@@ -1,0 +1,426 @@
+---
+import "$assets/reset.css";
+import "$assets/anims.css";
+
+import { Font } from "astro:assets";
+
+import Noscript from "$assets/noscript.html";
+import Navigation from "$layouts/widgets/Navigation.astro";
+import { babypink, cuteblue, grass, lavender, semanticColors, slate, space } from "$lib/colors";
+
+const siteName = "squeaky one";
+
+const description = `the mouse is squeaking at you, would you accept its request?,`;
+
+function getTitle(pageName: string | undefined) {
+    if (!pageName) {
+        return `!!! ${siteName} !!!`;
+    }
+
+    return `${siteName} - ${pageName}`;
+}
+
+const title = getTitle(Astro.props.title);
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="theme-color" content="#ffc2fe" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon_48.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon_152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon_192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon_512.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content="https://sqky.one/assets/thumbnail.png" />
+        <meta property="og:url" content="https://sqky.one" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={description} />
+
+        <meta name="generator" content={Astro.generator} />
+
+        <Font cssVariable="--font-iosevka-aile" />
+        <Font cssVariable="--font-iosevka-curly-slab" />
+        <Font cssVariable="--font-iosevka-etoile" />
+    </head>
+
+    <body>
+        <div class="site">
+            <main>
+                <slot />
+            </main>
+
+            <slot name="nav">
+                <Navigation>
+                    <slot name="nav:main-links" slot="nav:main-links" />
+                    <slot name="nav:other-categories" slot="nav:other-categories" />
+                    <slot name="nav:misc-links" slot="nav:misc-links" />
+                </Navigation>
+            </slot>
+        </div>
+
+        <div id="popout-fakeroot"></div>
+
+        <Fragment set:html={Noscript({})} />
+    </body>
+</html>
+
+<style>
+    .site {
+        width: 100%;
+
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+
+        padding-inline: calc(max(14dvw - 800px * 0.1, 0px));
+        padding-inline: calc(160 * max(100dvw - 800px, 0px) / 800);
+    }
+
+    @media (max-width: 1200px) {
+        .site {
+            flex-direction: column-reverse;
+        }
+    }
+
+    main {
+        width: 100%;
+
+        padding-block: 1.5rem;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        gap: 2rem;
+    }
+
+    #popout-fakeroot {
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        overflow: hidden;
+        user-select: none;
+        touch-action: none;
+        pointer-events: none;
+
+        text-rendering: optimizeLegibility;
+        will-change: contents;
+    }
+
+    #popout-fakeroot * {
+        pointer-events: auto;
+
+        text-rendering: optimizeLegibility;
+    }
+</style>
+
+<style
+    define:vars={{
+        ...babypink,
+        ...cuteblue,
+        ...lavender,
+        ...space,
+        ...grass,
+        ...slate,
+        ...semanticColors,
+    }}
+    is:global
+>
+    :root {
+        --sans: var(--font-iosevka-aile), sans-serif;
+        --mono: var(--font-iosevka-curly-slab), monospace;
+        --serif: var(--font-iosevka-etoile), serif;
+
+        font-family: var(--sans);
+
+        color: var(--textColor);
+        background-color: var(--bgColor);
+    }
+
+    html,
+    body {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .sans {
+        font-family: var(--sans);
+    }
+
+    .serif {
+        font-family: var(--serif);
+    }
+
+    .mono {
+        font-family: var(--mono);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--serif);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: var(--headingColor);
+
+        margin-block: 0.4em;
+    }
+
+    h1::before,
+    h2::before,
+    h3::before,
+    h4::before,
+    h5::before,
+    h6::before {
+        content: "# ";
+    }
+
+    h1 {
+        font-size: 2.25em;
+    }
+
+    h2 {
+        font-size: 2.1em;
+    }
+
+    h3 {
+        font-size: 1.8em;
+    }
+
+    h4 {
+        font-size: 1.7em;
+    }
+
+    h5 {
+        font-size: 1.65em;
+    }
+
+    h6 {
+        font-size: 1.55em;
+    }
+
+    a {
+        color: var(--linkColor);
+    }
+
+    a:focus,
+    a:hover {
+        color: var(--linkFocusColor);
+        text-decoration: underline;
+    }
+
+    a > h1,
+    a > h2,
+    a > h3,
+    a > h4,
+    a > h5,
+    a > h6 {
+        color: unset;
+    }
+
+    a > h1::before,
+    a > h2::before,
+    a > h3::before,
+    a > h4::before,
+    a > h5::before,
+    a > h6::before {
+        content: "¶ ";
+    }
+
+    p {
+        text-wrap-style: balance;
+        margin-block: 0.5em;
+    }
+
+    br {
+        line-height: 1.25em;
+    }
+
+    hr {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: var(--separatorColor);
+        margin-block: 2em;
+        border-radius: 9999px;
+        overflow: hidden;
+    }
+
+    b,
+    strong {
+        font-weight: bold;
+    }
+
+    strong {
+        color: var(--strongColor);
+    }
+
+    i,
+    em {
+        font-style: italic;
+    }
+
+    em {
+        color: var(--emColor);
+    }
+
+    mark {
+        font-size: 1.45em;
+    }
+
+    small {
+        font-size: 0.8em;
+        color: var(--smallColor);
+    }
+
+    code {
+        font-size: 0.875em;
+        display: inline;
+        padding-inline: 0.15em;
+        border-radius: 0.25rem;
+        color: var(--textColor);
+        border: 1px solid var(--codeBorderColor);
+        background-color: var(--codeBgColor);
+        font-family: var(--mono);
+    }
+
+    blockquote {
+        margin-block: 1.25rem;
+        margin-left: 1rem;
+        padding-left: 0.75rem;
+        border-radius: 0.35rem;
+        border-left: solid var(--quoteColor) 4px;
+
+        font-style: italic;
+    }
+
+    blockquote::before {
+        content: "\00201C\ ";
+    }
+
+    blockquote::after {
+        content: "\ \00201D";
+    }
+
+    cite {
+        display: block;
+        margin-top: -1rem;
+        margin-left: 2.75rem;
+
+        color: var(--citeColor);
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    cite::before {
+        content: "\002014\ ";
+    }
+
+    cite::after {
+        content: "";
+    }
+
+    ol {
+        list-style-type: decimal;
+        padding-left: 1.5em;
+        margin-block: 1em;
+    }
+
+    ul {
+        list-style-type: disc;
+        padding-left: 1em;
+        margin-block: 1em;
+    }
+
+    li {
+        color: var(--emColor);
+    }
+
+    textarea {
+        width: 100%;
+
+        color: var(--textAreaColor);
+        background-color: var(--textAreaBgColor);
+
+        border: 3px solid var(--textAreaBorderColor);
+        border-radius: 5px;
+
+        padding: 0.35rem;
+    }
+
+    table {
+        width: 100%;
+
+        overflow: scroll;
+        white-space: nowrap;
+
+        margin-block: 0.25rem;
+    }
+
+    thead {
+        background-color: var(--tableHeadBgColor);
+    }
+
+    tbody {
+        background-color: var(--tableBodyBgColor);
+    }
+
+    th,
+    td {
+        padding-inline: 1em;
+        padding-block: 0.35em;
+        text-align: start;
+        min-width: fit-content;
+    }
+
+    th {
+        border: 1px solid var(--thBorderColor);
+    }
+
+    td {
+        border: 1px solid var(--tdBorderColor);
+    }
+
+    img:focus,
+    summary:focus {
+        outline: 3px solid var(--blockFocusBorderColor);
+    }
+</style>

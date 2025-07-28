@@ -1,0 +1,19 @@
+---
+import type { LocalImageProps, RemoteImageProps } from "astro:assets";
+import { Image } from "astro:assets";
+
+export type Props = LocalImageProps | RemoteImageProps;
+
+const props = Astro.props;
+---
+
+<Image {...props} class:list={[props.class, "icon"]} alt="" />
+
+<style>
+    .icon {
+        display: inline;
+        width: auto;
+        height: 1.25em;
+        vertical-align: sub;
+    }
+</style>

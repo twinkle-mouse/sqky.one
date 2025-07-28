@@ -1,0 +1,230 @@
+---
+import { readdirSync, Stats, statSync } from "node:fs";
+import path from "node:path";
+
+import { ROOT_DIR } from "astro:env/server";
+
+import FileTableEntry from "$components/FileTableEntry.astro";
+import Page from "$layouts/Page.astro";
+import Section from "$layouts/Section.astro";
+import type { PageEntry } from "$lib/page";
+
+class SortMethod {
+    id: string;
+
+    private constructor(id: string) {
+        this.id = id;
+    }
+
+    static Name = new SortMethod("name");
+    static Size = new SortMethod("size");
+    static ModifiedDate = new SortMethod("mtime");
+    static Methods = [this.Name, this.Size, this.ModifiedDate];
+
+    static fromId(id: string | undefined) {
+        if (!id) {
+            return null;
+        }
+
+        for (const method of this.Methods) {
+            if (method.id == id) {
+                return method;
+            }
+        }
+
+        return null;
+    }
+}
+
+const params = Astro.params;
+const url = new URL(Astro.request.url);
+
+const dirPath = path.normalize(params.slug || "");
+const filePath = path.normalize(path.join(ROOT_DIR, dirPath));
+
+const ascending = url.searchParams.get("asc") === "true";
+
+const sortBy = SortMethod.fromId(url.searchParams.get("sort") || "") || SortMethod.Name;
+
+let fileNames = null;
+const files = new Map<string, { stats: Stats }>();
+
+try {
+    fileNames = readdirSync(filePath);
+} catch (err) {
+    console.log(err);
+}
+
+if (!fileNames) {
+    return Astro.rewrite("/404");
+}
+
+try {
+    fileNames?.forEach((fileName) => {
+        const stats = statSync(path.resolve(filePath, fileName));
+
+        files.set(fileName, { stats });
+    });
+} catch (err) {
+    console.log(err);
+    return Astro.rewrite("/404");
+}
+
+function compare(a: number | string, b: number | string, ascending: boolean) {
+    const v1 = ascending ? b : a;
+    const v2 = ascending ? a : b;
+
+    if (typeof v1 == "number" && typeof v2 == "number") {
+        if (isNaN(v1) || isNaN(v2)) {
+            return 0;
+        }
+
+        return Math.round(v1 - v2);
+    } else {
+        return v1.toString().localeCompare(v2.toString(), undefined, { numeric: true });
+    }
+}
+
+const entries = Array.from(
+    files.entries().map(([fileName, file]) => {
+        return {
+            name: fileName,
+            size: file.stats.size,
+            mtime: file.stats.mtime,
+            isDir: file.stats.isDirectory(),
+            isFile: file.stats.isFile(),
+        };
+    }),
+);
+
+function cmp(a: PageEntry, b: PageEntry) {
+    if (sortBy == SortMethod.Name) {
+        return compare(a.name, b.name, ascending);
+    } else if (sortBy == SortMethod.Size) {
+        return compare(a.size, b.size, ascending);
+    } else if (sortBy == SortMethod.ModifiedDate) {
+        return compare(a.mtime.getTime(), b.mtime.getTime(), ascending);
+    }
+
+    return 0;
+}
+
+const fileEntries = entries.filter((v) => v.isFile);
+const dirEntries = entries.filter((v) => v.isDir);
+
+fileEntries.sort(cmp);
+dirEntries.sort(cmp);
+
+const ascSymbol = "↓";
+const dscSymbol = "↑";
+
+const sortSymbol = ascending ? ascSymbol : dscSymbol;
+
+function linkUrl(method: SortMethod) {
+    const sort = ["sort", method.id];
+    const asc = ["asc", sortBy == method ? (!ascending).toString() : "false"];
+
+    return "?" + new URLSearchParams([sort, asc]).toString();
+}
+
+const urlPaths = url.pathname
+    .split("/")
+    .filter((v) => !!v)
+    .map((v) => v.trim());
+
+function getUrl(path: string, index: number) {
+    return `/${[...urlPaths.slice(0, index), path].join("/")}/`;
+}
+---
+
+<Page title=`Files Archive - /${dirPath}`>
+    <Fragment slot="nav"></Fragment>
+
+    <Section>
+        <div class="controls">
+            <a href="../">Back up...</a>
+            <a href="/">Back to root...</a>
+            <br />
+            <a href="https://sqky.one">Back to main site</a>
+        </div>
+
+        <p>
+            {urlPaths.length == 0 && <span>/</span>}
+
+            {
+                urlPaths.map((path, index) => {
+                    return (
+                        <Fragment>
+                            <span>/</span>
+                            <a href={getUrl(path, index)}>{decodeURI(path)}</a>
+                        </Fragment>
+                    );
+                })
+            }
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <a href={linkUrl(SortMethod.Name)}>
+                            Name
+                            <small>{sortBy == SortMethod.Name && sortSymbol}</small>
+                        </a>
+                    </th>
+                    <th>
+                        <a href={linkUrl(SortMethod.Size)}>
+                            Size
+                            <small>{sortBy == SortMethod.Size && sortSymbol}</small>
+                        </a>
+                    </th>
+                    <th>
+                        <a href={linkUrl(SortMethod.ModifiedDate)}>
+                            Modified Date
+                            <small>{sortBy == SortMethod.ModifiedDate && sortSymbol}</small>
+                        </a>
+                    </th>
+                </tr>
+                <tbody>
+                    {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                    {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                </tbody>
+            </thead>
+
+            <style>
+                .controls {
+                    margin-bottom: 1.25rem;
+                }
+
+                .controls > a {
+                    display: inline-block;
+
+                    padding-inline: 0.7rem;
+                    padding-block: 0.5rem;
+
+                    margin-block: 0.3rem;
+                    margin-inline: 0.15rem;
+
+                    border-radius: 4px;
+                    border: 2px solid var(--slate700);
+
+                    background-color: var(--slate800);
+
+                    text-wrap: nowrap;
+                }
+
+                table :global(th),
+                table :global(td) {
+                    text-align: end;
+                }
+
+                table :global(th:first-of-type),
+                table :global(td:first-of-type) {
+                    width: 100%;
+                    padding-right: 6em;
+                    text-align: start;
+                }
+            </style>
+        </table>
+    </Section>
+</Page>

@@ -1,0 +1,209 @@
+---
+import { lavender600, lavender800, lavender900, slate200, slate600, space500, space800, space900 } from "$lib/colors";
+
+import Transcube from "./Transcube.astro";
+
+let mainLinks = undefined;
+if (Astro.slots.has("nav:main-links")) {
+    mainLinks = await Astro.slots.render("nav:main-links");
+}
+---
+
+<nav>
+    <div>
+        <p>Main Site</p>
+        <div>
+            <a href="/#">Home</a>
+        </div>
+    </div>
+
+    {
+        mainLinks && (
+            <div>
+                <p>This Page</p>
+                <div>
+                    <Fragment set:html={mainLinks} />
+                </div>
+            </div>
+        )
+    }
+
+    <slot name="nav:other-categories" />
+
+    <div>
+        <p>Misc</p>
+        <div>
+            <a href="https://the.sqky.one/">Files Archive</a>
+            <slot name="nav:misc-links" />
+        </div>
+    </div>
+
+    <footer>
+        <Transcube />
+    </footer>
+</nav>
+
+<style
+    define:vars={{
+        bgColor: lavender800,
+        divBgColor: lavender900,
+        borderColor: lavender600,
+        linkBorderColor: space500,
+        linkBgColor: space900,
+        linkBgColorActive: space800,
+        textBgColor: slate600,
+        textBorderColor: slate200,
+    }}
+>
+    nav {
+        display: flex;
+        position: sticky;
+
+        top: 0;
+        left: 0;
+
+        flex: fit-content;
+        flex-wrap: nowrap;
+
+        background-color: var(--bgColor);
+
+        backdrop-filter: blur(2px);
+        box-shadow:
+            0px 0px 6px 3px rgba(0, 0, 0, 0.5),
+            inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
+    }
+
+    nav > div :global(p),
+    nav > div :global(a) {
+        display: block;
+
+        width: fit-content;
+        height: min-content;
+
+        text-wrap: nowrap;
+    }
+
+    nav > div :global(p) {
+        width: 100%;
+
+        margin: 0;
+        padding-block: 0.3rem;
+
+        border-bottom: 2px solid var(--textBorderColor);
+        background-color: var(--textBgColor);
+
+        text-align: center;
+    }
+
+    nav > div :global(a) {
+        padding: 0.15rem;
+
+        border: 1px solid var(--linkBorderColor);
+        background-color: var(--linkBgColor);
+    }
+
+    nav > div :global(a::before) {
+        content: "|> ";
+    }
+
+    nav > div :global(a:hover),
+    nav > div :global(a:focus) {
+        background-color: var(--linkBgColorActive);
+    }
+
+    nav {
+        margin-right: 1.75rem;
+        padding: 0;
+
+        min-width: 230px;
+        max-width: 280px;
+        height: 100dvh;
+
+        border: none;
+        border: 3px solid var(--borderColor);
+        border-block: none;
+    }
+
+    nav {
+        flex-direction: column;
+        padding-inline: none;
+    }
+
+    nav > :global(div) {
+        border: none;
+        border: 2px solid var(--textBorderColor);
+        border-inline: none;
+        background-color: var(--divBgColor);
+    }
+
+    nav > :global(div:first-of-type) {
+        border-top: none;
+        border-left: none;
+    }
+
+    nav > :global(div:has(+ div)) {
+        border-bottom: none;
+        border-right: none;
+    }
+
+    nav > div > :global(div) {
+        display: flex;
+
+        width: 100%;
+
+        padding: 1rem;
+
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: start;
+        gap: 0.5rem;
+    }
+
+    footer {
+        margin: 0;
+        margin-inline: auto;
+        margin-top: auto;
+    }
+
+    @media (max-width: 1200px) {
+        nav {
+            position: static;
+
+            margin-inline: 0;
+            padding: 0;
+
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+            height: 160px;
+
+            overflow-x: scroll;
+
+            border: none;
+            border: 3px solid var(--borderColor);
+            border-top: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        nav {
+            flex-direction: row;
+        }
+
+        nav > :global(div) {
+            width: fit-content;
+            height: auto;
+
+            border: none;
+            border: 2px solid var(--textBorderColor);
+            border-block: none;
+            background-color: var(--divBgColor);
+        }
+
+        footer {
+            margin: 0;
+            margin-block: auto;
+            margin-left: auto;
+        }
+    }
+</style>

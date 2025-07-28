@@ -1,0 +1,185 @@
+---
+import { MouseSide } from "$assets/Icons.astro";
+import Pfp from "$assets/profile_picture.png";
+import Icon from "$components/Icon.astro";
+import Picture from "$components/Picture.astro";
+import { sectionColors } from "$layouts/Section.astro";
+
+const pfpDesc =
+    "The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes.";
+---
+
+<figure class="pfp-container">
+    <div class="pfp">
+        <div class="pfp-image-container">
+            <div aria-hidden="true" class="ear-left"></div>
+            <div aria-hidden="true" class="ear-right"></div>
+
+            <Picture tabindex="0" role="button" src={Pfp} class="pfp-image" alt={pfpDesc} title={pfpDesc} draggable="false" />
+        </div>
+    </div>
+
+    <figcaption class="pfp-caption">
+        <p>the mouse!!!!!! <Icon src={MouseSide} /></p>
+        <p class="js-necessary"><small>(try patting it :3)</small></p>
+        <p>picture taken on <a href="https://resonite.com/">Resonite</a></p>
+        <p>
+            <small> (better picture incoming, i've been ADHDing about this for months) </small>
+        </p>
+    </figcaption>
+</figure>
+
+<style
+    define:vars={{
+        ...sectionColors,
+    }}
+>
+    .pfp-container {
+        width: min-content;
+
+        margin-left: 1.25rem;
+        margin-right: 2.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 3rem;
+
+        text-align: center;
+
+        float: left;
+    }
+
+    @media (max-width: 600px) {
+        .pfp-container {
+            margin: 0;
+            width: 100%;
+        }
+    }
+
+    .pfp {
+        width: 230px;
+        padding-block: 1rem;
+        margin-inline: auto;
+
+        will-change: contents;
+    }
+
+    .pfp-image-container {
+        position: relative;
+
+        width: 160px;
+        height: auto;
+
+        margin-inline: auto;
+
+        animation: wobble 0.45s infinite alternate cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    @media (prefers-reduced-motion) {
+        .pfp-image-container {
+            animation: none;
+        }
+    }
+
+    .pfp-caption {
+        display: block;
+        width: fit-content;
+        text-wrap: wrap;
+
+        margin-top: 1.85rem;
+        margin-inline: auto;
+    }
+
+    .pfp-image {
+        display: inline-block;
+        user-select: none;
+        touch-action: none;
+
+        background-color: var(--bgColor);
+        color: transparent;
+
+        width: 100%;
+        height: auto;
+
+        overflow: hidden;
+        border-radius: 9999px;
+    }
+
+    .ear-left,
+    .ear-right {
+        --distance-x: -5%;
+        --distance-y: 8%;
+
+        z-index: -1;
+        display: block;
+
+        width: 32%;
+        height: 46%;
+        position: absolute;
+
+        background: #f098bd;
+        border-radius: 9999px;
+
+        box-sizing: border-box;
+        border: #ffffff solid 10px;
+
+        animation-duration: 0.07s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease;
+        animation-direction: alternate-reverse;
+    }
+
+    .ear-left {
+        left: var(--distance-x);
+        top: var(--distance-y);
+
+        animation-name: earwiggleleft;
+    }
+
+    .ear-right {
+        right: var(--distance-x);
+        top: var(--distance-y);
+
+        animation-name: earwiggleright;
+    }
+
+    @media (prefers-reduced-motion) {
+        .ear-left,
+        .ear-right {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const url = "/assets/squeak.ogg";
+
+    const context = new AudioContext({ latencyHint: "interactive" });
+    const audioBuffer = await fetch(url)
+        .then((res) => res.arrayBuffer())
+        .then((buffer) => context.decodeAudioData(buffer));
+
+    const play = () => {
+        const source = context.createBufferSource();
+        source.buffer = audioBuffer;
+        source.onended = () => {
+            source.disconnect();
+        };
+
+        source.connect(context.destination);
+        source.start();
+    };
+
+    document.querySelectorAll<HTMLElement>(".pfp-image, .ear-left, .ear-right").forEach((element) => {
+        element.style.cursor = "pointer";
+
+        element.addEventListener("click", play);
+    });
+
+    document.querySelectorAll<HTMLElement>(".pfp-image").forEach((element) => {
+        element.addEventListener("keydown", (event) => {
+            if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && !event.key.includes("Tab")) {
+                play();
+                event.preventDefault();
+            }
+        });
+    });
+</script>

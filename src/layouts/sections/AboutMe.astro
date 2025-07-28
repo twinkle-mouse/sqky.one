@@ -1,0 +1,297 @@
+---
+import { ESFlag, MouseFront, TFHazard, ThetaDelta, TransFlag } from "$assets/Icons.astro";
+import { PurpleHeart } from "$assets/IconsSvg.astro";
+import Headmates from "$components/Headmates.astro";
+import Icon from "$components/Icon.astro";
+import ProfilePicture from "$components/ProfilePicture.astro";
+import PublicTextFile from "$components/PublicTextFile.astro";
+import SvgIcon from "$components/SvgIcon.astro";
+import Hearts from "$layouts/widgets/Hearts.astro";
+---
+
+<style>
+    .profile-intro {
+        padding-block: 1.5rem;
+
+        clear: right;
+    }
+
+    .rotate {
+        animation: rotate 2s linear infinite;
+    }
+
+    @media (prefers-reduced-motion) {
+        .rotate {
+            animation: none;
+        }
+    }
+</style>
+
+<p><strong>hiiiiiiiiiiiiiiiiiiiiii</strong></p>
+
+<ProfilePicture />
+
+<div class="profile-intro">
+    <p>
+        welcome to my site!!!!! this is the
+        <code><a href="https://sqky.one/">sqky.one</a></code>
+        squeaking to you.
+    </p>
+    <p>it means "Squeaky One"!!!!</p>
+
+    <br />
+
+    <p>i'm a <em>mouse</em> <Icon class="rotate" src={MouseFront} />!!!!</p>
+    <p>
+        and mice are squeaky, so i'm
+        <code><a href="https://the.sqky.one/">the.sqky.one</a></code>
+        !!!!!
+    </p>
+
+    <br />
+
+    <h2>who r u though</h2>
+    <p>you can call me any of these names!!! (they are all equally valid)</p>
+    <ul>
+        <li>Stella</li>
+        <li>twinkle <small>(lowercase only!)</small></li>
+        <li>Mei</li>
+        <li>mouse</li>
+    </ul>
+</div>
+
+<hr />
+
+<div class="profile-content">
+    <div>
+        <a href="#intro" id="intro">
+            <h2>introduce yourself to the class would u</h2>
+        </a>
+
+        <p>hi! i'm <em>Stella</em>, you can also call me <em>twinkle</em> or <em>mouse</em>.</p>
+        <p>
+            the name <em>twinkle</em> actually came from <strong>Twilight Sparkle</strong>,,,,,,, i used to go by <em>Twinkle Sprinkle</em> before i dropped the
+            <em>Sprinkle</em> and made the Twinkle <strong>lowercase</strong> &lt;:
+        </p>
+        <p>i'm very silly and <strong>gay</strong>!!!!!!!!!!!!!!!!</p>
+
+        <br />
+
+        <p>we were born in <a href="https://en.wikipedia.org/wiki/Taiwan">Taiwan</a> <small>please don't come at me about relations with mainland,</small></p>
+        <p>we grew up in Taiwan, and we still speak <em>Mandarin</em> fluently! <small>(and a bit of <em>Hokkien</em> but like,)</small></p>
+        <p>we had actually never been to any other countries before moving out of Taiwan!!!!!!!!!!!!!!!!</p>
+        <p>
+            we learned how to speak <a href="https://en.wikipedia.org/wiki/French_language">English</a> by being terminally online and socially isolated IRL and
+            bullied constantly at school (:
+        </p>
+        <p>we moved to <a href="https://en.wikipedia.org/wiki/Spain">Spain</a> in <code>late 2024</code>!!!</p>
+
+        <br />
+
+        <p>we play a lot of <em>videogames</em>!!!!</p>
+        <p>
+            <strong>Lavvie</strong> particularly loves to play fast-paced games like <em>Dead Cells</em>, <em>Hollow Knight</em>, <em>ULTRAKILL</em>, and also
+            just games that require a lot of mechanics like <em>Noita</em> and <em>Neon White</em> :3
+        </p>
+        <p>
+            i particularly loves games that are a superposition of stupid and brain-wracking / nerve-wracking, like
+            <em>Modded Minecraft</em>, <em>Modded Terraria</em>, (Modded) <em>Risk of Rain 2</em>, (Modded) <em>The Binding of Isaac</em>,
+            <em>Cobalt Core</em> and <em>Balatro</em>,
+        </p>
+        <p>
+            we've also played a lot of Nintendo games in the past, though we don't any more because the new games are <strong>mid</strong> and the company is
+            <strong>ass</strong>!!!!!
+        </p>
+
+        <br />
+
+        <p>we also <em>code</em> a lot!!!!</p>
+
+        <p>including this very website :&gt;</p>
+        <p>we also work on a videogame!!!!! it's called <a href="https://github.com/automancy/automancy"><i>automancy!</i></a>, it's an automation game :3</p>
+        <p><small>(it's partially inspired by our love/hate relationship with <em>Gregtech</em>, a Minecraft mod)</small></p>
+        <p>we know a few programming languages!!! we like <a href="https://www.rust-lang.org/"><i>Rust</i></a> the most though :3</p>
+
+        <br />
+
+        <p>we also <em>draw</em> sometimes!!!! though we're bad at it</p>
+        <p>we also really want to make <em>music</em> some day, though that's far away still,</p>
+        <p>we also used to do <em>graphics design</em> for a hobby!!!! :]</p>
+
+        <div>
+            <h3>what art thee</h3>
+
+            <p>there's a lot of things i could be… here's a list of ideas for me</p>
+            <p>
+                <small>
+                    (this list is ever-growing. we have BPD
+                    <small>(Borderline Personality Disorder)</small>
+                    and my identity is as fragmented as my HDD)
+                </small>
+            </p>
+            <ul>
+                <li>Mouse (mouse (mouse))</li>
+                <li>Computer mouse (but also animal mouse (also has RGB gamer lighting))</li>
+                <li>Marshmallow mouse (you will be TF'd if you eat me)</li>
+                <li>Deer mouse (like a deer if it was small and squeaky and also mouse)</li>
+                <li>Mouse girl (girl (young (did you know i'm an age regressor)))</li>
+                <li>Mouse Woman (Grown Up (This is Getting Silly))</li>
+                <li></li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <div>
+            <h3>By The Way, There's More</h3>
+
+            <p>we're plural!!!!!!!</p>
+            <p>
+                if referring to us collectively, call us
+                <em>Madeline</em> or <em>Maddie</em>
+                <small>(they/them)</small>
+                <SvgIcon src={PurpleHeart} />
+            </p>
+
+            <p>
+                here is a
+                <small>(hopefully up-to-date when you read this)</small>
+                list of the headmates (:
+            </p>
+            <p>
+                <small>
+                    <strong> (note: we might add pages for specific headmates later!!!!!) </strong>
+                </small>
+            </p>
+
+            <Hearts />
+
+            <Headmates />
+
+            <h4>Some Assorted Facts</h4>
+
+            <p>
+                we're
+                <span>
+                    <i class="transgender">transgender</i>
+                    <Icon src={TransFlag} />
+                </span>
+                !!! and also
+                <span>
+                    <i class="nonbinary">nonbinary</i>
+                </span>
+                !!!!!
+            </p>
+            <p>we're also on the <i class="aroace">aroace spectrum</i>!!!!!!</p>
+
+            <style>
+                .transgender,
+                .nonbinary,
+                .aroace {
+                    background-clip: text;
+                    color: #ffffff80;
+                }
+
+                .transgender {
+                    background-image: linear-gradient(
+                        -45deg,
+                        #5ccefa,
+                        #5ccefa 20%,
+                        #f6a8b7 20%,
+                        #f6a8b7 40%,
+                        #fff 40%,
+                        #fff 60%,
+                        #f6a8b7 60%,
+                        #f6a8b7 80%,
+                        #5ccefa 80%,
+                        #5ccefa
+                    );
+                }
+
+                .nonbinary {
+                    background-image: linear-gradient(-45deg, #fdf52f, #fdf52f 25%, #fff 25%, #fff 50%, #9d5ad2 50%, #9d5ad2 75%, #000 75%, #000);
+                }
+
+                .aroace {
+                    background-image: linear-gradient(
+                        -45deg,
+                        #e38c01,
+                        #e38c01 20%,
+                        #eccd00 20%,
+                        #eccd00 40%,
+                        #fff 40%,
+                        #fff 60%,
+                        #62afde 60%,
+                        #62afde 80%,
+                        #203857 80%,
+                        #203857
+                    );
+                }
+            </style>
+
+            <br />
+
+            <p>
+                We live in <em>España</em>
+                <Icon src={ESFlag} />!!!
+                <mark>
+                    <i><strong>Puta Renfe</strong>!!!!</i>
+                </mark>
+            </p>
+
+            <p>
+                We're Therian <Icon src={ThetaDelta} />!!!!
+                <small> (i dont know a good source of info on what this means, if you know a site lmk please) </small>
+            </p>
+
+            <p>
+                We're a
+                <a href="https://yaodema.com/tf-hazard/" target="_blank">TF Hazard</a>
+                <Icon src={TFHazard} />
+                !!!!!
+            </p>
+        </div>
+    </div>
+
+    <hr />
+
+    <div>
+        <a href="#contacts" id="contacts">
+            <h2>where da hell</h2>
+        </a>
+
+        <p>u can find me in these places!!! (in order of preference, not of convenience)</p>
+        <ol>
+            <li>
+                Email ~ <code>twinkle at mouse dot lgbt</code>
+            </li>
+            <li>Discord ~ <code>@twinkle_mouse</code></li>
+            <li>Signal ~ <code>twinkle.10</code></li>
+            <li>
+                Matrix ~ <code>@twinkle:peepee.party</code>
+                <small>(I don't get notifs here)</small>
+            </li>
+            <li>
+                XMPP ~ <code>twinkle@knotsinside.me</code>
+                <small>(I <i>might not</i> get notifs here)</small>
+            </li>
+        </ol>
+
+        <PublicTextFile src="pubkey.asc" />
+    </div>
+
+    <hr />
+
+    <div>
+        <a href="#quotes" id="quotes">
+            <h2>words of honour</h2>
+        </a>
+        <p>here u can find some stuff people have said about me :3</p>
+        <blockquote>not much is known about this creature, only a collection of names and some nesting behaviours…</blockquote>
+        <cite>anonymous deer</cite>
+        <blockquote>evil therapist</blockquote>
+        <cite>anonymous puppy</cite>
+        <blockquote>technological creature, yet not made of steel…</blockquote>
+        <cite>anonymous kitty</cite>
+    </div>
+</div>

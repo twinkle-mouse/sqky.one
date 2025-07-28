@@ -1,0 +1,43 @@
+---
+import { BatFront, BunnySide, CatSide, DeerSide, MouseFront } from "$assets/Icons.astro";
+import { BrownHeart, OrangeHeart, PinkHeart, WhiteHeart, YellowHeart } from "$assets/IconsSvg.astro";
+import Icon from "$components/Icon.astro";
+---
+
+<ul>
+    <li>
+        <a href="/">Stella Sparkles</a>
+
+        <Icon src={MouseFront} />
+        <small>(mouse/it/they)</small>
+        <Icon src={PinkHeart} />
+    </li>
+    <li>
+        Lavender Sparkles
+
+        <Icon src={BatFront} />
+        <small>(she/they)</small>
+        <Icon src={BrownHeart} />
+    </li>
+    <li>
+        Azalea Sparkles
+
+        <Icon src={CatSide} />
+        <small>(it/she)</small>
+        <Icon src={WhiteHeart} />
+    </li>
+    <li>
+        Petals
+
+        <Icon src={DeerSide} />
+        <small>(she/it)</small>
+        <Icon src={YellowHeart} />
+    </li>
+    <li>
+        Mary
+
+        <Icon src={BunnySide} />
+        <small>(she/her)</small>
+        <Icon src={OrangeHeart} />
+    </li>
+</ul>

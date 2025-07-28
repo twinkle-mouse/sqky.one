@@ -1,0 +1,51 @@
+---
+import nowplaying from "$assets/nowplaying.html";
+---
+
+<div class="nowplaying js-necessary">
+    <p>what the mouse listening to !?</p>
+    <p>
+        <small> (it shows whatever i'm listening to on my computer!!!) </small>
+    </p>
+
+    <div id="nowplaying-widget"></div>
+    <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const nowplayingWidget = document.getElementById("nowplaying-widget")!;
+        const nowplayingWidgetLoader = document.getElementById("nowplaying-widget-loader")!;
+
+        nowplayingWidget.attachShadow({ mode: "open" });
+
+        if (nowplayingWidget.shadowRoot) {
+            nowplayingWidget.shadowRoot.replaceChildren(...nowplayingWidgetLoader.childNodes);
+
+            nowplayingWidgetLoader.remove();
+        }
+    });
+</script>
+
+<style>
+    .nowplaying {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+        margin-inline: auto;
+    }
+
+    #nowplaying-widget {
+        margin-top: 1rem;
+        width: 400px;
+        height: 200px;
+    }
+
+    #nowplaying-widget-loader {
+        width: 0;
+        height: 0;
+        display: none;
+        visibility: hidden;
+    }
+</style>

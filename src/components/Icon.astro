@@ -1,0 +1,18 @@
+---
+import Picture, { type Props as P } from "$components/Picture.astro";
+
+export type Props = P;
+
+const props = Astro.props;
+---
+
+<Picture {...props} class:list={[props.class, "icon"]} alt="" />
+
+<style>
+    .icon {
+        display: inline;
+        width: auto;
+        height: 1.25em;
+        vertical-align: sub;
+    }
+</style>

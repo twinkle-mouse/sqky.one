@@ -1,0 +1,58 @@
+---
+import type { ImageMetadata } from "astro";
+
+import SvgIcon from "$components/SvgIcon.astro";
+
+export type Props = {
+    src: ImageMetadata;
+    radius: number;
+    delay: number;
+    length: number;
+};
+
+const { src, radius, delay, length } = Astro.props;
+---
+
+<div
+    class="headmate-heart"
+    style={{
+        "--radius": `${radius * 2}px`,
+        "--delay": `${delay}s`,
+        "--length": `${length}s`,
+    }}
+>
+    <div class="headmate-heart-x">
+        <div class="headmate-heart-y">
+            <SvgIcon src={src} />
+        </div>
+    </div>
+</div>
+
+<style>
+    .headmate-heart-x {
+        animation: hearts-rotate-x var(--length) calc(var(--delay, 0s) - var(--length) * 0.5) alternate infinite cubic-bezier(0.37, 0, 0.63, 1);
+    }
+
+    .headmate-heart-y {
+        animation: hearts-rotate-y var(--length) calc(var(--delay, 0s) + 0s) alternate infinite cubic-bezier(0.37, 0, 0.63, 1);
+    }
+
+    @media (prefers-reduced-motion) {
+        .headmate-heart-x,
+        .headmate-heart-y {
+            animation-play-state: paused;
+        }
+    }
+
+    .headmate-heart {
+        position: absolute;
+        display: block;
+        overflow: visible;
+    }
+
+    .headmate-heart img {
+        display: block;
+        width: 32px;
+        height: 32px;
+    }
+</style>

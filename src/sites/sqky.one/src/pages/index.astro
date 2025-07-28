@@ -1,0 +1,53 @@
+---
+import Page from "$layouts/Page.astro";
+import Section from "$layouts/Section.astro";
+import AboutMe from "$layouts/sections/AboutMe.astro";
+import ColorCards from "$layouts/sections/ColorCards.astro";
+import Nowplaying from "$layouts/sections/Nowplaying.astro";
+---
+
+<Page>
+    <Fragment slot="nav:main-links">
+        <a href="#intro">About Me</a>
+        <a href="#contacts">Contacts</a>
+        <a href="#quotes">Quotes</a>
+        <a href="#gadgets">Gadgets</a>
+    </Fragment>
+
+    <Section>
+        <AboutMe />
+    </Section>
+
+    <div id="gadgets" class="group">
+        <div class="fit js-inherit">
+            <Section>
+                <ColorCards />
+            </Section>
+        </div>
+
+        <div class="fit js-inherit">
+            <Section>
+                <Nowplaying />
+            </Section>
+        </div>
+    </div>
+</Page>
+
+<style>
+    .group {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap-reverse;
+        justify-content: stretch;
+        align-items: stretch;
+
+        gap: 2rem;
+    }
+
+    .group > .fit {
+        flex: min-content;
+        width: fit-content;
+        max-width: 100%;
+    }
+</style>

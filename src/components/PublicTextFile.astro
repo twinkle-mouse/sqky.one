@@ -1,0 +1,103 @@
+---
+export type Props = HTMLAttributes<"textarea"> & {
+    src: string;
+};
+
+import fs from "node:fs";
+import path from "node:path";
+
+import type { HTMLAttributes } from "astro/types";
+import { root as _root } from "astro:config/server";
+
+import { slate700 } from "$lib/colors";
+const root = path.normalize((_root as unknown as string).replace("file://", ""));
+
+const { src, ...props } = Astro.props;
+const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" });
+---
+
+<details open>
+    <summary>
+        <a href={src}>{src}</a>
+    </summary>
+
+    <textarea readonly cols="64" rows="14" {...props} class:list={[props.class, "mono"]}>{file}</textarea>
+</details>
+
+<style define:vars={{ textAreaLinkBgColor: slate700 }}>
+    details,
+    details > summary {
+        border-radius: 6px;
+    }
+
+    details {
+        border-radius: 6px;
+
+        background-color: var(--textAreaBgColor);
+        outline: 3px solid var(--textAreaBorderColor);
+    }
+
+    details > summary {
+        display: block;
+
+        padding: 0.35rem;
+
+        background-color: var(--textAreaLinkBgColor);
+
+        user-select: none;
+    }
+
+    details[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    summary::before {
+        content: "";
+
+        display: inline-block;
+        vertical-align: middle;
+
+        margin: 4px;
+
+        border: 8px solid;
+        border-color: transparent transparent transparent #fff;
+        box-sizing: content-box;
+
+        transform-origin: center center;
+        transition: transform 0.2s ease;
+    }
+
+    @media (prefers-reduced-motion) {
+        summary::before {
+            transition: none;
+        }
+    }
+
+    details[open] summary::before {
+        transform: scaleX(0.75) rotate(90deg) translateX(25%);
+    }
+
+    details:not([open]) summary::before {
+        transform: scaleY(0.75) rotate(0deg) translateX(25%);
+    }
+
+    summary > a {
+        display: inline-block;
+
+        width: fit-content;
+    }
+
+    details > textarea {
+        border: none;
+        background: none;
+        text-wrap: nowrap;
+    }
+
+    details[open] textarea {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        border-top: 3px solid var(--textAreaBorderColor);
+    }
+</style>
