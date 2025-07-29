@@ -6,13 +6,24 @@ export type Props = P;
 const props = Astro.props;
 ---
 
-<Picture {...props} class:list={[props.class, "icon"]} alt="" />
+<Picture
+    {...props}
+    pictureAttributes={{
+        ...props.pictureAttributes,
+        class: "icon",
+    }}
+    alt=""
+/>
 
 <style>
-    .icon {
-        display: inline;
+    .icon,
+    .icon > img {
+        display: inline-block;
         width: auto;
         height: 1.25em;
+    }
+
+    .icon {
         vertical-align: sub;
     }
 </style>
