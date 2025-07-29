@@ -79,7 +79,7 @@ function compare(a: number | string, b: number | string, ascending: boolean) {
             return 0;
         }
 
-        return Math.round(v1 - v2);
+        return Math.round(v2 - v1);
     } else {
         return v1.toString().localeCompare(v2.toString(), undefined, { numeric: true });
     }
