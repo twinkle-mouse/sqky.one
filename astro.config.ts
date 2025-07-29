@@ -1,6 +1,5 @@
 import path from "node:path";
 
-import node from "@astrojs/node";
 import { defineConfig } from "astro/config";
 
 import mainSite from "./src/sites/sqky.one/astro.config";
@@ -15,7 +14,7 @@ const dir = process.cwd();
 const fontsDir = path.join(dir, "fonts");
 const sitesDir = path.join(dir, "src", "sites");
 
-const site = process.env["SITE_CONFIG"] ?? Site.Main;
+const site = process.env["SITE_CONFIG"] || Site.Main;
 function getConfig(): object {
     if (site === Site.Main) {
         return { ...mainSite, srcDir: path.join(sitesDir, "sqky.one", "src") };
@@ -494,7 +493,4 @@ export default defineConfig({
             },
         ],
     },
-    adapter: node({
-        mode: "standalone",
-    }),
 });
