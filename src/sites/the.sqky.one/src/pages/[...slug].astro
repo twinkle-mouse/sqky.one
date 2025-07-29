@@ -39,7 +39,7 @@ class SortMethod {
 const params = Astro.params;
 const url = new URL(Astro.request.url);
 
-const dirPath = path.normalize(params.slug || "");
+const dirPath = params.slug ? path.normalize(params.slug) : "";
 const filePath = path.normalize(path.join(ROOT_DIR, dirPath));
 
 const ascending = url.searchParams.get("asc") === "true";
