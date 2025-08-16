@@ -1,11 +1,10 @@
 ---
-import { ESFlag, MouseFront, TFHazard, ThetaDelta, TransFlag } from "$assets/Icons.astro";
-import { PinkHeart, PurpleHeart } from "$assets/IconsSvg.astro";
+import { TFHazard, ThetaDelta } from "$assets/Icons.astro";
+import Emoji from "$components/Emoji.astro";
 import Headmates from "$components/Headmates.astro";
 import Icon from "$components/Icon.astro";
 import ProfilePicture from "$components/ProfilePicture.astro";
 import PublicTextFile from "$components/PublicTextFile.astro";
-import SvgIcon from "$components/SvgIcon.astro";
 import Hearts from "$layouts/widgets/Hearts.astro";
 ---
 
@@ -41,7 +40,7 @@ import Hearts from "$layouts/widgets/Hearts.astro";
 
     <br />
 
-    <p>i'm a <em>mouse</em> <Icon class="rotate" src={MouseFront} />!!!!</p>
+    <p>i'm a <em>mouse</em> <Emoji class="rotate" e="🐭" />!!!!</p>
     <p>
         and mice are squeaky, so i'm
         <code><a href="https://the.sqky.one/">the.sqky.one</a></code>
@@ -132,7 +131,7 @@ import Hearts from "$layouts/widgets/Hearts.astro";
             <ul>
                 <li>Mouse (mouse (mouse))</li>
                 <li>
-                    Mouse Plush (that goes 'squeak! <Icon src={PinkHeart} />' when you hug it)
+                    Mouse Plush (that goes ' squeak! <Emoji e="🩷" /> ' when you hug it)
                 </li>
                 <li>Computer mouse (but also animal mouse (also has RGB gamer lighting))</li>
                 <li>Marshmallow mouse (you will be TF'd if you eat me)</li>
@@ -153,7 +152,7 @@ import Hearts from "$layouts/widgets/Hearts.astro";
                 if referring to us collectively, call us
                 <em>Madeline</em> or <em>Maddie</em>
                 <small>(they/them)</small>
-                <SvgIcon src={PurpleHeart} />
+                <Emoji e="💜" />
             </p>
 
             <p>
@@ -174,23 +173,19 @@ import Hearts from "$layouts/widgets/Hearts.astro";
             <h4>Some Assorted Facts</h4>
 
             <p>
-                we're
-                <span>
-                    <i class="transgender">transgender</i>
-                    <Icon src={TransFlag} />
-                </span>
-                !!! and also
-                <span>
-                    <i class="nonbinary">nonbinary</i>
-                </span>
-                !!!!!
+                <span>we're <i class="transgender">transgender</i> <Emoji e="🏳️‍⚧️" />!!!</span>
+
+                <span>and also <i class="nonbinary">nonbinary</i>!!!!!</span>
+
+                <span>and also also <i class="agere">age regressors</i>!!!!!!!!!!</span>
             </p>
             <p>we're also on the <i class="aroace">aroace spectrum</i>!!!!!!</p>
 
             <style>
                 .transgender,
                 .nonbinary,
-                .aroace {
+                .aroace,
+                .agere {
                     background-clip: text;
                     color: #ffffff80;
                 }
@@ -230,27 +225,32 @@ import Hearts from "$layouts/widgets/Hearts.astro";
                         #203857
                     );
                 }
+
+                .agere {
+                    background-image: linear-gradient(-45deg, #fff, #fff 25%, #fdc1c8 25%, #fdc1c8 50%, #afe1fd 50%, #afe1fd 75%, #fcf77c 75%, #fcf77c);
+                }
             </style>
 
             <br />
 
             <p>
                 We live in <em>España</em>
-                <Icon src={ESFlag} />!!!
+                <Emoji e="🇪🇸" />!!!
+
                 <mark>
                     <i><strong>Puta Renfe</strong>!!!!</i>
                 </mark>
             </p>
 
             <p>
-                We're Therian <Icon src={ThetaDelta} />!!!!
+                We're Therian <Icon src={ThetaDelta.src} alt="the Theta-Delta symbol" />!!!!
                 <small> (i dont know a good source of info on what this means, if you know a site lmk please) </small>
             </p>
 
             <p>
                 We're a
                 <a href="https://yaodema.com/tf-hazard/" target="_blank">TF Hazard</a>
-                <Icon src={TFHazard} />
+                <Icon src={TFHazard.src} alt="the TF Hazard symbol" />
                 !!!!!
             </p>
         </div>

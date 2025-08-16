@@ -1,29 +1,18 @@
 ---
-import Picture, { type Props as P } from "$components/Picture.astro";
+import type { HTMLAttributes } from "astro/types";
 
-export type Props = P;
+export type Props = HTMLAttributes<"img">;
 
 const props = Astro.props;
 ---
 
-<Picture
-    {...props}
-    pictureAttributes={{
-        ...props.pictureAttributes,
-        class: "icon",
-    }}
-    alt=""
-/>
+<img {...props} class:list={[props.class, "icon"]} alt="" />
 
 <style>
-    .icon,
-    .icon > img {
-        display: inline-block;
-        width: auto;
-        height: 1.25em;
-    }
-
     .icon {
-        vertical-align: sub;
+        display: inline-block;
+        width: 1.25em;
+        height: 1.25em;
+        vertical-align: text-bottom;
     }
 </style>

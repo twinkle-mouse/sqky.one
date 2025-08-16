@@ -1,9 +1,9 @@
 ---
-import { BrownHeart, OrangeHeart, PinkHeart, PurpleHeart, WhiteHeart, YellowHeart } from "$assets/IconsSvg.astro";
+import { getEmojiUrl } from "$components/Emoji.astro";
 import HeartIcon from "$components/HeartIcon.astro";
-import SvgIcon from "$components/SvgIcon.astro";
+import Icon from "$components/Icon.astro";
 
-const hearts = [PinkHeart, BrownHeart, WhiteHeart, YellowHeart, OrangeHeart];
+const hearts = ["🩷", "🤎", "🤍", "💛", "🧡"];
 
 const radius = 80;
 const length = 4;
@@ -11,11 +11,11 @@ const length = 4;
 
 <div class="hearts" data-radius={radius}>
     <div class="system-heart-container">
-        <SvgIcon class="system-heart" width={radius} height={radius} src={PurpleHeart} />
+        <Icon class="system-heart" width={radius} height={radius} src={getEmojiUrl("💜")} />
     </div>
 
     <div class="headmate-hearts">
-        {hearts.map((heart, idx) => <HeartIcon src={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+        {hearts.map((heart, idx) => <HeartIcon src={getEmojiUrl(heart)} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
     </div>
 </div>
 

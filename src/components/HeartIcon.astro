@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from "astro";
 
-import SvgIcon from "$components/SvgIcon.astro";
+import Icon from "$components/Icon.astro";
 
 export type Props = {
     src: ImageMetadata;
@@ -23,7 +23,7 @@ const { src, radius, delay, length } = Astro.props;
 >
     <div class="headmate-heart-x">
         <div class="headmate-heart-y">
-            <SvgIcon src={src} />
+            <Icon src={src} />
         </div>
     </div>
 </div>

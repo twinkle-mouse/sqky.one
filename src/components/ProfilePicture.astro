@@ -1,7 +1,6 @@
 ---
-import { MouseSide } from "$assets/Icons.astro";
 import Pfp from "$assets/profile_picture.png";
-import Icon from "$components/Icon.astro";
+import Emoji from "$components/Emoji.astro";
 import Picture from "$components/Picture.astro";
 import { sectionColors } from "$layouts/Section.astro";
 
@@ -20,7 +19,7 @@ const pfpDesc =
     </div>
 
     <figcaption class="pfp-caption">
-        <p>the mouse!!!!!! <Icon src={MouseSide} /></p>
+        <p>the mouse!!!!!! <Emoji e="🐁" /></p>
         <p class="js-necessary"><small>(try patting it :3)</small></p>
         <p>picture taken on <a href="https://resonite.com/">Resonite</a></p>
         <p>
