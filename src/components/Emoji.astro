@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-export type Props = HTMLAttributes<"span"> & {
+export type Props = HTMLAttributes<"img"> & {
     e: string;
 };
 
@@ -36,38 +36,13 @@ export function getEmojiUrl(e: string) {
 const url = getEmojiUrl(e);
 ---
 
-<span {...props}>
-    {e}
-</span>
+<img {...props} src={url} alt={e} />
 
-<style define:vars={{ url: `url(${url})` }}>
-    span {
-        position: relative;
-
+<style>
+    img {
         display: inline-block;
         width: 1.25em;
         height: 1.25em;
         vertical-align: text-bottom;
-        overflow: hidden;
-    }
-
-    span,
-    span::selection,
-    span::-moz-selection {
-        color: transparent;
-    }
-
-    span::after {
-        content: "";
-
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        width: 1.25em;
-        height: 1.25em;
-
-        background-size: contain;
-        background: var(--url) no-repeat;
     }
 </style>
