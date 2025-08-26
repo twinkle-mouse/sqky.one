@@ -7,7 +7,7 @@ import { ROOT_DIR } from "astro:env/server";
 import FileTableEntry from "$components/FileTableEntry.astro";
 import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
-import type { PageEntry } from "$lib/page";
+import type { FileEntry } from "$lib/page";
 
 class SortMethod {
     id: string;
@@ -97,7 +97,7 @@ const entries = Array.from(
     }),
 );
 
-function cmp(a: PageEntry, b: PageEntry) {
+function cmp(a: FileEntry, b: FileEntry) {
     if (sortBy == SortMethod.Name) {
         return compare(a.name, b.name, ascending);
     } else if (sortBy == SortMethod.Size) {

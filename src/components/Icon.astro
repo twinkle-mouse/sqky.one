@@ -6,10 +6,10 @@ export type Props = HTMLAttributes<"img">;
 const props = Astro.props;
 ---
 
-<img {...props} class:list={[props.class, "icon"]} alt="" />
+<img {...props} alt="" />
 
 <style>
-    .icon {
+    img {
         display: inline-block;
         width: 1.25em;
         height: 1.25em;

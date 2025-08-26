@@ -41,22 +41,18 @@ if (entry.isFile) {
 ---
 
 <tr>
-    <td><span><img src={icon} width={24} height={24} /><a href={URL.parse(`${entry.name}${suffix}`, url)?.pathname}>{`${entry.name}${suffix}`}</a></span></td>
+    <td><img src={icon} /><a href={URL.parse(`${entry.name}${suffix}`, url)?.pathname}>{`${entry.name}${suffix}`}</a></td>
     <td class="mono">{formatBytes(entry.size)}</td>
     <td class="mono">{entry.mtime.toISOString()}</td>
 </tr>
 
 <style>
-    span {
-        height: fit-content;
-        display: flex;
-        align-items: end;
-        gap: 0.25em;
-    }
-
     img {
-        width: auto;
+        display: inline-block;
+        width: 1.5em;
         height: 1.5em;
+        vertical-align: -0.4em;
+        margin-right: 0.25em;
     }
 
     td {
