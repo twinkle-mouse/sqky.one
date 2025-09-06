@@ -36,7 +36,7 @@ export function getEmojiUrl(e: string) {
 const url = getEmojiUrl(e);
 ---
 
-<img {...props} src={url} alt={e} />
+<img {...props} src={url} alt={e} loading="eager" />
 
 <style>
     img {

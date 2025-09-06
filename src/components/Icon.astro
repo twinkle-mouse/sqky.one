@@ -6,7 +6,7 @@ export type Props = HTMLAttributes<"img">;
 const props = Astro.props;
 ---
 
-<img {...props} alt="" />
+<img {...props} alt="" loading="eager" />
 
 <style>
     img {
