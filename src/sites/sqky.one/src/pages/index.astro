@@ -1,9 +1,14 @@
 ---
+import Article from "$layouts/Article.astro";
 import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
 import AboutMe from "$layouts/sections/AboutMe.astro";
 import ColorCards from "$layouts/sections/ColorCards.astro";
+import Contacts from "$layouts/sections/Contacts.astro";
+import Facts from "$layouts/sections/Facts.astro";
+import Intro from "$layouts/sections/Intro.astro";
 import Nowplaying from "$layouts/sections/Nowplaying.astro";
+import Quotes from "$layouts/sections/Quotes.astro";
 ---
 
 <Page>
@@ -14,40 +19,71 @@ import Nowplaying from "$layouts/sections/Nowplaying.astro";
         <a href="#gadgets">Gadgets</a>
     </Fragment>
 
-    <Section>
-        <AboutMe />
-    </Section>
+    <Article>
+        <Fragment slot="heading">
+            The <i>Squeaky</i> One
+        </Fragment>
 
-    <div id="gadgets" class="group">
-        <div class="fit js-inherit">
-            <Section>
-                <ColorCards />
-            </Section>
-        </div>
+        <Section>
+            <Intro />
+        </Section>
 
-        <div class="fit js-inherit">
-            <Section>
-                <Nowplaying />
-            </Section>
+        <Section>
+            <AboutMe />
+            <hr />
+            <Facts />
+        </Section>
+
+        <Section>
+            <Contacts />
+
+            <hr />
+
+            <Quotes />
+        </Section>
+    </Article>
+
+    <Article heading={{ id: "gadgets" }}>
+        <Fragment slot="heading">Gadgets</Fragment>
+
+        <div class="group">
+            <div class="js-inherit">
+                <Section>
+                    <ColorCards />
+                </Section>
+            </div>
+
+            <div class="js-inherit">
+                <Section>
+                    <Nowplaying />
+                </Section>
+            </div>
         </div>
-    </div>
+    </Article>
+
+    <style>
+        .group {
+            width: 100%;
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap-reverse;
+            justify-content: stretch;
+            align-items: stretch;
+
+            padding: 1.25rem;
+            padding-top: 0;
+            gap: 1.5rem;
+        }
+
+        .group > * {
+            flex: min-content;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .group > * > :global(*) {
+            margin: 0;
+        }
+    </style>
 </Page>
-
-<style>
-    .group {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap-reverse;
-        justify-content: stretch;
-        align-items: stretch;
-
-        gap: 2rem;
-    }
-
-    .group > .fit {
-        flex: min-content;
-        width: fit-content;
-        max-width: 100%;
-    }
-</style>

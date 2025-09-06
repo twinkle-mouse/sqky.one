@@ -1,7 +1,10 @@
 ---
 import P from "$common/404.astro";
+import IndexNavControls from "$components/IndexNavControls.astro";
 ---
 
 <P>
-    <Fragment slot="nav"></Fragment>
+    <Fragment slot="nav:main-links">
+        <IndexNavControls />
+    </Fragment>
 </P>

@@ -191,17 +191,11 @@ const title = getTitle(Astro.props.title);
     h5,
     h6 {
         font-family: var(--serif);
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
         color: var(--headingColor);
 
-        margin-block: 0.4em;
+        line-height: 1.25em;
+        margin-top: 0.4em;
+        margin-bottom: 0.8em;
     }
 
     h1::before,
@@ -322,6 +316,78 @@ const title = getTitle(Astro.props.title);
         font-family: var(--mono);
     }
 
+    button,
+    label,
+    input,
+    input::file-selector-button {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+        font-family: var(--serif);
+        color: var(--buttonColor);
+    }
+
+    button,
+    input::file-selector-button {
+        margin-inline-end: 0.8rem;
+        margin-block: 0.6rem;
+        padding: 0.6rem;
+        border-radius: 0.4rem;
+
+        background-color: var(--buttonBgColor);
+        border: 3px solid var(--buttonActiveColor);
+    }
+
+    input[type="checkbox"] {
+        width: 36px;
+        height: 36px;
+
+        padding: 0.5em;
+        margin: -0.5em;
+
+        vertical-align: -0.185em;
+    }
+
+    input[type="checkbox"]::after {
+        content: "";
+        display: inline-block;
+
+        width: 18px;
+        height: 18px;
+
+        border-radius: 9999px;
+        background-color: var(--buttonColor);
+        border: 3px solid;
+        border-color: #555;
+    }
+
+    input[type="checkbox"]:hover::after,
+    input[type="checkbox"]:checked::after {
+        background-color: var(--buttonActiveColor);
+        border-color: #888;
+    }
+
+    input[type="checkbox"] + label {
+        margin-left: 0.35em;
+    }
+
+    button:focus,
+    button:hover,
+    input:focus,
+    input:hover,
+    input:focus + label,
+    input:hover + label,
+    input:focus::file-selector-button,
+    input:hover::file-selector-button {
+        text-decoration: underline;
+        text-underline-offset: 30%;
+        color: var(--buttonActiveColor);
+    }
+
+    input:checked + label {
+        color: var(--buttonActiveColor);
+    }
+
     blockquote {
         margin-block: 1.25rem;
         margin-left: 1rem;
@@ -333,11 +399,11 @@ const title = getTitle(Astro.props.title);
     }
 
     blockquote::before {
-        content: "\00201C\ ";
+        content: "“ ";
     }
 
     blockquote::after {
-        content: "\ \00201D";
+        content: " ”";
     }
 
     cite {
@@ -351,7 +417,7 @@ const title = getTitle(Astro.props.title);
     }
 
     cite::before {
-        content: "\002014\ ";
+        content: "— ";
     }
 
     cite::after {

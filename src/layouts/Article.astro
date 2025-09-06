@@ -1,0 +1,69 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { cuteblue700, cuteblue900, lavender400 } from "$lib/colors";
+
+type Props = HTMLAttributes<"article"> & {
+    heading?: {
+        id?: string;
+    };
+};
+
+export const articleColors = { headingColor: lavender400, bgColor: cuteblue900, borderColor: cuteblue700 };
+
+const { heading, ...props } = Astro.props;
+
+let headingContent = undefined;
+if (Astro.slots.has("heading")) {
+    headingContent = await Astro.slots.render("heading");
+}
+---
+
+<article {...props}>
+    {headingContent && <h1 id={heading?.id} set:html={headingContent} />}
+
+    <slot />
+</article>
+
+<style define:vars={{ ...articleColors }}>
+    h1,
+    h1::before,
+    h1::after {
+        all: unset;
+    }
+
+    h1 {
+        display: block;
+        text-align: center;
+        margin-block: 2rem;
+
+        color: var(--headingColor);
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: 700;
+
+        text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.3);
+    }
+
+    h1::before {
+        content: "“ ";
+    }
+
+    h1::after {
+        content: " ”";
+    }
+
+    article {
+        height: fit-content;
+
+        border: 2px var(--borderColor) solid;
+        border-radius: 0.3rem;
+        background-color: var(--bgColor);
+
+        box-shadow:
+            0px 0px 6px 3px rgba(0, 0, 0, 0.5),
+            inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
+
+        overflow: auto;
+    }
+</style>

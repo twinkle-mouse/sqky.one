@@ -1,0 +1,121 @@
+---
+import { TFHazard, ThetaDelta } from "$assets/Icons.astro";
+import Emoji from "$components/Emoji.astro";
+import Headmates from "$components/Headmates.astro";
+import Icon from "$components/Icon.astro";
+import Hearts from "$layouts/widgets/Hearts.astro";
+---
+
+<div>
+    <h3>By The Way, There's More</h3>
+    <p>we're plural!!!!!!!</p>
+    <p>
+        if referring to us collectively, call us
+        <em>Madeline</em> or <em>Maddie</em>
+        <small>(they/them)</small>
+        <Emoji e="💜" />
+    </p>
+    <p>and our system tag is <Emoji e="💫" /> !!</p>
+
+    <br />
+
+    <p>
+        here is a
+        <small>(hopefully up-to-date when you read this)</small>
+        list of the headmates (:
+    </p>
+    <p>
+        <small>
+            <strong> (note: we might add pages for specific headmates later!!!!!) </strong>
+        </small>
+    </p>
+</div>
+
+<Hearts />
+
+<Headmates />
+
+<div>
+    <h3>Some Assorted Facts</h3>
+    <p>
+        <span>we're <i class="transgender">transgender</i> <Emoji e="🏳️‍⚧️" />!!!</span>
+
+        <span>and also <i class="nonbinary">nonbinary</i>!!!!!</span>
+
+        <span>and also also <i class="agere">age regressors</i>!!!!!!!!!!</span>
+    </p>
+    <p>we're also on the <i class="aroace">aroace spectrum</i>!!!!!!</p>
+</div>
+
+<style>
+    .transgender,
+    .nonbinary,
+    .aroace,
+    .agere {
+        background-clip: text;
+        color: #ffffff80;
+    }
+
+    .transgender {
+        background-image: linear-gradient(
+            -45deg,
+            #5ccefa,
+            #5ccefa 20%,
+            #f6a8b7 20%,
+            #f6a8b7 40%,
+            #fff 40%,
+            #fff 60%,
+            #f6a8b7 60%,
+            #f6a8b7 80%,
+            #5ccefa 80%,
+            #5ccefa
+        );
+    }
+
+    .nonbinary {
+        background-image: linear-gradient(-45deg, #fdf52f, #fdf52f 25%, #fff 25%, #fff 50%, #9d5ad2 50%, #9d5ad2 75%, #000 75%, #000);
+    }
+
+    .aroace {
+        background-image: linear-gradient(
+            -45deg,
+            #e38c01,
+            #e38c01 20%,
+            #eccd00 20%,
+            #eccd00 40%,
+            #fff 40%,
+            #fff 60%,
+            #62afde 60%,
+            #62afde 80%,
+            #203857 80%,
+            #203857
+        );
+    }
+
+    .agere {
+        background-image: linear-gradient(-45deg, #fff, #fff 25%, #fdc1c8 25%, #fdc1c8 50%, #afe1fd 50%, #afe1fd 75%, #fcf77c 75%, #fcf77c);
+    }
+</style>
+
+<br />
+
+<p>
+    We live in <em>España</em>
+    <Emoji e="🇪🇸" />!!!
+
+    <mark>
+        <i><strong>Puta Renfe</strong>!!!!</i>
+    </mark>
+</p>
+
+<p>
+    We're Therian <Icon src={ThetaDelta.src} alt="ΘΔ" title="The Theta-Delta symbol" />!!!!
+    <small> (i dont know a good source of info on what this means, if you know a site lmk please) </small>
+</p>
+
+<p>
+    We're a
+    <a href="https://yaodema.com/tf-hazard/" target="_blank">TF Hazard</a>
+    <Icon src={TFHazard.src} title="The TF Hazard symbol" />
+    !!!!!
+</p>

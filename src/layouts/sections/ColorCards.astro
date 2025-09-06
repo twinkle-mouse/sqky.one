@@ -1,139 +1,177 @@
 ---
 import ColorCard from "$components/ColorCard.astro";
-import { colors, cuteblue400, slate100 } from "$lib/colors";
+import { colors, slate100 } from "$lib/colors";
 ---
 
 <div aria-hidden="true">
-    <p class="color-title mono">
-        <span class="colors-text">c o l o u r s</span>
-    </p>
+    <h2 class="colors-text mono">c o l o u r s</h2>
+
+    <style>
+        .colors-text::before,
+        .colors-text::after {
+            all: unset;
+        }
+
+        .colors-text {
+            background: linear-gradient(
+                135deg,
+                #ff2400,
+                #ff2400,
+                #ff2400,
+                #ff7b46,
+                #ff7b46,
+                #ff7b46,
+                #fff89a,
+                #fff89a,
+                #fff89a,
+                #72ff8a,
+                #72ff8a,
+                #72ff8a,
+                #a8f9ff,
+                #a8f9ff,
+                #a8f9ff,
+                #6a6dff,
+                #6a6dff,
+                #6a6dff,
+                #f36eff,
+                #f36eff,
+                #f36eff,
+                #6a6dff,
+                #6a6dff,
+                #6a6dff,
+                #a8f9ff,
+                #a8f9ff,
+                #a8f9ff,
+                #72ff8a,
+                #72ff8a,
+                #72ff8a,
+                #fff89a,
+                #fff89a,
+                #fff89a,
+                #ff7b46,
+                #ff7b46,
+                #ff7b46,
+                #ff2400,
+                #ff2400,
+                #ff2400
+            );
+
+            width: fit-content;
+            margin-inline: auto;
+            margin-bottom: 2rem;
+            text-wrap: nowrap;
+            text-align: center;
+            font-size: 2.5rem;
+
+            background-size: 600% 100%;
+            background-clip: text;
+
+            color: transparent;
+
+            animation: rainbow 36s linear infinite;
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+        }
+    </style>
 
     <p class="text-center">play around, drag them all over, they're fun :3</p>
+
+    <div class="toggle-card-names text-center">
+        <input type="checkbox" id="toggle-card-names-visibility" /><label for="toggle-card-names-visibility">Toggle card names</label>
+    </div>
+
+    <style>
+        .toggle-card-names {
+            margin-top: 2em;
+        }
+    </style>
 
     <div class="cards">
         {
             Object.entries(colors).map(([name, variants]) => (
                 <div class="color-section">
-                    <span class="js-selectable color-name">{name}</span>
+                    <span class="color-set-name">{name}</span>
 
                     {variants.entries().map(([variant, color]) => (
-                        <ColorCard color={color} variant={variant} />
+                        <span class="color-card">
+                            <ColorCard color={color} variant={variant} />
+                        </span>
                     ))}
                 </div>
             ))
         }
     </div>
+
+    <style
+        define:vars={{
+            colorNameColor: slate100,
+        }}
+    >
+        .cards {
+            display: flex;
+            position: relative;
+
+            width: fit-content;
+            max-width: 100%;
+            min-width: 240px;
+            overflow: scroll;
+
+            padding: 1rem;
+            margin-top: 1.5rem;
+            margin-inline: auto;
+            gap: 0.75rem;
+
+            border-radius: 1.25rem;
+
+            font-size: 1.25rem;
+
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            background-color: #121212;
+        }
+
+        .color-section {
+            display: flex;
+
+            flex: 10%;
+            gap: 0.35em;
+
+            flex-direction: column;
+            align-items: center;
+
+            text-align: center;
+
+            touch-action: none;
+        }
+
+        .color-set-name {
+            color: var(--colorNameColor);
+
+            text-decoration: underline;
+            text-transform: capitalize;
+
+            user-select: none;
+        }
+
+        .toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ .cards .color-card {
+            --color-override: transparent;
+            user-select: none;
+        }
+    </style>
 </div>
 
-<style
-    define:vars={{
-        colorNameColor: slate100,
-        colorTitleColor: cuteblue400,
-    }}
->
-    .color-title {
-        color: var(--colorTitleColor);
-        text-align: center;
-        font-size: 2.15rem;
-    }
+<script>
+    const cards = document.querySelectorAll<HTMLElement>(".color-card");
+    const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
 
-    .colors-text {
-        background: linear-gradient(
-            135deg,
-            #ff2400,
-            #ff2400,
-            #ff2400,
-            #ff7b46,
-            #ff7b46,
-            #ff7b46,
-            #fff89a,
-            #fff89a,
-            #fff89a,
-            #72ff8a,
-            #72ff8a,
-            #72ff8a,
-            #a8f9ff,
-            #a8f9ff,
-            #a8f9ff,
-            #6a6dff,
-            #6a6dff,
-            #6a6dff,
-            #f36eff,
-            #f36eff,
-            #f36eff,
-            #6a6dff,
-            #6a6dff,
-            #6a6dff,
-            #a8f9ff,
-            #a8f9ff,
-            #a8f9ff,
-            #72ff8a,
-            #72ff8a,
-            #72ff8a,
-            #fff89a,
-            #fff89a,
-            #fff89a,
-            #ff7b46,
-            #ff7b46,
-            #ff7b46,
-            #ff2400,
-            #ff2400,
-            #ff2400
-        );
+    const update = () => {
+        if (toggler.checked === false) {
+            cards.forEach((e) => e.style.setProperty("--color-override", "transparent"));
+        } else {
+            cards.forEach((e) => e.style.removeProperty("--color-override"));
+        }
+    };
 
-        width: max-content;
-        display: inline-block;
-        background-size: 600% 100%;
-        background-clip: text;
-
-        color: transparent;
-
-        animation: rainbow 36s linear infinite;
-    }
-
-    .cards {
-        display: flex;
-        position: relative;
-
-        width: fit-content;
-        min-width: 340px;
-        max-width: 100%;
-
-        padding: 1rem;
-        margin-top: 1.5rem;
-        margin-inline: auto;
-        gap: 0.75rem;
-
-        border-radius: 1.25rem;
-
-        font-size: 1.25rem;
-
-        flex-wrap: wrap;
-        justify-content: space-around;
-
-        background-color: #121212;
-    }
-
-    .color-section {
-        display: flex;
-
-        flex: 10%;
-        gap: 0.35em;
-
-        flex-direction: column;
-        align-items: center;
-
-        text-align: center;
-
-        touch-action: none;
-    }
-
-    .color-name {
-        color: var(--colorNameColor);
-
-        text-decoration: underline;
-        text-transform: capitalize;
-
-        user-select: none;
-    }
-</style>
+    toggler.addEventListener("input", update);
+    document.addEventListener("DOMContentLoaded", update);
+</script>

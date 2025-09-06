@@ -20,12 +20,12 @@ const contrastColor = ((color: Color) => {
 })(new Color(color));
 ---
 
-<span class="js-selectable color-card mono">
+<span class="js-selectable color-card">
     <span
         class="color-card-inner"
         style={{
             backgroundColor: color,
-            color: contrastColor,
+            color: `var(--color-override, ${contrastColor})`,
         }}
     >
         {variant}

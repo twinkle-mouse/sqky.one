@@ -5,6 +5,8 @@ import path from "node:path";
 import { ROOT_DIR } from "astro:env/server";
 
 import FileTableEntry from "$components/FileTableEntry.astro";
+import IndexNavControls from "$components/IndexNavControls.astro";
+import Article from "$layouts/Article.astro";
 import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
 import type { FileEntry } from "$lib/page";
@@ -138,17 +140,12 @@ function getUrl(path: string, index: number) {
 ---
 
 <Page title=`Files Archive - /${dirPath}`>
-    <Fragment slot="nav"></Fragment>
+    <Fragment slot="nav:main-links">
+        <IndexNavControls />
+    </Fragment>
 
-    <Section>
-        <div class="controls">
-            <a href="../">Back up...</a>
-            <a href="/">Back to root...</a>
-            <br />
-            <a href="https://sqky.one">Back to main site</a>
-        </div>
-
-        <p>
+    <Article>
+        <p class="nav-path">
             {urlPaths.length == 0 && <span>/</span>}
 
             {
@@ -163,68 +160,57 @@ function getUrl(path: string, index: number) {
             }
         </p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        <a href={linkUrl(SortMethod.Name)}>
-                            Name
-                            <small>{sortBy == SortMethod.Name && sortSymbol}</small>
-                        </a>
-                    </th>
-                    <th>
-                        <a href={linkUrl(SortMethod.Size)}>
-                            Size
-                            <small>{sortBy == SortMethod.Size && sortSymbol}</small>
-                        </a>
-                    </th>
-                    <th>
-                        <a href={linkUrl(SortMethod.ModifiedDate)}>
-                            Modified Date
-                            <small>{sortBy == SortMethod.ModifiedDate && sortSymbol}</small>
-                        </a>
-                    </th>
-                </tr>
-                <tbody>
-                    {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
-                    {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
-                </tbody>
-            </thead>
+        <style>
+            .nav-path {
+                font-size: 1.3rem;
+                margin-inline: 1rem;
+                margin-block: 1.5rem;
+            }
+        </style>
 
-            <style>
-                .controls {
-                    margin-bottom: 1.25rem;
-                }
+        <Section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <a href={linkUrl(SortMethod.Name)}>
+                                Name
+                                <small>{sortBy == SortMethod.Name && sortSymbol}</small>
+                            </a>
+                        </th>
+                        <th>
+                            <a href={linkUrl(SortMethod.Size)}>
+                                Size
+                                <small>{sortBy == SortMethod.Size && sortSymbol}</small>
+                            </a>
+                        </th>
+                        <th>
+                            <a href={linkUrl(SortMethod.ModifiedDate)}>
+                                Modified Date
+                                <small>{sortBy == SortMethod.ModifiedDate && sortSymbol}</small>
+                            </a>
+                        </th>
+                    </tr>
+                    <tbody>
+                        {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                        {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                    </tbody>
+                </thead>
 
-                .controls > a {
-                    display: inline-block;
+                <style>
+                    table :global(th),
+                    table :global(td) {
+                        text-align: end;
+                    }
 
-                    padding-inline: 0.7rem;
-                    padding-block: 0.5rem;
-
-                    margin-block: 0.3rem;
-                    margin-inline: 0.15rem;
-
-                    border-radius: 4px;
-                    border: 2px solid var(--slate700);
-
-                    background-color: var(--slate800);
-
-                    text-wrap: nowrap;
-                }
-
-                table :global(th),
-                table :global(td) {
-                    text-align: end;
-                }
-
-                table :global(th:first-of-type),
-                table :global(td:first-of-type) {
-                    width: 100%;
-                    padding-right: 6em;
-                    text-align: start;
-                }
-            </style>
-        </table>
-    </Section>
+                    table :global(th:first-of-type),
+                    table :global(td:first-of-type) {
+                        width: 100%;
+                        padding-right: 6em;
+                        text-align: start;
+                    }
+                </style>
+            </table>
+        </Section>
+    </Article>
 </Page>
