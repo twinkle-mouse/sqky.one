@@ -3,10 +3,10 @@ export const babypink200 = "#ffd1f1ff";
 export const babypink300 = "#fabee9ff";
 export const babypink400 = "#fdb6e9ff";
 export const babypink500 = "#f3a0ddff";
-export const babypink600 = "#c478b2ff";
-export const babypink700 = "#7c4271ff";
-export const babypink800 = "#44273eff";
-export const babypink900 = "#2e1a2aff";
+export const babypink600 = "#b86ba6ff";
+export const babypink700 = "#713a67ff";
+export const babypink800 = "#3d1c36ff";
+export const babypink900 = "#271724ff";
 export const babypink = {
     babypink100,
     babypink200,
@@ -19,15 +19,15 @@ export const babypink = {
     babypink900,
 };
 
-export const cuteblue100 = "#e4f5ffff";
-export const cuteblue200 = "#d3eeffff";
-export const cuteblue300 = "#c0e3ffff";
-export const cuteblue400 = "#a0d6faff";
-export const cuteblue500 = "#82c0e9ff";
-export const cuteblue600 = "#5b93c0ff";
-export const cuteblue700 = "#32668dff";
-export const cuteblue800 = "#193347ff";
-export const cuteblue900 = "#11202bff";
+export const cuteblue100 = "#e3e6ffff";
+export const cuteblue200 = "#cfd4fdff";
+export const cuteblue300 = "#b0b8f1ff";
+export const cuteblue400 = "#939eeaff";
+export const cuteblue500 = "#848fe5ff";
+export const cuteblue600 = "#5761aaff";
+export const cuteblue700 = "#373e78ff";
+export const cuteblue800 = "#20254aff";
+export const cuteblue900 = "#16192fff";
 export const cuteblue = {
     cuteblue100,
     cuteblue200,
@@ -40,15 +40,15 @@ export const cuteblue = {
     cuteblue900,
 };
 
-export const lavender100 = "#f1e4ffff";
-export const lavender200 = "#e7d1ffff";
+export const lavender100 = "#f2e5ffff";
+export const lavender200 = "#e8d2ffff";
 export const lavender300 = "#e5c2ffff";
-export const lavender400 = "#d0acf5ff";
-export const lavender500 = "#c395e9ff";
-export const lavender600 = "#915db8ff";
-export const lavender700 = "#6e3c92ff";
-export const lavender800 = "#421e57ff";
-export const lavender900 = "#281431ff";
+export const lavender400 = "#d8b1ffff";
+export const lavender500 = "#d7a6ffff";
+export const lavender600 = "#af7bdaff";
+export const lavender700 = "#744b92ff";
+export const lavender800 = "#492b5bff";
+export const lavender900 = "#281830ff";
 export const lavender = {
     lavender100,
     lavender200,
@@ -61,15 +61,15 @@ export const lavender = {
     lavender900,
 };
 
-export const space100 = "#dcdcffff";
-export const space200 = "#cbcbffff";
-export const space300 = "#aba8e7ff";
-export const space400 = "#8f88d1ff";
-export const space500 = "#776fbbff";
-export const space600 = "#5e589eff";
-export const space700 = "#494386ff";
-export const space800 = "#30295fff";
-export const space900 = "#1c183bff";
+export const space100 = "#d8d8ffff";
+export const space200 = "#cacaffff";
+export const space300 = "#c0bdffff";
+export const space400 = "#b9b0ffff";
+export const space500 = "#a89effff";
+export const space600 = "#8c83e8ff";
+export const space700 = "#6861afff";
+export const space800 = "#383366ff";
+export const space900 = "#201c38ff";
 export const space = {
     space100,
     space200,
@@ -82,15 +82,15 @@ export const space = {
     space900,
 };
 
-export const grass100 = "#eeffdbff";
-export const grass200 = "#e2ffbfff";
-export const grass300 = "#ccff9dff";
-export const grass400 = "#abf169ff";
-export const grass500 = "#93e646ff";
-export const grass600 = "#82c543ff";
-export const grass700 = "#618b3aff";
-export const grass800 = "#374e21ff";
-export const grass900 = "#1c2513ff";
+export const grass100 = "#f6ffecff";
+export const grass200 = "#ebffd2ff";
+export const grass300 = "#daffb8ff";
+export const grass400 = "#ccff9dff";
+export const grass500 = "#bffc86ff";
+export const grass600 = "#9dd06eff";
+export const grass700 = "#6c8c4bff";
+export const grass800 = "#3e4d2fff";
+export const grass900 = "#212719ff";
 export const grass = {
     grass100,
     grass200,
@@ -103,15 +103,15 @@ export const grass = {
     grass900,
 };
 
-export const slate100 = "#e1dfecff";
-export const slate200 = "#c5c4d4ff";
-export const slate300 = "#aba9bbff";
-export const slate400 = "#89899eff";
-export const slate500 = "#717086ff";
-export const slate600 = "#595769ff";
-export const slate700 = "#444253ff";
-export const slate800 = "#312f3dff";
-export const slate900 = "#202027ff";
+export const slate100 = "#e7e5f3ff";
+export const slate200 = "#cecce1ff";
+export const slate300 = "#aba7c5ff";
+export const slate400 = "#8f8faeff";
+export const slate500 = "#7d7b97ff";
+export const slate600 = "#646276ff";
+export const slate700 = "#4b4a57ff";
+export const slate800 = "#313136ff";
+export const slate900 = "#202024ff";
 export const slate = {
     slate100,
     slate200,
@@ -138,6 +138,9 @@ export const semanticColors = {
     textColor: babypink100,
     linkColor: grass200,
     linkFocusColor: grass500,
+    buttonColor: cuteblue300,
+    buttonBgColor: cuteblue800,
+    buttonActiveColor: cuteblue100,
     headingColor: lavender300,
     smallColor: slate300,
     codeBgColor: slate600,
