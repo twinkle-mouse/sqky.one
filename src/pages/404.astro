@@ -7,9 +7,10 @@ import Navigation from "$layouts/widgets/Navigation.astro";
 <Page title="Not Found">
     <slot name="nav" slot="nav">
         <Navigation>
-            <slot name="nav:main-links" slot="nav:main-links" />
+            <slot name="nav:page-links" slot="nav:page-links" />
             <slot name="nav:other-categories" slot="nav:other-categories" />
             <slot name="nav:misc-links" slot="nav:misc-links" />
+            <slot name="nav:footer" slot="nav:footer" />
         </Navigation>
     </slot>
 

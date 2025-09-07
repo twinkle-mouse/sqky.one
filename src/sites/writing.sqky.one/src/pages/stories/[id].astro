@@ -1,0 +1,77 @@
+---
+import { getEntry } from "astro:content";
+import { render } from "astro:content";
+import { getCollection } from "astro:content";
+
+import Article from "$layouts/Article.astro";
+import Page from "$layouts/Page.astro";
+import Section from "$layouts/Section.astro";
+
+export async function getStaticPaths() {
+    return (await getCollection("writings")).map((v) => {
+        return { params: { id: v.id.replace("stories/", "") } };
+    });
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("writings", `stories/${id}`);
+if (entry === undefined) {
+    return Astro.redirect("/404");
+}
+
+const { Content, headings } = await render(entry);
+---
+
+<Page>
+    <Fragment slot="nav:page-links">
+        {headings.map((v) => <a href={`#${v.slug}`}>{v.text}</a>)}
+    </Fragment>
+
+    <Article>
+        <Fragment slot="heading">
+            {entry.data.title}
+        </Fragment>
+
+        <div id="content">
+            <Content
+                components={{
+                    section: Section,
+                }}
+            />
+
+            <style is:global>
+                #content ::before,
+                #content ::after {
+                    all: unset;
+                }
+
+                #content p {
+                    margin-block: 1.5rem;
+                    line-height: 1.5em;
+                    text-wrap: wrap stable;
+                    text-align: justify;
+                    text-justify: distribute;
+                    white-space: pre-line;
+                }
+
+                #content h1,
+                #content h2,
+                #content h3,
+                #content h4,
+                #content h5,
+                #content h6 {
+                    text-align: center;
+                    font-weight: 500;
+                }
+
+                #content section > p:has(code) {
+                    text-align: center;
+                }
+
+                #content blockquote > * {
+                    margin: 0;
+                }
+            </style>
+        </div>
+    </Article>
+</Page>

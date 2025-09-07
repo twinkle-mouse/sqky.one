@@ -1,23 +1,28 @@
+export class Site {
+    static Main = "Main_SqkyOne";
+    static Writing = "Writing_SqkyOne";
+    static Files = "Files_TheSqkyOne";
+}
+export const site = process.env["SITE_CONFIG"] || Site.Main;
+
 import path from "node:path";
 
 import { defineConfig } from "astro/config";
 
 import mainSite from "./src/sites/sqky.one/astro.config";
 import theSqkyOne from "./src/sites/the.sqky.one/astro.config";
-
-class Site {
-    static Main = "Main_SqkyOne";
-    static Files = "Files_TheSqkyOne";
-}
+import writing from "./src/sites/writing.sqky.one/astro.config";
 
 const dir = process.cwd();
 const fontsDir = path.join(dir, "fonts");
 const sitesDir = path.join(dir, "src", "sites");
 
-const site = process.env["SITE_CONFIG"] || Site.Main;
 function getConfig(): object {
     if (site === Site.Main) {
         return { ...mainSite, srcDir: path.join(sitesDir, "sqky.one", "src") };
+    }
+    if (site === Site.Writing) {
+        return { ...writing, srcDir: path.join(sitesDir, "writing.sqky.one", "src") };
     }
     if (site === Site.Files) {
         return { ...theSqkyOne, srcDir: path.join(sitesDir, "the.sqky.one", "src") };

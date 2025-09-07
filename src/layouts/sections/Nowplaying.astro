@@ -1,6 +1,5 @@
 ---
 import nowplaying from "$assets/nowplaying.html";
-import { cuteblue600, cuteblue800 } from "$lib/colors";
 ---
 
 <div class="text-center js-necessary">
@@ -30,20 +29,20 @@ import { cuteblue600, cuteblue800 } from "$lib/colors";
     });
 </script>
 
-<style define:vars={{ bgColor: cuteblue800, borderColor: cuteblue600 }}>
+<style>
     .nowplaying {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: fit-content;
         margin-inline: auto;
-        background-color: var(--bgColor);
+        background-color: var(--cuteblue800);
 
         padding: 1.35rem;
         margin-top: 1.5rem;
         margin-bottom: 1rem;
 
-        border: 2px dashed var(--borderColor);
+        border: 2px dashed var(--cuteblue600);
     }
 
     #nowplaying-widget {

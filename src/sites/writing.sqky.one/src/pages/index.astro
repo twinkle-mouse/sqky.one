@@ -1,0 +1,87 @@
+---
+import { getCollection } from "astro:content";
+
+import Article from "$layouts/Article.astro";
+import Page from "$layouts/Page.astro";
+import Section from "$layouts/Section.astro";
+
+const entries = (await getCollection("writings")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Page>
+    <Article>
+        <Fragment slot="heading">Writings, blogs and squeaks</Fragment>
+        <Section>
+            <h2>Stories</h2>
+
+            {
+                entries.map((writing) => (
+                    <div class="entry-card">
+                        <div class="entry-title">
+                            <a href={writing.id}>{writing.data.title}</a>
+                            <aside>{writing.data.date.toDateString()}</aside>
+                        </div>
+
+                        <div class="entry-content">{writing.data.description || "(no description)"}</div>
+
+                        <footer>
+                            <p>
+                                <em>Authors:</em> {writing.data.authors.join(", ")}
+                            </p>
+                            <p>
+                                <em>Tags:</em> {writing.data.tags.join(", ") || "(none)"}
+                            </p>
+                        </footer>
+                    </div>
+                ))
+            }
+
+            <style>
+                .entry-card {
+                    width: 100%;
+                    height: max-content;
+                    background-color: var(--cuteblue800);
+                    border-radius: 1rem;
+                    border: 3px solid var(--cuteblue600);
+                    padding: 1rem;
+                }
+
+                .entry-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                    padding-block: 0.2rem;
+                }
+
+                .entry-title a {
+                    font-size: 1.55rem;
+                    font-family: var(--serif);
+                    font-style: oblique;
+                }
+
+                .entry-title aside {
+                    font-size: 0.9rem;
+                    font-family: var(--mono);
+                    color: var(--slate500);
+                }
+
+                .entry-content {
+                    font-family: var(--serif);
+                    font-style: italic;
+                    color: var(--lavender200);
+                    white-space: pre-line;
+                }
+
+                .entry-card footer {
+                    border-top: 1px solid var(--slate600);
+                    margin-top: 1rem;
+                    padding-top: 0.5rem;
+                    font-size: 0.85rem;
+                    font-family: var(--sans);
+                    color: var(--slate400);
+                }
+            </style>
+        </Section>
+    </Article>
+</Page>

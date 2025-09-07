@@ -1,6 +1,6 @@
 ---
 import ColorCard from "$components/ColorCard.astro";
-import { colors, slate100 } from "$lib/colors";
+import { colors } from "$lib/colors";
 ---
 
 <div aria-hidden="true">
@@ -101,11 +101,7 @@ import { colors, slate100 } from "$lib/colors";
         }
     </div>
 
-    <style
-        define:vars={{
-            colorNameColor: slate100,
-        }}
-    >
+    <style>
         .cards {
             display: flex;
             position: relative;
@@ -145,7 +141,7 @@ import { colors, slate100 } from "$lib/colors";
         }
 
         .color-set-name {
-            color: var(--colorNameColor);
+            color: var(--slate100);
 
             text-decoration: underline;
             text-transform: capitalize;

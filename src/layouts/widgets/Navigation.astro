@@ -1,11 +1,9 @@
 ---
 import { lavender600, lavender800, lavender900, slate200, slate600, space500, space800, space900 } from "$lib/colors";
 
-import Transcube from "./Transcube.astro";
-
-let mainLinks = undefined;
-if (Astro.slots.has("nav:main-links")) {
-    mainLinks = await Astro.slots.render("nav:main-links");
+let pageLinks = undefined;
+if (Astro.slots.has("nav:page-links")) {
+    pageLinks = await Astro.slots.render("nav:page-links");
 }
 ---
 
@@ -14,15 +12,16 @@ if (Astro.slots.has("nav:main-links")) {
         <p>Main Site</p>
         <div>
             <a href="https://sqky.one/#">Home</a>
+            <a href="https://writing.sqky.one/#">Writings</a>
         </div>
     </div>
 
     {
-        mainLinks && (
+        pageLinks && (
             <div>
                 <p>This Page</p>
                 <div>
-                    <Fragment set:html={mainLinks} />
+                    <Fragment set:html={pageLinks} />
                 </div>
             </div>
         )
@@ -40,7 +39,7 @@ if (Astro.slots.has("nav:main-links")) {
     </div>
 
     <footer>
-        <Transcube />
+        <slot name="nav:footer" />
     </footer>
 </nav>
 
@@ -74,17 +73,17 @@ if (Astro.slots.has("nav:main-links")) {
             inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
     }
 
-    nav > div :global(p),
-    nav > div :global(a) {
+    nav > :global(div) :global(p),
+    nav > :global(div) :global(a) {
         display: block;
 
         width: fit-content;
         height: min-content;
 
-        text-wrap: nowrap;
+        text-wrap: stable;
     }
 
-    nav > div :global(p) {
+    nav > :global(div) :global(p) {
         width: 100%;
 
         margin: 0;
@@ -96,19 +95,19 @@ if (Astro.slots.has("nav:main-links")) {
         text-align: center;
     }
 
-    nav > div :global(a) {
+    nav > :global(div) :global(a) {
         padding: 0.15rem;
 
         border: 1px solid var(--linkBorderColor);
         background-color: var(--linkBgColor);
     }
 
-    nav > div :global(a::before) {
+    nav > :global(div) :global(a::before) {
         content: "|> ";
     }
 
-    nav > div :global(a:hover),
-    nav > div :global(a:focus) {
+    nav > :global(div) :global(a:hover),
+    nav > :global(div) :global(a:focus) {
         background-color: var(--linkBgColorActive);
     }
 
@@ -147,7 +146,7 @@ if (Astro.slots.has("nav:main-links")) {
         border-right: none;
     }
 
-    nav > div > :global(div) {
+    nav > :global(div) > :global(div) {
         display: flex;
 
         width: 100%;

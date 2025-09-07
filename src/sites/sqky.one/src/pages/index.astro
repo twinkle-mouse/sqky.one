@@ -9,14 +9,19 @@ import Facts from "$layouts/sections/Facts.astro";
 import Intro from "$layouts/sections/Intro.astro";
 import Nowplaying from "$layouts/sections/Nowplaying.astro";
 import Quotes from "$layouts/sections/Quotes.astro";
+import Transcube from "$layouts/widgets/Transcube.astro";
 ---
 
 <Page>
-    <Fragment slot="nav:main-links">
+    <Fragment slot="nav:page-links">
         <a href="#intro">About Me</a>
         <a href="#contacts">Contacts</a>
         <a href="#quotes">Quotes</a>
         <a href="#gadgets">Gadgets</a>
+    </Fragment>
+
+    <Fragment slot="nav:footer">
+        <Transcube />
     </Fragment>
 
     <Article>

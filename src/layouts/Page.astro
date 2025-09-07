@@ -65,9 +65,10 @@ const title = getTitle(Astro.props.title);
 
             <slot name="nav">
                 <Navigation>
-                    <slot name="nav:main-links" slot="nav:main-links" />
+                    <slot name="nav:page-links" slot="nav:page-links" />
                     <slot name="nav:other-categories" slot="nav:other-categories" />
                     <slot name="nav:misc-links" slot="nav:misc-links" />
+                    <slot name="nav:footer" slot="nav:footer" />
                 </Navigation>
             </slot>
         </div>
@@ -271,7 +272,7 @@ const title = getTitle(Astro.props.title);
     hr {
         display: block;
         width: 100%;
-        height: 3px;
+        height: 2px;
         background: var(--separatorColor);
         margin-block: 2em;
         border-radius: 9999px;
@@ -396,6 +397,11 @@ const title = getTitle(Astro.props.title);
         border-left: solid var(--quoteColor) 4px;
 
         font-style: italic;
+    }
+
+    blockquote > * {
+        display: inline;
+        white-space: pre-line;
     }
 
     blockquote::before {

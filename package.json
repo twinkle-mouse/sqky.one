@@ -16,6 +16,7 @@
         "lint": "prettier src --write && eslint --fix 'src/**/*.{js,astro}'"
     },
     "devDependencies": {
+        "@astrojs/mdx": "^4.3.4",
         "@eslint/js": "^9.35.0",
         "@types/node": "^24.3.1",
         "@typescript-eslint/parser": "^8.42.0",
@@ -30,6 +31,7 @@
         "postcss-reporter": "^7.1.0",
         "prettier": "^3.6.2",
         "prettier-plugin-astro": "^0.14.1",
+        "remark-sectionize": "^2.1.0",
         "sharp": "^0.34.3",
         "typescript": "^5.9.2",
         "typescript-eslint": "^8.42.0",

@@ -1,15 +1,14 @@
 ---
-export type Props = HTMLAttributes<"textarea"> & {
-    src: string;
-};
-
 import fs from "node:fs";
 import path from "node:path";
 
 import type { HTMLAttributes } from "astro/types";
 import { root as _root } from "astro:config/server";
 
-import { slate700 } from "$lib/colors";
+export type Props = HTMLAttributes<"textarea"> & {
+    src: string;
+};
+
 const root = path.normalize((_root as unknown as string).replace("file://", ""));
 
 const { src, ...props } = Astro.props;
@@ -24,7 +23,7 @@ const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" 
     <textarea readonly cols="64" rows="14" {...props} class:list={[props.class, "mono"]}>{file}</textarea>
 </details>
 
-<style define:vars={{ textAreaLinkBgColor: slate700 }}>
+<style>
     details,
     details > summary {
         border-radius: 6px;
@@ -42,7 +41,7 @@ const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" 
 
         padding: 0.35rem;
 
-        background-color: var(--textAreaLinkBgColor);
+        background-color: var(--slate700);
 
         user-select: none;
     }

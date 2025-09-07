@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 
 import { space700, space900 } from "$lib/colors";
 
-type Props = HTMLAttributes<"section">;
+export type Props = HTMLAttributes<"section">;
 
 export const sectionColors = { bgColor: space900, borderColor: space700 };
 
@@ -18,9 +18,8 @@ const { ...props } = Astro.props;
     section {
         height: fit-content;
 
-        margin: 1.25rem;
-        padding-block: 1rem;
-        padding-inline: 1.3rem;
+        margin: 1rem;
+        padding: 1.15rem;
 
         border: 2px var(--borderColor) solid;
         border-radius: 0.3rem;
