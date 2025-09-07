@@ -22,7 +22,7 @@ if (entry === undefined) {
 const { Content, headings } = await render(entry);
 ---
 
-<Page>
+<Page title={`'${entry.data.title}'`}>
     <Fragment slot="nav:page-links">
         {headings.map((v) => <a href={`#${v.slug}`}>{v.text}</a>)}
     </Fragment>

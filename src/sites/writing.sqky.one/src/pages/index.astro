@@ -8,7 +8,7 @@ import Section from "$layouts/Section.astro";
 const entries = (await getCollection("writings")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Page>
+<Page title="Writings, Squeakings">
     <Article>
         <Fragment slot="heading">Writings, blogs and squeaks</Fragment>
         <Section>
