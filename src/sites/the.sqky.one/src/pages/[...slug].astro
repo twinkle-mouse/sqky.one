@@ -5,7 +5,6 @@ import path from "node:path";
 import { ROOT_DIR } from "astro:env/server";
 
 import FileTableEntry from "$components/FileTableEntry.astro";
-import SiteNavControls from "$components/SiteNavControls.astro";
 import Article from "$layouts/Article.astro";
 import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
@@ -140,10 +139,6 @@ function getUrl(path: string, index: number) {
 ---
 
 <Page title=`Files Archive - /${dirPath}`>
-    <Fragment slot="nav:other-categories">
-        <SiteNavControls />
-    </Fragment>
-
     <Article>
         <p class="nav-path">
             {urlPaths.length == 0 && <span>/</span>}

@@ -1,4 +1,5 @@
 ---
+import SiteNavControls from "$components/SiteNavControls.astro";
 import { lavender600, lavender800, lavender900, slate200, slate600, space500, space800, space900 } from "$lib/colors";
 
 let pageLinks = undefined;
@@ -26,6 +27,8 @@ if (Astro.slots.has("nav:page-links")) {
             </div>
         )
     }
+
+    <SiteNavControls />
 
     <slot name="nav:other-categories" />
 
