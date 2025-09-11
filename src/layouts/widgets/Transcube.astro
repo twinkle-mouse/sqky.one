@@ -6,81 +6,85 @@ import transflag from "./transflag.png";
 const size = 128;
 ---
 
-<div class="transcube">
-    <div class="anim" style="animation: 4s linear infinite rotate; transform: rotate3d(1, 0, 0, 45deg)">
-        <div class="anim" style="animation: 6s linear infinite rotate; transform: rotate3d(0, 1, 0, 90deg)">
-            <div class="anim" style="animation: 8s linear infinite rotate; transform: rotate3d(0, 0, 1, 135deg)">
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
-                />
+<div>
+    <p>Trans Cube</p>
 
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
-                />
+    <div class="transcube">
+        <div class="anim" style="animation: 4s linear infinite rotate; transform: rotate3d(1, 0, 0, 45deg)">
+            <div class="anim" style="animation: 6s linear infinite rotate; transform: rotate3d(0, 1, 0, 90deg)">
+                <div class="anim" style="animation: 8s linear infinite rotate; transform: rotate3d(0, 0, 1, 135deg)">
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
+                    />
 
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
-                />
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
+                    />
 
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
-                />
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
+                    />
 
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
-                />
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
+                    />
 
-                <Image
-                    alt=""
-                    src={transflag}
-                    width={size}
-                    height={size}
-                    format="png"
-                    quality="max"
-                    class="face"
-                    draggable="false"
-                    style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
-                />
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
+                    />
+                </div>
             </div>
         </div>
     </div>

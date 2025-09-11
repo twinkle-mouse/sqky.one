@@ -1,6 +1,6 @@
 ---
 import SiteNavControls from "$components/SiteNavControls.astro";
-import { lavender600, lavender800, lavender900, slate200, slate600, space500, space800, space900 } from "$lib/colors";
+import { lavender600, lavender800, slate200, slate600, space500, space800, space900 } from "$lib/colors";
 
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
@@ -41,15 +41,12 @@ if (Astro.slots.has("nav:page-links")) {
         </div>
     </div>
 
-    <footer>
-        <slot name="nav:footer" />
-    </footer>
+    <slot name="nav:footer" />
 </nav>
 
 <style
     define:vars={{
         bgColor: lavender800,
-        divBgColor: lavender900,
         borderColor: lavender600,
         linkBorderColor: space500,
         linkBgColor: space900,
@@ -61,6 +58,8 @@ if (Astro.slots.has("nav:page-links")) {
     nav {
         display: flex;
         position: sticky;
+
+        overflow: scroll;
 
         top: 0;
         left: 0;
@@ -80,7 +79,7 @@ if (Astro.slots.has("nav:page-links")) {
     nav > :global(div) :global(a) {
         display: block;
 
-        width: fit-content;
+        width: max-content;
         height: min-content;
 
         text-wrap: stable;
@@ -118,8 +117,8 @@ if (Astro.slots.has("nav:page-links")) {
         margin-right: 1.75rem;
         padding: 0;
 
-        min-width: 230px;
-        max-width: 280px;
+        min-width: 320px;
+        max-width: 320px;
         height: 100dvh;
 
         border: none;
@@ -134,19 +133,12 @@ if (Astro.slots.has("nav:page-links")) {
 
     nav > :global(div) {
         border: none;
-        border: 2px solid var(--textBorderColor);
-        border-inline: none;
-        background-color: var(--divBgColor);
+        border-top: 2px solid var(--textBorderColor);
     }
 
     nav > :global(div:first-of-type) {
         border-top: none;
         border-left: none;
-    }
-
-    nav > :global(div:has(+ div)) {
-        border-bottom: none;
-        border-right: none;
     }
 
     nav > :global(div) > :global(div) {
@@ -162,12 +154,6 @@ if (Astro.slots.has("nav:page-links")) {
         gap: 0.5rem;
     }
 
-    footer {
-        margin: unset;
-        margin-inline: auto;
-        margin-top: auto;
-    }
-
     @media (max-width: 1200px) {
         nav {
             position: static;
@@ -179,8 +165,6 @@ if (Astro.slots.has("nav:page-links")) {
             max-width: unset;
             width: 100%;
             height: 160px;
-
-            overflow-x: scroll;
 
             border: none;
             border: 3px solid var(--borderColor);
@@ -194,19 +178,11 @@ if (Astro.slots.has("nav:page-links")) {
         }
 
         nav > :global(div) {
-            width: fit-content;
+            width: 100%;
             height: auto;
 
             border: none;
-            border: 2px solid var(--textBorderColor);
-            border-block: none;
-            background-color: var(--divBgColor);
-        }
-
-        footer {
-            margin: unset;
-            margin-block: auto;
-            margin-left: auto;
+            border-left: 2px solid var(--textBorderColor);
         }
     }
 </style>

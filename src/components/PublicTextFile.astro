@@ -1,4 +1,5 @@
 ---
+import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -13,19 +14,23 @@ const root = path.normalize((_root as unknown as string).replace("file://", ""))
 
 const { src, ...props } = Astro.props;
 const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" });
+
+const uuid = `textfile-${randomUUID()}`;
 ---
 
 <details open>
     <summary>
-        <a href={src}>{src}</a>
+        <label for={uuid}>
+            <a href={src}>{src}</a>
+        </label>
     </summary>
 
-    <textarea readonly cols="64" rows="14" {...props} class:list={[props.class, "mono"]}>{file}</textarea>
+    <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={[props.class, "mono"]}>{file}</textarea>
 </details>
 
 <style>
     details,
-    details > summary {
+    summary {
         border-radius: 6px;
     }
 
@@ -33,15 +38,16 @@ const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" 
         border-radius: 6px;
 
         background-color: var(--textAreaBgColor);
-        outline: 3px solid var(--textAreaBorderColor);
     }
 
-    details > summary {
+    summary {
         display: block;
 
         padding: 0.35rem;
 
         background-color: var(--slate700);
+        outline: 3px solid var(--textAreaBorderColor);
+        margin-bottom: 6px;
 
         user-select: none;
     }
@@ -81,22 +87,19 @@ const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" 
         transform: scaleY(0.75) rotate(0deg) translateX(25%);
     }
 
-    summary > a {
+    a {
         display: inline-block;
 
         width: fit-content;
     }
 
-    details > textarea {
+    textarea {
         border: none;
         background: none;
         text-wrap: nowrap;
-    }
 
-    details[open] textarea {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-
-        border-top: 3px solid var(--textAreaBorderColor);
+        outline: 3px solid var(--textAreaBorderColor);
     }
 </style>

@@ -185,6 +185,20 @@ const title = getTitle(Astro.props.title);
         text-align: center;
     }
 
+    a,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    cite,
+    li,
+    th,
+    td {
+        text-wrap: stable;
+    }
+
     h1,
     h2,
     h3,
@@ -205,7 +219,8 @@ const title = getTitle(Astro.props.title);
     h4::before,
     h5::before,
     h6::before {
-        content: "# ";
+        content: "#";
+        margin-inline: 0.3em;
     }
 
     h1 {
@@ -257,11 +272,11 @@ const title = getTitle(Astro.props.title);
     a > h4::before,
     a > h5::before,
     a > h6::before {
-        content: "¶ ";
+        content: "¶";
+        margin-inline: 0.3em;
     }
 
     p {
-        text-wrap-style: balance;
         margin-block: 0.5em;
     }
 
@@ -405,11 +420,13 @@ const title = getTitle(Astro.props.title);
     }
 
     blockquote::before {
-        content: "“ ";
+        content: "“";
+        margin-inline: 0.3em;
     }
 
     blockquote::after {
-        content: " ”";
+        content: "”";
+        margin-inline: 0.3em;
     }
 
     cite {
@@ -423,11 +440,13 @@ const title = getTitle(Astro.props.title);
     }
 
     cite::before {
-        content: "— ";
+        content: "—";
+        margin-inline: 0.3em;
     }
 
     cite::after {
         content: "";
+        margin-inline: 0.3em;
     }
 
     ol {
@@ -493,7 +512,9 @@ const title = getTitle(Astro.props.title);
     }
 
     img:focus,
-    summary:focus {
-        outline: 3px solid var(--blockFocusBorderColor);
+    summary:focus,
+    textarea:focus {
+        outline: 3px solid;
+        outline-color: var(--blockFocusBorderColor) !important;
     }
 </style>
