@@ -43,16 +43,23 @@ const uuid = randomUUID();
 ---
 
 <span {...props} class:list={["emoji", cls]}>
-    <AstroIcon aria-labelledby=`emoji-${uuid}` role="img" name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} />
-    <span id=`emoji-${uuid}` class="emoji-text">{e}</span>
+    <AstroIcon aria-labelledby=`emoji-${uuid}` role="img" name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} /><span
+        id=`emoji-${uuid}`
+        class="emoji-text">{e}</span
+    >
 </span>
 
 <style>
     .emoji {
         display: inline-block;
         position: relative;
-        width: 1.25em;
-        height: 1.25em;
+        width: auto;
+        height: auto;
+        vertical-align: text-bottom;
+    }
+
+    svg {
+        display: inline-block;
         vertical-align: text-bottom;
     }
 
