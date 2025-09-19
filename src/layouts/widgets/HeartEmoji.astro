@@ -21,7 +21,7 @@ const { e, radius, delay, length } = Astro.props;
 >
     <div class="headmate-heart-x">
         <div class="headmate-heart-y">
-            <Emoji class="headmate-heart-emoji" e={e} />
+            <Emoji class="headmate-heart-emoji" e={e} width={32} height={32} />
         </div>
     </div>
 </div>
@@ -50,7 +50,5 @@ const { e, radius, delay, length } = Astro.props;
 
     .headmate-heart-emoji {
         display: block;
-        width: 32px;
-        height: 32px;
     }
 </style>
