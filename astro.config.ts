@@ -8,6 +8,8 @@ export const site = process.env["SITE_CONFIG"] || Site.Main;
 import path from "node:path";
 
 import { defineConfig } from "astro/config";
+import compressor from "astro-compressor";
+import icon from "astro-icon";
 
 import mainSite from "./src/sites/sqky.one/astro.config";
 import theSqkyOne from "./src/sites/the.sqky.one/astro.config";
@@ -34,12 +36,37 @@ const config = getConfig();
 
 export default defineConfig({
     ...config,
+
+    devToolbar: {
+        enabled: false,
+    },
+
+    build: {
+        inlineStylesheets: "always",
+    },
+
     vite: {
         css: {
             transformer: "postcss",
         },
         cacheDir: path.join(dir, "node_modules", ".vite"),
     },
+
+    integrations: [
+        //@ts-expect-error astro config type doesn't make sense to import
+        ...(config.integrations || []),
+        icon({
+            include: {},
+            iconDir: "./icons",
+
+            svgoOptions: {
+                multipass: false,
+                plugins: [],
+            },
+        }),
+        compressor(),
+    ],
+
     experimental: {
         preserveScriptOrder: true,
         fonts: [

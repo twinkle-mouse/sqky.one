@@ -52,17 +52,13 @@ const title = getTitle(Astro.props.title);
 
         <meta name="generator" content={Astro.generator} />
 
-        <Font cssVariable="--font-iosevka-aile" />
-        <Font cssVariable="--font-iosevka-curly-slab" />
-        <Font cssVariable="--font-iosevka-etoile" />
+        <Font preload cssVariable="--font-iosevka-aile" />
+        <Font preload cssVariable="--font-iosevka-curly-slab" />
+        <Font preload cssVariable="--font-iosevka-etoile" />
     </head>
 
     <body>
         <div class="site">
-            <main>
-                <slot />
-            </main>
-
             <slot name="nav">
                 <Navigation>
                     <slot name="nav:page-links" slot="nav:page-links" />
@@ -71,6 +67,10 @@ const title = getTitle(Astro.props.title);
                     <slot name="nav:footer" slot="nav:footer" />
                 </Navigation>
             </slot>
+
+            <main>
+                <slot />
+            </main>
         </div>
 
         <div id="popout-fakeroot"></div>
@@ -84,7 +84,7 @@ const title = getTitle(Astro.props.title);
         width: 100%;
 
         display: flex;
-        flex-direction: row-reverse;
+        flex-direction: row;
         flex-wrap: nowrap;
 
         padding-inline: calc(max(14dvw - 800px * 0.1, 0px));
@@ -93,7 +93,7 @@ const title = getTitle(Astro.props.title);
 
     @media (max-width: 1200px) {
         .site {
-            flex-direction: column-reverse;
+            flex-direction: column;
         }
     }
 

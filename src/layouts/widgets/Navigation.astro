@@ -1,5 +1,5 @@
 ---
-import SiteNavControls from "$components/SiteNavControls.astro";
+import SiteNavControls from "$layouts/widgets/SiteNavControls.astro";
 import { lavender600, lavender800, slate200, slate600, space500, space800, space900 } from "$lib/colors";
 
 let pageLinks = undefined;
@@ -75,8 +75,8 @@ if (Astro.slots.has("nav:page-links")) {
             inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
     }
 
-    nav > :global(div) :global(p),
-    nav > :global(div) :global(a) {
+    nav > :global(div) > :global(p),
+    nav > :global(div) > :global(a) {
         display: block;
 
         width: max-content;
@@ -85,7 +85,7 @@ if (Astro.slots.has("nav:page-links")) {
         text-wrap: stable;
     }
 
-    nav > :global(div) :global(p) {
+    nav > :global(div) > :global(p) {
         width: 100%;
 
         margin: 0;

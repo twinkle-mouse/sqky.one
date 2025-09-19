@@ -4,38 +4,11 @@ import path from "node:path";
 
 import { ROOT_DIR } from "astro:env/server";
 
-import FileTableEntry from "$components/FileTableEntry.astro";
 import Article from "$layouts/Article.astro";
 import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
-import type { FileEntry } from "$lib/page";
-
-class SortMethod {
-    id: string;
-
-    private constructor(id: string) {
-        this.id = id;
-    }
-
-    static Name = new SortMethod("name");
-    static Size = new SortMethod("size");
-    static ModifiedDate = new SortMethod("mtime");
-    static Methods = [this.Name, this.Size, this.ModifiedDate];
-
-    static fromId(id: string | undefined) {
-        if (!id) {
-            return null;
-        }
-
-        for (const method of this.Methods) {
-            if (method.id == id) {
-                return method;
-            }
-        }
-
-        return null;
-    }
-}
+import FileTableEntry from "$layouts/widgets/FileTableEntry.astro";
+import { compare, type FileEntry, SortMethod } from "$lib/files";
 
 const params = Astro.params;
 const url = new URL(Astro.request.url);
@@ -71,21 +44,6 @@ try {
     return Astro.rewrite("/404");
 }
 
-function compare(a: number | string, b: number | string, ascending: boolean) {
-    const v1 = ascending ? b : a;
-    const v2 = ascending ? a : b;
-
-    if (typeof v1 == "number" && typeof v2 == "number") {
-        if (isNaN(v1) || isNaN(v2)) {
-            return 0;
-        }
-
-        return Math.round(v2 - v1);
-    } else {
-        return v1.toString().localeCompare(v2.toString(), undefined, { numeric: true });
-    }
-}
-
 const entries = Array.from(
     files.entries().map(([fileName, file]) => {
         return {
@@ -98,21 +56,10 @@ const entries = Array.from(
     }),
 );
 
-function cmp(a: FileEntry, b: FileEntry) {
-    if (sortBy == SortMethod.Name) {
-        return compare(a.name, b.name, ascending);
-    } else if (sortBy == SortMethod.Size) {
-        return compare(a.size, b.size, ascending);
-    } else if (sortBy == SortMethod.ModifiedDate) {
-        return compare(a.mtime.getTime(), b.mtime.getTime(), ascending);
-    }
-
-    return 0;
-}
-
 const fileEntries = entries.filter((v) => v.isFile);
 const dirEntries = entries.filter((v) => v.isDir);
 
+const cmp = (a: FileEntry, b: FileEntry) => compare(sortBy, ascending, a, b);
 fileEntries.sort(cmp);
 dirEntries.sort(cmp);
 

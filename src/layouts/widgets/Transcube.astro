@@ -22,6 +22,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
                     />
 
@@ -34,6 +35,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
                     />
 
@@ -46,6 +48,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
                     />
 
@@ -58,6 +61,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
                     />
 
@@ -70,6 +74,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
                     />
 
@@ -82,6 +87,7 @@ const size = 128;
                         quality="max"
                         class="face"
                         draggable="false"
+                        loading="eager"
                         style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
                     />
                 </div>
@@ -103,6 +109,13 @@ const size = 128;
         margin-inline: auto;
 
         user-select: none;
+
+        transition: filter 0.5s ease;
+    }
+
+    .transcube:has(.face:hover) {
+        filter: drop-shadow(0px 0px calc(var(--s) / 12) rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px calc(var(--s) / 8) rgba(255, 255, 255, 0.5))
+            drop-shadow(0px 0px calc(var(--s) / 6) rgba(255, 255, 255, 0.75));
     }
 
     @media (prefers-reduced-motion) {
@@ -131,7 +144,7 @@ const size = 128;
 <style define:vars={{ size: "96px" }}>
     .transcube {
         --s: var(--size);
-        padding: 3.5rem;
+        padding: 4.5rem;
     }
 
     .face {
@@ -141,7 +154,7 @@ const size = 128;
     @media (max-width: 1200px) {
         .transcube {
             --s: calc(var(--size) / 1.5);
-            padding: 2.75rem;
+            padding: 3rem;
         }
 
         .face {

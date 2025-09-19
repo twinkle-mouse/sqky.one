@@ -1,7 +1,7 @@
 ---
-import { getEmojiUrl } from "$components/Emoji.astro";
-import HeartIcon from "$components/HeartIcon.astro";
-import Icon from "$components/Icon.astro";
+import Emoji from "$components/Emoji.astro";
+
+import HeartEmoji from "./HeartEmoji.astro";
 
 const hearts = ["🩷", "🤎", "🤍", "💛", "🧡"];
 
@@ -11,11 +11,11 @@ const length = 4;
 
 <div class="hearts" data-radius={radius}>
     <div class="system-heart-container">
-        <Icon class="system-heart" width={radius} height={radius} src={getEmojiUrl("💜")} />
+        <Emoji class="system-heart" e="💜" width={radius} height={radius} />
     </div>
 
     <div class="headmate-hearts">
-        {hearts.map((heart, idx) => <HeartIcon src={getEmojiUrl(heart)} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+        {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
     </div>
 </div>
 
