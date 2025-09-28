@@ -1,0 +1,9 @@
+---
+import Page, { type Props as PageProps } from "$layouts/Page.astro";
+
+type Props = Omit<PageProps, "siteName" | "desc">;
+---
+
+<Page {...Astro.props} siteName="Files of Squeaks" desc="who made my files squeaky?? anyways,">
+    <slot />
+</Page>

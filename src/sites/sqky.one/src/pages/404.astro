@@ -1,5 +1,8 @@
 ---
-import P from "$common/404.astro";
+import MainPage from "$common/MainPage.astro";
+import NotFound, { pageName } from "$layouts/NotFound.astro";
 ---
 
-<P />
+<MainPage pageName={pageName}>
+    <NotFound />
+</MainPage>

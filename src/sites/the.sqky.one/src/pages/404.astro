@@ -1,5 +1,8 @@
 ---
-import P from "$common/404.astro";
+import FilesArchivePage from "$common/FilesArchivePage.astro";
+import NotFound, { pageName } from "$layouts/NotFound.astro";
 ---
 
-<P />
+<FilesArchivePage pageName={pageName}>
+    <NotFound />
+</FilesArchivePage>

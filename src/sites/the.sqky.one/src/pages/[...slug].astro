@@ -4,8 +4,8 @@ import path from "node:path";
 
 import { ROOT_DIR } from "astro:env/server";
 
+import FilesArchivePage from "$common/FilesArchivePage.astro";
 import Article from "$layouts/Article.astro";
-import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
 import FileTableEntry from "$layouts/widgets/FileTableEntry.astro";
 import { compare, type FileEntry, SortMethod } from "$lib/files";
@@ -83,9 +83,11 @@ const urlPaths = url.pathname
 function getUrl(path: string, index: number) {
     return `/${[...urlPaths.slice(0, index), path].join("/")}/`;
 }
+
+const fullUrl = `/${urlPaths.map(decodeURI).join("/")}/`.replaceAll("//", "/");
 ---
 
-<Page title=`Files Archive - /${dirPath}`>
+<FilesArchivePage pageName=`${fullUrl}`>
     <Article>
         <p class="nav-path">
             {urlPaths.length == 0 && <span>/</span>}
@@ -155,4 +157,4 @@ function getUrl(path: string, index: number) {
             </table>
         </Section>
     </Article>
-</Page>
+</FilesArchivePage>

@@ -1,41 +1,51 @@
 ---
 import { getCollection } from "astro:content";
 
+import WritingsPage from "$common/WritingsPage.astro";
 import Article from "$layouts/Article.astro";
-import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
 
-const entries = (await getCollection("writings")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+function cmp<T extends { data: { date: Date } }>(a: T, b: T) {
+    return b.data.date.valueOf() - a.data.date.valueOf();
+}
+
+const allEntries = {
+    stories: (await getCollection("stories")).sort(cmp),
+};
+
+export const defaultDescription = "(no description)";
 ---
 
-<Page title="Writings, Squeakings">
+<WritingsPage pageName="The Library" desc="An index into all of my writings, or at least the ones I care enough to format and upload <:">
     <Article>
-        <Fragment slot="heading">Writings, blogs and squeaks</Fragment>
+        <Fragment slot="heading">Writings, blogs, stories and squeaks</Fragment>
         <Section>
             <h2>Stories</h2>
 
             {
-                entries.map((writing) => (
-                    <div class="entry-card">
-                        <div class="entry-title">
-                            <a href={writing.id}>{writing.data.title}</a>
-                            <aside class="entry-date" data-iso-date={writing.data.date.toISOString()}>
-                                <noscript>{writing.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}</noscript>
-                            </aside>
+                Object.entries(allEntries).map(([collection, entries]) =>
+                    entries.map((entry) => (
+                        <div class="entry-card">
+                            <div class="entry-title">
+                                <a href={`${collection}/${entry.id}`}>{entry.data.title}</a>
+                                <aside class="entry-date" data-iso-date={entry.data.date.toISOString()}>
+                                    <noscript>{entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}</noscript>
+                                </aside>
+                            </div>
+
+                            <div class="entry-content">{entry.data.description || defaultDescription}</div>
+
+                            <footer>
+                                <p>
+                                    <em>Authors:</em> {entry.data.authors.join(", ")}
+                                </p>
+                                <p>
+                                    <em>Tags:</em> {entry.data.tags.join(", ") || "(none)"}
+                                </p>
+                            </footer>
                         </div>
-
-                        <div class="entry-content">{writing.data.description || "(no description)"}</div>
-
-                        <footer>
-                            <p>
-                                <em>Authors:</em> {writing.data.authors.join(", ")}
-                            </p>
-                            <p>
-                                <em>Tags:</em> {writing.data.tags.join(", ") || "(none)"}
-                            </p>
-                        </footer>
-                    </div>
-                ))
+                    )),
+                )
             }
 
             <script>
@@ -115,4 +125,4 @@ const entries = (await getCollection("writings")).sort((a, b) => b.data.date.val
             </style>
         </Section>
     </Article>
-</Page>
+</WritingsPage>

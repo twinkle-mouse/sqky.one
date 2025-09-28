@@ -1,10 +1,10 @@
 ---
+import FilesArchivePage from "$common/FilesArchivePage.astro";
 import Article from "$layouts/Article.astro";
-import Page from "$layouts/Page.astro";
 import Section from "$layouts/Section.astro";
 ---
 
-<Page title="File Upload">
+<FilesArchivePage pageName="File Upload">
     <Article>
         <Fragment slot="heading">Single Use File Upload</Fragment>
 
@@ -26,7 +26,7 @@ import Section from "$layouts/Section.astro";
             <p id="message"></p>
         </Section>
     </Article>
-</Page>
+</FilesArchivePage>
 
 <script>
     const uploader = document.querySelector<HTMLElement>("#uploader")!;

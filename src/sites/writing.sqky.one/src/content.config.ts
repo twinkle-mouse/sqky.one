@@ -3,8 +3,8 @@ import { defineCollection, z } from "astro:content";
 
 const WRITING = "./src/sites/writing.sqky.one";
 
-const writings = defineCollection({
-    loader: glob({ pattern: "**/*.{md,mdx}", base: `${WRITING}/src/writings` }),
+const stories = defineCollection({
+    loader: glob({ pattern: "**/*.{md,mdx}", base: `${WRITING}/src/writings/stories` }),
     schema: z.object({
         title: z.string(),
         description: z.string().nullable().default(null),
@@ -14,4 +14,4 @@ const writings = defineCollection({
     }),
 });
 
-export const collections = { writings };
+export const collections = { stories };

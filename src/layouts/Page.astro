@@ -8,19 +8,23 @@ import Noscript from "$assets/noscript.html";
 import Navigation from "$layouts/widgets/Navigation.astro";
 import { babypink, cuteblue, grass, lavender, semanticColors, slate, space } from "$lib/colors";
 
-const siteName = "squeaky one";
+export type Props = {
+    siteName: string;
+    desc: string;
+    pageName?: string;
+};
 
-const description = `the mouse is squeaking at you, would you accept its request?,`;
+const { siteName, pageName, desc } = Astro.props;
 
-function getTitle(pageName: string | undefined) {
+function getTitle() {
     if (!pageName) {
         return `!!! ${siteName} !!!`;
     }
 
-    return `${siteName} - ${pageName}`;
+    return `${pageName} — ${siteName}`;
 }
 
-const title = getTitle(Astro.props.title);
+const title = getTitle();
 ---
 
 <!doctype html>
@@ -42,13 +46,13 @@ const title = getTitle(Astro.props.title);
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
         <title>{title}</title>
-        <meta name="description" content={description} />
+        <meta name="description" content={desc} />
 
         <meta property="og:title" content={title} />
         <meta property="og:image" content="https://sqky.one/assets/thumbnail.png" />
         <meta property="og:url" content="https://sqky.one" />
         <meta property="og:type" content="website" />
-        <meta property="og:description" content={description} />
+        <meta property="og:description" content={desc} />
 
         <meta name="generator" content={Astro.generator} />
 
