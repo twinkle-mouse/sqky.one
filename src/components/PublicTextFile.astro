@@ -4,16 +4,14 @@ import fs from "node:fs";
 import path from "node:path";
 
 import type { HTMLAttributes } from "astro/types";
-import { root as _root } from "astro:config/server";
+import { root } from "astro:config/server";
 
 export type Props = HTMLAttributes<"textarea"> & {
     src: string;
 };
 
-const root = path.normalize((_root as unknown as string).replace("file://", ""));
-
 const { src, ...props } = Astro.props;
-const file = fs.readFileSync(path.join(root, "public", src), { encoding: "utf8" });
+const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding: "utf8" });
 
 const uuid = `textfile-${randomUUID()}`;
 ---
