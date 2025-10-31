@@ -5,7 +5,6 @@ import "$assets/anims.css";
 import { Font } from "astro:assets";
 
 import Noscript from "$assets/noscript.html";
-import Navigation from "$layouts/widgets/Navigation.astro";
 import { babypink, cuteblue, grass, lavender, semanticColors, slate, space } from "$lib/colors";
 
 export type Props = {
@@ -63,14 +62,7 @@ const title = getTitle();
 
     <body>
         <div class="site">
-            <slot name="nav">
-                <Navigation>
-                    <slot name="nav:page-links" slot="nav:page-links" />
-                    <slot name="nav:other-categories" slot="nav:other-categories" />
-                    <slot name="nav:misc-links" slot="nav:misc-links" />
-                    <slot name="nav:footer" slot="nav:footer" />
-                </Navigation>
-            </slot>
+            <slot name="nav" />
 
             <main>
                 <slot />
