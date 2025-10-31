@@ -71,6 +71,13 @@ import { colors } from "$lib/colors";
             animation: rainbow 36s linear infinite;
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
         }
+
+        @media (prefers-reduced-motion) {
+            .colors-text {
+                background-size: 200% 100%;
+                animation: none;
+            }
+        }
     </style>
 
     <p class="text-center">play around, drag them all over, they're fun :3</p>
