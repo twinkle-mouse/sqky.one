@@ -55,9 +55,9 @@ const title = getTitle();
 
         <meta name="generator" content={Astro.generator} />
 
+        <Font preload cssVariable="--font-noseyrodent" />
         <Font preload cssVariable="--font-iosevka-aile" />
-        <Font preload cssVariable="--font-iosevka-curly-slab" />
-        <Font preload cssVariable="--font-iosevka-etoile" />
+        <Font preload cssVariable="--font-iosevka-curly" />
     </head>
 
     <body>
@@ -146,9 +146,9 @@ const title = getTitle();
     is:global
 >
     :root {
-        --sans: var(--font-iosevka-aile), sans-serif;
-        --mono: var(--font-iosevka-curly-slab), monospace;
-        --serif: var(--font-iosevka-etoile), serif;
+        --sans: var(--font-noseyrodent), sans-serif;
+        --serif: var(--font-iosevka-aile), serif;
+        --mono: var(--font-iosevka-curly), monospace;
 
         font-family: var(--sans);
 

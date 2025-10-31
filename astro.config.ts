@@ -73,7 +73,25 @@ export default defineConfig({
             {
                 fallbacks: [],
                 provider: "local",
-                name: "Iosevka Aile Web",
+                name: "noseyrodent",
+                cssVariable: "--font-noseyrodent",
+                variants: [
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/noseyrodent/noseyrodent-Regular.woff2"],
+                        weight: 400,
+                    },
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/noseyrodent/noseyrodent-Bold.woff2"],
+                        weight: 700,
+                    },
+                ],
+            },
+            {
+                fallbacks: [],
+                provider: "local",
+                name: "Iosevka Aile",
                 cssVariable: "--font-iosevka-aile",
                 variants: [
                     {
@@ -224,301 +242,150 @@ export default defineConfig({
             {
                 fallbacks: [],
                 provider: "local",
-                name: "Iosevka Curly Slab Web",
-                cssVariable: "--font-iosevka-curly-slab",
+                name: "Iosevka Fixed Curly",
+                cssVariable: "--font-iosevka-curly",
                 variants: [
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Thin.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Thin.woff2"],
                         weight: 100,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ThinItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ThinItalic.woff2"],
                         weight: 100,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ThinOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ThinOblique.woff2"],
                         weight: 100,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraLight.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraLight.woff2"],
                         weight: 200,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraLightItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraLightItalic.woff2"],
                         weight: 200,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraLightOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraLightOblique.woff2"],
                         weight: 200,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Light.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Light.woff2"],
                         weight: 300,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-LightItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-LightItalic.woff2"],
                         weight: 300,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-LightOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-LightOblique.woff2"],
                         weight: 300,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Regular.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Regular.woff2"],
                         weight: 400,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Italic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Italic.woff2"],
                         weight: 400,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Oblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Oblique.woff2"],
                         weight: 400,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Medium.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Medium.woff2"],
                         weight: 500,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-MediumItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-MediumItalic.woff2"],
                         weight: 500,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-MediumOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-MediumOblique.woff2"],
                         weight: 500,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-SemiBold.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-SemiBold.woff2"],
                         weight: 600,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-SemiBoldItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-SemiBoldItalic.woff2"],
                         weight: 600,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-SemiBoldOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-SemiBoldOblique.woff2"],
                         weight: 600,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Bold.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Bold.woff2"],
                         weight: 700,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-BoldItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-BoldItalic.woff2"],
                         weight: 700,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-BoldOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-BoldOblique.woff2"],
                         weight: 700,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraBold.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraBold.woff2"],
                         weight: 800,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraBoldItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraBoldItalic.woff2"],
                         weight: 800,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-ExtraBoldOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-ExtraBoldOblique.woff2"],
                         weight: 800,
                     },
 
                     {
                         style: "normal",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-Heavy.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-Heavy.woff2"],
                         weight: 900,
                     },
                     {
                         style: "italic",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-HeavyItalic.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-HeavyItalic.woff2"],
                         weight: 900,
                     },
                     {
                         style: "oblique",
-                        src: [fontsDir + "/IosevkaCurlySlab/WOFF2/IosevkaCurlySlab-HeavyOblique.woff2"],
-                        weight: 900,
-                    },
-                ],
-            },
-            {
-                fallbacks: [],
-                provider: "local",
-                name: "Iosevka Etoile Web",
-                cssVariable: "--font-iosevka-etoile",
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Thin.woff2"],
-                        weight: 100,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ThinItalic.woff2"],
-                        weight: 100,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ThinOblique.woff2"],
-                        weight: 100,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraLight.woff2"],
-                        weight: 200,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraLightItalic.woff2"],
-                        weight: 200,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraLightOblique.woff2"],
-                        weight: 200,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Light.woff2"],
-                        weight: 300,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-LightItalic.woff2"],
-                        weight: 300,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-LightOblique.woff2"],
-                        weight: 300,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Regular.woff2"],
-                        weight: 400,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Italic.woff2"],
-                        weight: 400,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Oblique.woff2"],
-                        weight: 400,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Medium.woff2"],
-                        weight: 500,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-MediumItalic.woff2"],
-                        weight: 500,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-MediumOblique.woff2"],
-                        weight: 500,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-SemiBold.woff2"],
-                        weight: 600,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-SemiBoldItalic.woff2"],
-                        weight: 600,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-SemiBoldOblique.woff2"],
-                        weight: 600,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Bold.woff2"],
-                        weight: 700,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-BoldItalic.woff2"],
-                        weight: 700,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-BoldOblique.woff2"],
-                        weight: 700,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraBold.woff2"],
-                        weight: 800,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraBoldItalic.woff2"],
-                        weight: 800,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-ExtraBoldOblique.woff2"],
-                        weight: 800,
-                    },
-
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-Heavy.woff2"],
-                        weight: 900,
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-HeavyItalic.woff2"],
-                        weight: 900,
-                    },
-                    {
-                        style: "oblique",
-                        src: [fontsDir + "/IosevkaEtoile/WOFF2/IosevkaEtoile-HeavyOblique.woff2"],
+                        src: [fontsDir + "/IosevkaFixedCurly/WOFF2/IosevkaFixedCurly-HeavyOblique.woff2"],
                         weight: 900,
                     },
                 ],
