@@ -96,14 +96,12 @@ const title = getTitle();
     main {
         width: 100%;
 
-        padding-block: 1.5rem;
+        padding-block: 1rem;
 
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         overflow: hidden;
-
-        gap: 2rem;
     }
 
     #popout-fakeroot {
@@ -182,7 +180,6 @@ const title = getTitle();
         text-align: center;
     }
 
-    a,
     h1,
     h2,
     h3,
@@ -190,6 +187,7 @@ const title = getTitle();
     h5,
     h6,
     cite,
+    blockquote,
     li,
     th,
     td {
@@ -205,7 +203,7 @@ const title = getTitle();
         font-family: var(--serif);
         color: var(--headingColor);
 
-        line-height: 1.25em;
+        line-height: 1em;
         margin-top: 0.4em;
         margin-bottom: 0.8em;
     }
@@ -217,7 +215,8 @@ const title = getTitle();
     h5::before,
     h6::before {
         content: "#";
-        margin-inline: 0.3em;
+        margin-right: 0.3em;
+        vertical-align: middle;
     }
 
     h1 {
@@ -270,7 +269,6 @@ const title = getTitle();
     a > h5::before,
     a > h6::before {
         content: "¶";
-        margin-inline: 0.3em;
     }
 
     p {
