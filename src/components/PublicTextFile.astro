@@ -27,19 +27,14 @@ const uuid = `textfile-${randomUUID()}`;
 </details>
 
 <style>
-    details {
-        margin-block: 1.5rem;
-        margin-inline: 0.35rem;
-    }
-
     details,
     summary {
         border-radius: 6px;
     }
 
     details {
-        border-radius: 6px;
-
+        margin-block: 1.5rem;
+        margin-inline: 0.35rem;
         background-color: var(--textAreaBgColor);
     }
 
@@ -50,7 +45,6 @@ const uuid = `textfile-${randomUUID()}`;
 
         background-color: var(--slate700);
         outline: 3px solid var(--textAreaBorderColor);
-        margin-bottom: 6px;
 
         user-select: none;
     }
@@ -101,6 +95,7 @@ const uuid = `textfile-${randomUUID()}`;
         background: none;
         text-wrap: nowrap;
 
+        margin-top: 6px;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         outline: 3px solid var(--textAreaBorderColor);
