@@ -43,7 +43,7 @@ const uuid = `textfile-${randomUUID()}`;
 
         padding: 0.35rem;
 
-        background-color: var(--slate700);
+        background-color: var(--textAreaBorderColor);
         outline: 3px solid var(--textAreaBorderColor);
 
         user-select: none;
@@ -68,6 +68,12 @@ const uuid = `textfile-${randomUUID()}`;
 
         transform-origin: center center;
         transition: transform 0.2s ease;
+    }
+
+    @media (prefers-color-scheme: light) {
+        summary::before {
+            border-color: transparent transparent transparent #000;
+        }
     }
 
     @media (prefers-reduced-motion) {

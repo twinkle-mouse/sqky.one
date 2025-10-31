@@ -1,6 +1,5 @@
 ---
 import SiteNavControls from "$layouts/widgets/SiteNavControls.astro";
-import { lavender600, lavender800, slate200, slate600, space500, space800, space900 } from "$lib/colors";
 
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
@@ -45,17 +44,7 @@ if (Astro.slots.has("nav:page-links")) {
     <slot name="nav:footer" />
 </nav>
 
-<style
-    define:vars={{
-        bgColor: lavender800,
-        borderColor: lavender600,
-        linkBorderColor: space500,
-        linkBgColor: space900,
-        linkBgColorActive: space800,
-        textBgColor: slate600,
-        textBorderColor: slate200,
-    }}
->
+<style>
     nav {
         display: flex;
 
@@ -67,12 +56,10 @@ if (Astro.slots.has("nav:page-links")) {
         flex: fit-content;
         flex-wrap: nowrap;
 
-        background-color: var(--bgColor);
+        background-color: var(--navBgColor);
 
         backdrop-filter: blur(2px);
-        box-shadow:
-            0px 0px 6px 3px rgba(0, 0, 0, 0.5),
-            inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
+        box-shadow: var(--cardBoxShadow);
     }
 
     nav > :global(div) > :global(p),
@@ -91,8 +78,8 @@ if (Astro.slots.has("nav:page-links")) {
         margin: 0;
         padding-block: 0.3rem;
 
-        border-bottom: 2px solid var(--textBorderColor);
-        background-color: var(--textBgColor);
+        border-bottom: 2px solid var(--navTitleBorderColor);
+        background-color: var(--navTitleBgColor);
 
         text-align: center;
     }
@@ -113,8 +100,8 @@ if (Astro.slots.has("nav:page-links")) {
     nav > :global(div) > :global(div) > :global(a) {
         padding: 0.15rem;
 
-        border: 1px solid var(--linkBorderColor);
-        background-color: var(--linkBgColor);
+        border: 1px solid var(--navLinkBorderColor);
+        background-color: var(--navLinkBgColor);
     }
 
     nav > :global(div) > :global(div) > :global(a::before) {
@@ -123,7 +110,7 @@ if (Astro.slots.has("nav:page-links")) {
 
     nav > :global(div) > :global(div) > :global(a:hover),
     nav > :global(div) > :global(div) > :global(a:focus) {
-        background-color: var(--linkBgColorActive);
+        background-color: var(--navLinkBgColorActive);
     }
 
     nav {
@@ -137,7 +124,7 @@ if (Astro.slots.has("nav:page-links")) {
         height: 100dvh;
 
         border: none;
-        border: 3px solid var(--borderColor);
+        border: 3px solid var(--navBorderColor);
         border-block: none;
     }
 
@@ -147,7 +134,7 @@ if (Astro.slots.has("nav:page-links")) {
 
     nav > :global(div) {
         border: none;
-        border-top: 2px solid var(--textBorderColor);
+        border-top: 2px solid var(--navTitleBorderColor);
     }
 
     @media (max-width: 1200px) {
@@ -163,7 +150,7 @@ if (Astro.slots.has("nav:page-links")) {
             height: 160px;
 
             border: none;
-            border: 3px solid var(--borderColor);
+            border: 3px solid var(--navBorderColor);
             border-top: none;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
@@ -178,7 +165,7 @@ if (Astro.slots.has("nav:page-links")) {
             height: auto;
 
             border: none;
-            border-left: 2px solid var(--textBorderColor);
+            border-left: 2px solid var(--navTitleBorderColor);
         }
     }
 

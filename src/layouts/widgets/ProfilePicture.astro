@@ -1,7 +1,6 @@
 ---
 import Pfp from "$assets/profile_picture.png";
 import Picture from "$components/Picture.astro";
-import { sectionColors } from "$layouts/Section.astro";
 
 const pfpDesc =
     "The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes.";
@@ -27,11 +26,7 @@ const pfpDesc =
     </figcaption>
 </figure>
 
-<style
-    define:vars={{
-        ...sectionColors,
-    }}
->
+<style>
     .pfp-container {
         width: min-content;
 
@@ -91,7 +86,7 @@ const pfpDesc =
         user-select: none;
         touch-action: none;
 
-        background-color: var(--bgColor);
+        background-color: var(--sectionBgColor);
         color: transparent;
 
         width: 100%;

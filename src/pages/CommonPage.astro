@@ -3,9 +3,10 @@ import "$assets/reset.css";
 import "$assets/anims.css";
 
 import { Font } from "astro:assets";
+import Color from "colorjs.io";
 
 import Noscript from "$assets/noscript.html";
-import { babypink, cuteblue, grass, lavender, semanticColors, slate, space } from "$lib/colors";
+import { colors, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight } from "$lib/colors";
 
 export type Props = {
     siteName: string;
@@ -24,6 +25,20 @@ function getTitle() {
 }
 
 const title = getTitle();
+
+function colorsToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
+}
+
+function stylesToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
+}
+
+const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
+const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
+const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
+const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
+const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
 ---
 
 <!doctype html>
@@ -58,6 +73,42 @@ const title = getTitle();
         <Font preload cssVariable="--font-noseyrodent" />
         <Font preload cssVariable="--font-iosevka-aile" />
         <Font preload cssVariable="--font-iosevka-curly" />
+
+        <style is:raw set:text={`:root{${colorsStyle}}`}></style>
+
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticColorsDarkStyle}
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticUtilsDarkStyle}
+            }`}
+        ></style>
+
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticColorsLightStyle}
+                }
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticUtilsLightStyle}
+                }
+            }`}
+        ></style>
     </head>
 
     <body>
@@ -101,7 +152,6 @@ const title = getTitle();
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
-        overflow: hidden;
     }
 
     #popout-fakeroot {
@@ -131,18 +181,7 @@ const title = getTitle();
     }
 </style>
 
-<style
-    define:vars={{
-        ...babypink,
-        ...cuteblue,
-        ...lavender,
-        ...space,
-        ...grass,
-        ...slate,
-        ...semanticColors,
-    }}
-    is:global
->
+<style is:global>
     :root {
         --sans: var(--font-noseyrodent), sans-serif;
         --serif: var(--font-iosevka-aile), serif;
@@ -367,13 +406,13 @@ const title = getTitle();
         border-radius: 9999px;
         background-color: var(--buttonColor);
         border: 3px solid;
-        border-color: #555;
+        border-color: var(--buttonBorderColor);
     }
 
     input[type="checkbox"]:hover::after,
     input[type="checkbox"]:checked::after {
         background-color: var(--buttonActiveColor);
-        border-color: #888;
+        border-color: var(--buttonActiveBorderColor);
     }
 
     input[type="checkbox"] + label {

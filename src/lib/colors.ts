@@ -3,10 +3,10 @@ export const babypink200 = "#ffd1f1ff";
 export const babypink300 = "#fabee9ff";
 export const babypink400 = "#fdb6e9ff";
 export const babypink500 = "#f0a5dcff";
-export const babypink600 = "#b96aa6ff";
-export const babypink700 = "#613559ff";
-export const babypink800 = "#311e2dff";
-export const babypink900 = "#1a1519ff";
+export const babypink600 = "#d484c2ff";
+export const babypink700 = "#9b598fff";
+export const babypink800 = "#633959ff";
+export const babypink900 = "#3b2737ff";
 export const babypink = {
     babypink100,
     babypink200,
@@ -24,10 +24,10 @@ export const cuteblue200 = "#cfd4fdff";
 export const cuteblue300 = "#b0b8f1ff";
 export const cuteblue400 = "#939eeaff";
 export const cuteblue500 = "#848fe5ff";
-export const cuteblue600 = "#5965bbff";
-export const cuteblue700 = "#3d4271ff";
-export const cuteblue800 = "#212433ff";
-export const cuteblue900 = "#18181dff";
+export const cuteblue600 = "#6571c7ff";
+export const cuteblue700 = "#4c5496ff";
+export const cuteblue800 = "#383e5fff";
+export const cuteblue900 = "#272738ff";
 export const cuteblue = {
     cuteblue100,
     cuteblue200,
@@ -45,10 +45,10 @@ export const lavender200 = "#e8d2ffff";
 export const lavender300 = "#e5c2ffff";
 export const lavender400 = "#d8b1ffff";
 export const lavender500 = "#d7a6ffff";
-export const lavender600 = "#af7bdaff";
-export const lavender700 = "#644679ff";
-export const lavender800 = "#32263aff";
-export const lavender900 = "#1c181fff";
+export const lavender600 = "#c08cebff";
+export const lavender700 = "#9766b9ff";
+export const lavender800 = "#694780ff";
+export const lavender900 = "#3c2c47ff";
 export const lavender = {
     lavender100,
     lavender200,
@@ -67,9 +67,9 @@ export const space300 = "#c0bdffff";
 export const space400 = "#b9b0ffff";
 export const space500 = "#9c93f3ff";
 export const space600 = "#8077daff";
-export const space700 = "#4e4984ff";
-export const space800 = "#322f44ff";
-export const space900 = "#1a191fff";
+export const space700 = "#6059afff";
+export const space800 = "#49407cff";
+export const space900 = "#312a4bff";
 export const space = {
     space100,
     space200,
@@ -86,11 +86,11 @@ export const grass100 = "#f6ffecff";
 export const grass200 = "#ebffd2ff";
 export const grass300 = "#daffb8ff";
 export const grass400 = "#ccff9dff";
-export const grass500 = "#bffc86ff";
-export const grass600 = "#9dd06eff";
-export const grass700 = "#688b4eff";
-export const grass800 = "#39462fff";
-export const grass900 = "#1d1f1bff";
+export const grass500 = "#b0ec77ff";
+export const grass600 = "#77af43ff";
+export const grass700 = "#5f9138ff";
+export const grass800 = "#476331ff";
+export const grass900 = "#2f3f21ff";
 export const grass = {
     grass100,
     grass200,
@@ -103,15 +103,15 @@ export const grass = {
     grass900,
 };
 
-export const slate100 = "#e7e5f3ff";
-export const slate200 = "#cecce1ff";
-export const slate300 = "#aba7c5ff";
-export const slate400 = "#8f8faeff";
-export const slate500 = "#7d7b97ff";
-export const slate600 = "#646275ff";
-export const slate700 = "#4f4d5aff";
-export const slate800 = "#313136ff";
-export const slate900 = "#1b1b1dff";
+export const slate100 = "#dedbf0ff";
+export const slate200 = "#c9c6e7ff";
+export const slate300 = "#b8b2ddff";
+export const slate400 = "#b1b1d4ff";
+export const slate500 = "#9b99bbff";
+export const slate600 = "#7c7994ff";
+export const slate700 = "#6f6b86ff";
+export const slate800 = "#454555ff";
+export const slate900 = "#36363fff";
 export const slate = {
     slate100,
     slate200,
@@ -133,15 +133,29 @@ export const colors = {
     slate: new Map(Object.entries(slate)),
 };
 
-export const semanticColors = {
+export const semanticColorsDark = {
     bgColor: lavender900,
+    articleBgColor: cuteblue900,
+    articleBorderColor: cuteblue700,
+    sectionBgColor: space900,
+    sectionBorderColor: space700,
+    navBgColor: lavender800,
+    navBorderColor: lavender600,
+    navLinkBorderColor: space500,
+    navLinkBgColor: space900,
+    navLinkBgColorActive: space800,
+    navTitleBgColor: slate600,
+    navTitleBorderColor: slate200,
     textColor: babypink100,
     linkColor: grass200,
     linkFocusColor: grass500,
     buttonColor: cuteblue300,
+    buttonBorderColor: cuteblue500,
     buttonBgColor: cuteblue800,
     buttonActiveColor: cuteblue100,
+    buttonActiveBorderColor: cuteblue300,
     headingColor: lavender300,
+    articleHeadingColor: lavender400,
     smallColor: slate300,
     codeBgColor: slate600,
     codeBorderColor: slate400,
@@ -158,4 +172,59 @@ export const semanticColors = {
     tableBodyBgColor: lavender900,
     thBorderColor: lavender600,
     tdBorderColor: lavender600,
+};
+
+export const semanticUtilsDark = {
+    cardBoxShadow: `
+        0px 0px 6px 3px rgba(0, 0, 0, 0.5),
+        inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2)
+    `,
+};
+
+export const semanticColorsLight = {
+    bgColor: cuteblue100,
+    articleBgColor: space100,
+    articleBorderColor: space400,
+    sectionBgColor: lavender100,
+    sectionBorderColor: lavender400,
+    navBgColor: lavender200,
+    navBorderColor: lavender500,
+    navLinkBorderColor: space400,
+    navLinkBgColor: space200,
+    navLinkBgColorActive: space100,
+    navTitleBgColor: slate200,
+    navTitleBorderColor: slate700,
+    textColor: babypink700,
+    linkColor: grass700,
+    linkFocusColor: grass600,
+    buttonColor: cuteblue400,
+    buttonBorderColor: cuteblue300,
+    buttonBgColor: cuteblue200,
+    buttonActiveColor: cuteblue600,
+    buttonActiveBorderColor: cuteblue400,
+    headingColor: space600,
+    articleHeadingColor: babypink600,
+    smallColor: slate600,
+    codeBgColor: slate100,
+    codeBorderColor: slate300,
+    strongColor: cuteblue500,
+    emColor: babypink600,
+    quoteColor: slate600,
+    citeColor: lavender700,
+    separatorColor: babypink500,
+    blockFocusBorderColor: cuteblue400,
+    textAreaColor: cuteblue900,
+    textAreaBgColor: slate400,
+    textAreaBorderColor: slate200,
+    tableHeadBgColor: lavender100,
+    tableBodyBgColor: lavender200,
+    thBorderColor: lavender500,
+    tdBorderColor: lavender500,
+};
+
+export const semanticUtilsLight = {
+    cardBoxShadow: `
+        0px 0px 6px 3px rgba(219, 219, 219, 0.5),
+        inset 0px 0px 3px 2px rgba(112, 169, 184, 0.2)
+    `,
 };

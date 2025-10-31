@@ -70,10 +70,11 @@ export const defaultDescription = "(no description)";
                 .entry-card {
                     width: 100%;
                     height: max-content;
-                    background-color: var(--cuteblue800);
                     border-radius: 1rem;
-                    border: 3px solid var(--cuteblue600);
                     padding: 1rem;
+
+                    background-color: var(--cuteblue800);
+                    border: 3px solid var(--cuteblue600);
                 }
 
                 .entry-title {
@@ -124,6 +125,25 @@ export const defaultDescription = "(no description)";
                     font-size: 0.85rem;
                     font-family: var(--sans);
                     color: var(--slate400);
+                }
+
+                @media (prefers-color-scheme: light) {
+                    .entry-card {
+                        background-color: var(--cuteblue200);
+                        border-color: var(--cuteblue300);
+                    }
+
+                    .entry-title aside {
+                        color: var(--slate600);
+                    }
+
+                    .entry-card footer {
+                        color: var(--slate700);
+                    }
+
+                    .entry-content {
+                        color: var(--lavender700);
+                    }
                 }
             </style>
         </Section>

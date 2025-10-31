@@ -45,11 +45,18 @@ import nowplaying from "$assets/nowplaying.html";
         align-items: center;
         width: fit-content;
         margin-inline: auto;
-        background-color: var(--cuteblue800);
 
         padding: 1.35rem;
 
-        border: 2px dashed var(--cuteblue600);
+        background-color: var(--cuteblue900);
+        border: 2px dashed var(--cuteblue700);
+    }
+
+    @media (prefers-color-scheme: light) {
+        .nowplaying {
+            background-color: var(--cuteblue100);
+            border-color: var(--cuteblue300);
+        }
     }
 
     #nowplaying-widget {

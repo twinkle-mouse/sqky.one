@@ -1,11 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-import { space700, space900 } from "$lib/colors";
-
 export type Props = HTMLAttributes<"section">;
-
-export const sectionColors = { bgColor: space900, borderColor: space700 };
 
 const { ...props } = Astro.props;
 ---
@@ -14,21 +10,19 @@ const { ...props } = Astro.props;
     <slot />
 </section>
 
-<style define:vars={{ ...sectionColors }}>
+<style>
     section {
         height: fit-content;
 
         margin: 1rem;
         padding: 1.15rem;
 
-        border: 2px var(--borderColor) solid;
+        border: 2px var(--sectionBorderColor) solid;
         border-radius: 0.35rem;
-        background-color: var(--bgColor);
+        background-color: var(--sectionBgColor);
 
         backdrop-filter: blur(2px);
-        box-shadow:
-            0px 0px 6px 3px rgba(0, 0, 0, 0.5),
-            inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2);
+        box-shadow: var(--cardBoxShadow);
 
         overflow: auto;
     }
