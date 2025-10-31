@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 
 import WritingsPage from "$common/WritingsPage.astro";
+import EmojiWrapper from "$components/EmojiWrapper.astro";
 import Article from "$layouts/Article.astro";
 import Section from "$layouts/Section.astro";
 
@@ -25,25 +26,27 @@ export const defaultDescription = "(no description)";
             {
                 Object.entries(allEntries).map(([collection, entries]) =>
                     entries.map((entry) => (
-                        <div class="entry-card">
-                            <div class="entry-title">
-                                <a href={`${collection}/${entry.id}`}>{entry.data.title}</a>
-                                <aside class="entry-date" data-iso-date={entry.data.date.toISOString()}>
-                                    <noscript>{entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}</noscript>
-                                </aside>
+                        <EmojiWrapper>
+                            <div class="entry-card">
+                                <div class="entry-title">
+                                    <a href={`${collection}/${entry.id}`}>{entry.data.title}</a>
+                                    <aside class="entry-date" data-iso-date={entry.data.date.toISOString()}>
+                                        <noscript>{entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}</noscript>
+                                    </aside>
+                                </div>
+
+                                <div class="entry-content">{entry.data.description || defaultDescription}</div>
+
+                                <footer>
+                                    <p>
+                                        <em>Authors:</em> {entry.data.authors.join(", ")}
+                                    </p>
+                                    <p>
+                                        <em>Tags:</em> {entry.data.tags.join(", ") || "(none)"}
+                                    </p>
+                                </footer>
                             </div>
-
-                            <div class="entry-content">{entry.data.description || defaultDescription}</div>
-
-                            <footer>
-                                <p>
-                                    <em>Authors:</em> {entry.data.authors.join(", ")}
-                                </p>
-                                <p>
-                                    <em>Tags:</em> {entry.data.tags.join(", ") || "(none)"}
-                                </p>
-                            </footer>
-                        </div>
+                        </EmojiWrapper>
                     )),
                 )
             }

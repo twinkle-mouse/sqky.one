@@ -79,3 +79,24 @@
         background-position: 600% 0%;
     }
 }
+
+@keyframes motto-colors {
+    from {
+        color: var(--babypink200);
+    }
+    20% {
+        color: var(--cuteblue200);
+    }
+    40% {
+        color: var(--grass200);
+    }
+    60% {
+        color: var(--space200);
+    }
+    80% {
+        color: var(--lavender200);
+    }
+    to {
+        color: var(--babypink200);
+    }
+}

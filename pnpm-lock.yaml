@@ -39,6 +39,9 @@ importers:
       colorjs.io:
         specifier: ^0.5.2
         version: 0.5.2
+      emoji-regex:
+        specifier: ^10.6.0
+        version: 10.6.0
       eslint:
         specifier: ^9.38.0
         version: 9.38.0(jiti@2.6.1)

@@ -24,6 +24,7 @@
         "astro-compressor": "^1.2.0",
         "autoprefixer": "^10.4.21",
         "colorjs.io": "^0.5.2",
+        "emoji-regex": "^10.6.0",
         "eslint": "^9.38.0",
         "eslint-plugin-astro": "^1.4.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",

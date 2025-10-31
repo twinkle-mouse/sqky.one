@@ -1,5 +1,4 @@
 ---
-import Emoji from "$components/Emoji.astro";
 import ProfilePicture from "$layouts/widgets/ProfilePicture.astro";
 ---
 
@@ -29,7 +28,7 @@ import ProfilePicture from "$layouts/widgets/ProfilePicture.astro";
 
         <br />
 
-        <p>i'm a <em>mouse</em> <Emoji class="rotate" e="🐭" />!!!!</p>
+        <p>i'm a <em>mouse</em> <span class="animation-rotate">🐭</span> !!!!</p>
         <p>
             and mice are squeaky, so i'm
             <code><a href="https://the.sqky.one/">the.sqky.one</a></code>
@@ -54,15 +53,5 @@ import ProfilePicture from "$layouts/widgets/ProfilePicture.astro";
         padding-block: 1.5rem;
 
         clear: right;
-    }
-
-    .rotate {
-        animation: rotate 2s linear infinite;
-    }
-
-    @media (prefers-reduced-motion) {
-        .rotate {
-            animation: none;
-        }
     }
 </style>
