@@ -4,9 +4,9 @@ export const babypink300 = "#fabee9ff";
 export const babypink400 = "#fdb6e9ff";
 export const babypink500 = "#f0a5dcff";
 export const babypink600 = "#b96aa6ff";
-export const babypink700 = "#62375aff";
-export const babypink800 = "#371f32ff";
-export const babypink900 = "#1e141cff";
+export const babypink700 = "#613559ff";
+export const babypink800 = "#311e2dff";
+export const babypink900 = "#1a1519ff";
 export const babypink = {
     babypink100,
     babypink200,
@@ -26,8 +26,8 @@ export const cuteblue400 = "#939eeaff";
 export const cuteblue500 = "#848fe5ff";
 export const cuteblue600 = "#5965bbff";
 export const cuteblue700 = "#3d4271ff";
-export const cuteblue800 = "#20243cff";
-export const cuteblue900 = "#131522ff";
+export const cuteblue800 = "#212433ff";
+export const cuteblue900 = "#18181dff";
 export const cuteblue = {
     cuteblue100,
     cuteblue200,
@@ -47,8 +47,8 @@ export const lavender400 = "#d8b1ffff";
 export const lavender500 = "#d7a6ffff";
 export const lavender600 = "#af7bdaff";
 export const lavender700 = "#644679ff";
-export const lavender800 = "#362541ff";
-export const lavender900 = "#1e1722ff";
+export const lavender800 = "#32263aff";
+export const lavender900 = "#1c181fff";
 export const lavender = {
     lavender100,
     lavender200,
@@ -68,8 +68,8 @@ export const space400 = "#b9b0ffff";
 export const space500 = "#9c93f3ff";
 export const space600 = "#8077daff";
 export const space700 = "#4e4984ff";
-export const space800 = "#302e4fff";
-export const space900 = "#1c1a27ff";
+export const space800 = "#322f44ff";
+export const space900 = "#1a191fff";
 export const space = {
     space100,
     space200,
@@ -88,9 +88,9 @@ export const grass300 = "#daffb8ff";
 export const grass400 = "#ccff9dff";
 export const grass500 = "#bffc86ff";
 export const grass600 = "#9dd06eff";
-export const grass700 = "#6d8853ff";
-export const grass800 = "#3a4430ff";
-export const grass900 = "#1e2218ff";
+export const grass700 = "#688b4eff";
+export const grass800 = "#39462fff";
+export const grass900 = "#1d1f1bff";
 export const grass = {
     grass100,
     grass200,
@@ -110,8 +110,8 @@ export const slate400 = "#8f8faeff";
 export const slate500 = "#7d7b97ff";
 export const slate600 = "#646275ff";
 export const slate700 = "#4f4d5aff";
-export const slate800 = "#2f2f37ff";
-export const slate900 = "#1c1c1fff";
+export const slate800 = "#313136ff";
+export const slate900 = "#1b1b1dff";
 export const slate = {
     slate100,
     slate200,
