@@ -8,13 +8,18 @@ if (Astro.slots.has("nav:page-links")) {
 ---
 
 <nav>
-    <div>
-        <p>Main Site</p>
+    <div class="sitemap">
+        <p>Sitemap</p>
         <div>
             <a href="https://sqky.one/#">Home</a>
             <a href="https://writing.sqky.one/#">Writings</a>
+            <a href="https://the.sqky.one/#">Files Archive</a>
+            <a href="https://status.sqky.one/">Uptime Status</a>
+            <a href="https://media.mouse.lgbt/">Public Jellyfin</a>
         </div>
     </div>
+
+    <SiteNavControls />
 
     {
         pageLinks && (
@@ -27,19 +32,7 @@ if (Astro.slots.has("nav:page-links")) {
         )
     }
 
-    <SiteNavControls />
-
     <slot name="nav:other-categories" />
-
-    <div>
-        <p>Services</p>
-        <div>
-            <a href="https://the.sqky.one/#">Files Archive</a>
-            <a href="https://status.sqky.one/">Uptime Status</a>
-            <a href="https://media.mouse.lgbt/">Public Jellyfin</a>
-            <slot name="nav:misc-links" />
-        </div>
-    </div>
 
     <slot name="nav:footer" />
 </nav>
@@ -97,6 +90,10 @@ if (Astro.slots.has("nav:page-links")) {
         gap: 0.5rem;
     }
 
+    nav > :global(div) > :global(div) > :global(a::before) {
+        content: "\> ";
+    }
+
     nav > :global(div) > :global(div) > :global(a) {
         padding: 0.15rem;
 
@@ -104,13 +101,27 @@ if (Astro.slots.has("nav:page-links")) {
         background-color: var(--navLinkBgColor);
     }
 
-    nav > :global(div) > :global(div) > :global(a::before) {
-        content: "|> ";
-    }
-
     nav > :global(div) > :global(div) > :global(a:hover),
     nav > :global(div) > :global(div) > :global(a:focus) {
         background-color: var(--navLinkBgColorActive);
+    }
+
+    nav > div.sitemap {
+        background-color: var(--sitemapBgColor);
+    }
+
+    nav > div.sitemap > :global(div) > :global(a::before) {
+        content: "@ ";
+    }
+
+    nav > div.sitemap > :global(div) > :global(a) {
+        border: 1px solid var(--sitemapLinkBorderColor);
+        background-color: var(--sitemapLinkBgColor);
+    }
+
+    nav > div.sitemap > :global(div) > :global(a:hover),
+    nav > div.sitemap > :global(div) > :global(a:focus) {
+        background-color: var(--sitemapLinkBgColorActive);
     }
 
     nav {
