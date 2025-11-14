@@ -56,13 +56,7 @@ export default defineConfig({
         //@ts-expect-error astro config type doesn't make sense to import
         ...(config.integrations || []),
         icon({
-            include: {},
             iconDir: "./icons",
-
-            svgoOptions: {
-                multipass: false,
-                plugins: [],
-            },
         }),
         compressor(),
     ],
