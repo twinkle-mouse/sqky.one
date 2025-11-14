@@ -1,23 +1,22 @@
 ---
 import { getEntry } from "astro:content";
 import { render } from "astro:content";
-import { getCollection } from "astro:content";
 
 import WritingsPage from "$common/WritingsPage.astro";
 import EmojiWrapper from "$components/EmojiWrapper.astro";
 import Article from "$layouts/Article.astro";
 import Section from "$layouts/Section.astro";
-
-import { defaultDescription } from "../index.astro";
+import { defaultDescription } from "$layouts/WritingEntries.astro";
+import { getWritingEntries } from "../index.astro";
 
 export async function getStaticPaths() {
-    return (await getCollection("stories")).map((v) => {
-        return { params: { id: v.id } };
+    return (await getWritingEntries()).map((entry) => {
+        return { params: { id: entry.id } };
     });
 }
 
 const { id } = Astro.params;
-const entry = await getEntry("stories", id);
+const entry = await getEntry("writings", id);
 if (entry === undefined) {
     return Astro.redirect("/404");
 }
@@ -50,6 +49,10 @@ const { Content, headings } = await render(entry);
                     all: unset;
                 }
 
+                #content {
+                    padding-inline: 1rem;
+                }
+
                 #content p {
                     margin-block: 1.5rem;
                     line-height: 1.5em;
@@ -69,6 +72,11 @@ const { Content, headings } = await render(entry);
 
                 #content section > p:has(code) {
                     text-align: center;
+                }
+
+                #content section {
+                    margin-inline: 0;
+                    margin-top: 2rem;
                 }
 
                 #content blockquote > * {

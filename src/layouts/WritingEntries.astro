@@ -1,0 +1,150 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+
+export const defaultDescription = "(no description)";
+
+type Props = {
+    entries: CollectionEntry<"writings">[];
+};
+---
+
+<div class="entries">
+    {
+        Astro.props.entries.map((entry) => (
+            <EmojiWrapper>
+                <div class="entry-card">
+                    <div class="entry-title">
+                        <a href={`${entry.collection}/${entry.id}`}>{entry.data.title}</a>
+                        <aside class="entry-date" data-iso-date={entry.data.date.toISOString()}>
+                            <noscript>{entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}</noscript>
+                        </aside>
+                    </div>
+
+                    <div class="entry-content">{entry.data.description || defaultDescription}</div>
+
+                    <footer>
+                        <p>
+                            <em>Authors:</em> {entry.data.authors.join(", ")}
+                        </p>
+                        <p>
+                            <em>Tags:</em>{" "}
+                            {entry.data.tags
+                                .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
+                                .flatMap((v, index) => {
+                                    if (index < entry.data.tags.length - 1) {
+                                        return [v, ", "];
+                                    } else {
+                                        return v;
+                                    }
+                                }) || "(none)"}
+                        </p>
+                    </footer>
+                </div>
+            </EmojiWrapper>
+        ))
+    }
+
+    <style>
+        .entries {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .entry-card {
+            width: 100%;
+            height: max-content;
+            border-radius: 1rem;
+            padding: 1rem;
+
+            background-color: var(--cuteblue800);
+            border: 3px solid var(--cuteblue600);
+        }
+
+        .entry-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-block: 0.2rem;
+        }
+
+        .entry-title a {
+            font-size: 1.55rem;
+            font-family: var(--serif);
+            font-style: oblique;
+        }
+
+        @media (max-width: 580px) {
+            .entry-title a {
+                font-size: 1.3rem;
+            }
+        }
+
+        .entry-title aside {
+            width: max-content;
+            margin-left: 1rem;
+
+            text-align: right;
+            text-wrap: stable;
+
+            font-size: 0.85rem;
+            font-family: var(--mono);
+            color: var(--slate400);
+        }
+
+        .entry-content {
+            white-space: pre-line;
+            font-family: var(--sans);
+            font-style: italic;
+            color: var(--lavender200);
+        }
+
+        .entry-card footer {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+
+            border-top: 1px solid var(--slate600);
+
+            font-size: 0.85rem;
+            font-family: var(--sans);
+            color: var(--slate400);
+        }
+
+        @media (prefers-color-scheme: light) {
+            .entry-card {
+                background-color: var(--cuteblue200);
+                border-color: var(--cuteblue300);
+            }
+
+            .entry-title aside {
+                color: var(--slate600);
+            }
+
+            .entry-card footer {
+                color: var(--slate700);
+            }
+
+            .entry-content {
+                color: var(--lavender700);
+            }
+        }
+    </style>
+</div>
+
+<script>
+    const formatDate = () => {
+        document.querySelectorAll<HTMLElement>(".entry-date").forEach((e) => {
+            const isoDateString = e.dataset["isoDate"];
+            if (!isoDateString) return;
+
+            const isoDate = new Date(isoDateString);
+            e.innerText = isoDate.toLocaleDateString(navigator.language, { dateStyle: "long" });
+        });
+    };
+
+    document.addEventListener("DOMContentLoaded", formatDate);
+    window.addEventListener("languagechange", formatDate);
+</script>
