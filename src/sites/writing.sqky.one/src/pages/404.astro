@@ -1,0 +1,10 @@
+---
+import WritingsPage from "$common/WritingsPage.astro";
+import NotFound, { pageName } from "$layouts/NotFound.astro";
+---
+
+<WritingsPage pageName={pageName} desc="This Entry Does Not Exist,">
+    <Fragment slot="page-title">ERROR</Fragment>
+
+    <NotFound />
+</WritingsPage>
