@@ -1,0 +1,84 @@
+---
+import FilesArchivePage from "$common/FilesArchivePage.astro";
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+---
+
+<FilesArchivePage pageName="File Upload">
+    <Fragment slot="page-title">Single Use File Upload</Fragment>
+
+    <LargeSection>
+        <Section>
+            <p>Direct file upload link to my computer. You need to be given a code to use this.</p>
+            <p>The code will be inside the url, like this:</p>
+            <p><code>https://the.sqky.one/upload/?code=XXXXXXXXXXXXXXXX</code></p>
+
+            <div id="uploader" hidden>
+                <div>
+                    <input id="file-input" type="file" />
+                    <button id="upload-button">Submit</button>
+                </div>
+            </div>
+
+            <p id="message"></p>
+        </Section>
+    </LargeSection>
+</FilesArchivePage>
+
+<script>
+    const uploader = document.querySelector<HTMLElement>("#uploader")!;
+    const button = document.querySelector<HTMLButtonElement>("#upload-button")!;
+    const message = document.querySelector<HTMLParagraphElement>("#message")!;
+    const fileInput = document.querySelector<HTMLInputElement>("#file-input")!;
+
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const code = params.get("code");
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!code) {
+            message.innerHTML = "Missing upload code!";
+        } else {
+            uploader.hidden = false;
+        }
+    });
+
+    async function handleClick() {
+        if (!code) return;
+
+        if (fileInput.files == null || fileInput.files.length == 0) {
+            message.innerHTML = "No file selected!";
+            return;
+        }
+
+        const file = fileInput.files![0];
+        fileInput.value = "";
+        fileInput.disabled = true;
+        button.disabled = true;
+
+        try {
+            message.innerHTML = "Uploading...";
+
+            const response = await fetch(`/upload/accept/${file.name}`, {
+                method: "PUT",
+                body: file,
+                headers: [
+                    ["Authorization", code],
+                    ["Content-Type", file.type],
+                ],
+            });
+
+            if (response.status >= 200 && response.status < 300) {
+                message.innerHTML = "Successfully uploaded.";
+            } else {
+                message.innerHTML = `Upload failed!<br/>Reason: ${response.status} ${response.statusText}`;
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            fileInput.disabled = false;
+            button.disabled = false;
+        }
+    }
+    button.addEventListener("click", handleClick);
+</script>

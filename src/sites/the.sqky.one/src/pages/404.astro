@@ -1,0 +1,10 @@
+---
+import FilesArchivePage from "$common/FilesArchivePage.astro";
+import NotFound, { pageName } from "$layouts/NotFound.astro";
+---
+
+<FilesArchivePage pageName={pageName}>
+    <Fragment slot="page-title">ERROR</Fragment>
+
+    <NotFound />
+</FilesArchivePage>

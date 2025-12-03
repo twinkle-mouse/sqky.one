@@ -1,0 +1,49 @@
+---
+import { experimental_AstroContainer } from "astro/container";
+import emojiRegex from "emoji-regex";
+import { parse } from "node-html-parser";
+
+import Emoji from "./Emoji.astro";
+
+const rendered = await Astro.slots.render("default");
+
+const container = await experimental_AstroContainer.create();
+
+const element = parse(rendered);
+let children = [];
+children.push(...element.childNodes);
+for (const child of children) {
+    if (child.childNodes.length > 0) {
+        children.push(...child.childNodes);
+    }
+
+    // TEXT_NODE: 3
+    if (child.nodeType == 3 && !!child.textContent) {
+        const parent = child.parentNode;
+
+        if (parent != undefined && parent.attributes["data-emoji"] != "true") {
+            let htmlSrc = child.textContent;
+            let htmlDst = "";
+
+            let match = emojiRegex().exec(htmlSrc);
+            if (match != null) {
+                do {
+                    const emoji = match[0];
+                    const index = match["index"];
+                    const before = htmlSrc.substring(0, index);
+                    const after = htmlSrc.substring(index + emoji.length);
+                    const emojiHtml = (await container.renderToString(Emoji, { props: { e: emoji } })).trim();
+                    htmlDst += before + emojiHtml;
+                    htmlSrc = after;
+                    match = emojiRegex().exec(htmlSrc);
+                } while (match != null);
+                htmlDst += htmlSrc;
+
+                parent.exchangeChild(child, parse(htmlDst));
+            }
+        }
+    }
+}
+---
+
+<Fragment set:html={element} />

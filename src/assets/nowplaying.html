@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script>
+            const ADDRESS = "wss://the.sqky.one/mpris-nowplaying/";
+
+            function connect(wrapper) {
+                const ws = new WebSocket(ADDRESS);
+
+                ws.onopen = (e) => {
+                    console.log("Socket opened.");
+
+                    wrapper.open();
+                };
+
+                ws.onerror = (e) => {
+                    console.log("Socket errored. Reconnect will be attempted in 1 second. Reason:", e.reason);
+
+                    wrapper.reset();
+                };
+
+                ws.onclose = (e) => {
+                    console.log("Socket closed. Reconnect will be attempted in 1 second. Reason:", e.reason);
+
+                    wrapper.reset();
+                };
+
+                ws.onmessage = (e) => {
+                    let data = null;
+                    if (typeof e.data == "object") {
+                        data = e.data;
+                    } else if (e.data === "") {
+                        data = undefined;
+                    } else {
+                        try {
+                            data = JSON.parse(e.data);
+                        } catch {
+                            data = e.data;
+                        }
+                    }
+
+                    wrapper.data = data;
+                };
+
+                wrapper.ws = ws;
+            }
+
+            class WebsocketWrapper {
+                ws = undefined;
+                data = null;
+
+                interval = undefined;
+                intervalId = undefined;
+
+                update;
+
+                reset() {
+                    clearInterval(this.intervalId);
+                    this.intervalId = undefined;
+
+                    this.ws = undefined;
+                    this.data = null;
+
+                    this.update(this.ws, this.data);
+
+                    setTimeout(() => connect(this), 1000);
+                }
+
+                open() {
+                    this.intervalId = setInterval(() => {
+                        if (this.ws?.readyState === WebSocket.OPEN) {
+                            this.update(this.ws, this.data);
+                        }
+                    }, this.interval);
+                }
+
+                constructor(update = (ws, data) => {}, interval = 1000) {
+                    this.update = update;
+                    this.interval = interval;
+
+                    connect(this);
+                }
+            }
+        </script>
+
+        <script>
+            let currentImageUrl = undefined;
+            let currentImageUrlCss = "";
+
+            function applyStatus(data, elements, currentImage) {
+                if (currentImage) {
+                    if (currentImageUrl) {
+                        try {
+                            URL.revokeObjectURL(currentImageUrl);
+                        } catch {}
+
+                        currentImageUrl = undefined;
+                    }
+
+                    if (currentImage instanceof Blob) {
+                        currentImageUrl = URL.createObjectURL(currentImage);
+                    } else {
+                        currentImageUrl = currentImage;
+                    }
+
+                    currentImageUrlCss = `url("${currentImageUrl}")`;
+                } else if (currentImage === null) {
+                    currentImageUrlCss = "";
+                }
+
+                const titleElement = elements["title"];
+                const artistElement = elements["artist"];
+                const albumElement = elements["album"];
+                const statusElement = elements["status"];
+                const barElement = elements["bar"];
+                const barCircleElement = elements["barCircle"];
+                const positionElement = elements["position"];
+                const artElement = elements["art"];
+                const artLabelElement = elements["artLabel"];
+
+                const paused = data?.playbackState == "paused";
+                const position = data?.position;
+                const metadata = data?.metadata;
+
+                let title = metadata?.title;
+                if (!title) {
+                    title = "Nothing playing!";
+                } else {
+                    title = `“${title}”`;
+                }
+
+                let album = metadata?.album;
+                if (!album) {
+                    album = "";
+                } else {
+                    album = `on ‘${album}’`;
+                }
+
+                let artist = metadata?.artist;
+                if (!artist) {
+                    artist = "";
+                } else {
+                    artist = `by ${artist}`;
+                }
+
+                const art = metadata?.artwork?.at(0) ?? "";
+                const length = metadata?.length;
+
+                if (titleElement) {
+                    if (titleElement.textContent !== title) {
+                        titleElement.textContent = title;
+                    }
+                }
+
+                if (artistElement) {
+                    if (artistElement.textContent !== artist) {
+                        artistElement.textContent = artist;
+                    }
+                }
+
+                if (albumElement) {
+                    if (albumElement.textContent !== album) {
+                        albumElement.textContent = album;
+                    }
+                }
+
+                if (artElement) {
+                    if (artElement.style.backgroundImage !== currentImageUrlCss) {
+                        artElement.style.backgroundImage = currentImageUrlCss;
+                    }
+                }
+
+                if (artLabelElement && !!metadata?.album) {
+                    const artLabel = `Album art for "${metadata.album}"`;
+                    if (artLabelElement.textContent !== artLabel) {
+                        artLabelElement.textContent = artLabel;
+                    }
+                }
+
+                if (statusElement) {
+                    if (length !== undefined && length > 0) {
+                        if (statusElement.hidden !== false) {
+                            statusElement.hidden = false;
+                        }
+
+                        if (barCircleElement) {
+                            let pos = "0.0%";
+
+                            if (position !== undefined) {
+                                const posPercentage = (position / length) * 100.0;
+
+                                pos = `${posPercentage}%`;
+                            }
+
+                            if (barCircleElement.style.left !== pos) {
+                                barCircleElement.style.left = pos;
+                            }
+                        }
+
+                        if (positionElement) {
+                            let progressText = "";
+
+                            if (position !== undefined) {
+                                const posSeconds = (Math.round(position / 1_000_000) % 60).toString().padStart(2, "0");
+                                const posMinutes = Math.floor(position / 1_000_000 / 60);
+                                const lenSeconds = (Math.round(length / 1_000_000) % 60).toString().padStart(2, "0");
+                                const lenMinutes = Math.floor(length / 1_000_000 / 60);
+
+                                let paused_text = "";
+                                if (paused) {
+                                    paused_text = " (Paused!)";
+                                }
+
+                                progressText = `${posMinutes}:${posSeconds} / ${lenMinutes}:${lenSeconds}${paused_text}`;
+                            }
+
+                            if (positionElement.textContent !== progressText) {
+                                positionElement.textContent = progressText;
+                            }
+                        }
+                    } else {
+                        if (statusElement.hidden !== true) {
+                            statusElement.hidden = true;
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <script>
+            function load() {
+                const elements = {
+                    title: document.getElementById("np-title"),
+                    artist: document.getElementById("np-artist"),
+                    album: document.getElementById("np-album"),
+                    status: document.getElementById("np-status"),
+                    bar: document.getElementById("np-bar"),
+                    barCircle: document.getElementById("np-bar-circle"),
+                    position: document.getElementById("np-position"),
+                    art: document.getElementById("np-art"),
+                    artLabel: document.getElementById("np-art-label"),
+                };
+
+                let currentImage = undefined;
+                const imageFetcher = new WebsocketWrapper((ws, data) => {
+                    ws?.send("artwork/0");
+
+                    currentImage = data;
+                }, 250);
+
+                const ws = new WebsocketWrapper((ws, data) => {
+                    ws?.send(null);
+
+                    applyStatus(data, elements, currentImage);
+                }, 250);
+            }
+
+            document.addEventListener("DOMContentLoaded", load);
+        </script>
+
+        <style>
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+
+                margin: 0;
+                padding: 0;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            #nowplaying {
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+            }
+
+            #np-info {
+                width: 50%;
+
+                display: flex;
+                flex-direction: column;
+
+                padding: 8px;
+                margin-right: 8px;
+            }
+
+            #np-bar {
+                width: 100%;
+                padding-top: 2px;
+                margin-block: 6px;
+                height: 10px;
+                position: relative;
+            }
+
+            #np-bar-background {
+                width: 100%;
+                height: 100%;
+                background-color: rgb(255, 255, 255);
+                border: solid 3px rgb(70, 65, 83);
+                border-radius: 8px;
+                position: absolute;
+            }
+
+            #np-bar-circle {
+                left: 0;
+                top: 0;
+                transform: translateX(-50%);
+                width: 8px;
+                height: 8px;
+                background-color: rgb(248, 175, 175);
+                border: solid 3px rgb(255, 134, 134);
+                border-radius: 50%;
+                box-sizing: content-box;
+                position: absolute;
+            }
+
+            #np-art {
+                width: 50%;
+                opacity: 0.5;
+
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            #np-text {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                text-align: center;
+            }
+
+            #np-title {
+                margin-block: 0;
+                flex: 1;
+                font-weight: 900;
+
+                color: var(--lavender200);
+            }
+
+            #np-album {
+                margin-block: 0;
+                font-size: 0.75em;
+                font-weight: 600;
+            }
+
+            #np-artist {
+                margin-bottom: 0;
+                margin-top: 0.75rem;
+                font-weight: 700;
+
+                color: var(--lavender400);
+            }
+
+            #np-position {
+                text-align: end;
+                font-size: 0.7em;
+
+                color: var(--slate300);
+            }
+
+            .sr-only {
+                position: absolute;
+                left: -10000px;
+                top: auto;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="nowplaying">
+            <div id="np-info">
+                <div id="np-text">
+                    <h4 id="np-title"></h4>
+                    <p id="np-album"></p>
+                    <p id="np-artist"></p>
+                </div>
+                <div id="np-status" hidden>
+                    <div id="np-bar">
+                        <div id="np-bar-background"></div>
+                        <div id="np-bar-circle"></div>
+                    </div>
+                    <p id="np-position"></p>
+                </div>
+            </div>
+            <div id="np-art">
+                <label class="sr-only" id="np-art-label"></label>
+            </div>
+        </div>
+    </body>
+</html>

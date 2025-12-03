@@ -1,0 +1,106 @@
+---
+import { getEntry, render } from "astro:content";
+
+import WritingsPage from "$common/WritingsPage.astro";
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+import { defaultDescription } from "$lib/writings";
+
+import { getWritingEntries } from "../index.astro";
+
+export async function getStaticPaths() {
+    return (await getWritingEntries()).map((entry) => {
+        return { params: { id: entry.id } };
+    });
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("writings", id);
+if (entry === undefined) {
+    return Astro.redirect("/404");
+}
+
+const { Content, headings } = await render(entry);
+---
+
+<WritingsPage pageName={`'${entry.data.title}'`} desc={entry.data.description || defaultDescription}>
+    <Fragment slot="page-title">{entry.data.title}</Fragment>
+
+    <Fragment slot="nav:page-links">
+        {
+            headings.map((v) => (
+                <li>
+                    <a href={`#${v.slug}`}>{v.text}</a>
+                </li>
+            ))
+        }
+    </Fragment>
+
+    <LargeSection>
+        <Fragment slot="heading">
+            {entry.data.title}
+        </Fragment>
+
+        <div id="content">
+            <EmojiWrapper>
+                <Content
+                    components={{
+                        section: Section,
+                    }}
+                />
+            </EmojiWrapper>
+
+            <style is:global>
+                #content ::before,
+                #content ::after {
+                    all: unset;
+                }
+
+                #content {
+                    font-size: larger;
+
+                    padding-inline: 1rem;
+                }
+
+                #content aside {
+                    float: right;
+                    background-color: var(--codeBgColor);
+
+                    margin-left: 1rem;
+                    margin-block: 1.5rem;
+                    padding-inline: 1rem;
+
+                    border-left: 3px solid var(--codeBorderColor);
+                    border-radius: 4px;
+                }
+
+                #content p {
+                    margin-block: 1.5rem;
+                    line-height: 1.5;
+                    text-wrap: wrap stable;
+                    white-space: pre-line;
+                }
+
+                #content h1,
+                #content h2,
+                #content h3,
+                #content h4,
+                #content h5,
+                #content h6 {
+                    text-align: center;
+                    font-weight: 500;
+                }
+
+                #content section {
+                    margin-inline: 0;
+                    margin-top: 2rem;
+                }
+
+                #content blockquote > * {
+                    margin: 0;
+                }
+            </style>
+        </div>
+    </LargeSection>
+</WritingsPage>

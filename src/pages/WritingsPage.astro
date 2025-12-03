@@ -1,0 +1,22 @@
+---
+import Page, { type Props as PageProps } from "$common/CommonPage.astro";
+import Navigation from "$layouts/widgets/Navigation.astro";
+import { siteName } from "$lib/writings";
+
+type Props = Omit<PageProps, "siteName">;
+---
+
+<Page {...Astro.props} siteName={siteName}>
+    <Fragment slot="head-tags">
+        <link rel="alternate" type="application/rss+xml" title={siteName} href={new URL("rss.xml", Astro.site)} />
+    </Fragment>
+
+    <Navigation slot="nav">
+        <slot name="nav:page-links" slot="nav:page-links" />
+        <slot name="nav:other-categories" slot="nav:other-categories" />
+        <slot name="nav:footer" slot="nav:footer" />
+    </Navigation>
+
+    <slot name="page-title" slot="page-title" />
+    <slot />
+</Page>

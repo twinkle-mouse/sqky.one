@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"section">;
+
+const { ...props } = Astro.props;
+---
+
+<section {...props}>
+    <slot />
+</section>
+
+<style>
+    section {
+        height: fit-content;
+
+        margin-inline: 1rem;
+        margin-block: 1.25rem;
+        padding: 1.15rem;
+
+        border: 2px var(--sectionBorderColor) solid;
+        border-radius: 0.35rem;
+        background-color: var(--sectionBgColor);
+
+        backdrop-filter: blur(2px);
+        box-shadow: var(--cardBoxShadow);
+
+        overflow: auto;
+    }
+</style>

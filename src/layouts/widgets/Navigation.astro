@@ -1,0 +1,191 @@
+---
+let pageLinks = undefined;
+if (Astro.slots.has("nav:page-links")) {
+    pageLinks = (await Astro.slots.render("nav:page-links")).trim();
+}
+---
+
+<nav>
+    <div>
+        <p>This Page</p>
+        <ul>
+            <li>
+                <a href="#maincontent">Skip to content</a>
+            </li>
+            {pageLinks && <Fragment set:html={pageLinks} />}
+        </ul>
+    </div>
+
+    <div class="sitemap">
+        <p>Sitemap</p>
+        <ul>
+            <li><a href="https://sqky.one/#">Home</a></li>
+            <li><a href="https://writing.sqky.one/#">Writings</a></li>
+            <li><a href="https://the.sqky.one/#">Files Archive</a></li>
+            <li><a href="https://status.sqky.one/">Uptime Status</a></li>
+            <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
+        </ul>
+    </div>
+
+    <slot name="nav:other-categories" />
+
+    <slot name="nav:footer" />
+</nav>
+
+<style>
+    nav {
+        display: flex;
+
+        overflow: scroll;
+
+        top: 0;
+        left: 0;
+
+        flex: fit-content;
+        flex-wrap: nowrap;
+
+        background-color: var(--navBgColor);
+
+        backdrop-filter: blur(2px);
+        box-shadow: var(--cardBoxShadow);
+    }
+
+    nav > :global(div) > :global(ul),
+    nav > :global(div) > :global(ul) > :global(li) {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    nav > :global(div) > :global(p),
+    nav > :global(div) > :global(ul) > :global(li) > :global(a) {
+        display: block;
+
+        width: max-content;
+        height: min-content;
+
+        text-wrap: stable;
+    }
+
+    nav > :global(div) > :global(p) {
+        width: 100%;
+
+        margin: 0;
+        padding-block: 0.3rem;
+
+        border-bottom: 2px solid var(--navTitleBorderColor);
+        background-color: var(--navTitleBgColor);
+
+        text-align: center;
+    }
+
+    nav > :global(div) > :global(ul) {
+        display: flex;
+
+        width: 100%;
+
+        padding: 1rem;
+
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: start;
+        gap: 0.5rem;
+    }
+
+    nav > :global(div) > :global(ul) > :global(li) > :global(a::before) {
+        content: "\>" / "";
+        margin-right: 0.25em;
+    }
+
+    nav > :global(div) > :global(ul) > :global(li) > :global(a) {
+        padding: 0.15rem;
+
+        border: 1px solid var(--navLinkBorderColor);
+        background-color: var(--navLinkBgColor);
+    }
+
+    nav > :global(div) > :global(ul) > :global(li) > :global(a:hover),
+    nav > :global(div) > :global(ul) > :global(li) > :global(a:focus) {
+        background-color: var(--navLinkBgColorActive);
+    }
+
+    nav > div.sitemap {
+        background-color: var(--sitemapBgColor);
+    }
+
+    nav > div.sitemap > :global(ul) > :global(li) > :global(a::before) {
+        content: "@" / "";
+        margin-right: 0.25em;
+    }
+
+    nav > div.sitemap > :global(ul) > :global(li) > :global(a) {
+        border: 1px solid var(--sitemapLinkBorderColor);
+        background-color: var(--sitemapLinkBgColor);
+    }
+
+    nav > div.sitemap > :global(ul) > :global(li) > :global(a:hover),
+    nav > div.sitemap > :global(ul) > :global(li) > :global(a:focus) {
+        background-color: var(--sitemapLinkBgColorActive);
+    }
+
+    nav {
+        position: sticky;
+
+        margin-right: 1.75rem;
+        padding: 0;
+
+        min-width: 320px;
+        max-width: 320px;
+        height: 100dvh;
+
+        border: none;
+        border: 3px solid var(--navBorderColor);
+        border-block: none;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav > :global(div) {
+        border: none;
+        border-top: 2px solid var(--navTitleBorderColor);
+    }
+
+    @media (max-width: 1200px) {
+        nav {
+            position: static;
+
+            margin-inline: 0;
+            padding: 0;
+
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+            height: 160px;
+
+            border: none;
+            border: 3px solid var(--navBorderColor);
+            border-top: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        nav {
+            flex-direction: row;
+        }
+
+        nav > :global(div) {
+            width: 100%;
+            height: auto;
+
+            border: none;
+            border-left: 2px solid var(--navTitleBorderColor);
+        }
+    }
+
+    nav > :global(div:first-of-type) {
+        border-top: none;
+        border-left: none;
+    }
+</style>

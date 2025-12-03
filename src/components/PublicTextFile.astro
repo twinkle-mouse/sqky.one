@@ -1,0 +1,124 @@
+---
+import { randomUUID } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+
+import type { HTMLAttributes } from "astro/types";
+import { root } from "astro:config/server";
+
+export type Props = HTMLAttributes<"textarea"> & {
+    src: string;
+    desc?: string;
+};
+
+const { src, desc, ...props } = Astro.props;
+const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding: "utf8" });
+
+const uuid = `textfile-${randomUUID()}`;
+---
+
+<details>
+    <summary>
+        <label for={uuid}>
+            <strong>{desc}</strong>
+        </label>
+        <a class="mono" href={src}>{src}</a>
+    </summary>
+
+    <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", props.class]}>{file}</textarea>
+</details>
+
+<style>
+    details,
+    summary {
+        border-radius: 6px;
+    }
+
+    details {
+        min-width: max-content;
+        width: 100%;
+
+        margin-top: 1.75rem;
+        margin-bottom: 0.5rem;
+        background-color: var(--textAreaBgColor);
+    }
+
+    summary {
+        display: flex;
+
+        padding: 0.35rem;
+
+        background-color: var(--textAreaBorderColor);
+        outline: 3px solid var(--textAreaBorderColor);
+
+        user-select: none;
+    }
+
+    details[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    summary::before {
+        content: "";
+
+        flex: 0 0;
+
+        width: min-content;
+        height: min-content;
+        margin: 4px;
+
+        display: inline-block;
+
+        border: 8px solid;
+        border-color: transparent transparent transparent #fff;
+        box-sizing: content-box;
+
+        transform-origin: center center;
+        transition: transform 0.2s ease;
+    }
+
+    @media (prefers-reduced-motion) {
+        summary::before {
+            transition: none;
+        }
+    }
+
+    details[open] summary::before {
+        transform: scaleX(0.75) rotate(90deg) translateX(25%);
+    }
+
+    details:not([open]) summary::before {
+        transform: scaleY(0.75) rotate(0deg) translateX(25%);
+    }
+
+    summary label {
+        margin-left: 0.3em;
+        margin-right: 1em;
+    }
+
+    summary a {
+        display: inline-block;
+        height: min-content;
+        margin-left: auto;
+    }
+
+    textarea {
+        border: none;
+        background: none;
+        text-wrap: nowrap;
+
+        margin-top: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        outline: 3px solid var(--textAreaBorderColor);
+    }
+
+    summary:focus {
+        outline-color: var(--focusColor);
+    }
+
+    textarea:focus {
+        outline-color: var(--focusColor);
+    }
+</style>

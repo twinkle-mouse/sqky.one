@@ -1,0 +1,211 @@
+---
+import Section from "$layouts/Section.astro";
+import ColorCard from "$layouts/widgets/ColorCard.astro";
+import { colors } from "$lib/colors";
+---
+
+<Section>
+    <div>
+        <h3 class="colors-text-container">
+            <div class="colors-text-box">
+                <div class="colors-text mono">colours</div>
+            </div>
+        </h3>
+
+        <label class="sr-only">
+            Below is a widget with colour swatches of the different sets of colours used on the site. Each one is a different hue with lightness option from 1
+            to 9. Each set is laid out vertically from lightest at the top to darkest at the bottom, with the name of the set right above the list.
+        </label>
+        <label class="sr-only js-necessary">Users may use a mouse to drag around the swatches on the screen, bouncing back when released.</label>
+
+        <p class="text-center js-necessary">play around, drag them all over!! they're fun</p>
+        <p class="text-center">all the colours are personally picked by me :3</p>
+
+        <div class="js-necessary toggle-card-names text-center">
+            <input type="checkbox" id="toggle-card-names-visibility" />
+            <label for="toggle-card-names-visibility">Toggle card names</label>
+        </div>
+
+        <div class="cards-container">
+            <div class="cards">
+                {
+                    Object.entries(colors).map(([name, variants]) => (
+                        <div class="color-section">
+                            <label class="color-set-name">{name}</label>
+
+                            <ul aria-hidden="true" class="color-set">
+                                {variants.entries().map(([variant, color]) => (
+                                    <li class="color-card mono">
+                                        <ColorCard color={color} variant={variant} />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</Section>
+
+<style>
+    .colors-text-container {
+        overflow-x: scroll;
+    }
+
+    .colors-text-container::before,
+    .colors-text-container::after {
+        all: unset;
+    }
+
+    .colors-text-box {
+        width: max-content;
+        overflow: hidden;
+        margin-inline: auto;
+    }
+
+    .colors-text {
+        font-size: 2.5rem;
+
+        letter-spacing: 0.6em;
+        margin-right: -0.6em;
+
+        background: linear-gradient(
+            135deg,
+            #ff2400,
+            #ff2400,
+            #ff2400,
+            #ff7b46,
+            #ff7b46,
+            #ff7b46,
+            #fff89a,
+            #fff89a,
+            #fff89a,
+            #72ff8a,
+            #72ff8a,
+            #72ff8a,
+            #a8f9ff,
+            #a8f9ff,
+            #a8f9ff,
+            #6a6dff,
+            #6a6dff,
+            #6a6dff,
+            #f36eff,
+            #f36eff,
+            #f36eff,
+            #6a6dff,
+            #6a6dff,
+            #6a6dff,
+            #a8f9ff,
+            #a8f9ff,
+            #a8f9ff,
+            #72ff8a,
+            #72ff8a,
+            #72ff8a,
+            #fff89a,
+            #fff89a,
+            #fff89a,
+            #ff7b46,
+            #ff7b46,
+            #ff7b46,
+            #ff2400,
+            #ff2400,
+            #ff2400
+        );
+        background-size: 600% 100%;
+        background-clip: text;
+
+        color: transparent;
+
+        animation: rainbow 36s linear infinite;
+        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+    }
+
+    @media (prefers-reduced-motion) {
+        .colors-text {
+            background-size: 200% 100%;
+            animation: none;
+        }
+    }
+
+    .toggle-card-names {
+        margin-top: 2em;
+    }
+
+    .color-set,
+    .color-card {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .cards-container {
+        overflow: scroll;
+    }
+
+    .cards {
+        display: flex;
+        position: relative;
+
+        width: max-content;
+        max-width: 100%;
+        min-width: 400px;
+
+        padding: 1rem;
+        margin-top: 1.5rem;
+        margin-inline: auto;
+        gap: 1rem;
+
+        border-radius: 1.25rem;
+
+        font-size: 1.25rem;
+
+        flex-wrap: wrap;
+        justify-content: space-around;
+
+        background-color: #121212;
+    }
+
+    .color-section {
+        display: flex;
+
+        gap: 0.25em;
+
+        flex-direction: column;
+        align-items: center;
+
+        text-align: center;
+
+        touch-action: none;
+    }
+
+    .color-set-name {
+        color: var(--slate100);
+
+        text-decoration: underline;
+        text-transform: capitalize;
+
+        user-select: none;
+    }
+
+    .toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ .cards .color-card {
+        --color-override: transparent;
+        user-select: none;
+    }
+</style>
+
+<script>
+    const cards = document.querySelectorAll<HTMLElement>(".color-card");
+    const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
+
+    const update = () => {
+        if (toggler.checked === false) {
+            cards.forEach((e) => e.style.setProperty("--color-override", "transparent"));
+        } else {
+            cards.forEach((e) => e.style.removeProperty("--color-override"));
+        }
+    };
+
+    toggler.addEventListener("input", update);
+    document.addEventListener("DOMContentLoaded", update);
+</script>

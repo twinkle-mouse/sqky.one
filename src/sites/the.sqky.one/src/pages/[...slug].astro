@@ -1,0 +1,199 @@
+---
+import { readdirSync, Stats, statSync } from "node:fs";
+import path from "node:path";
+
+import { ROOT_DIR } from "astro:env/server";
+
+import FilesArchivePage from "$common/FilesArchivePage.astro";
+import Emoji from "$components/Emoji.astro";
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+import FileTableEntry from "$layouts/widgets/FileTableEntry.astro";
+import { compare, type FileEntry, SortMethod } from "$lib/files";
+
+const params = Astro.params;
+const url = new URL(Astro.request.url);
+
+const dirPath = params.slug ? path.normalize(params.slug) : "";
+const filePath = path.normalize(path.join(ROOT_DIR, dirPath));
+
+const ascending = url.searchParams.get("asc") === "true";
+
+const sortBy = SortMethod.fromId(url.searchParams.get("sort") || "") || SortMethod.Name;
+
+let fileNames = null;
+const files = new Map<string, { stats: Stats }>();
+
+try {
+    fileNames = readdirSync(filePath);
+} catch (err) {
+    console.log(err);
+}
+
+if (!fileNames) {
+    return Astro.rewrite("/404");
+}
+
+try {
+    fileNames?.forEach((fileName) => {
+        const stats = statSync(path.resolve(filePath, fileName));
+
+        files.set(fileName, { stats });
+    });
+} catch (err) {
+    console.log(err);
+    return Astro.rewrite("/404");
+}
+
+const entries = Array.from(
+    files.entries().map(([fileName, file]) => {
+        return {
+            name: fileName,
+            size: file.stats.size,
+            mtime: file.stats.mtime,
+            isDir: file.stats.isDirectory(),
+            isFile: file.stats.isFile(),
+        };
+    }),
+);
+
+const fileEntries = entries.filter((v) => v.isFile);
+const dirEntries = entries.filter((v) => v.isDir);
+
+const cmp = (a: FileEntry, b: FileEntry) => compare(sortBy, ascending, a, b);
+fileEntries.sort(cmp);
+dirEntries.sort(cmp);
+
+const ascSymbol = "↓";
+const dscSymbol = "↑";
+
+const sortSymbol = ascending ? ascSymbol : dscSymbol;
+const sortDirAltText = ascending ? "ascendingly" : "descendingly";
+
+let sortAltText = "";
+switch (sortBy) {
+    case SortMethod.Name:
+        sortAltText = `Currently sorting by name ${sortDirAltText}.`;
+        break;
+    case SortMethod.Size:
+        sortAltText = `Currently sorting by size ${sortDirAltText}.`;
+        break;
+    case SortMethod.ModifiedDate:
+        sortAltText = `Currently sorting by modified date ${sortDirAltText}.`;
+        break;
+}
+
+function linkUrl(method: SortMethod) {
+    const sort = ["sort", method.id];
+    const asc = ["asc", sortBy == method ? (!ascending).toString() : "false"];
+
+    return "?" + new URLSearchParams([sort, asc]).toString();
+}
+
+const urlPaths = url.pathname
+    .split("/")
+    .filter((v) => !!v)
+    .map((v) => v.trim());
+
+function getUrl(path: string, index: number) {
+    return `/${[...urlPaths.slice(0, index), path].join("/")}/`;
+}
+
+const fullUrl = `/${urlPaths.map(decodeURI).join("/")}/`.replaceAll("//", "/");
+---
+
+<FilesArchivePage pageName=`${fullUrl}`>
+    <Fragment slot="page-title">Files Archive</Fragment>
+
+    <Fragment slot="nav:page-links">
+        <li>
+            <a href="#files-list">Skip to files list</a>
+        </li>
+    </Fragment>
+
+    <Fragment slot="nav:other-categories">
+        <div>
+            <p>Navigation</p>
+            <ul>
+                <li><a href="/">Back to root <Emoji e="⤴️" /> </a></li>
+                <li><a href="../">Back up <Emoji e="⬆️" /> </a></li>
+            </ul>
+        </div>
+    </Fragment>
+
+    <LargeSection>
+        <div class="nav-path">
+            <a href="/">/</a>
+
+            {
+                urlPaths.map((path, index) => {
+                    return (
+                        <Fragment>
+                            <a href={getUrl(path, index)}>{decodeURI(path)}/</a>
+                        </Fragment>
+                    );
+                })
+            }
+        </div>
+
+        <style>
+            .nav-path {
+                font-size: 1.3rem;
+                margin-inline: 1rem;
+                margin-block: 1.5rem;
+            }
+
+            .nav-path > a {
+                margin-inline: 0.1rem;
+            }
+        </style>
+
+        <label class="sr-only">{sortAltText}</label>
+        <label class="sr-only">Visit the links in the table header to change sorting type and direction.</label>
+
+        <Section id="files-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <a href={linkUrl(SortMethod.Name)}>Name</a>
+                            <small>
+                                {sortBy == SortMethod.Name && <span aria-hidden="true">{sortSymbol}</span>}
+                            </small>
+                        </th>
+                        <th>
+                            <a href={linkUrl(SortMethod.Size)}>Size</a>
+                            <small>
+                                {sortBy == SortMethod.Size && <span aria-hidden="true">{sortSymbol}</span>}
+                            </small>
+                        </th>
+                        <th>
+                            <a href={linkUrl(SortMethod.ModifiedDate)}>Modified Date</a>
+                            <small>
+                                {sortBy == SortMethod.ModifiedDate && <span aria-hidden="true">{sortSymbol}</span>}
+                            </small>
+                        </th>
+                    </tr>
+                    <tbody>
+                        {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                        {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                    </tbody>
+                </thead>
+
+                <style>
+                    table :global(th),
+                    table :global(td) {
+                        text-align: end;
+                    }
+
+                    table :global(th:first-of-type),
+                    table :global(td:first-of-type) {
+                        width: 100%;
+                        padding-right: 6em;
+                        text-align: start;
+                    }
+                </style>
+            </table>
+        </Section>
+    </LargeSection>
+</FilesArchivePage>

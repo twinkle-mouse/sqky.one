@@ -1,0 +1,195 @@
+---
+import Pfp from "$assets/profile_picture.png";
+import Picture from "$components/Picture.astro";
+---
+
+<figure class="pfp-container">
+    <label class="sr-only js-necessary">
+        Below is a profile picture of a mouse hopping left and right. You can interact with it to make it squeak using either a keyboard or a mouse.
+    </label>
+
+    <div class="pfp">
+        <div class="pfp-image-container">
+            <div aria-hidden="true" class="ear-left"></div>
+            <div aria-hidden="true" class="ear-right"></div>
+
+            <Picture
+                src={Pfp}
+                class="pfp-image"
+                alt="The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes."
+                draggable="false"
+            />
+        </div>
+    </div>
+
+    <figcaption class="pfp-caption">
+        <p>
+            it's the mouse!!!!!! 🐁
+            <br />
+            <small>(try patting it :3)</small>
+            <br />
+            picture taken on <a href="https://resonite.com/">Resonite</a>
+        </p>
+        <p>
+            <small>(better picture incoming, i've been <abbr>ADHD</abbr>ing about this for months)</small>
+        </p>
+    </figcaption>
+</figure>
+
+<style>
+    .pfp-container {
+        flex: 1 2;
+
+        height: min-content;
+
+        margin-inline: 0.5rem;
+        padding-inline: 0.5rem;
+        margin-block: 0.5rem;
+        padding-block: 1.25rem;
+        border: 1px solid var(--headingColor);
+
+        text-align: center;
+    }
+
+    .pfp {
+        width: 230px;
+        margin-inline: auto;
+
+        will-change: contents;
+    }
+
+    .pfp-image-container {
+        position: relative;
+
+        width: 160px;
+        height: auto;
+
+        margin-inline: auto;
+
+        animation: wobble 0.45s infinite alternate cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    @media (prefers-reduced-motion) {
+        .pfp-image-container {
+            animation: none;
+        }
+    }
+
+    .pfp-caption {
+        display: block;
+        width: 100%;
+        text-wrap: wrap;
+
+        padding-top: 1.5rem;
+        margin-inline: auto;
+    }
+
+    @media (max-width: 440px) {
+        .pfp-image-container {
+            scale: 0.75;
+        }
+
+        .pfp-caption {
+            padding-top: 0;
+        }
+    }
+
+    .pfp-image {
+        display: inline-block;
+        user-select: none;
+        touch-action: none;
+
+        background-color: var(--sectionBgColor);
+        color: transparent;
+
+        width: 100%;
+        height: auto;
+
+        overflow: hidden;
+        border-radius: 9999px;
+    }
+
+    .ear-left,
+    .ear-right {
+        --distance-x: -5%;
+        --distance-y: 8%;
+
+        z-index: -1;
+        display: block;
+
+        width: 32%;
+        height: 46%;
+        position: absolute;
+
+        background: #f098bd;
+        border-radius: 9999px;
+
+        box-sizing: border-box;
+        border: #ffffff solid 10px;
+
+        animation-duration: 0.07s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease;
+        animation-direction: alternate-reverse;
+    }
+
+    .ear-left {
+        left: var(--distance-x);
+        top: var(--distance-y);
+
+        animation-name: earwiggleleft;
+    }
+
+    .ear-right {
+        right: var(--distance-x);
+        top: var(--distance-y);
+
+        animation-name: earwiggleright;
+    }
+
+    @media (prefers-reduced-motion) {
+        .ear-left,
+        .ear-right {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const url = "/assets/squeak.ogg";
+
+    const context = new AudioContext({ latencyHint: "interactive" });
+    const audioBuffer = await fetch(url)
+        .then((res) => res.arrayBuffer())
+        .then((buffer) => context.decodeAudioData(buffer));
+
+    const play = () => {
+        const source = context.createBufferSource();
+        source.buffer = audioBuffer;
+        source.onended = () => {
+            source.disconnect();
+        };
+
+        source.connect(context.destination);
+        source.start();
+    };
+
+    document.querySelectorAll<HTMLElement>(".pfp-image, .ear-left, .ear-right").forEach((element) => {
+        element.style.cursor = "pointer";
+
+        element.addEventListener("click", play);
+    });
+
+    document.querySelectorAll<HTMLElement>(".pfp-image").forEach((element) => {
+        element.tabIndex = 0;
+
+        const disallowedKeys = ["Tab", "Arrow", "Escape"];
+
+        element.addEventListener("keydown", (event) => {
+            if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && disallowedKeys.find((key) => event.key.includes(key)) == undefined) {
+                play();
+                event.preventDefault();
+            }
+        });
+    });
+</script>

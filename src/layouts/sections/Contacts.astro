@@ -1,0 +1,27 @@
+---
+import PublicTextFile from "$components/PublicTextFile.astro";
+import Section from "$layouts/Section.astro";
+---
+
+<Section id="contacts">
+    <h2>where da hell</h2>
+
+    <p>u can find me in these places!!! (in order of preference, not of convenience)</p>
+    <ol>
+        <li>
+            Email ~ <code>twinkle at mouse dot lgbt</code>
+        </li>
+        <li>Discord ~ <code>@twinkle_mouse</code></li>
+        <li>Signal ~ <code>twinkle.10</code></li>
+        <li>
+            Matrix ~ <code>@twinkle:peepee.party</code>
+            <small>(I don't get notifs here)</small>
+        </li>
+        <li>
+            <abbr>XMPP</abbr> ~ <code>twinkle@knotsinside.me</code>
+            <small>(I <i>might not</i> get notifs here)</small>
+        </li>
+    </ol>
+
+    <PublicTextFile src="pubkey.asc" desc="my PGP public key" />
+</Section>

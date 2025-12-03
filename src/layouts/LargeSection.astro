@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"article">;
+
+const { ...props } = Astro.props;
+---
+
+<section {...props}>
+    <slot />
+</section>
+
+<style>
+    section {
+        height: fit-content;
+
+        border: 2px var(--articleBorderColor) solid;
+        border-radius: 1.2rem;
+        background-color: var(--articleBgColor);
+
+        box-shadow: var(--cardBoxShadow);
+
+        overflow: auto;
+        margin-block: 1rem;
+    }
+
+    section > :global(h2),
+    section > :global(h3),
+    section > :global(h4),
+    section > :global(h5),
+    section > :global(h6) {
+        text-align: center;
+        margin-top: 0.5em;
+        margin-bottom: 0.2em;
+    }
+</style>

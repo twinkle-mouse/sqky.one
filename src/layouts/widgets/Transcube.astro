@@ -1,0 +1,157 @@
+---
+import { Image } from "astro:assets";
+
+import transflag from "./transflag.svg";
+
+const size = 96;
+---
+
+<div class="transcube-container">
+    <p>Trans Cube</p>
+
+    <label class="sr-only">A 3 dimensional cube with the transgender flag on every side, infinitely rotating in a symmetrical manner.</label>
+    <div role="img" class="transcube">
+        <div class="anim" style="animation: 4s linear infinite rotate; transform: rotate3d(1, 0, 0, 45deg)">
+            <div class="anim" style="animation: 6s linear infinite rotate; transform: rotate3d(0, 1, 0, 90deg)">
+                <div class="anim" style="animation: 8s linear infinite rotate; transform: rotate3d(0, 0, 1, 135deg)">
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
+                    />
+
+                    <Image
+                        alt=""
+                        src={transflag}
+                        width={size}
+                        height={size}
+                        format="png"
+                        quality="max"
+                        class="face"
+                        draggable="false"
+                        loading="eager"
+                        style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media (prefers-reduced-motion) {
+        .transcube-container {
+            display: none;
+        }
+    }
+
+    .transcube {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        min-width: calc(var(--s) * 2);
+        min-height: calc(var(--s) * 2);
+        height: auto;
+
+        margin-block: 1.5em;
+        margin-inline: auto;
+
+        user-select: none;
+
+        transition: filter 0.5s ease;
+    }
+
+    .transcube:has(.face:hover) {
+        filter: drop-shadow(0px 0px calc(var(--s) / 12) rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px calc(var(--s) / 8) rgba(255, 255, 255, 0.5))
+            drop-shadow(0px 0px calc(var(--s) / 6) rgba(255, 255, 255, 0.75));
+    }
+
+    .anim {
+        width: var(--s);
+        height: var(--s);
+
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        animation-composition: add;
+    }
+
+    .face {
+        display: block;
+        position: absolute;
+
+        image-rendering: pixelated;
+        filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000);
+    }
+</style>
+
+<style define:vars={{ size: `${size}px` }}>
+    .transcube {
+        --s: var(--size);
+    }
+
+    @media (max-width: 1200px) {
+        .transcube {
+            --s: calc(var(--size) / 1.5);
+        }
+    }
+</style>

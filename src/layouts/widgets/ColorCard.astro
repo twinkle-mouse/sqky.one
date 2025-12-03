@@ -1,0 +1,243 @@
+---
+import Color from "colorjs.io";
+
+const { color, variant } = Astro.props;
+
+const list: Color[] = [];
+// it doesn't seem to matter if i give it all the possible grey values lmfao
+// it's always either fully black or fully white
+for (let i = 0; i <= 8; i++) {
+    list.push(new Color("oklab", [i / 8.0, 0, 0]));
+}
+
+const contrastColor = ((color: Color) => {
+    const results = list
+        .map((candidate) => [color.contrast(candidate, "DeltaPhi"), candidate] as [number, Color])
+        .sort(([a], [b]) => b - a)
+        .map(([, v]) => v.to("srgb").toString());
+
+    return results[0];
+})(new Color(color));
+---
+
+<span class="js-selectable color-card">
+    <label
+        class="color-card-inner"
+        style={{
+            backgroundColor: color,
+            color: `var(--color-override, ${contrastColor})`,
+        }}
+    >
+        {variant}
+    </label>
+</span>
+
+<style>
+    .color-card {
+        display: flex;
+
+        width: fit-content;
+        margin: -0.2rem;
+        padding: 0.2rem;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 0.8rem;
+        text-align: center;
+        text-transform: capitalize;
+
+        cursor: grab;
+        user-select: none;
+        touch-action: none;
+        transition:
+            scale 0.065s ease,
+            translate 0.2s ease;
+    }
+
+    .color-card:hover {
+        scale: 1.05;
+    }
+
+    .color-card:active {
+        scale: 0.95;
+        cursor: grabbing;
+    }
+
+    .color-card-inner {
+        padding-block: 0.3rem;
+        padding-inline: 0.5rem;
+        border-radius: 0.4rem;
+
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+</style>
+
+<script>
+    import { springStep } from "$lib/spring";
+
+    const fakeroot = document.getElementById("popout-fakeroot")!;
+
+    document.querySelectorAll<HTMLElement>(".color-card").forEach((element) => {
+        const defaultState = {
+            stopping: false,
+            lastTime: 0,
+            initialPos: null as [number, number] | null,
+            currentPos: null as [number, number] | null,
+            currentVel: null as [number, number] | null,
+            lastVel: null as [number, number] | null,
+            cursorPosViewport: null as [number, number] | null,
+            cursorPos: null as [number, number] | null,
+            draggedElement: null as HTMLElement | null,
+            draggingElement: null as HTMLElement | null,
+        };
+
+        const state: Map<number, typeof defaultState> = new Map();
+
+        const animate = (pointerId: number) => {
+            const curr = state.get(pointerId);
+            if (!curr) return;
+
+            const animate = (time: DOMHighResTimeStamp) => {
+                const dT = (time - curr.lastTime) / 1000.0;
+
+                if (
+                    curr.lastTime > 0 &&
+                    curr.draggingElement &&
+                    curr.initialPos !== null &&
+                    curr.currentPos !== null &&
+                    curr.currentVel !== null &&
+                    curr.cursorPos !== null
+                ) {
+                    const mass = 0.9;
+                    const stiffness = 90;
+                    const damping = 8;
+
+                    const x = springStep(curr.currentPos[0], curr.currentVel[0], curr.cursorPos[0], mass, stiffness, damping, dT);
+                    const y = springStep(curr.currentPos[1], curr.currentVel[1], curr.cursorPos[1], mass, stiffness, damping, dT);
+
+                    curr.currentPos[0] = x.pos;
+                    curr.currentPos[1] = y.pos;
+                    curr.currentVel[0] = x.velocity;
+                    curr.currentVel[1] = y.velocity;
+
+                    let rotate = "0deg";
+                    let scale = "1";
+                    if (curr.lastVel !== null) {
+                        const deltaVel = [curr.currentVel[0] - curr.lastVel[0], curr.currentVel[1] - curr.lastVel[1]];
+
+                        scale = `${Math.sqrt(Math.abs(deltaVel[0] + deltaVel[1])) / 60.0 + 1.0}`;
+                        rotate = `${Math.max(Math.min(360.0, deltaVel[0] / 8.0), -360.0)}deg`;
+                    }
+                    curr.lastVel = [...curr.currentVel];
+
+                    const translate = `${curr.currentPos[0] - curr.initialPos[0]}px, ${curr.currentPos[1] - curr.initialPos[1]}px`;
+
+                    curr.draggingElement.style.transform = `translate(${translate}) scale(${scale}) rotate(${rotate})`;
+                }
+
+                curr.lastTime = time;
+
+                if (
+                    curr.stopping &&
+                    curr.draggedElement &&
+                    curr.draggingElement &&
+                    curr.currentPos !== null &&
+                    curr.initialPos !== null &&
+                    Math.abs(curr.initialPos[0] - curr.currentPos[0]) < 0.05 &&
+                    Math.abs(curr.initialPos[1] - curr.currentPos[1]) < 0.05
+                ) {
+                    curr.draggingElement.remove();
+                    curr.draggedElement.style.visibility = "";
+
+                    state.delete(pointerId);
+
+                    window.cancelAnimationFrame(handle);
+                } else {
+                    window.requestAnimationFrame(animate);
+                }
+            };
+
+            const handle = window.requestAnimationFrame(animate);
+
+            return handle;
+        };
+
+        element.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0) return;
+
+            state.set(event.pointerId, structuredClone(defaultState));
+            const curr = state.get(event.pointerId);
+
+            if (curr && curr.draggedElement === null && curr.draggingElement === null) {
+                curr.draggedElement = element;
+
+                curr.initialPos = [event.clientX + window.scrollX, event.clientY + window.scrollY];
+                curr.currentPos = [...curr.initialPos];
+                curr.currentVel = [0, 0];
+
+                curr.draggedElement.style.scale = "unset";
+                curr.draggedElement.style.transition = "unset";
+                curr.draggedElement.style.margin = "unset";
+                curr.draggedElement.style.padding = "unset";
+                {
+                    const rect = curr.draggedElement.getBoundingClientRect();
+
+                    const e = curr.draggedElement.cloneNode(true) as HTMLElement;
+                    e.style.position = "absolute";
+                    e.style.left = `${rect.x + window.scrollX}px`;
+                    e.style.top = `${rect.y + window.scrollY}px`;
+                    fakeroot.appendChild(e);
+
+                    curr.draggingElement = e;
+
+                    document.body.style.cursor = "grabbing";
+                    curr.draggingElement.style.cursor = "grabbing";
+                }
+                curr.draggedElement.style.scale = "";
+                curr.draggedElement.style.transition = "";
+                curr.draggedElement.style.margin = "";
+                curr.draggedElement.style.padding = "";
+
+                curr.draggedElement.style.visibility = "hidden";
+
+                animate(event.pointerId);
+            }
+        });
+
+        document.addEventListener("pointerup", (event) => {
+            const curr = state.get(event.pointerId);
+
+            if (curr) {
+                if (!curr.stopping && curr.draggedElement && curr.draggingElement) {
+                    curr.stopping = true;
+                    curr.cursorPos = curr.initialPos;
+                }
+
+                if (curr.draggingElement) {
+                    curr.draggingElement.style.cursor = "";
+                }
+            }
+
+            document.body.style.cursor = "";
+        });
+
+        document.addEventListener("pointermove", (event) => {
+            const curr = state.get(event.pointerId);
+
+            if (curr && !curr.stopping) {
+                curr.cursorPosViewport = [event.clientX, event.clientY];
+                curr.cursorPos = [curr.cursorPosViewport[0] + window.scrollX, curr.cursorPosViewport[1] + window.scrollY];
+            }
+        });
+
+        document.addEventListener("scroll", () => {
+            state.forEach((curr) => {
+                if (!curr.stopping && curr.cursorPosViewport !== null) {
+                    curr.cursorPos = [curr.cursorPosViewport[0] + window.scrollX, curr.cursorPosViewport[1] + window.scrollY];
+                }
+            });
+        });
+    });
+</script>

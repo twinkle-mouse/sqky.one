@@ -1,0 +1,630 @@
+---
+import "$assets/reset.css";
+import "$assets/anims.css";
+
+import type { HTMLAttributes } from "astro/types";
+import { Font } from "astro:assets";
+import Color from "colorjs.io";
+
+import Noscript from "$assets/noscript.html";
+import { colors, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight } from "$lib/colors";
+
+export type Props = HTMLAttributes<"main"> & {
+    siteName: string;
+    desc: string;
+    pageName?: string;
+};
+
+const { siteName, pageName, desc, ...props } = Astro.props;
+
+function getTitle() {
+    if (!pageName) {
+        return `!!! ${siteName} !!!`;
+    }
+
+    return `${pageName} — ${siteName}`;
+}
+
+const title = getTitle();
+
+function colorsToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
+}
+
+function stylesToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
+}
+
+const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
+const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
+const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
+const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
+const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
+---
+
+<!doctype html>
+<html lang="en-US" transition:animate="none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="theme-color" content="#ffc2fe" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon_48.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon_152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon_192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon_512.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content="https://sqky.one/assets/thumbnail.png" />
+        <meta property="og:url" content="https://sqky.one" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={desc} />
+
+        <meta name="generator" content={Astro.generator} />
+
+        <Font preload cssVariable="--font-noseyrodent" />
+        <Font preload cssVariable="--font-iosevka-aile" />
+        <Font preload cssVariable="--font-iosevka-curly" />
+
+        <slot name="head-tags" />
+
+        <style is:raw set:text={`:root{${colorsStyle}}`}></style>
+
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticColorsDarkStyle}
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticUtilsDarkStyle}
+            }`}
+        ></style>
+
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                /* sorry, the light mode colours right now are just bad, ill work on it eventually. */
+                :root {
+                    ${semanticColorsLightStyle}
+                }
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticUtilsLightStyle}
+                }
+            }`}
+        ></style>
+    </head>
+
+    <body>
+        <div class="site">
+            <slot name="nav" />
+
+            <main {...props} id="maincontent">
+                <h1 id="page-title"><slot name="page-title" /></h1>
+
+                <slot />
+            </main>
+        </div>
+
+        <div id="popout-fakeroot"></div>
+
+        <Fragment set:html={Noscript({})} />
+    </body>
+</html>
+
+<style>
+    .site {
+        width: 100%;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        padding-inline: calc(max(14dvw - 800px * 0.1, 0px));
+        padding-inline: calc(160 * max(100dvw - 800px, 0px) / 800);
+    }
+
+    @media (max-width: 1200px) {
+        .site {
+            flex-direction: column;
+        }
+    }
+
+    main {
+        width: 100%;
+
+        padding-block: 1rem;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    #popout-fakeroot {
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        overflow: hidden;
+        user-select: none;
+        touch-action: none;
+        pointer-events: none;
+
+        text-rendering: optimizeLegibility;
+        will-change: contents;
+    }
+
+    #popout-fakeroot * {
+        pointer-events: auto;
+
+        text-rendering: optimizeLegibility;
+    }
+</style>
+
+<style is:global>
+    .sr-only {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+    :focus-visible {
+        outline: 3px groove var(--focusColor);
+    }
+
+    :root {
+        --sans: var(--font-noseyrodent), sans-serif;
+        --serif: var(--font-iosevka-aile), serif;
+        --mono: var(--font-iosevka-curly), monospace;
+
+        font-family: var(--sans);
+
+        color: var(--textColor);
+        background-color: var(--bgColor);
+    }
+
+    html,
+    body {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .sans {
+        font-family: var(--sans);
+    }
+
+    .serif {
+        font-family: var(--serif);
+    }
+
+    .mono {
+        font-family: var(--mono);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .markdown {
+        display: contents;
+    }
+
+    .markdown p {
+        white-space: pre-line;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    cite,
+    blockquote,
+    li,
+    th,
+    td {
+        text-wrap: stable;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--serif);
+        color: var(--headingColor);
+
+        border-bottom: 1px solid var(--headingColor);
+
+        line-height: 1;
+        padding-top: 0.1em;
+        padding-bottom: 0.6em;
+        margin-bottom: 0.1em;
+
+        display: inline-block;
+        width: 100%;
+    }
+
+    h1::before,
+    h2::before,
+    h3::before,
+    h4::before,
+    h5::before,
+    h6::before {
+        content: "#" / "";
+        margin-right: 0.35em;
+    }
+
+    h1::after,
+    h2::after,
+    h3::after,
+    h4::after,
+    h5::after,
+    h6::after {
+        content: "";
+        margin-left: 0.35em;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    h2 {
+        font-size: 2.75rem;
+        font-weight: 600;
+    }
+
+    h3 {
+        font-size: 1.9rem;
+        font-weight: 600;
+    }
+
+    h4 {
+        font-size: 1.7rem;
+        font-weight: 500;
+    }
+
+    h5 {
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+
+    h6 {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    a {
+        color: var(--linkColor);
+        text-decoration: underline;
+    }
+
+    a:hover,
+    a:focus {
+        color: var(--linkHoverColor);
+    }
+
+    p {
+        margin-block: 1.1em;
+    }
+
+    hr {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--separatorColor);
+        margin-block: 2em;
+    }
+
+    b,
+    strong {
+        font-weight: bold;
+    }
+
+    strong {
+        color: var(--strongColor);
+    }
+
+    i,
+    em {
+        font-style: italic;
+    }
+
+    em {
+        color: var(--emColor);
+    }
+
+    mark {
+        font-size: 1.5em;
+    }
+
+    small {
+        font-size: 0.85em;
+        color: var(--smallColor);
+    }
+
+    time {
+        font-size: 0.85em;
+        color: var(--smallColor);
+    }
+
+    code {
+        font-size: 0.85em;
+        vertical-align: 0.15em;
+
+        display: inline;
+        padding-inline: 0.15em;
+        border-radius: 0.25rem;
+
+        white-space: nowrap;
+
+        color: var(--textColor);
+        border: 1px solid var(--codeBorderColor);
+        background-color: var(--codeBgColor);
+
+        font-family: var(--mono);
+    }
+
+    button,
+    input,
+    input + label,
+    input::file-selector-button {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+        font-family: var(--sans);
+        color: var(--buttonColor);
+    }
+
+    button,
+    input::file-selector-button {
+        margin-inline: 0.6rem;
+        margin-block: 0.6rem;
+        padding: 0.6rem;
+        border-radius: 0.4rem;
+
+        background-color: var(--buttonBgColor);
+        border: 3px solid var(--buttonActiveColor);
+    }
+
+    input[type="checkbox"] {
+        width: 1.35em;
+        height: 1.35em;
+        vertical-align: top;
+    }
+
+    input[type="checkbox"]::after {
+        content: "";
+        display: inline-block;
+
+        width: 100%;
+        height: 100%;
+
+        border-radius: 9999px;
+        background-color: var(--buttonColor);
+        border: 4px solid;
+        border-color: var(--buttonBorderColor);
+    }
+
+    input[type="checkbox"]:hover::after {
+        background-color: var(--buttonHoverColor);
+        border-color: var(--buttonActiveBorderColor);
+    }
+
+    input[type="checkbox"]:checked::after {
+        background-color: var(--buttonActiveColor);
+        border-color: var(--buttonActiveBorderColor);
+    }
+
+    input[type="checkbox"] + label {
+        margin-left: 0.35em;
+    }
+
+    input + label {
+        text-decoration: underline;
+        text-underline-offset: 30%;
+    }
+
+    button:hover,
+    input:hover,
+    input:hover + label,
+    input:hover::file-selector-button {
+        color: var(--buttonHoverColor);
+    }
+
+    input:checked + label {
+        color: var(--buttonActiveColor);
+    }
+
+    blockquote {
+        margin-block: 1.25rem;
+        margin-left: 1rem;
+        padding-left: 0.75rem;
+        border-radius: 0.35rem;
+        border-left: solid var(--quoteColor) 4px;
+
+        font-style: italic;
+    }
+
+    blockquote > * {
+        display: inline;
+        white-space: pre-line;
+    }
+
+    blockquote::before {
+        content: "“" / "";
+        margin-inline: 0.35em;
+    }
+
+    blockquote::after {
+        content: "”" / "";
+        margin-inline: 0.35em;
+    }
+
+    cite {
+        display: block;
+        margin-top: -1rem;
+        margin-left: 2.75rem;
+
+        color: var(--citeColor);
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    cite::before {
+        content: "—" / "";
+        margin-inline: 0.35em;
+    }
+
+    /*
+    cite::after {
+        content: "";
+        margin-inline: 0.35em;
+    }
+    */
+
+    ol {
+        list-style: decimal;
+        padding-left: 1.5em;
+        margin-block: 1em;
+    }
+
+    ul {
+        list-style: disc;
+        padding-left: 1em;
+        margin-block: 1em;
+    }
+
+    li {
+        color: var(--emColor);
+    }
+
+    textarea {
+        width: 100%;
+
+        color: var(--textAreaColor);
+        background-color: var(--textAreaBgColor);
+
+        border: 3px solid var(--textAreaBorderColor);
+        border-radius: 5px;
+
+        padding: 0.35rem;
+    }
+
+    table {
+        width: 100%;
+
+        overflow: scroll;
+        white-space: nowrap;
+
+        margin-block: 0.25rem;
+    }
+
+    thead {
+        background-color: var(--tableHeadBgColor);
+    }
+
+    tbody {
+        background-color: var(--tableBodyBgColor);
+    }
+
+    th,
+    td {
+        padding-inline: 1em;
+        padding-block: 0.35em;
+        text-align: start;
+        vertical-align: middle;
+        min-width: fit-content;
+    }
+
+    th {
+        border: 1px solid var(--thBorderColor);
+    }
+
+    td {
+        border: 1px solid var(--tdBorderColor);
+    }
+
+    a:focus-visible,
+    input:focus-visible {
+        outline: 2px solid var(--focusColor);
+    }
+
+    img:focus-visible,
+    summary:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+        outline: 3px solid var(--focusColor);
+    }
+
+    abbr {
+        text-decoration: dotted underline;
+    }
+
+    #page-title {
+        text-align: center;
+
+        margin-top: 0.2em;
+        padding-bottom: 0.6em;
+        margin-bottom: 0.4em;
+
+        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.4);
+    }
+
+    #page-title::before {
+        content: "“" / "";
+        margin-inline: 0.2em;
+    }
+
+    #page-title::after {
+        content: "”" / "";
+        margin-inline: 0.2em;
+    }
+
+    .animation-rotate {
+        display: inline-block;
+        animation: rotate 2s linear infinite;
+    }
+
+    @media (prefers-reduced-motion) {
+        .animation-rotate {
+            animation: none;
+        }
+    }
+</style>

@@ -1,0 +1,130 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+import { defaultDescription } from "$lib/writings";
+
+type Props = {
+    entries: CollectionEntry<"writings">[];
+};
+---
+
+<div class="entries">
+    {
+        Astro.props.entries.map((entry) => (
+            <EmojiWrapper>
+                <article class="entry-card">
+                    <div class="entry-header">
+                        <h3 class="entry-title">
+                            <a href={`${entry.collection}/${entry.id}`}>{entry.data.title}</a>
+                        </h3>
+
+                        <time class="entry-date mono" datetime={entry.data.date.toISOString()}>
+                            {entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}
+                        </time>
+                    </div>
+
+                    <div class="entry-content">{entry.data.description || defaultDescription}</div>
+                    <div class="entry-details">
+                        <p>
+                            <em>Authors:</em> {entry.data.authors.join(", ")}
+                        </p>
+                        <p>
+                            <em>Tags:</em>{" "}
+                            {entry.data.tags
+                                .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
+                                .flatMap((v, index) => {
+                                    if (index < entry.data.tags.length - 1) {
+                                        return [v, ", "];
+                                    } else {
+                                        return v;
+                                    }
+                                }) || "(none)"}
+                        </p>
+                    </div>
+                </article>
+            </EmojiWrapper>
+        ))
+    }
+
+    <style>
+        .entries {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1.5rem;
+            gap: 1.25rem;
+        }
+
+        .entry-card {
+            width: 100%;
+            height: max-content;
+            border-radius: 1rem;
+            padding: 1rem;
+
+            background-color: var(--cuteblue800);
+            border: 2px solid var(--cuteblue600);
+        }
+
+        .entry-title::before,
+        .entry-title::after {
+            all: unset;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-block: 0.2rem;
+        }
+
+        .entry-title {
+            padding: 0;
+            margin: 0;
+            border: none;
+
+            width: fit-content;
+        }
+
+        .entry-title a {
+            font-size: 1.55rem;
+            font-family: var(--serif);
+            font-style: italic;
+        }
+
+        @media (max-width: 580px) {
+            .entry-title a {
+                font-size: 1.3rem;
+            }
+        }
+
+        .entry-date {
+            width: max-content;
+            margin-left: 1rem;
+
+            text-align: right;
+            text-wrap: stable;
+
+            font-size: 0.85rem;
+            color: var(--slate400);
+        }
+
+        .entry-content {
+            white-space: pre-line;
+            font-family: var(--sans);
+            font-style: italic;
+            color: var(--lavender200);
+        }
+
+        .entry-details {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+
+            border-top: 1px solid var(--slate600);
+
+            font-size: 0.85rem;
+            font-family: var(--sans);
+            color: var(--slate400);
+        }
+    </style>
+</div>

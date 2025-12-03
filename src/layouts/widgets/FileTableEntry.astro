@@ -1,0 +1,71 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+
+import type { FileEntry } from "$lib/files";
+import { getMaterialFileIcon, getMaterialFolderIcon } from "$lib/material-icon";
+
+export type Props = {
+    entry: FileEntry;
+};
+
+const { entry } = Astro.props;
+const url = new URL(Astro.request.url);
+if (!url.pathname.endsWith("/")) {
+    url.pathname += "/";
+}
+
+function formatBytes(bytes: number, precision: number = 3) {
+    const k = 1000;
+    const units = [" B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    if (bytes < k) return `${bytes.toString().padStart(precision)} ${units[0]}`;
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    const num = (bytes / Math.pow(k, i)).toPrecision(precision);
+    const unit = units[i];
+
+    return `${num.toString().padStart(precision)} ${unit}`;
+}
+
+let suffix = "";
+if (entry.isDir) {
+    suffix += "/";
+}
+
+let icon: string = "file";
+if (entry.isDir) {
+    icon = getMaterialFolderIcon(entry.name);
+}
+if (entry.isFile) {
+    icon = getMaterialFileIcon(entry.name);
+}
+---
+
+<tr>
+    <td
+        ><AstroIcon role="img" class="file-icon" name=`material-file/${icon}` width="1.5em" height="1.5em" /><a
+            href={URL.parse(`${entry.name}${suffix}`, url)?.pathname}>{`${entry.name}${suffix}`}</a
+        >
+    </td>
+    <td class="mono">{formatBytes(entry.size)}</td>
+    <td class="mono"
+        ><time datetime={entry.mtime.toISOString()}>
+            {
+                `${entry.mtime.getFullYear()}/${(entry.mtime.getMonth() + 1).toString().padStart(2, "0")}/${entry.mtime.getDate().toString().padStart(2, "0")} ${entry.mtime.getHours().toString().padStart(2, "0")}:${entry.mtime.getMinutes().toString().padStart(2, "0")}`
+            }</time
+        ></td
+    >
+</tr>
+
+<style>
+    .file-icon {
+        color: var(--slate300);
+        display: inline-block;
+        vertical-align: -0.4em;
+        margin-right: 0.3em;
+    }
+
+    td {
+        white-space: pre;
+    }
+</style>

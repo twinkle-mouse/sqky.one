@@ -1,0 +1,52 @@
+---
+import Section from "$layouts/Section.astro";
+import ProfilePicture from "$layouts/widgets/ProfilePicture.astro";
+---
+
+<Section>
+    <div class="profile">
+        <div class="profile-intro">
+            <h2 aria-hidden="true">hiiiiiiiiiiiiiiiiii</h2>
+            <h2 class="sr-only">hi!</h2>
+
+            <p>
+                welcome to my site!!!!! this is the <a href="https://sqky.one/">sqky one</a> squeaking to you. it means "squeaky one" !!!!
+            </p>
+
+            <p>
+                i'm a <em>mouse</em>
+                <span class="animation-rotate">🐭</span> !!
+                <br />
+                and mice are squeaky, so i'm <a href="https://the.sqky.one/">the squeaky one</a> !!!!!
+                <br />
+                <small>(link to my <i>public file archive</i>)</small>
+            </p>
+
+            <section>
+                <h3>who r u though</h3>
+                <p>you can call me any of these names!!! (they are all equally valid)</p>
+                <ul>
+                    <li>Stella</li>
+                    <li>twinkle <small>(lowercase only!)</small></li>
+                    <li>Mei</li>
+                    <li>mouse</li>
+                </ul>
+            </section>
+        </div>
+
+        <ProfilePicture />
+    </div>
+</Section>
+
+<style>
+    .profile {
+        display: flex;
+        width: fit-content;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .profile-intro {
+        flex: 2 1 340px;
+    }
+</style>

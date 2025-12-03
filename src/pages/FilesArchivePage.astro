@@ -1,0 +1,23 @@
+---
+import { ClientRouter } from "astro:transitions";
+
+import Page, { type Props as PageProps } from "$common/CommonPage.astro";
+import Navigation from "$layouts/widgets/Navigation.astro";
+
+type Props = Omit<PageProps, "siteName" | "desc">;
+---
+
+<Page {...Astro.props} siteName="Files of Squeaks" desc="who made my files squeaky?? anyways,">
+    <Fragment slot="head-tags">
+        <ClientRouter />
+    </Fragment>
+
+    <Navigation slot="nav">
+        <slot name="nav:page-links" slot="nav:page-links" />
+        <slot name="nav:other-categories" slot="nav:other-categories" />
+        <slot name="nav:footer" slot="nav:footer" />
+    </Navigation>
+
+    <slot name="page-title" slot="page-title" />
+    <slot />
+</Page>
