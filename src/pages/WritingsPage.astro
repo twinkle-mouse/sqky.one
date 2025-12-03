@@ -1,0 +1,16 @@
+---
+import Page, { type Props as PageProps } from "$common/CommonPage.astro";
+import Navigation from "$layouts/widgets/Navigation.astro";
+
+type Props = Omit<PageProps, "siteName">;
+---
+
+<Page {...Astro.props} siteName="Books of Squeaks">
+    <Navigation slot="nav">
+        <slot name="nav:page-links" slot="nav:page-links" />
+        <slot name="nav:other-categories" slot="nav:other-categories" />
+        <slot name="nav:footer" slot="nav:footer" />
+    </Navigation>
+
+    <slot />
+</Page>

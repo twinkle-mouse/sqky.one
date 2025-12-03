@@ -1,0 +1,187 @@
+---
+import ColorCard from "$layouts/widgets/ColorCard.astro";
+import { colors } from "$lib/colors";
+---
+
+<div aria-hidden="true">
+    <h2 class="colors-text mono">c o l o u r s</h2>
+
+    <style>
+        .colors-text::before,
+        .colors-text::after {
+            all: unset;
+        }
+
+        .colors-text {
+            background: linear-gradient(
+                135deg,
+                #ff2400,
+                #ff2400,
+                #ff2400,
+                #ff7b46,
+                #ff7b46,
+                #ff7b46,
+                #fff89a,
+                #fff89a,
+                #fff89a,
+                #72ff8a,
+                #72ff8a,
+                #72ff8a,
+                #a8f9ff,
+                #a8f9ff,
+                #a8f9ff,
+                #6a6dff,
+                #6a6dff,
+                #6a6dff,
+                #f36eff,
+                #f36eff,
+                #f36eff,
+                #6a6dff,
+                #6a6dff,
+                #6a6dff,
+                #a8f9ff,
+                #a8f9ff,
+                #a8f9ff,
+                #72ff8a,
+                #72ff8a,
+                #72ff8a,
+                #fff89a,
+                #fff89a,
+                #fff89a,
+                #ff7b46,
+                #ff7b46,
+                #ff7b46,
+                #ff2400,
+                #ff2400,
+                #ff2400
+            );
+
+            width: fit-content;
+            margin-inline: auto;
+            margin-bottom: 2rem;
+            text-wrap: nowrap;
+            text-align: center;
+            font-size: 2.5rem;
+
+            background-size: 600% 100%;
+            background-clip: text;
+
+            color: transparent;
+
+            animation: rainbow 36s linear infinite;
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        @media (prefers-reduced-motion) {
+            .colors-text {
+                background-size: 200% 100%;
+                animation: none;
+            }
+        }
+    </style>
+
+    <p class="text-center">play around, drag them all over, they're fun :3</p>
+
+    <div class="toggle-card-names text-center">
+        <input type="checkbox" id="toggle-card-names-visibility" /><label for="toggle-card-names-visibility">Toggle card names</label>
+    </div>
+
+    <style>
+        .toggle-card-names {
+            margin-top: 2em;
+        }
+    </style>
+
+    <div class="cards">
+        {
+            Object.entries(colors).map(([name, variants]) => (
+                <div class="color-section">
+                    <span class="color-set-name">{name}</span>
+
+                    <ul>
+                        {variants.entries().map(([variant, color]) => (
+                            <li class="color-card mono">
+                                <ColorCard color={color} variant={variant} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))
+        }
+    </div>
+
+    <style>
+        ul,
+        li {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .cards {
+            display: flex;
+            position: relative;
+
+            width: max-content;
+            max-width: 100%;
+            min-width: 400px;
+
+            padding: 1rem;
+            margin-top: 1.5rem;
+            margin-inline: auto;
+            gap: 1rem;
+
+            border-radius: 1.25rem;
+
+            font-size: 1.25rem;
+
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+            background-color: #121212;
+        }
+
+        .color-section {
+            display: flex;
+
+            gap: 0.25em;
+
+            flex-direction: column;
+            align-items: center;
+
+            text-align: center;
+
+            touch-action: none;
+        }
+
+        .color-set-name {
+            color: var(--slate100);
+
+            text-decoration: underline;
+            text-transform: capitalize;
+
+            user-select: none;
+        }
+
+        .toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ .cards .color-card {
+            --color-override: transparent;
+            user-select: none;
+        }
+    </style>
+</div>
+
+<script>
+    const cards = document.querySelectorAll<HTMLElement>(".color-card");
+    const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
+
+    const update = () => {
+        if (toggler.checked === false) {
+            cards.forEach((e) => e.style.setProperty("--color-override", "transparent"));
+        } else {
+            cards.forEach((e) => e.style.removeProperty("--color-override"));
+        }
+    };
+
+    toggler.addEventListener("input", update);
+    document.addEventListener("DOMContentLoaded", update);
+</script>

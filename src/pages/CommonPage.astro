@@ -1,0 +1,563 @@
+---
+import "$assets/reset.css";
+import "$assets/anims.css";
+
+import { Font } from "astro:assets";
+import Color from "colorjs.io";
+
+import Noscript from "$assets/noscript.html";
+import { colors, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight } from "$lib/colors";
+
+export type Props = {
+    siteName: string;
+    desc: string;
+    pageName?: string;
+};
+
+const { siteName, pageName, desc } = Astro.props;
+
+function getTitle() {
+    if (!pageName) {
+        return `!!! ${siteName} !!!`;
+    }
+
+    return `${pageName} — ${siteName}`;
+}
+
+const title = getTitle();
+
+function colorsToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
+}
+
+function stylesToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
+}
+
+const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
+const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
+const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
+const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
+const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
+---
+
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="theme-color" content="#ffc2fe" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon_48.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon_152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon_192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon_512.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content="https://sqky.one/assets/thumbnail.png" />
+        <meta property="og:url" content="https://sqky.one" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={desc} />
+
+        <meta name="generator" content={Astro.generator} />
+
+        <Font preload cssVariable="--font-noseyrodent" />
+        <Font preload cssVariable="--font-iosevka-aile" />
+        <Font preload cssVariable="--font-iosevka-curly" />
+
+        <style is:raw set:text={`:root{${colorsStyle}}`}></style>
+
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticColorsDarkStyle}
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticUtilsDarkStyle}
+            }`}
+        ></style>
+
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticColorsLightStyle}
+                }
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticUtilsLightStyle}
+                }
+            }`}
+        ></style>
+    </head>
+
+    <body>
+        <div class="site">
+            <slot name="nav" />
+
+            <main>
+                <slot />
+            </main>
+        </div>
+
+        <div id="popout-fakeroot"></div>
+
+        <Fragment set:html={Noscript({})} />
+    </body>
+</html>
+
+<style>
+    .site {
+        width: 100%;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        padding-inline: calc(max(14dvw - 800px * 0.1, 0px));
+        padding-inline: calc(160 * max(100dvw - 800px, 0px) / 800);
+    }
+
+    @media (max-width: 1200px) {
+        .site {
+            flex-direction: column;
+        }
+    }
+
+    main {
+        width: 100%;
+
+        padding-block: 1rem;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    #popout-fakeroot {
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        overflow: hidden;
+        user-select: none;
+        touch-action: none;
+        pointer-events: none;
+
+        text-rendering: optimizeLegibility;
+        will-change: contents;
+    }
+
+    #popout-fakeroot * {
+        pointer-events: auto;
+
+        text-rendering: optimizeLegibility;
+    }
+</style>
+
+<style is:global>
+    :root {
+        --sans: var(--font-noseyrodent), sans-serif;
+        --serif: var(--font-iosevka-aile), serif;
+        --mono: var(--font-iosevka-curly), monospace;
+
+        font-family: var(--sans);
+
+        color: var(--textColor);
+        background-color: var(--bgColor);
+    }
+
+    html,
+    body {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .sans {
+        font-family: var(--sans);
+    }
+
+    .serif {
+        font-family: var(--serif);
+    }
+
+    .mono {
+        font-family: var(--mono);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    cite,
+    blockquote,
+    li,
+    th,
+    td {
+        text-wrap: stable;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--serif);
+        color: var(--headingColor);
+
+        line-height: 1em;
+        margin-top: 0.4em;
+        margin-bottom: 0.8em;
+    }
+
+    h1::before,
+    h2::before,
+    h3::before,
+    h4::before,
+    h5::before,
+    h6::before {
+        content: "#";
+        margin-right: 0.3em;
+        vertical-align: middle;
+    }
+
+    h1 {
+        font-size: 2.25em;
+    }
+
+    h2 {
+        font-size: 2.1em;
+    }
+
+    h3 {
+        font-size: 1.8em;
+    }
+
+    h4 {
+        font-size: 1.7em;
+    }
+
+    h5 {
+        font-size: 1.65em;
+    }
+
+    h6 {
+        font-size: 1.55em;
+    }
+
+    a {
+        color: var(--linkColor);
+    }
+
+    a:focus,
+    a:hover {
+        color: var(--linkFocusColor);
+        text-decoration: underline;
+    }
+
+    a > h1,
+    a > h2,
+    a > h3,
+    a > h4,
+    a > h5,
+    a > h6 {
+        color: unset;
+    }
+
+    a > h1::before,
+    a > h2::before,
+    a > h3::before,
+    a > h4::before,
+    a > h5::before,
+    a > h6::before {
+        content: "¶";
+    }
+
+    p {
+        margin-block: 0.5em;
+    }
+
+    br {
+        line-height: 1.25em;
+    }
+
+    hr {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--separatorColor);
+        margin-block: 2em;
+    }
+
+    b,
+    strong {
+        font-weight: bold;
+    }
+
+    strong {
+        color: var(--strongColor);
+    }
+
+    i,
+    em {
+        font-style: italic;
+    }
+
+    em {
+        color: var(--emColor);
+    }
+
+    mark {
+        font-size: 1.45em;
+    }
+
+    small {
+        font-size: 0.8em;
+        color: var(--smallColor);
+    }
+
+    code {
+        font-size: 0.875em;
+        display: inline;
+        padding-inline: 0.15em;
+        border-radius: 0.25rem;
+        color: var(--textColor);
+        border: 1px solid var(--codeBorderColor);
+        background-color: var(--codeBgColor);
+        font-family: var(--mono);
+    }
+
+    button,
+    label,
+    input,
+    input::file-selector-button {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+        font-family: var(--sans);
+        color: var(--buttonColor);
+    }
+
+    button,
+    input::file-selector-button {
+        margin-inline-end: 0.8rem;
+        margin-block: 0.6rem;
+        padding: 0.6rem;
+        border-radius: 0.4rem;
+
+        background-color: var(--buttonBgColor);
+        border: 3px solid var(--buttonActiveColor);
+    }
+
+    input[type="checkbox"] {
+        width: 36px;
+        height: 36px;
+
+        padding: 0.5em;
+        margin: -0.5em;
+
+        vertical-align: -0.185em;
+    }
+
+    input[type="checkbox"]::after {
+        content: "";
+        display: inline-block;
+
+        width: 18px;
+        height: 18px;
+
+        border-radius: 9999px;
+        background-color: var(--buttonColor);
+        border: 3px solid;
+        border-color: var(--buttonBorderColor);
+    }
+
+    input[type="checkbox"]:hover::after,
+    input[type="checkbox"]:checked::after {
+        background-color: var(--buttonActiveColor);
+        border-color: var(--buttonActiveBorderColor);
+    }
+
+    input[type="checkbox"] + label {
+        margin-left: 0.35em;
+    }
+
+    button:focus,
+    button:hover,
+    input:focus,
+    input:hover,
+    input:focus + label,
+    input:hover + label,
+    input:focus::file-selector-button,
+    input:hover::file-selector-button {
+        text-decoration: underline;
+        text-underline-offset: 30%;
+        color: var(--buttonActiveColor);
+    }
+
+    input:checked + label {
+        color: var(--buttonActiveColor);
+    }
+
+    blockquote {
+        margin-block: 1.25rem;
+        margin-left: 1rem;
+        padding-left: 0.75rem;
+        border-radius: 0.35rem;
+        border-left: solid var(--quoteColor) 4px;
+
+        font-style: italic;
+    }
+
+    blockquote > * {
+        display: inline;
+        white-space: pre-line;
+    }
+
+    blockquote::before {
+        content: "“";
+        margin-inline: 0.3em;
+    }
+
+    blockquote::after {
+        content: "”";
+        margin-inline: 0.3em;
+    }
+
+    cite {
+        display: block;
+        margin-top: -1rem;
+        margin-left: 2.75rem;
+
+        color: var(--citeColor);
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    cite::before {
+        content: "—";
+        margin-inline: 0.3em;
+    }
+
+    cite::after {
+        content: "";
+        margin-inline: 0.3em;
+    }
+
+    ol {
+        list-style: decimal;
+        padding-left: 1.5em;
+        margin-block: 1em;
+    }
+
+    ul {
+        list-style: disc;
+        padding-left: 1em;
+        margin-block: 1em;
+    }
+
+    li {
+        color: var(--emColor);
+    }
+
+    textarea {
+        width: 100%;
+
+        color: var(--textAreaColor);
+        background-color: var(--textAreaBgColor);
+
+        border: 3px solid var(--textAreaBorderColor);
+        border-radius: 5px;
+
+        padding: 0.35rem;
+    }
+
+    table {
+        width: 100%;
+
+        overflow: scroll;
+        white-space: nowrap;
+
+        margin-block: 0.25rem;
+    }
+
+    thead {
+        background-color: var(--tableHeadBgColor);
+    }
+
+    tbody {
+        background-color: var(--tableBodyBgColor);
+    }
+
+    th,
+    td {
+        padding-inline: 1em;
+        padding-block: 0.35em;
+        text-align: start;
+        vertical-align: middle;
+        min-width: fit-content;
+    }
+
+    th {
+        border: 1px solid var(--thBorderColor);
+    }
+
+    td {
+        border: 1px solid var(--tdBorderColor);
+    }
+
+    img:focus,
+    summary:focus,
+    textarea:focus {
+        outline: 3px solid;
+        outline-color: var(--blockFocusBorderColor) !important;
+    }
+
+    .animation-rotate {
+        display: inline-block;
+        animation: rotate 2s linear infinite;
+    }
+
+    @media (prefers-reduced-motion) {
+        .animation-rotate {
+            animation: none;
+        }
+    }
+</style>

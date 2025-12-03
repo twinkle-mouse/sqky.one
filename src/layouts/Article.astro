@@ -1,0 +1,66 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"article"> & {
+    heading?: {
+        id?: string;
+    };
+};
+
+const { heading, ...props } = Astro.props;
+
+let headingContent = undefined;
+if (Astro.slots.has("heading")) {
+    headingContent = await Astro.slots.render("heading");
+}
+---
+
+<article {...props}>
+    {headingContent && <h1 id={heading?.id} set:html={headingContent} />}
+
+    <slot />
+</article>
+
+<style>
+    h1,
+    h1::before,
+    h1::after {
+        all: unset;
+    }
+
+    h1 {
+        display: block;
+        text-align: center;
+        margin-block: 2rem;
+
+        color: var(--articleHeadingColor);
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: 700;
+
+        text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.3);
+    }
+
+    h1::before {
+        content: "“";
+        margin-inline: 0.3em;
+    }
+
+    h1::after {
+        content: "”";
+        margin-inline: 0.3em;
+    }
+
+    article {
+        height: fit-content;
+
+        border: 2px var(--articleBorderColor) solid;
+        border-radius: 1.2rem;
+        background-color: var(--articleBgColor);
+
+        box-shadow: var(--cardBoxShadow);
+
+        overflow: auto;
+        margin-block: 1rem;
+    }
+</style>

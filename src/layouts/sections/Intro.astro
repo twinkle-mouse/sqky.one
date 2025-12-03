@@ -1,0 +1,57 @@
+---
+import ProfilePicture from "$layouts/widgets/ProfilePicture.astro";
+---
+
+<div>
+    <p class="text-center greetings" aria-label="hii!">hiiiiiiiiiiiiiiiiiiiiiii</p>
+
+    <style>
+        .greetings {
+            overflow: hidden;
+
+            margin-top: 1.75rem;
+            font-size: 2.25em;
+            font-weight: bold;
+            color: var(--strongColor);
+        }
+    </style>
+
+    <ProfilePicture />
+
+    <div class="profile-intro">
+        <p>
+            welcome to my site!!!!! this is the
+            <code><a href="https://sqky.one/">sqky.one</a></code>
+            squeaking to you.
+        </p>
+        <p>it means "squeaky one"!!!!</p>
+
+        <br />
+
+        <p>i'm a <em>mouse</em> <span class="animation-rotate">🐭</span> !!!!</p>
+        <p>
+            and mice are squeaky, so i'm
+            <code><a href="https://the.sqky.one/">the.sqky.one</a></code>
+            !!!!!
+        </p>
+
+        <br />
+
+        <h2>who r u though</h2>
+        <p>you can call me any of these names!!! (they are all equally valid)</p>
+        <ul>
+            <li>Stella</li>
+            <li>twinkle <small>(lowercase only!)</small></li>
+            <li>Mei</li>
+            <li>mouse</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .profile-intro {
+        padding-block: 1.5rem;
+
+        clear: right;
+    }
+</style>

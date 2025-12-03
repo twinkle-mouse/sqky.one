@@ -1,0 +1,73 @@
+---
+import nowplaying from "$assets/nowplaying.html";
+---
+
+<div class="text-center">
+    <p>what the mouse listening to !?</p>
+    <p>
+        <small> (it shows whatever i'm listening to on my computer!!!) </small>
+    </p>
+</div>
+
+<div class="nowplaying-container js-necessary">
+    <div class="nowplaying">
+        <div id="nowplaying-widget"></div>
+        <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const nowplayingWidget = document.getElementById("nowplaying-widget")!;
+        const nowplayingWidgetLoader = document.getElementById("nowplaying-widget-loader")!;
+
+        nowplayingWidget.attachShadow({ mode: "open" });
+
+        if (nowplayingWidget.shadowRoot) {
+            nowplayingWidget.shadowRoot.replaceChildren(...nowplayingWidgetLoader.childNodes);
+
+            nowplayingWidgetLoader.remove();
+        }
+    });
+</script>
+
+<style>
+    .nowplaying-container {
+        overflow: scroll;
+        width: 100%;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .nowplaying {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+        margin-inline: auto;
+
+        padding: 1.35rem;
+
+        background-color: var(--cuteblue900);
+        border: 2px dashed var(--cuteblue700);
+    }
+
+    @media (prefers-color-scheme: light) {
+        .nowplaying {
+            background-color: var(--cuteblue100);
+            border-color: var(--cuteblue300);
+        }
+    }
+
+    #nowplaying-widget {
+        width: 400px;
+        height: 200px;
+    }
+
+    #nowplaying-widget-loader {
+        width: 0;
+        height: 0;
+        display: none;
+        visibility: hidden;
+    }
+</style>

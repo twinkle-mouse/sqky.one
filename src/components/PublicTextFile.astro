@@ -1,0 +1,111 @@
+---
+import { randomUUID } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+
+import type { HTMLAttributes } from "astro/types";
+import { root } from "astro:config/server";
+
+export type Props = HTMLAttributes<"textarea"> & {
+    src: string;
+    desc?: string;
+};
+
+const { src, desc, ...props } = Astro.props;
+const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding: "utf8" });
+
+const uuid = `textfile-${randomUUID()}`;
+---
+
+<details open>
+    <summary>
+        <label for={uuid}>
+            <strong>{desc}</strong>
+        </label>
+        <a class="mono" href={src}>{src}</a>
+    </summary>
+
+    <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", props.class]}>{file}</textarea>
+</details>
+
+<style>
+    details,
+    summary {
+        border-radius: 6px;
+    }
+
+    details {
+        margin-block: 1.5rem;
+        margin-inline: 0.35rem;
+        background-color: var(--textAreaBgColor);
+    }
+
+    summary {
+        display: block;
+
+        padding: 0.35rem;
+
+        background-color: var(--textAreaBorderColor);
+        outline: 3px solid var(--textAreaBorderColor);
+
+        user-select: none;
+    }
+
+    details[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    summary::before {
+        content: "";
+
+        display: inline-block;
+        vertical-align: middle;
+
+        margin: 4px;
+
+        border: 8px solid;
+        border-color: transparent transparent transparent #fff;
+        box-sizing: content-box;
+
+        transform-origin: center center;
+        transition: transform 0.2s ease;
+    }
+
+    @media (prefers-color-scheme: light) {
+        summary::before {
+            border-color: transparent transparent transparent #000;
+        }
+    }
+
+    @media (prefers-reduced-motion) {
+        summary::before {
+            transition: none;
+        }
+    }
+
+    details[open] summary::before {
+        transform: scaleX(0.75) rotate(90deg) translateX(25%);
+    }
+
+    details:not([open]) summary::before {
+        transform: scaleY(0.75) rotate(0deg) translateX(25%);
+    }
+
+    a {
+        display: inline-block;
+        width: fit-content;
+        float: right;
+    }
+
+    textarea {
+        border: none;
+        background: none;
+        text-wrap: nowrap;
+
+        margin-top: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        outline: 3px solid var(--textAreaBorderColor);
+    }
+</style>

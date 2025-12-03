@@ -1,0 +1,54 @@
+---
+import Emoji from "$components/Emoji.astro";
+
+import HeartEmoji from "./HeartEmoji.astro";
+
+const hearts = ["🩷", "🤎", "🤍", "💛", "🧡"];
+
+const radius = 80;
+const length = 4;
+---
+
+<div class="hearts" data-radius={radius}>
+    <div class="system-heart-container">
+        <Emoji class="system-heart" e="💜" width={radius} height={radius} />
+    </div>
+
+    <div class="headmate-hearts">
+        {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+    </div>
+</div>
+
+<style define:vars={{ radius: `${radius}px` }}>
+    .hearts {
+        display: block;
+        position: relative;
+        float: right;
+        width: 192px;
+        height: 192px;
+        margin: 2.35rem;
+    }
+
+    @media (max-width: 640px) {
+        .hearts {
+            margin-inline: auto;
+            float: none;
+        }
+    }
+
+    .system-heart-container {
+        position: absolute;
+        display: flex;
+
+        width: 100%;
+        height: 100%;
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .system-heart {
+        width: var(--radius);
+        height: var(--radius);
+    }
+</style>

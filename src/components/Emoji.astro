@@ -1,0 +1,72 @@
+---
+import { randomUUID } from "node:crypto";
+
+import type { HTMLAttributes } from "astro/types";
+import { Icon as AstroIcon } from "astro-icon/components";
+
+export type Props = HTMLAttributes<"span"> & {
+    e: string;
+    width?: string | number | undefined;
+    height?: string | number | undefined;
+};
+
+const { e, width, height, class: cls, ...props } = Astro.props;
+
+// this is the most evil code i could've ever done
+export function getEmojiName(e: string) {
+    let codes: string[] = [];
+    const codesList = [codes];
+
+    for (let i = 0; ; i++) {
+        const code = e.codePointAt(i);
+        if (!code) break;
+
+        const encoded = code.toString(16);
+        if (encoded == "200d") {
+            codes = [];
+            codesList.push(codes);
+            continue;
+        }
+        if (encoded.startsWith("fe0")) {
+            continue;
+        }
+
+        codes.push(encoded);
+    }
+
+    const path = codesList.map((codes) => codes.filter((_, index) => index % 2 == 0).join("_")).join("_200d_");
+    return `noto-emoji/emoji_u${path}`;
+}
+
+const name = getEmojiName(e);
+const uuid = randomUUID();
+---
+
+<span {...props} class:list={["emoji", cls]}>
+    <span id=`emoji-${uuid}` class="emoji-text">{e}</span>
+    <AstroIcon aria-labelledby=`emoji-${uuid}` role="img" name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} />
+</span>
+
+<style>
+    .emoji {
+        display: inline-block;
+        position: relative;
+        width: auto;
+        height: auto;
+        vertical-align: text-bottom;
+    }
+
+    .emoji svg {
+        display: inline-block;
+        vertical-align: text-bottom;
+    }
+
+    .emoji-text {
+        position: absolute;
+        opacity: 0;
+        width: 1.25em;
+        height: 1.25em;
+        left: 0;
+        top: 0;
+    }
+</style>

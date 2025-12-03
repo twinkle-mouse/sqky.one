@@ -1,0 +1,54 @@
+---
+import Emoji from "$components/Emoji.astro";
+
+export type Props = {
+    e: string;
+    radius: number;
+    delay: number;
+    length: number;
+};
+
+const { e, radius, delay, length } = Astro.props;
+---
+
+<div
+    class="headmate-heart"
+    style={{
+        "--radius": `${radius * 2}px`,
+        "--delay": `${delay}s`,
+        "--length": `${length}s`,
+    }}
+>
+    <div class="headmate-heart-x">
+        <div class="headmate-heart-y">
+            <Emoji class="headmate-heart-emoji" e={e} width={32} height={32} />
+        </div>
+    </div>
+</div>
+
+<style>
+    .headmate-heart-x {
+        animation: hearts-rotate-x var(--length) calc(var(--delay, 0s) - var(--length) * 0.5) alternate infinite cubic-bezier(0.37, 0, 0.63, 1);
+    }
+
+    .headmate-heart-y {
+        animation: hearts-rotate-y var(--length) calc(var(--delay, 0s) + 0s) alternate infinite cubic-bezier(0.37, 0, 0.63, 1);
+    }
+
+    @media (prefers-reduced-motion) {
+        .headmate-heart-x,
+        .headmate-heart-y {
+            animation-play-state: paused;
+        }
+    }
+
+    .headmate-heart {
+        position: absolute;
+        display: block;
+        overflow: visible;
+    }
+
+    .headmate-heart-emoji {
+        display: block;
+    }
+</style>
