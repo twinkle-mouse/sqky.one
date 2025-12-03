@@ -1,0 +1,10 @@
+---
+import MainPage from "$common/MainPage.astro";
+import NotFound, { pageName } from "$layouts/NotFound.astro";
+---
+
+<MainPage pageName={pageName}>
+    <Fragment slot="page-title">ERROR</Fragment>
+
+    <NotFound />
+</MainPage>

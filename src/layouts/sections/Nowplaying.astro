@@ -1,0 +1,64 @@
+---
+import nowplaying from "$assets/nowplaying.html";
+---
+
+<section class="text-center">
+    <h3>what's popping !?</h3>
+    <p>(it shows whatever i'm listening to on my computer!!!)</p>
+
+    <div class="nowplaying-container js-necessary">
+        <div class="nowplaying">
+            <div id="nowplaying-widget"></div>
+            <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const nowplayingWidget = document.getElementById("nowplaying-widget")!;
+        const nowplayingWidgetLoader = document.getElementById("nowplaying-widget-loader")!;
+
+        nowplayingWidget.attachShadow({ mode: "open" });
+
+        if (nowplayingWidget.shadowRoot) {
+            nowplayingWidget.shadowRoot.replaceChildren(...nowplayingWidgetLoader.childNodes);
+
+            nowplayingWidgetLoader.remove();
+        }
+    });
+</script>
+
+<style>
+    .nowplaying-container {
+        overflow: scroll;
+        width: 100%;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .nowplaying {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+        margin-inline: auto;
+
+        padding: 1.35rem;
+
+        background-color: var(--cuteblue900);
+        border: 2px dashed var(--cuteblue700);
+    }
+
+    #nowplaying-widget {
+        width: 400px;
+        height: 200px;
+    }
+
+    #nowplaying-widget-loader {
+        width: 0;
+        height: 0;
+        display: none;
+        visibility: hidden;
+    }
+</style>

@@ -1,0 +1,78 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { getEntry } from "astro:content";
+
+import { renderSvg } from "$src/lib/renderSvg";
+
+export type Props = HTMLAttributes<"span"> & {
+    e: string;
+    width?: string | number | undefined;
+    height?: string | number | undefined;
+};
+
+const { e, width, height, "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
+
+// this is the most evil code i could've ever done
+export function getEmojiName(e: string) {
+    let codes: string[] = [];
+    const codesList = [codes];
+
+    for (let i = 0; ; i++) {
+        const code = e.codePointAt(i);
+        if (!code) break;
+
+        const encoded = code.toString(16);
+        if (encoded == "200d") {
+            codes = [];
+            codesList.push(codes);
+            continue;
+        }
+        if (encoded.startsWith("fe0")) {
+            continue;
+        }
+
+        codes.push(encoded);
+    }
+
+    const path = codesList.map((codes) => codes.filter((_, index) => index % 2 == 0).join("_")).join("_200d_");
+    return `emoji_u${path}`;
+}
+
+const name = getEmojiName(e);
+const emojiEntry = await getEntry("emojis", name);
+const emoji = renderSvg(emojiEntry?.data.src, {
+    "aria-hidden": "true",
+    width: width ?? "1.25em",
+    height: height ?? "1.25em",
+});
+---
+
+<span {...props} aria-hidden={ariaHidden ?? "true"} class:list={["emoji", cls]}>
+    <span data-emoji="true">{e}</span>
+    <Fragment set:html={emoji} />
+</span>
+
+<style>
+    .emoji {
+        display: inline-block;
+        position: relative;
+        width: auto;
+        height: auto;
+        vertical-align: text-bottom;
+    }
+
+    .emoji :global(svg) {
+        display: inline-block;
+        vertical-align: text-bottom;
+    }
+
+    .emoji span {
+        position: absolute;
+        opacity: 0;
+        font-size: 1px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
