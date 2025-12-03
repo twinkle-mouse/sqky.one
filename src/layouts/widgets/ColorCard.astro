@@ -1,0 +1,73 @@
+---
+import Color from "colorjs.io";
+
+const { color, variant } = Astro.props;
+
+const list: Color[] = [];
+// it doesn't seem to matter if i give it all the possible grey values lmfao
+// it's always either fully black or fully white
+for (let i = 0; i <= 8; i++) {
+    list.push(new Color("oklab", [i / 8.0, 0, 0]));
+}
+
+const contrastColor = ((color: Color) => {
+    const results = list
+        .map((candidate) => [color.contrast(candidate, "DeltaPhi"), candidate] as [number, Color])
+        .sort(([a], [b]) => b - a)
+        .map(([, v]) => v.to("srgb").toString());
+
+    return results[0];
+})(new Color(color));
+---
+
+<span class="js-selectable color-card">
+    <label
+        class="color-card-inner mono"
+        style={{
+            backgroundColor: color,
+            color: `var(--color-override, ${contrastColor})`,
+        }}
+    >
+        {variant}
+    </label>
+</span>
+
+<style>
+    .color-card {
+        display: flex;
+
+        width: fit-content;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 0.8rem;
+        text-align: center;
+        text-transform: capitalize;
+
+        cursor: grab;
+        user-select: none;
+        touch-action: none;
+        transition:
+            scale 0.065s ease,
+            translate 0.2s ease;
+    }
+
+    .color-card:hover {
+        scale: 1.05;
+    }
+
+    .color-card:active {
+        scale: 0.95;
+        cursor: grabbing;
+    }
+
+    .color-card-inner {
+        padding-block: 0.3rem;
+        padding-inline: 0.5rem;
+        border-radius: 0.4rem;
+
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+</style>

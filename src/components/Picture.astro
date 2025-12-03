@@ -1,0 +1,9 @@
+---
+import El, { type Props as P } from "astro/components/Picture.astro";
+
+export type Props = P;
+
+const { alt, title, ...props } = Astro.props;
+---
+
+<El quality="max" formats={["webp", "avif", "png"]} {...props} alt={alt!} title={title ?? alt!} />

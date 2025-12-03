@@ -1,0 +1,102 @@
+@keyframes earwiggleleft {
+    from {
+        transform: rotate(-45deg);
+    }
+    to {
+        transform: rotate(-70deg);
+    }
+}
+
+@keyframes earwiggleright {
+    from {
+        transform: rotate(45deg);
+    }
+    to {
+        transform: rotate(70deg);
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-7.5%);
+    }
+}
+
+@keyframes wobble {
+    0% {
+        transform: rotate(-4deg) translateY(0) translateX(-3%);
+        animation-timing-function: ease-in;
+    }
+
+    25% {
+        transform: rotate(0) translateY(8%) translateX(0);
+        animation-timing-function: ease-out;
+    }
+
+    50% {
+        transform: rotate(4deg) translateY(0) translateX(3%);
+        animation-timing-function: ease-in;
+    }
+
+    75% {
+        transform: rotate(0) translateY(8%) translateX(0);
+        animation-timing-function: ease-out;
+    }
+
+    100% {
+        transform: rotate(-4deg) translateY(0) translateX(-3%);
+        animation-timing-function: ease-in;
+    }
+}
+
+@keyframes hearts-rotate-x {
+    to {
+        transform: translateX(var(--radius));
+    }
+}
+
+@keyframes hearts-rotate-y {
+    to {
+        transform: translateY(var(--radius));
+    }
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 600% 0%;
+    }
+}
+
+@keyframes motto-colors {
+    from {
+        color: var(--babypink200);
+    }
+    20% {
+        color: var(--cuteblue200);
+    }
+    40% {
+        color: var(--grass200);
+    }
+    60% {
+        color: var(--space200);
+    }
+    80% {
+        color: var(--lavender200);
+    }
+    to {
+        color: var(--babypink200);
+    }
+}

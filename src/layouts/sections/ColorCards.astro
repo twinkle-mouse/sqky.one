@@ -1,0 +1,455 @@
+---
+import Section from "$layouts/Section.astro";
+import ColorCard from "$layouts/widgets/ColorCard.astro";
+import { colors } from "$lib/colors";
+---
+
+<Section>
+    <div>
+        <h3 class="colors-text-container">
+            <div class="colors-text-box">
+                <div class="colors-text mono">colours</div>
+            </div>
+        </h3>
+
+        <label class="sr-only">
+            Below is a widget with colour swatches of the different sets of colours used on the site. Each one is a different hue with lightness option from 1
+            to 9. Each set is laid out vertically from lightest at the top to darkest at the bottom, with the name of the set right above the list.
+        </label>
+        <label class="sr-only js-necessary">Users may use a mouse to drag around the swatches on the screen, bouncing back when released.</label>
+
+        <p class="text-center js-necessary">play around, drag them all over!! they're fun</p>
+        <p class="text-center">all the colours are personally picked by me :3</p>
+
+        <div id="toggle-card-names" class="text-center">
+            <input type="checkbox" id="toggle-card-names-visibility" />
+            <label for="toggle-card-names-visibility">Toggle card names</label>
+        </div>
+
+        <div class="color-cards-container">
+            <div class="color-cards">
+                {
+                    Object.entries(colors).map(([name, variants]) => (
+                        <div class="color-section">
+                            <label class="color-set-name">{name}</label>
+
+                            <ul aria-hidden="true" class="color-set">
+                                {variants.entries().map(([variant, color]) => (
+                                    <li class="color-set-item">
+                                        <ColorCard color={color} variant={variant} />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</Section>
+
+<style>
+    .colors-text-container {
+        overflow-x: scroll;
+    }
+
+    .colors-text-container::before,
+    .colors-text-container::after {
+        all: unset;
+    }
+
+    .colors-text-box {
+        width: max-content;
+        overflow: hidden;
+        margin-inline: auto;
+    }
+
+    .colors-text {
+        font-size: 2.5rem;
+
+        letter-spacing: 0.6em;
+        margin-right: -0.6em;
+
+        background: linear-gradient(
+            135deg,
+            #ff2400,
+            #ff2400,
+            #ff2400,
+            #ff7b46,
+            #ff7b46,
+            #ff7b46,
+            #fff89a,
+            #fff89a,
+            #fff89a,
+            #72ff8a,
+            #72ff8a,
+            #72ff8a,
+            #a8f9ff,
+            #a8f9ff,
+            #a8f9ff,
+            #6a6dff,
+            #6a6dff,
+            #6a6dff,
+            #f36eff,
+            #f36eff,
+            #f36eff,
+            #6a6dff,
+            #6a6dff,
+            #6a6dff,
+            #a8f9ff,
+            #a8f9ff,
+            #a8f9ff,
+            #72ff8a,
+            #72ff8a,
+            #72ff8a,
+            #fff89a,
+            #fff89a,
+            #fff89a,
+            #ff7b46,
+            #ff7b46,
+            #ff7b46,
+            #ff2400,
+            #ff2400,
+            #ff2400
+        );
+        background-size: 600% 100%;
+        background-clip: text;
+
+        color: transparent;
+
+        animation: rainbow 36s linear infinite;
+        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+    }
+
+    @media (prefers-reduced-motion) {
+        .colors-text {
+            background-size: 200% 100%;
+            animation: none;
+        }
+    }
+
+    .color-cards-container {
+        overflow: scroll;
+    }
+
+    .color-cards {
+        display: flex;
+        position: relative;
+
+        width: max-content;
+        max-width: 100%;
+        min-width: 400px;
+        user-select: none;
+
+        padding: 1rem;
+        margin-top: 1.5rem;
+        margin-inline: auto;
+        gap: 1rem;
+
+        border-radius: 1.25rem;
+
+        font-size: 1.25rem;
+
+        flex-wrap: wrap;
+        justify-content: space-around;
+
+        background-color: #121212;
+    }
+
+    .color-section {
+        display: flex;
+
+        gap: 0.25em;
+
+        flex-direction: column;
+        align-items: center;
+
+        text-align: center;
+
+        touch-action: none;
+    }
+
+    .color-set {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .color-set-item {
+        padding: 0.2rem;
+        margin: -0.2rem;
+    }
+
+    .color-set-name {
+        color: var(--slate100);
+
+        text-decoration: underline;
+        text-transform: capitalize;
+    }
+
+    #toggle-card-names {
+        margin-top: 2em;
+    }
+</style>
+
+<noscript>
+    <style>
+        #toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ * .color-set-item {
+            --color-override: transparent;
+        }
+    </style>
+</noscript>
+<script>
+    const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
+    const cards = document.querySelectorAll<HTMLElement>(".color-set-item .color-card");
+
+    const update = () => {
+        if (toggler.checked === false) {
+            cards.forEach((e) => e.style.setProperty("--color-override", "transparent"));
+        } else {
+            cards.forEach((e) => e.style.removeProperty("--color-override"));
+        }
+    };
+
+    toggler.addEventListener("input", update);
+    document.addEventListener("DOMContentLoaded", update);
+</script>
+
+<!-- ^ we can do this with CSS if JS is disabled, but doing it with JS is better for script shenanigans (see below) -->
+
+<script>
+    import { springStep } from "$lib/spring";
+
+    class Vec {
+        public x: number;
+        public y: number;
+
+        private constructor(x: number, y: number) {
+            this.x = x;
+            this.y = y;
+        }
+
+        static new(x: number, y: number) {
+            return new Vec(x, y);
+        }
+
+        copy() {
+            return new Vec(this.x, this.y);
+        }
+
+        add(o: Vec) {
+            return Vec.add(this, o);
+        }
+
+        sub(o: Vec) {
+            return Vec.sub(this, o);
+        }
+
+        static add(a: Vec, b: Vec) {
+            const x = a.x + b.x;
+            const y = a.y + b.y;
+            return new Vec(x, y);
+        }
+
+        static sub(a: Vec, b: Vec) {
+            const x = a.x - b.x;
+            const y = a.y - b.y;
+            return new Vec(x, y);
+        }
+
+        static zero() {
+            return new Vec(0, 0);
+        }
+    }
+
+    const defaultState = {
+        stopping: false,
+        stopped: false,
+        lastTime: 0,
+        initialPos: Vec.zero(),
+        initialScroll: Vec.zero(),
+        currentPos: Vec.zero(),
+        currentVel: Vec.zero(),
+        lastVel: Vec.zero(),
+        cursorPos: Vec.zero(),
+        draggedElementPos: Vec.zero(),
+        draggedElement: null as HTMLElement | null,
+        draggingElement: null as HTMLElement | null,
+        containerElement: null as HTMLElement | null,
+    };
+
+    const fakeroot = document.getElementById("popout-fakeroot")!;
+
+    const stateMap: Map<number, (typeof defaultState)[]> = new Map();
+
+    const updateDraggedElementPos = (pointerId: number) => {
+        const states = stateMap.get(pointerId);
+        if (!states) return;
+
+        for (const state of states) {
+            if (!state.containerElement) continue;
+            if (!state.draggedElement) continue;
+
+            let rect: DOMRect;
+            {
+                state.draggedElement.style.scale = "unset";
+                state.draggedElement.style.transition = "unset";
+                state.draggedElement.style.transform = "unset";
+                state.draggedElement.style.margin = "unset";
+                state.draggedElement.style.padding = "unset";
+                rect = state.draggedElement.getBoundingClientRect();
+                state.draggedElement.style.scale = "";
+                state.draggedElement.style.transition = "";
+                state.draggedElement.style.transform = "";
+                state.draggedElement.style.margin = "";
+                state.draggedElement.style.padding = "";
+            }
+            state.draggedElementPos = Vec.new(rect.x, rect.y);
+        }
+    };
+
+    const updateDraggingElementPos = (pointerId: number) => {
+        const states = stateMap.get(pointerId);
+        if (!states) return;
+
+        for (const state of states) {
+            if (!state.draggingElement) continue;
+
+            state.draggingElement.style.left = `${state.draggedElementPos.x + window.scrollX}px`;
+            state.draggingElement.style.top = `${state.draggedElementPos.y + window.scrollY}px`;
+        }
+    };
+
+    document.addEventListener("pointerup", (event) => {
+        const states = stateMap.get(event.pointerId);
+        if (!states) return;
+
+        for (const state of states) {
+            state.stopping = true;
+
+            if (state.draggingElement) {
+                state.draggingElement.style.cursor = "";
+            }
+        }
+    });
+
+    document.addEventListener("pointermove", (event) => {
+        const states = stateMap.get(event.pointerId);
+        if (!states) return;
+
+        for (const state of states) {
+            if (!state.stopping) {
+                state.cursorPos = Vec.new(event.clientX, event.clientY);
+            }
+        }
+    });
+    document.addEventListener("scroll", () => {
+        for (const pointerId of stateMap.keys()) {
+            updateDraggingElementPos(pointerId);
+        }
+    });
+    document.querySelectorAll<HTMLElement>(".color-cards-container").forEach((container) => {
+        container.addEventListener("scroll", () => {
+            for (const pointerId of stateMap.keys()) {
+                updateDraggedElementPos(pointerId);
+            }
+        });
+
+        container.querySelectorAll<HTMLElement>(".color-set-item .color-card").forEach((element) => {
+            element.addEventListener("pointerdown", (event) => {
+                if (event.button !== 0) return;
+
+                let states = stateMap.get(event.pointerId);
+                if (!states) {
+                    stateMap.set(event.pointerId, []);
+                    states = stateMap.get(event.pointerId);
+                }
+
+                const state = structuredClone(defaultState);
+                {
+                    state.containerElement = container;
+                    state.draggedElement = element;
+
+                    state.cursorPos = Vec.new(event.clientX, event.clientY);
+                    state.initialPos = state.cursorPos.copy();
+                    state.currentPos = state.initialPos.copy();
+                    state.initialScroll = Vec.new(window.scrollX + state.containerElement.scrollLeft, window.scrollY + state.containerElement.scrollTop);
+
+                    const e = state.draggedElement.cloneNode(true) as HTMLElement;
+                    e.style.position = "absolute";
+                    e.style.cursor = "grabbing";
+                    fakeroot.appendChild(e);
+
+                    state.draggingElement = e;
+                    state.draggedElement.style.visibility = "hidden";
+                }
+
+                states!.push(state);
+
+                updateDraggedElementPos(event.pointerId);
+                updateDraggingElementPos(event.pointerId);
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const animate = (time: DOMHighResTimeStamp) => {
+            for (const [pointerId, states] of stateMap) {
+                for (const state of states) {
+                    if (state.stopped) continue;
+                    if (!state.containerElement) continue;
+                    if (!state.draggingElement) continue;
+
+                    const scroll = Vec.new(window.scrollX + state.containerElement.scrollLeft, window.scrollY + state.containerElement.scrollTop);
+                    let targetPos: Vec;
+                    if (state.stopping) {
+                        targetPos = state.initialPos.add(state.initialScroll.sub(scroll));
+                    } else {
+                        targetPos = state.cursorPos;
+                    }
+
+                    if (state.lastTime > 0) {
+                        const dT = (time - state.lastTime) / 1000.0;
+                        const mass = 0.9;
+                        const stiffness = 90;
+                        const damping = 8;
+
+                        const x = springStep(state.currentPos.x, state.currentVel.x, targetPos.x, mass, stiffness, damping, dT);
+                        const y = springStep(state.currentPos.y, state.currentVel.y, targetPos.y, mass, stiffness, damping, dT);
+
+                        state.currentPos = Vec.new(x.pos, y.pos);
+                        state.currentVel = Vec.new(x.velocity, y.velocity);
+                        const deltaVel = state.currentVel.sub(state.lastVel);
+                        state.lastVel = state.currentVel.copy();
+
+                        const scale = `${Math.sqrt(Math.abs(deltaVel.x + deltaVel.y)) / 60.0 + 1.0}`;
+                        const rotate = `${Math.max(Math.min(360.0, deltaVel.x / 8.0), -360.0)}deg`;
+                        const translate = `${state.currentPos.x - state.initialPos.x}px, ${state.currentPos.y - state.initialPos.y}px`;
+
+                        state.draggingElement.style.transform = `translate(${translate}) scale(${scale}) rotate(${rotate})`;
+                    }
+                    state.lastTime = time;
+
+                    if (state.stopping) {
+                        const diff = targetPos.sub(state.currentPos);
+
+                        if (Math.abs(diff.x) < 0.25 && Math.abs(diff.y) < 0.25) {
+                            state.draggingElement?.remove();
+                            if (state.draggedElement) state.draggedElement.style.visibility = "";
+
+                            state.stopped = true;
+                        }
+                    }
+                }
+
+                if (states.every((state) => state.stopped)) {
+                    stateMap.delete(pointerId);
+                }
+            }
+
+            window.requestAnimationFrame(animate);
+        };
+
+        window.requestAnimationFrame(animate);
+    });
+</script>

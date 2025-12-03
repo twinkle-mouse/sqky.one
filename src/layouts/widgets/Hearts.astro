@@ -1,0 +1,53 @@
+---
+import Emoji from "$components/Emoji.astro";
+
+import HeartEmoji from "./HeartEmoji.astro";
+
+const hearts = ["🩷", "🤎", "🤍", "💛", "🧡"];
+
+const radius = 80;
+const length = 4;
+---
+
+<div class="hearts" data-radius={radius}>
+    <label class="sr-only">
+        An animation of several coloured hearts slowly revolving around a giant purple heart, representing our system. The revolving hearts' colours are each
+        one of the headmates' favourite, as shown in the headmates list, and there's a heart for each one of us.
+    </label>
+
+    <div aria-hidden="true">
+        <div class="system-heart-container">
+            <Emoji class="system-heart" e="💜" width={radius} height={radius} />
+        </div>
+
+        <div class="headmate-hearts">
+            {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+        </div>
+    </div>
+</div>
+
+<style define:vars={{ radius: `${radius}px` }}>
+    .hearts {
+        display: block;
+        position: relative;
+        width: 192px;
+        height: 192px;
+        margin: 8px;
+    }
+
+    .system-heart-container {
+        position: absolute;
+        display: flex;
+
+        width: 100%;
+        height: 100%;
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .system-heart {
+        width: var(--radius);
+        height: var(--radius);
+    }
+</style>

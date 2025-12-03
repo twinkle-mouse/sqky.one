@@ -1,0 +1,52 @@
+{
+    "name": "sqky.one",
+    "type": "module",
+    "private": true,
+    "version": "0.0.1",
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "packageManager": "pnpm@10.13.1",
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro",
+        "server": "node ./dist/server/entry.mjs",
+        "lint": "prettier src --write && eslint --fix 'src/**/*.{ts,js,astro}'"
+    },
+    "devDependencies": {
+        "@astrojs/mdx": "^5.0.1",
+        "@eslint/js": "^10.0.1",
+        "@types/node": "^25.5.0",
+        "@types/sanitize-html": "^2.16.1",
+        "@typescript-eslint/parser": "^8.57.1",
+        "astro": "^6.0.5",
+        "astro-compressor": "^1.3.0",
+        "autoprefixer": "^10.4.27",
+        "colorjs.io": "^0.6.1",
+        "emoji-regex": "^10.6.0",
+        "eslint": "^10.0.3",
+        "eslint-plugin-astro": "^1.6.0",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
+        "jiti": "^2.6.1",
+        "markdownlint": "^0.40.0",
+        "node-html-parser": "^7.1.0",
+        "postcss": "^8.5.8",
+        "postcss-reporter": "^7.1.0",
+        "prettier": "^3.8.1",
+        "prettier-plugin-astro": "^0.14.1",
+        "sanitize-html": "^2.17.1",
+        "sharp": "^0.34.5",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.57.1",
+        "unist-util-find-after": "5.0.0",
+        "unist-util-visit": "5.0.0",
+        "vite": "^8.0.0"
+    },
+    "dependencies": {
+        "@astrojs/node": "^10.0.2",
+        "@astrojs/rss": "^4.0.17",
+        "astro-icon": "^1.1.5"
+    }
+}

@@ -1,0 +1,185 @@
+---
+import MainPage from "$common/MainPage.astro";
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+import AboutMe from "$layouts/sections/AboutMe.astro";
+import ColorCards from "$layouts/sections/ColorCards.astro";
+import Contacts from "$layouts/sections/Contacts.astro";
+import Intro from "$layouts/sections/Intro.astro";
+import Nowplaying from "$layouts/sections/Nowplaying.astro";
+import Quotes from "$layouts/sections/Quotes.astro";
+import Gaysphere from "$layouts/widgets/Gaysphere.astro";
+import Transcube from "$layouts/widgets/Transcube.astro";
+---
+
+<MainPage>
+    <Fragment slot="page-title">
+        The <i>Squeaky</i> One
+    </Fragment>
+
+    <Fragment slot="nav:page-links">
+        <li><a href="#about-me">About Me</a></li>
+        <li><a href="#contacts">Contacts</a></li>
+        <li><a href="#quotes">Quotes</a></li>
+        <li><a href="#gadgets">Gadgets</a></li>
+    </Fragment>
+
+    <Fragment slot="nav:footer">
+        <Transcube />
+        <Gaysphere />
+    </Fragment>
+
+    <EmojiWrapper>
+        <LargeSection>
+            <Intro />
+
+            <AboutMe />
+
+            <Contacts />
+
+            <Quotes />
+        </LargeSection>
+
+        <LargeSection id="gadgets">
+            <h2 id="heading">Gadgets</h2>
+
+            <div>
+                <ColorCards />
+            </div>
+
+            <div class="js-inherit">
+                <Section>
+                    <Nowplaying />
+                </Section>
+            </div>
+        </LargeSection>
+
+        <footer>
+            <div class="motto-container">
+                <p class="motto">forgive don't forget</p>
+            </div>
+
+            <p class="text-center">
+                <small>
+                    (this is a reference to
+                    <a href="https://stomachbook.bandcamp.com/track/all-you-can-hope-for-now-are-the-scars-to-show-for-it">STOMACH BOOK</a>. please go check
+                    them out, this line of lyrics means a lot to me ❤️‍🩹)
+                </small>
+            </p>
+
+            <style>
+                .motto-container {
+                    padding-inline: 1rem;
+                    overflow: scroll;
+                }
+
+                .motto {
+                    --stroke-color: var(--slate600);
+                    --glow-color: #ffffffaa;
+
+                    text-shadow:
+                        var(--stroke-color) 4px 0px 0px,
+                        var(--stroke-color) 3.87565px 0.989616px 0px,
+                        var(--stroke-color) 3.51033px 1.9177px 0px,
+                        var(--stroke-color) 2.92676px 2.72656px 0px,
+                        var(--stroke-color) 2.16121px 3.36588px 0px,
+                        var(--stroke-color) 1.26129px 3.79594px 0px,
+                        var(--stroke-color) 0.282949px 3.98998px 0px,
+                        var(--stroke-color) -0.712984px 3.93594px 0px,
+                        var(--stroke-color) -1.66459px 3.63719px 0px,
+                        var(--stroke-color) -2.51269px 3.11229px 0px,
+                        var(--stroke-color) -3.20457px 2.39389px 0px,
+                        var(--stroke-color) -3.69721px 1.52664px 0px,
+                        var(--stroke-color) -3.95997px 0.56448px 0px,
+                        var(--stroke-color) -3.97652px -0.432781px 0px,
+                        var(--stroke-color) -3.74583px -1.40313px 0px,
+                        var(--stroke-color) -3.28224px -2.28625px 0px,
+                        var(--stroke-color) -2.61457px -3.02721px 0px,
+                        var(--stroke-color) -1.78435px -3.57996px 0px,
+                        var(--stroke-color) -0.843183px -3.91012px 0px,
+                        var(--stroke-color) 0.150409px -3.99717px 0px,
+                        var(--stroke-color) 1.13465px -3.8357px 0px,
+                        var(--stroke-color) 2.04834px -3.43574px 0px,
+                        var(--stroke-color) 2.83468px -2.82216px 0px,
+                        var(--stroke-color) 3.44477px -2.03312px 0px,
+                        var(--stroke-color) 3.84068px -1.11766px 0px,
+                        var(--stroke-color) 3.9978px -0.132717px 0px,
+                        var(--glow-color) 0px 0px 10px,
+                        var(--glow-color) 0px 0px 20px;
+                    text-wrap: nowrap;
+
+                    display: block;
+                    width: fit-content;
+                    margin-inline: auto;
+
+                    font-size: 2.7rem;
+                    font-weight: bold;
+
+                    animation: motto-colors 5s linear infinite;
+                }
+
+                @media (prefers-reduced-motion) {
+                    .motto {
+                        animation: none;
+                    }
+                }
+
+                .motto::before {
+                    content: "«" / "";
+                    margin-inline: 0.4em;
+                }
+
+                .motto::after {
+                    content: "»" / "";
+                    margin-inline: 0.4em;
+                }
+
+                @media (max-width: 620px) {
+                    .motto {
+                        font-size: 2.3rem;
+                    }
+                }
+
+                @media (max-width: 520px) {
+                    .motto {
+                        font-size: 2rem;
+                    }
+                }
+
+                @media (max-width: 420px) {
+                    .motto {
+                        font-size: 1.85rem;
+                    }
+                }
+
+                @media (max-width: 380px) {
+                    .motto {
+                        font-size: 1.65rem;
+                    }
+                }
+
+                @media (max-width: 340px) {
+                    .motto {
+                        font-size: 1.5rem;
+                    }
+                }
+            </style>
+
+            <hr />
+
+            <div class="credits">
+                <p>This site uses the <a href="https://micenest.xyz/nro/">noseyrodent</a> typeface!</p>
+                <p>This site uses the real passion of a mouse, thank you so much for visiting 💖.</p>
+            </div>
+
+            <style>
+                .credits {
+                    font-size: 0.8rem;
+                    padding-inline: 0.7rem;
+                    color: var(--smallColor);
+                }
+            </style>
+        </footer>
+    </EmojiWrapper>
+</MainPage>

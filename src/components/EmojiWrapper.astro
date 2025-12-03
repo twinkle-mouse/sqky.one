@@ -1,0 +1,55 @@
+---
+async function replaceAllAsync(str: string, searchValue: string | RegExp, replacer: (substring: string, ...args: unknown[]) => Promise<string>) {
+    const promises: Promise<string>[] = [];
+    str.replaceAll(searchValue, (full, ...args) => {
+        promises.push(replacer(full, ...args));
+        return full;
+    });
+    const data = await Promise.all(promises);
+    let index = 0;
+    return str.replaceAll(searchValue, () => {
+        const v = data[index];
+        index += 1;
+        return v;
+    });
+}
+
+import { experimental_AstroContainer } from "astro/container";
+import emojiRegex from "emoji-regex";
+import { NodeType, parse } from "node-html-parser";
+
+import Emoji from "./Emoji.astro";
+
+const rendered = await Astro.slots.render("default");
+
+const container = await experimental_AstroContainer.create();
+
+const regex = emojiRegex();
+const element = parse(rendered);
+let children = [...element.childNodes];
+for (const child of children) {
+    if (child.childNodes.length > 0) {
+        children.push(...child.childNodes);
+    }
+
+    if (child.nodeType == NodeType.TEXT_NODE && !!child.textContent) {
+        const parent = child.parentNode;
+        if (parent == undefined) {
+            continue;
+        }
+
+        if (parent.attributes?.["data-emoji"] == "true") {
+            continue;
+        }
+
+        const htmlSrc = child.textContent;
+        const htmlDst = await replaceAllAsync(htmlSrc, regex, async (emoji) => {
+            return (await container.renderToString(Emoji, { props: { e: emoji } })).trim();
+        });
+
+        parent.exchangeChild(child, parse(htmlDst));
+    }
+}
+---
+
+<Fragment set:html={element} />
