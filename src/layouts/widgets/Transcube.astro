@@ -1,9 +1,9 @@
 ---
 import { Image } from "astro:assets";
 
-import transflag from "./transflag.png";
+import transflag from "./transflag.svg";
 
-const size = 128;
+const size = 96;
 ---
 
 <div class="transcube-container">
@@ -97,6 +97,12 @@ const size = 128;
 </div>
 
 <style>
+    @media (prefers-reduced-motion) {
+        .transcube-container {
+            display: none;
+        }
+    }
+
     .transcube {
         display: flex;
         justify-content: center;
@@ -106,6 +112,7 @@ const size = 128;
         min-height: calc(var(--s) * 2);
         height: auto;
 
+        margin-block: 1.5em;
         margin-inline: auto;
 
         user-select: none;
@@ -116,12 +123,6 @@ const size = 128;
     .transcube:has(.face:hover) {
         filter: drop-shadow(0px 0px calc(var(--s) / 12) rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px calc(var(--s) / 8) rgba(255, 255, 255, 0.5))
             drop-shadow(0px 0px calc(var(--s) / 6) rgba(255, 255, 255, 0.75));
-    }
-
-    @media (prefers-reduced-motion) {
-        .transcube-container {
-            display: none;
-        }
     }
 
     .anim {
@@ -138,27 +139,18 @@ const size = 128;
         position: absolute;
 
         image-rendering: pixelated;
+        filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000);
     }
 </style>
 
-<style define:vars={{ size: "96px" }}>
+<style define:vars={{ size: `${size}px` }}>
     .transcube {
         --s: var(--size);
-        padding: 4.5rem;
-    }
-
-    .face {
-        border: 2px solid #222;
     }
 
     @media (max-width: 1200px) {
         .transcube {
             --s: calc(var(--size) / 1.5);
-            padding: 3rem;
-        }
-
-        .face {
-            border-width: 1px;
         }
     }
 </style>
