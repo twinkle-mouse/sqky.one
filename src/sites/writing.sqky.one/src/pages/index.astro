@@ -5,6 +5,7 @@ import WritingsPage from "$common/WritingsPage.astro";
 import Article from "$layouts/Article.astro";
 import Section from "$layouts/Section.astro";
 import WritingEntries from "$layouts/WritingEntries.astro";
+import { siteDesc } from "$lib/writings";
 
 export function cmpEntry<T extends { data: { date: Date } }>(a: T, b: T) {
     return b.data.date.valueOf() - a.data.date.valueOf();
@@ -17,7 +18,7 @@ export async function getWritingEntries() {
 const entries = await getWritingEntries();
 ---
 
-<WritingsPage pageName="The Library" desc="An index into all of my writings, or at least the ones I care enough to format and upload <:">
+<WritingsPage pageName="The Library" desc={siteDesc}>
     <Article>
         <Fragment slot="heading">Writings, blogs, stories and squeaks</Fragment>
         <Section>

@@ -2,8 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 
 import EmojiWrapper from "$components/EmojiWrapper.astro";
-
-export const defaultDescription = "(no description)";
+import { defaultDescription } from "$lib/writings";
 
 type Props = {
     entries: CollectionEntry<"writings">[];
@@ -60,7 +59,7 @@ type Props = {
             padding: 1rem;
 
             background-color: var(--cuteblue800);
-            border: 3px solid var(--cuteblue600);
+            border: 2px solid var(--cuteblue600);
         }
 
         .entry-title {
@@ -114,16 +113,16 @@ type Props = {
 
         @media (prefers-color-scheme: light) {
             .entry-card {
-                background-color: var(--cuteblue200);
-                border-color: var(--cuteblue300);
+                background-color: var(--cuteblue100);
+                border-color: var(--cuteblue500);
             }
 
             .entry-title aside {
-                color: var(--slate600);
+                color: var(--slate800);
             }
 
             .entry-card footer {
-                color: var(--slate700);
+                color: var(--slate800);
             }
 
             .entry-content {
