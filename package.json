@@ -16,11 +16,12 @@
         "lint": "prettier src --write && eslint --fix 'src/**/*.{ts,js,astro}'"
     },
     "devDependencies": {
-        "@astrojs/mdx": "^4.3.12",
+        "@astrojs/mdx": "^4.3.13",
         "@eslint/js": "^9.39.1",
-        "@types/node": "^24.10.1",
-        "@typescript-eslint/parser": "^8.48.1",
-        "astro": "^5.16.4",
+        "@types/node": "^24.10.3",
+        "@types/sanitize-html": "^2.16.0",
+        "@typescript-eslint/parser": "^8.49.0",
+        "astro": "^5.16.5",
         "astro-compressor": "^1.2.0",
         "autoprefixer": "^10.4.22",
         "colorjs.io": "^0.5.2",
@@ -33,14 +34,17 @@
         "postcss-reporter": "^7.1.0",
         "prettier": "^3.7.4",
         "prettier-plugin-astro": "^0.14.1",
-        "remark-sectionize": "^2.1.0",
+        "sanitize-html": "^2.17.0",
         "sharp": "^0.34.5",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.48.1",
-        "vite": "^7.2.6"
+        "typescript-eslint": "^8.49.0",
+        "unist-util-find-after": "5.0.0",
+        "unist-util-visit": "5.0.0",
+        "vite": "^7.2.7"
     },
     "dependencies": {
         "@astrojs/node": "^9.5.1",
+        "@astrojs/rss": "^4.0.14",
         "astro-icon": "^1.1.5"
     }
 }

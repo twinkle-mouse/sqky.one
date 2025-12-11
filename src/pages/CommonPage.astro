@@ -74,6 +74,8 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         <Font preload cssVariable="--font-iosevka-aile" />
         <Font preload cssVariable="--font-iosevka-curly" />
 
+        <slot name="head-tags" />
+
         <style is:raw set:text={`:root{${colorsStyle}}`}></style>
 
         <style

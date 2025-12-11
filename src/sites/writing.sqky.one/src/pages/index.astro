@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 
 import WritingsPage from "$common/WritingsPage.astro";
+import RssIcon from "$components/RssIcon.astro";
 import Article from "$layouts/Article.astro";
 import Section from "$layouts/Section.astro";
 import WritingEntries from "$layouts/WritingEntries.astro";
@@ -20,6 +21,13 @@ const entries = await getWritingEntries();
 
 <WritingsPage pageName="The Library" desc={siteDesc}>
     <Article>
+        <p class="icons"><RssIcon /></p>
+        <style>
+            .icons {
+                padding-inline: 1.5rem;
+            }
+        </style>
+
         <Fragment slot="heading">Writings, blogs, stories and squeaks</Fragment>
         <Section>
             <h2>Entries</h2>
