@@ -18,6 +18,7 @@ export async function GET(context: AstroGlobal) {
         title: siteName,
         site: context.site!,
         description: siteDesc,
+        customData: [`<atom:link href="${new URL("rss.xml", context.site)}" rel="self" type="application/rss+xml" />`].join(""),
         items: await Promise.all(
             writings.map(async (post) => {
                 const { Content } = await render(post);
