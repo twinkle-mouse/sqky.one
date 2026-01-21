@@ -1,25 +1,38 @@
 ---
 import { experimental_AstroContainer } from "astro/container";
 import emojiRegex from "emoji-regex";
-
+import { parse } from "node-html-parser";
 import Emoji from "./Emoji.astro";
 
-let content = await Astro.slots.render("default");
+const rendered = await Astro.slots.render("default");
 
 const container = await experimental_AstroContainer.create();
+const emojiMatcher = emojiRegex();
 
-let html = "";
-const regex = emojiRegex();
-for (const match of content.matchAll(regex)) {
-    const emoji = match[0];
+const element = parse(rendered);
+let children = [];
+children.push(...element.childNodes);
+for (const child of children) {
+    if (child.childNodes.length > 0) {
+        children.push(...child.childNodes);
+    }
 
-    const index = content.indexOf(emoji);
-    html += content.substring(0, index);
-    const emojiHtml = (await container.renderToString(Emoji, { props: { e: emoji } })).trim();
-    html += emojiHtml;
-    content = content.substring(index + emoji.length);
+    // TEXT_NODE: 3
+    if (child.nodeType == 3 && !!child.textContent) {
+        if (child.parentNode != undefined && child.parentNode.attributes["data-emoji"] != "true") {
+            for (const match of child.textContent.matchAll(emojiMatcher)) {
+                const emoji = match[0];
+                const index = child.textContent.indexOf(emoji);
+
+                const before = child.textContent.substring(0, index);
+                const after = child.textContent.substring(index + emoji.length);
+                const emojiHtml = (await container.renderToString(Emoji, { props: { e: emoji } })).trim();
+
+                child.parentNode.exchangeChild(child, parse(before + emojiHtml + after));
+            }
+        }
+    }
 }
-html += content;
 ---
 
-<Fragment set:html={html} />
+<Fragment set:html={element} />

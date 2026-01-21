@@ -1,31 +1,28 @@
 ---
 import FilesArchivePage from "$common/FilesArchivePage.astro";
-import Article from "$layouts/Article.astro";
+import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 ---
 
 <FilesArchivePage pageName="File Upload">
-    <Article>
-        <Fragment slot="heading">Single Use File Upload</Fragment>
+    <Fragment slot="page-title">Single Use File Upload</Fragment>
 
+    <LargeSection>
         <Section>
             <p>Direct file upload link to my computer. You need to be given a code to use this.</p>
             <p>The code will be inside the url, like this:</p>
             <p><code>https://the.sqky.one/upload/?code=XXXXXXXXXXXXXXXX</code></p>
 
-            <br />
-
             <div id="uploader" hidden>
                 <div>
                     <input id="file-input" type="file" />
-                    <br />
                     <button id="upload-button">Submit</button>
                 </div>
             </div>
 
             <p id="message"></p>
         </Section>
-    </Article>
+    </LargeSection>
 </FilesArchivePage>
 
 <script>

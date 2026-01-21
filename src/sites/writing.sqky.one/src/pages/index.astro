@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 
 import WritingsPage from "$common/WritingsPage.astro";
 import RssIcon from "$components/RssIcon.astro";
-import Article from "$layouts/Article.astro";
+import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 import WritingEntries from "$layouts/WritingEntries.astro";
 import { siteDesc } from "$lib/writings";
@@ -20,7 +20,9 @@ const entries = await getWritingEntries();
 ---
 
 <WritingsPage pageName="The Library" desc={siteDesc}>
-    <Article>
+    <Fragment slot="page-title">The Library of Squeaks</Fragment>
+
+    <LargeSection>
         <p class="icons"><RssIcon /></p>
         <style>
             .icons {
@@ -34,5 +36,5 @@ const entries = await getWritingEntries();
 
             <WritingEntries entries={entries} />
         </Section>
-    </Article>
+    </LargeSection>
 </WritingsPage>

@@ -119,6 +119,7 @@
                 const barCircleElement = elements["barCircle"];
                 const positionElement = elements["position"];
                 const artElement = elements["art"];
+                const artLabelElement = elements["artLabel"];
 
                 const paused = data?.playbackState == "paused";
                 const position = data?.position;
@@ -169,6 +170,13 @@
                 if (artElement) {
                     if (artElement.style.backgroundImage !== currentImageUrlCss) {
                         artElement.style.backgroundImage = currentImageUrlCss;
+                    }
+                }
+
+                if (artLabelElement && !!metadata?.album) {
+                    const artLabel = `Album art for "${metadata.album}"`;
+                    if (artLabelElement.textContent !== artLabel) {
+                        artLabelElement.textContent = artLabel;
                     }
                 }
 
@@ -233,6 +241,7 @@
                     barCircle: document.getElementById("np-bar-circle"),
                     position: document.getElementById("np-position"),
                     art: document.getElementById("np-art"),
+                    artLabel: document.getElementById("np-art-label"),
                 };
 
                 let currentImage = undefined;
@@ -358,18 +367,13 @@
                 color: var(--slate300);
             }
 
-            @media (prefers-color-scheme: light) {
-                #np-title {
-                    color: var(--lavender700);
-                }
-
-                #np-artist {
-                    color: var(--babypink700);
-                }
-
-                #np-position {
-                    color: var(--slate600);
-                }
+            .sr-only {
+                position: absolute;
+                left: -10000px;
+                top: auto;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
             }
         </style>
     </head>
@@ -386,10 +390,12 @@
                         <div id="np-bar-background"></div>
                         <div id="np-bar-circle"></div>
                     </div>
-                    <div id="np-position"></div>
+                    <p id="np-position"></p>
                 </div>
             </div>
-            <div id="np-art" />
+            <div id="np-art">
+                <label class="sr-only" id="np-art-label"></label>
+            </div>
         </div>
     </body>
 </html>

@@ -3,7 +3,7 @@ import { getEntry, render } from "astro:content";
 
 import WritingsPage from "$common/WritingsPage.astro";
 import EmojiWrapper from "$components/EmojiWrapper.astro";
-import Article from "$layouts/Article.astro";
+import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 import { defaultDescription } from "$lib/writings";
 
@@ -25,6 +25,8 @@ const { Content, headings } = await render(entry);
 ---
 
 <WritingsPage pageName={`'${entry.data.title}'`} desc={entry.data.description || defaultDescription}>
+    <Fragment slot="page-title">{entry.data.title}</Fragment>
+
     <Fragment slot="nav:page-links">
         {
             headings.map((v) => (
@@ -35,7 +37,7 @@ const { Content, headings } = await render(entry);
         }
     </Fragment>
 
-    <Article>
+    <LargeSection>
         <Fragment slot="heading">
             {entry.data.title}
         </Fragment>
@@ -75,7 +77,7 @@ const { Content, headings } = await render(entry);
 
                 #content p {
                     margin-block: 1.5rem;
-                    line-height: 1.5em;
+                    line-height: 1.5;
                     text-wrap: wrap stable;
                     white-space: pre-line;
                 }
@@ -100,5 +102,5 @@ const { Content, headings } = await render(entry);
                 }
             </style>
         </div>
-    </Article>
+    </LargeSection>
 </WritingsPage>

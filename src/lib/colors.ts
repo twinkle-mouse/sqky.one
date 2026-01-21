@@ -134,6 +134,7 @@ export const colors = {
 };
 
 export const semanticColorsDark = {
+    focusColor: "#ff1d1d",
     bgColor: lavender900,
     articleBgColor: cuteblue900,
     articleBorderColor: cuteblue700,
@@ -152,12 +153,13 @@ export const semanticColorsDark = {
     sitemapLinkBgColorActive: cuteblue700,
     textColor: babypink100,
     linkColor: grass200,
-    linkFocusColor: grass500,
-    buttonColor: cuteblue300,
-    buttonBorderColor: cuteblue500,
+    linkHoverColor: grass500,
+    buttonColor: space500,
+    buttonBorderColor: space200,
     buttonBgColor: cuteblue800,
+    buttonHoverColor: space300,
     buttonActiveColor: cuteblue100,
-    buttonActiveBorderColor: cuteblue300,
+    buttonActiveBorderColor: cuteblue500,
     headingColor: lavender300,
     articleHeadingColor: lavender400,
     smallColor: slate300,
@@ -185,6 +187,7 @@ export const semanticUtilsDark = {
     `,
 };
 
+/*
 export const semanticColorsLight = {
     bgColor: "#fff",
     articleBgColor: cuteblue100,
@@ -236,3 +239,7 @@ export const semanticUtilsLight = {
         inset 0px 0px 3px 2px rgba(112, 169, 184, 0.2)
     `,
 };
+*/
+
+export const semanticColorsLight = semanticColorsDark;
+export const semanticUtilsLight = semanticUtilsDark;

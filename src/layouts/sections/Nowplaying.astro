@@ -2,19 +2,19 @@
 import nowplaying from "$assets/nowplaying.html";
 ---
 
-<div class="text-center">
-    <p>what the mouse listening to !?</p>
+<section class="text-center">
+    <h3>what the mouse listening to !?</h3>
     <p>
-        <small> (it shows whatever i'm listening to on my computer!!!) </small>
+        <small>(it shows whatever i'm listening to on my computer!!!)</small>
     </p>
-</div>
 
-<div class="nowplaying-container js-necessary">
-    <div class="nowplaying">
-        <div id="nowplaying-widget"></div>
-        <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+    <div class="nowplaying-container js-necessary">
+        <div class="nowplaying">
+            <div id="nowplaying-widget"></div>
+            <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+        </div>
     </div>
-</div>
+</section>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -50,13 +50,6 @@ import nowplaying from "$assets/nowplaying.html";
 
         background-color: var(--cuteblue900);
         border: 2px dashed var(--cuteblue700);
-    }
-
-    @media (prefers-color-scheme: light) {
-        .nowplaying {
-            background-color: var(--cuteblue100);
-            border-color: var(--cuteblue300);
-        }
     }
 
     #nowplaying-widget {

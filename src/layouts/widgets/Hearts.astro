@@ -10,12 +10,19 @@ const length = 4;
 ---
 
 <div class="hearts" data-radius={radius}>
-    <div class="system-heart-container">
-        <Emoji class="system-heart" e="💜" width={radius} height={radius} />
-    </div>
+    <label class="sr-only">
+        An animation of several coloured hearts slowly revolving around a giant purple heart, representing our system. The revolving hearts' colours are each
+        one of the headmates' favourite, as shown in the headmates list, and there's a heart for each one of us.
+    </label>
 
-    <div class="headmate-hearts">
-        {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+    <div aria-hidden="true">
+        <div class="system-heart-container">
+            <Emoji class="system-heart" e="💜" width={radius} height={radius} />
+        </div>
+
+        <div class="headmate-hearts">
+            {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length} delay={(idx / hearts.length) * -2 * length} />)}
+        </div>
     </div>
 </div>
 
@@ -23,17 +30,9 @@ const length = 4;
     .hearts {
         display: block;
         position: relative;
-        float: right;
         width: 192px;
         height: 192px;
-        margin: 2.35rem;
-    }
-
-    @media (max-width: 640px) {
-        .hearts {
-            margin-inline: auto;
-            float: none;
-        }
+        margin: 8px;
     }
 
     .system-heart-container {

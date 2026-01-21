@@ -1,55 +1,58 @@
 ---
 import Pfp from "$assets/profile_picture.png";
 import Picture from "$components/Picture.astro";
-
-const pfpDesc =
-    "The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes.";
 ---
 
 <figure class="pfp-container">
+    <label class="sr-only js-necessary">
+        Below is a profile picture of a mouse hopping left and right. You can interact with it to make it squeak using either a keyboard or a mouse.
+    </label>
+
     <div class="pfp">
         <div class="pfp-image-container">
             <div aria-hidden="true" class="ear-left"></div>
             <div aria-hidden="true" class="ear-right"></div>
 
-            <Picture tabindex="0" role="button" src={Pfp} class="pfp-image" alt={pfpDesc} title={pfpDesc} draggable="false" />
+            <Picture
+                src={Pfp}
+                class="pfp-image"
+                alt="The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes."
+                draggable="false"
+            />
         </div>
     </div>
 
     <figcaption class="pfp-caption">
-        <p>the mouse!!!!!! 🐁</p>
-        <p class="js-necessary"><small>(try patting it :3)</small></p>
-        <p>picture taken on <a href="https://resonite.com/">Resonite</a></p>
         <p>
-            <small> (better picture incoming, i've been ADHDing about this for months) </small>
+            it's the mouse!!!!!! 🐁
+            <br />
+            <small>(try patting it :3)</small>
+            <br />
+            picture taken on <a href="https://resonite.com/">Resonite</a>
+        </p>
+        <p>
+            <small>(better picture incoming, i've been ADHDing about this for months)</small>
         </p>
     </figcaption>
 </figure>
 
 <style>
     .pfp-container {
-        width: min-content;
+        flex: 1 2;
 
-        margin-left: 1.25rem;
-        margin-right: 2.5rem;
-        padding-top: 1.5rem;
-        padding-bottom: 3rem;
+        height: min-content;
+
+        margin-inline: 0.5rem;
+        padding-inline: 0.5rem;
+        margin-block: 0.5rem;
+        padding-block: 1.25rem;
+        border: 1px solid var(--headingColor);
 
         text-align: center;
-
-        float: left;
-    }
-
-    @media (max-width: 600px) {
-        .pfp-container {
-            margin: 0;
-            width: 100%;
-        }
     }
 
     .pfp {
         width: 230px;
-        padding-block: 1rem;
         margin-inline: auto;
 
         will-change: contents;
@@ -74,11 +77,21 @@ const pfpDesc =
 
     .pfp-caption {
         display: block;
-        width: fit-content;
+        width: 100%;
         text-wrap: wrap;
 
-        margin-top: 1.85rem;
+        padding-top: 1.5rem;
         margin-inline: auto;
+    }
+
+    @media (max-width: 440px) {
+        .pfp-image-container {
+            scale: 0.75;
+        }
+
+        .pfp-caption {
+            padding-top: 0;
+        }
     }
 
     .pfp-image {
@@ -168,8 +181,12 @@ const pfpDesc =
     });
 
     document.querySelectorAll<HTMLElement>(".pfp-image").forEach((element) => {
+        element.tabIndex = 0;
+
+        const disallowedKeys = ["Tab", "Arrow", "Escape"];
+
         element.addEventListener("keydown", (event) => {
-            if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && !event.key.includes("Tab")) {
+            if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && disallowedKeys.find((key) => event.key.includes(key)) == undefined) {
                 play();
                 event.preventDefault();
             }

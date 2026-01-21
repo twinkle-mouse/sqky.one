@@ -3,17 +3,18 @@ import RssSvg from "$assets/icons/rss.svg";
 ---
 
 <a href="/rss.xml">
-    <RssSvg width={32} height={32} class="rss-icon" role="img"><title>Subscribe to the Squeakenings (RSS)</title></RssSvg>
+    <label class="sr-only">Subscribe to the Squeakenings (RSS)</label>
+    <RssSvg width={32} height={32} class="rss-icon" role="img" />
 </a>
 
 <style>
-    .rss-icon {
-        color: rgb(255, 199, 96);
+    a {
+        height: auto;
+        display: inline-block;
+        line-height: 0;
     }
 
-    @media (prefers-color-scheme: light) {
-        .rss-icon {
-            color: rgb(233, 151, 0);
-        }
+    .rss-icon {
+        color: rgb(255, 199, 96);
     }
 </style>

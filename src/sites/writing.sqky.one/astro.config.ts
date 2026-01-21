@@ -1,5 +1,4 @@
 // @ts-check
-import mdx from "@astrojs/mdx";
 import { defineConfig } from "astro/config";
 
 import remarkSectionize from "./remark-sectionize";
@@ -10,5 +9,4 @@ export default defineConfig({
     markdown: {
         remarkPlugins: [remarkSectionize],
     },
-    integrations: [mdx({})],
 });

@@ -17,7 +17,7 @@ const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding
 const uuid = `textfile-${randomUUID()}`;
 ---
 
-<details open>
+<details>
     <summary>
         <label for={uuid}>
             <strong>{desc}</strong>
@@ -35,13 +35,16 @@ const uuid = `textfile-${randomUUID()}`;
     }
 
     details {
+        min-width: max-content;
+        width: 100%;
+
         margin-block: 1.5rem;
         margin-inline: 0.35rem;
         background-color: var(--textAreaBgColor);
     }
 
     summary {
-        display: block;
+        display: flex;
 
         padding: 0.35rem;
 
@@ -59,10 +62,13 @@ const uuid = `textfile-${randomUUID()}`;
     summary::before {
         content: "";
 
-        display: inline-block;
-        vertical-align: middle;
+        flex: 0 0;
 
+        width: min-content;
+        height: min-content;
         margin: 4px;
+
+        display: inline-block;
 
         border: 8px solid;
         border-color: transparent transparent transparent #fff;
@@ -70,12 +76,6 @@ const uuid = `textfile-${randomUUID()}`;
 
         transform-origin: center center;
         transition: transform 0.2s ease;
-    }
-
-    @media (prefers-color-scheme: light) {
-        summary::before {
-            border-color: transparent transparent transparent #000;
-        }
     }
 
     @media (prefers-reduced-motion) {
@@ -92,10 +92,15 @@ const uuid = `textfile-${randomUUID()}`;
         transform: scaleY(0.75) rotate(0deg) translateX(25%);
     }
 
-    a {
+    summary label {
+        margin-left: 0.3em;
+        margin-right: 1em;
+    }
+
+    summary a {
         display: inline-block;
-        width: fit-content;
-        float: right;
+        height: min-content;
+        margin-left: auto;
     }
 
     textarea {
@@ -107,5 +112,13 @@ const uuid = `textfile-${randomUUID()}`;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         outline: 3px solid var(--textAreaBorderColor);
+    }
+
+    summary:focus {
+        outline-color: var(--focusColor);
+    }
+
+    textarea:focus {
+        outline-color: var(--focusColor);
     }
 </style>

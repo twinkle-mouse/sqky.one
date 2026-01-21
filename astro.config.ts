@@ -7,6 +7,7 @@ export const site = process.env["SITE_CONFIG"] || Site.Main;
 
 import path from "node:path";
 
+import mdx from "@astrojs/mdx";
 import { defineConfig } from "astro/config";
 import compressor from "astro-compressor";
 import icon from "astro-icon";
@@ -55,6 +56,7 @@ export default defineConfig({
     integrations: [
         //@ts-expect-error astro config type doesn't make sense to import
         ...(config.integrations || []),
+        mdx({}),
         icon({
             iconDir: "./icons",
         }),

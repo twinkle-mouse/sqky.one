@@ -1,12 +1,11 @@
 ---
 import MainPage from "$common/MainPage.astro";
 import EmojiWrapper from "$components/EmojiWrapper.astro";
-import Article from "$layouts/Article.astro";
+import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 import AboutMe from "$layouts/sections/AboutMe.astro";
 import ColorCards from "$layouts/sections/ColorCards.astro";
 import Contacts from "$layouts/sections/Contacts.astro";
-import Facts from "$layouts/sections/Facts.astro";
 import Intro from "$layouts/sections/Intro.astro";
 import Nowplaying from "$layouts/sections/Nowplaying.astro";
 import Quotes from "$layouts/sections/Quotes.astro";
@@ -15,8 +14,12 @@ import Transcube from "$layouts/widgets/Transcube.astro";
 ---
 
 <MainPage>
+    <Fragment slot="page-title">
+        The <i>Squeaky</i> One
+    </Fragment>
+
     <Fragment slot="nav:page-links">
-        <li><a href="#intro">About Me</a></li>
+        <li><a href="#about-me">About Me</a></li>
         <li><a href="#contacts">Contacts</a></li>
         <li><a href="#quotes">Quotes</a></li>
         <li><a href="#gadgets">Gadgets</a></li>
@@ -28,37 +31,21 @@ import Transcube from "$layouts/widgets/Transcube.astro";
     </Fragment>
 
     <EmojiWrapper>
-        <Article>
-            <Fragment slot="heading">
-                The <i>Squeaky</i> One
-            </Fragment>
+        <LargeSection>
+            <Intro />
 
-            <Section>
-                <Intro />
-            </Section>
+            <AboutMe />
 
-            <Section>
-                <AboutMe />
-                <hr />
-                <Facts />
-            </Section>
+            <Contacts />
 
-            <Section>
-                <Contacts />
+            <Quotes />
+        </LargeSection>
 
-                <hr />
+        <LargeSection id="gadgets">
+            <h2 id="heading">Gadgets</h2>
 
-                <Quotes />
-            </Section>
-        </Article>
-
-        <Article heading={{ id: "gadgets" }} aria-hidden="true">
-            <Fragment slot="heading">Gadgets</Fragment>
-
-            <div class="js-inherit">
-                <Section>
-                    <ColorCards />
-                </Section>
+            <div>
+                <ColorCards />
             </div>
 
             <div class="js-inherit">
@@ -66,10 +53,13 @@ import Transcube from "$layouts/widgets/Transcube.astro";
                     <Nowplaying />
                 </Section>
             </div>
-        </Article>
+        </LargeSection>
 
-        <div class="motto-block">
-            <p class="motto">forgive don't forget</p>
+        <footer>
+            <div class="motto-container">
+                <p class="motto">forgive don't forget</p>
+            </div>
+
             <p class="text-center">
                 <small>
                     (this is a reference to
@@ -77,7 +67,13 @@ import Transcube from "$layouts/widgets/Transcube.astro";
                     them out, this line of lyrics means a lot to me ❤️‍🩹)
                 </small>
             </p>
+
             <style>
+                .motto-container {
+                    padding-inline: 1rem;
+                    overflow: scroll;
+                }
+
                 .motto {
                     --stroke-color: var(--slate600);
                     --glow-color: #ffffffaa;
@@ -130,11 +126,13 @@ import Transcube from "$layouts/widgets/Transcube.astro";
                 }
 
                 .motto::before {
-                    content: "« ";
+                    content: "«" / "";
+                    margin-inline: 0.4em;
                 }
 
                 .motto::after {
-                    content: "  »";
+                    content: "»" / "";
+                    margin-inline: 0.4em;
                 }
 
                 @media (max-width: 620px) {
@@ -167,23 +165,17 @@ import Transcube from "$layouts/widgets/Transcube.astro";
                     }
                 }
             </style>
-        </div>
-        <style>
-            .motto-block {
-                padding-inline: 1rem;
-            }
-        </style>
 
-        <hr />
+            <hr />
 
-        <footer>
             <div class="credits">
                 <p>This site uses the <a href="https://micenest.xyz/nro/">noseyrodent</a> typeface!</p>
                 <p>This site uses the real passion of a mouse, thank you so much for visiting 💖.</p>
             </div>
+
             <style>
                 .credits {
-                    font-size: 0.65rem;
+                    font-size: 0.8rem;
                     padding-inline: 0.7rem;
                     color: var(--smallColor);
                 }

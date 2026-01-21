@@ -1,13 +1,21 @@
 ---
-import SiteNavControls from "$layouts/widgets/SiteNavControls.astro";
-
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
-    pageLinks = await Astro.slots.render("nav:page-links");
+    pageLinks = (await Astro.slots.render("nav:page-links")).trim();
 }
 ---
 
 <nav>
+    <div>
+        <p>This Page</p>
+        <ul>
+            <li>
+                <a href="#maincontent">Skip to content</a>
+            </li>
+            {pageLinks && <Fragment set:html={pageLinks} />}
+        </ul>
+    </div>
+
     <div class="sitemap">
         <p>Sitemap</p>
         <ul>
@@ -18,19 +26,6 @@ if (Astro.slots.has("nav:page-links")) {
             <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
         </ul>
     </div>
-
-    <SiteNavControls />
-
-    {
-        pageLinks && (
-            <div>
-                <p>This Page</p>
-                <ul>
-                    <Fragment set:html={pageLinks} />
-                </ul>
-            </div>
-        )
-    }
 
     <slot name="nav:other-categories" />
 
@@ -98,7 +93,8 @@ if (Astro.slots.has("nav:page-links")) {
     }
 
     nav > :global(div) > :global(ul) > :global(li) > :global(a::before) {
-        content: "\> ";
+        content: "\>" / "";
+        margin-right: 0.25em;
     }
 
     nav > :global(div) > :global(ul) > :global(li) > :global(a) {
@@ -118,7 +114,8 @@ if (Astro.slots.has("nav:page-links")) {
     }
 
     nav > div.sitemap > :global(ul) > :global(li) > :global(a::before) {
-        content: "@ ";
+        content: "@" / "";
+        margin-right: 0.25em;
     }
 
     nav > div.sitemap > :global(ul) > :global(li) > :global(a) {

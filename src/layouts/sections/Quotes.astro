@@ -1,12 +1,11 @@
-<a href="#quotes" id="quotes">
-    <h2>words of honour</h2>
-</a>
-<p>here u can find some stuff people have said about me :3</p>
-<blockquote>not much is known about this creature, only a collection of names and some nesting behaviours…</blockquote>
-<cite>anonymous deer</cite>
-<blockquote>evil therapist</blockquote>
-<cite>anonymous puppy</cite>
-<blockquote>Stella you're an angel mouse but not like the Catholic kind</blockquote>
-<cite>anonymous puppy</cite>
-<blockquote>technological creature, yet not made of steel…</blockquote>
-<cite>anonymous kitty</cite>
+---
+import Section from "$layouts/Section.astro";
+
+import QuotesContent from "./Quotes.mdx";
+---
+
+<Section id="quotes">
+    <div class="markdown">
+        <QuotesContent />
+    </div>
+</Section>

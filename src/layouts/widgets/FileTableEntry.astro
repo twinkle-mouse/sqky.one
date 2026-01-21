@@ -14,7 +14,7 @@ if (!url.pathname.endsWith("/")) {
     url.pathname += "/";
 }
 
-function formatBytes(bytes: number, precision: number = 4) {
+function formatBytes(bytes: number, precision: number = 3) {
     const k = 1000;
     const units = [" B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     if (bytes < k) return `${bytes.toString().padStart(precision)} ${units[0]}`;
@@ -48,7 +48,13 @@ if (entry.isFile) {
         >
     </td>
     <td class="mono">{formatBytes(entry.size)}</td>
-    <td class="mono">{entry.mtime.toISOString()}</td>
+    <td class="mono"
+        ><time datetime={entry.mtime.toISOString()}>
+            {
+                `${entry.mtime.getFullYear()}/${(entry.mtime.getMonth() + 1).toString().padStart(2, "0")}/${entry.mtime.getDate().toString().padStart(2, "0")} ${entry.mtime.getHours().toString().padStart(2, "0")}:${entry.mtime.getMinutes().toString().padStart(2, "0")}`
+            }</time
+        ></td
+    >
 </tr>
 
 <style>

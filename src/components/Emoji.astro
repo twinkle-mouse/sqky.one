@@ -1,6 +1,4 @@
 ---
-import { randomUUID } from "node:crypto";
-
 import type { HTMLAttributes } from "astro/types";
 import { Icon as AstroIcon } from "astro-icon/components";
 
@@ -10,7 +8,7 @@ export type Props = HTMLAttributes<"span"> & {
     height?: string | number | undefined;
 };
 
-const { e, width, height, class: cls, ...props } = Astro.props;
+const { e, width, height, "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
 
 // this is the most evil code i could've ever done
 export function getEmojiName(e: string) {
@@ -39,12 +37,18 @@ export function getEmojiName(e: string) {
 }
 
 const name = getEmojiName(e);
-const uuid = `emoji-${randomUUID()}`;
 ---
 
-<span {...props} class:list={["emoji", cls]}>
-    <span id={uuid} class="emoji-text">{e}</span>
-    <AstroIcon role="img" aria-labelledby={uuid} title={e} name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} />
+{
+    ariaHidden == "false" && (
+        <label data-emoji="true" class="sr-only">
+            {e} emoji
+        </label>
+    )
+}
+<span {...props} aria-hidden="true" class:list={["emoji", cls]}>
+    <span data-emoji="true">{e}</span>
+    <AstroIcon aria-hidden="true" title={e} name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} />
 </span>
 
 <style>
@@ -61,7 +65,7 @@ const uuid = `emoji-${randomUUID()}`;
         vertical-align: text-bottom;
     }
 
-    .emoji-text {
+    .emoji span {
         position: absolute;
         opacity: 0;
         font-size: 1px;
