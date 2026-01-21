@@ -39,14 +39,7 @@ export function getEmojiName(e: string) {
 const name = getEmojiName(e);
 ---
 
-{
-    ariaHidden == "false" && (
-        <label data-emoji="true" class="sr-only">
-            {e} emoji
-        </label>
-    )
-}
-<span {...props} aria-hidden="true" class:list={["emoji", cls]}>
+<span {...props} aria-hidden={ariaHidden ?? "true"} class:list={["emoji", cls]}>
     <span data-emoji="true">{e}</span>
     <AstroIcon aria-hidden="true" title={e} name={name} width={width ?? "1.25em"} height={height ?? "1.25em"} />
 </span>
