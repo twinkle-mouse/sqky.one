@@ -6,131 +6,62 @@ if (Astro.slots.has("nav:page-links")) {
 ---
 
 <nav>
-    <div>
-        <p>This Page</p>
-        <ul>
-            <li>
-                <a href="#maincontent">Skip to content</a>
-            </li>
-            {pageLinks && <Fragment set:html={pageLinks} />}
-        </ul>
+    <div id="nav-items">
+        <div>
+            <p>This Page</p>
+            <ul>
+                <li>
+                    <a href="#maincontent">Skip to content</a>
+                </li>
+                {pageLinks && <Fragment set:html={pageLinks} />}
+            </ul>
+        </div>
+
+        <div class="sitemap">
+            <p>Sitemap</p>
+            <ul>
+                <li><a href="https://sqky.one/#">Home</a></li>
+                <li><a href="https://writing.sqky.one/#">Writings</a></li>
+                <li><a href="https://the.sqky.one/#">Files Archive</a></li>
+                <li><a href="https://status.sqky.one/">Uptime Status</a></li>
+                <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
+            </ul>
+        </div>
+
+        <slot name="nav:other-categories" />
+
+        <slot name="nav:footer" />
     </div>
-
-    <div class="sitemap">
-        <p>Sitemap</p>
-        <ul>
-            <li><a href="https://sqky.one/#">Home</a></li>
-            <li><a href="https://writing.sqky.one/#">Writings</a></li>
-            <li><a href="https://the.sqky.one/#">Files Archive</a></li>
-            <li><a href="https://status.sqky.one/">Uptime Status</a></li>
-            <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
-        </ul>
-    </div>
-
-    <slot name="nav:other-categories" />
-
-    <slot name="nav:footer" />
 </nav>
 
 <style>
     nav {
-        display: flex;
-
         overflow: scroll;
 
         top: 0;
         left: 0;
 
-        flex: fit-content;
-        flex-wrap: nowrap;
-
-        background-color: var(--navBgColor);
-
         backdrop-filter: blur(2px);
         box-shadow: var(--cardBoxShadow);
     }
 
-    nav > :global(div) > :global(ul),
-    nav > :global(div) > :global(ul) > :global(li) {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    nav > :global(div) > :global(p),
-    nav > :global(div) > :global(ul) > :global(li) > :global(a) {
-        display: block;
-
-        width: max-content;
-        height: min-content;
-
-        text-wrap: stable;
-    }
-
-    nav > :global(div) > :global(p) {
-        width: 100%;
-
-        margin: 0;
-        padding-block: 0.3rem;
-
-        border-bottom: 2px solid var(--navTitleBorderColor);
-        background-color: var(--navTitleBgColor);
-
-        text-align: center;
-    }
-
-    nav > :global(div) > :global(ul) {
+    #nav-items {
         display: flex;
 
-        width: 100%;
+        width: fit-content;
+        height: max-content;
+        min-height: 100%;
 
-        padding: 1rem;
+        flex-wrap: nowrap;
 
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: start;
-        gap: 0.5rem;
-    }
-
-    nav > :global(div) > :global(ul) > :global(li) > :global(a::before) {
-        content: "\>" / "";
-        margin-right: 0.25em;
-    }
-
-    nav > :global(div) > :global(ul) > :global(li) > :global(a) {
-        padding: 0.15rem;
-
-        border: 1px solid var(--navLinkBorderColor);
-        background-color: var(--navLinkBgColor);
-    }
-
-    nav > :global(div) > :global(ul) > :global(li) > :global(a:hover),
-    nav > :global(div) > :global(ul) > :global(li) > :global(a:focus) {
-        background-color: var(--navLinkBgColorActive);
-    }
-
-    nav > div.sitemap {
-        background-color: var(--sitemapBgColor);
-    }
-
-    nav > div.sitemap > :global(ul) > :global(li) > :global(a::before) {
-        content: "@" / "";
-        margin-right: 0.25em;
-    }
-
-    nav > div.sitemap > :global(ul) > :global(li) > :global(a) {
-        border: 1px solid var(--sitemapLinkBorderColor);
-        background-color: var(--sitemapLinkBgColor);
-    }
-
-    nav > div.sitemap > :global(ul) > :global(li) > :global(a:hover),
-    nav > div.sitemap > :global(ul) > :global(li) > :global(a:focus) {
-        background-color: var(--sitemapLinkBgColorActive);
+        gap: 2px;
+        background-color: var(--navTitleBorderColor);
     }
 
     nav {
         position: sticky;
 
+        /* navbar sidebar size */
         margin-right: 1.75rem;
         padding: 0;
 
@@ -143,26 +74,21 @@ if (Astro.slots.has("nav:page-links")) {
         border-block: none;
     }
 
-    nav {
+    #nav-items {
         flex-direction: column;
-    }
-
-    nav > :global(div) {
-        border: none;
-        border-top: 2px solid var(--navTitleBorderColor);
     }
 
     @media (max-width: 1200px) {
         nav {
             position: static;
 
-            margin-inline: 0;
+            margin: 0;
             padding: 0;
 
             min-width: unset;
             max-width: unset;
             width: 100%;
-            height: 160px;
+            height: 220px;
 
             border: none;
             border: 3px solid var(--navBorderColor);
@@ -171,21 +97,102 @@ if (Astro.slots.has("nav:page-links")) {
             border-top-right-radius: 0;
         }
 
-        nav {
+        #nav-items {
             flex-direction: row;
         }
 
-        nav > :global(div) {
+        #nav-items > :global(div) {
             width: 100%;
             height: auto;
-
-            border: none;
-            border-left: 2px solid var(--navTitleBorderColor);
         }
     }
 
-    nav > :global(div:first-of-type) {
-        border-top: none;
-        border-left: none;
+    #nav-items > :global(div:last-of-type) {
+        flex-grow: 1;
+    }
+
+    /* reset styles */
+    #nav-items :global(ul),
+    #nav-items :global(li) {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    #nav-items > :global(div) > :global(p),
+    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a) {
+        display: block;
+
+        width: max-content;
+        height: min-content;
+    }
+    /* reset styles */
+
+    #nav-items > :global(div) > :global(p) {
+        width: 100%;
+
+        margin: 0;
+        padding-block: 0.3rem;
+
+        border-bottom: 2px solid var(--navTitleBorderColor);
+        background-color: var(--navTitleBgColor);
+
+        text-align: center;
+    }
+
+    #nav-items > :global(div) > :global(ul) {
+        display: flex;
+
+        width: 100%;
+
+        padding: 1rem;
+
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: start;
+    }
+
+    #nav-items > :global(div) {
+        background-color: var(--navBgColor);
+    }
+
+    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a) {
+        padding: 0.15rem;
+
+        border-width: 1px;
+        border-style: solid;
+
+        border-color: var(--navLinkBorderColor);
+        background-color: var(--navLinkBgColor);
+    }
+
+    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a::before) {
+        margin-right: 0.25em;
+
+        content: "\>" / "";
+    }
+
+    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a:hover),
+    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a:focus) {
+        background-color: var(--navLinkBgColorActive);
+    }
+
+    #nav-items > div.sitemap {
+        background-color: var(--sitemapBgColor);
+    }
+
+    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a) {
+        border-color: var(--sitemapLinkBorderColor);
+        background-color: var(--sitemapLinkBgColor);
+    }
+
+    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a::before) {
+        content: "@" / "";
+    }
+
+    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:hover),
+    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:focus) {
+        background-color: var(--sitemapLinkBgColorActive);
     }
 </style>

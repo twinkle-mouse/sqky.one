@@ -152,48 +152,56 @@ const fullUrl = `/${urlPaths.map(decodeURI).join("/")}/`.replaceAll("//", "/");
         <label class="sr-only">Visit the links in the table header to change sorting type and direction.</label>
 
         <Section id="files-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <a href={linkUrl(SortMethod.Name)}>Name</a>
-                            <small>
-                                {sortBy == SortMethod.Name && <span aria-hidden="true">{sortSymbol}</span>}
-                            </small>
-                        </th>
-                        <th>
-                            <a href={linkUrl(SortMethod.Size)}>Size</a>
-                            <small>
-                                {sortBy == SortMethod.Size && <span aria-hidden="true">{sortSymbol}</span>}
-                            </small>
-                        </th>
-                        <th>
-                            <a href={linkUrl(SortMethod.ModifiedDate)}>Modified Date</a>
-                            <small>
-                                {sortBy == SortMethod.ModifiedDate && <span aria-hidden="true">{sortSymbol}</span>}
-                            </small>
-                        </th>
-                    </tr>
-                    <tbody>
-                        {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
-                        {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
-                    </tbody>
-                </thead>
+            <div class="files-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href={linkUrl(SortMethod.Name)}>Name</a>
+                                <small>
+                                    {sortBy == SortMethod.Name && <span aria-hidden="true">{sortSymbol}</span>}
+                                </small>
+                            </th>
+                            <th>
+                                <a href={linkUrl(SortMethod.Size)}>Size</a>
+                                <small>
+                                    {sortBy == SortMethod.Size && <span aria-hidden="true">{sortSymbol}</span>}
+                                </small>
+                            </th>
+                            <th>
+                                <a href={linkUrl(SortMethod.ModifiedDate)}>Modified Date</a>
+                                <small>
+                                    {sortBy == SortMethod.ModifiedDate && <span aria-hidden="true">{sortSymbol}</span>}
+                                </small>
+                            </th>
+                        </tr>
+                        <tbody>
+                            {dirEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                            {fileEntries.map((entry) => <FileTableEntry entry={entry} />)}
+                        </tbody>
+                    </thead>
 
-                <style>
-                    table :global(th),
-                    table :global(td) {
-                        text-align: end;
-                    }
+                    <style>
+                        table :global(th),
+                        table :global(td) {
+                            text-align: end;
+                        }
 
-                    table :global(th:first-of-type),
-                    table :global(td:first-of-type) {
-                        width: 100%;
-                        padding-right: 6em;
-                        text-align: start;
-                    }
-                </style>
-            </table>
+                        table :global(th:first-of-type),
+                        table :global(td:first-of-type) {
+                            width: 100%;
+                            padding-right: 6em;
+                            text-align: start;
+                        }
+                    </style>
+                </table>
+            </div>
         </Section>
+
+        <style>
+            .files-table {
+                overflow-x: scroll;
+            }
+        </style>
     </LargeSection>
 </FilesArchivePage>

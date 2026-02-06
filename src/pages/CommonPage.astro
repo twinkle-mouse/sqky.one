@@ -137,27 +137,32 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         width: 100%;
 
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
 
         padding-inline: calc(max(14dvw - 800px * 0.1, 0px));
         padding-inline: calc(160 * max(100dvw - 800px, 0px) / 800);
+    }
+
+    main {
+        padding-block: 1rem;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    main {
+        /* navbar sidebar size */
+        width: calc(100% - (320px + 1.75rem));
     }
 
     @media (max-width: 1200px) {
         .site {
             flex-direction: column;
         }
-    }
 
-    main {
-        width: 100%;
-
-        padding-block: 1rem;
-
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
+        main {
+            width: 100%;
+        }
     }
 
     #popout-fakeroot {
@@ -256,8 +261,10 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
     blockquote,
     li,
     th,
-    td {
-        text-wrap: stable;
+    td,
+    p,
+    a {
+        text-wrap: wrap stable;
     }
 
     h1,
@@ -550,7 +557,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
     table {
         width: 100%;
 
-        overflow: scroll;
         white-space: nowrap;
 
         margin-block: 0.25rem;
