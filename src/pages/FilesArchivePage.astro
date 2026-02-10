@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 
 import Page, { type Props as PageProps } from "$common/CommonPage.astro";
+import Emoji from "$components/Emoji.astro";
 import Navigation from "$layouts/widgets/Navigation.astro";
 
 type Props = Omit<PageProps, "siteName" | "desc">;
@@ -14,7 +15,17 @@ type Props = Omit<PageProps, "siteName" | "desc">;
 
     <Navigation slot="nav">
         <slot name="nav:page-links" slot="nav:page-links" />
-        <slot name="nav:other-categories" slot="nav:other-categories" />
+
+        <Fragment slot="nav:other-categories">
+            <div>
+                <p>Navigation</p>
+                <ul>
+                    <li><a href="/">Back to root <Emoji e="⤴️" /> </a></li>
+                    <li><a href="../">Back up <Emoji e="⬆️" /> </a></li>
+                </ul>
+            </div>
+            <slot name="nav:other-categories" />
+        </Fragment>
         <slot name="nav:footer" slot="nav:footer" />
     </Navigation>
 

@@ -5,7 +5,6 @@ import path from "node:path";
 import { ROOT_DIR } from "astro:env/server";
 
 import FilesArchivePage from "$common/FilesArchivePage.astro";
-import Emoji from "$components/Emoji.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 import FileTableEntry from "$layouts/widgets/FileTableEntry.astro";
@@ -109,16 +108,6 @@ const fullUrl = `/${urlPaths.map(decodeURI).join("/")}/`.replaceAll("//", "/");
         <li>
             <a href="#files-list">Skip to files list</a>
         </li>
-    </Fragment>
-
-    <Fragment slot="nav:other-categories">
-        <div>
-            <p>Navigation</p>
-            <ul>
-                <li><a href="/">Back to root <Emoji e="⤴️" /> </a></li>
-                <li><a href="../">Back up <Emoji e="⬆️" /> </a></li>
-            </ul>
-        </div>
     </Fragment>
 
     <LargeSection>
