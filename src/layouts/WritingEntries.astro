@@ -16,7 +16,7 @@ type Props = {
                 <article class="entry-card">
                     <div class="entry-header">
                         <h3 class="entry-title">
-                            <a href={`${entry.collection}/${entry.id}`}>{entry.data.title}</a>
+                            <a href={`/${entry.collection}/${entry.id}`}>{entry.data.title}</a>
                         </h3>
 
                         <time class="entry-date mono" datetime={entry.data.date.toISOString()}>
