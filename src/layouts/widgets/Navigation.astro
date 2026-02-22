@@ -31,6 +31,9 @@ if (Astro.slots.has("nav:page-links")) {
         <slot name="nav:other-categories" />
 
         <slot name="nav:footer" />
+
+        <!-- to fill up space -->
+        <div class="filler"></div>
     </div>
 </nav>
 
@@ -79,6 +82,11 @@ if (Astro.slots.has("nav:page-links")) {
         flex-direction: column;
     }
 
+    #nav-items .filler {
+        flex: 1 2;
+        margin-top: -2px;
+    }
+
     @media (max-width: 1200px) {
         nav {
             position: static;
@@ -106,10 +114,10 @@ if (Astro.slots.has("nav:page-links")) {
             width: 100%;
             height: auto;
         }
-    }
 
-    #nav-items > :global(div:last-of-type) {
-        flex-grow: 1;
+        #nav-items .filler {
+            display: none;
+        }
     }
 
     /* reset styles */
