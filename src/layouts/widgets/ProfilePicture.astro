@@ -25,12 +25,17 @@ import Picture from "$components/Picture.astro";
     <figcaption class="pfp-caption">
         <p>
             it's the mouse!!!!!! 🐁
-            <br />
-            <small class="js-necessary">(try patting it :3)</small>
-            <br />
-            picture taken on <a href="https://resonite.com/">Resonite</a>
+            <small class="js-necessary">
+                <br />
+
+                (try patting it :3)
+            </small>
         </p>
+
         <p>
+            picture taken on <a href="https://resonite.com/">Resonite</a>
+            <br />
+
             <small>(better picture incoming, i've been <abbr>ADHD</abbr>ing about this for months)</small>
         </p>
     </figcaption>
@@ -42,17 +47,18 @@ import Picture from "$components/Picture.astro";
 
         height: min-content;
 
-        margin-inline: 0.5rem;
-        padding-inline: 0.5rem;
-        margin-block: 0.5rem;
-        padding-block: 1.25rem;
+        margin: 0.5rem;
+        padding: 0.75rem;
         border: 1px solid var(--headingColor);
 
         text-align: center;
     }
 
     .pfp {
-        width: 230px;
+        width: 250px;
+        padding: 0.5rem;
+        padding-top: 1.25rem;
+
         margin-inline: auto;
 
         will-change: contents;
@@ -61,7 +67,7 @@ import Picture from "$components/Picture.astro";
     .pfp-image-container {
         position: relative;
 
-        width: 160px;
+        width: 150px;
         height: auto;
 
         margin-inline: auto;
@@ -80,13 +86,14 @@ import Picture from "$components/Picture.astro";
         width: 100%;
         text-wrap: wrap;
 
-        padding-top: 1.5rem;
+        padding-top: 0.8rem;
         margin-inline: auto;
     }
 
     @media (max-width: 440px) {
-        .pfp-image-container {
-            scale: 0.75;
+        .pfp {
+            scale: 0.8;
+            padding: 0;
         }
 
         .pfp-caption {
