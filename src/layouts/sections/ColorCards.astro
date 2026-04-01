@@ -343,11 +343,13 @@ import { colors } from "$lib/colors";
             }
         }
     });
+
     document.addEventListener("scroll", () => {
         for (const pointerId of stateMap.keys()) {
             updateDraggingElementPos(pointerId);
         }
     });
+
     document.querySelectorAll<HTMLElement>(".color-cards-container").forEach((container) => {
         container.addEventListener("scroll", () => {
             for (const pointerId of stateMap.keys()) {
