@@ -250,6 +250,16 @@ export const semanticUtilsLight = {
 export const semanticColorsLight = semanticColorsDark;
 export const semanticUtilsLight = semanticUtilsDark;
 
+export const semanticColorsDarkLavenderOverride = {
+    bgColor: "#101020",
+    textColor: "#fff2f2",
+    headingColor: cuteblue100,
+    sectionBgColor: "#201c24",
+    sectionBorderColor: "#1b112b",
+};
+
+export const semanticColorsLightLavenderOverride = semanticColorsDarkLavenderOverride;
+
 export function colorsToCssStyle(colors: [string, string][]) {
     return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
 }

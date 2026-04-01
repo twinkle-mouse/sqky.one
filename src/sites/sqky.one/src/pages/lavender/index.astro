@@ -1,0 +1,173 @@
+---
+import EmojiWrapper from "$src/components/EmojiWrapper.astro";
+import Section from "$src/layouts/Section.astro";
+import { colorsToCssStyle, semanticColorsDarkLavenderOverride, semanticColorsLightLavenderOverride } from "$src/lib/colors";
+import MainPage from "$src/pages/MainPage.astro";
+
+const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDarkLavenderOverride));
+const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLightLavenderOverride));
+---
+
+<MainPage pageName="Lavender Sparkles">
+    <Fragment slot="head-tags">
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticColorsDarkStyle}
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticColorsLightStyle}
+                }
+            }`}
+        ></style>
+    </Fragment>
+
+    <style is:global>
+        #maincontent {
+            --sans: sans-serif;
+            --serif: serif;
+            --mono: monospace;
+
+            font-family: var(--sans);
+        }
+    </style>
+
+    <Fragment slot="page-title">Lavender Sparkles</Fragment>
+
+    <EmojiWrapper>
+        <Section>
+            <h2>Hello</h2>
+            <p>
+                As you might have noticed, this page has different colours to that of Stella's.
+                <br />
+                You may chalk it up to different colour preferences, if you were expecting a reason behind it.
+                <br />
+                The navigation bar's colours remain as-is for consistency reasons.
+            </p>
+
+            <p>
+                My name is <i>Lavender Sparkles</i>, as you can tell from the title of this page.
+                <br />
+                I am not one for introductions, nor one for much talking, but I may try either way.
+                <br />
+                I am a <i>mouse</i>, and I used to be a bat—largely in defiance of the cutesy aesthetics of Stella's.
+                <br />
+                I tend to prefer speaking formally, and I find myself drawing comfort from phrases, 'fancy' vocabulary, and communicating in a plain-yet-precise manner.
+            </p>
+
+            <p>
+                Welcome to my corner of this website.
+                <br />
+                Don't overstay your welcome, though, and stay strong out there.
+
+                <blockquote>
+                    <p>As you mature, your audience would to the same.</p>
+                </blockquote>
+            </p>
+        </Section>
+
+        <Section>
+            <h2>Who are you?</h2>
+
+            <p>
+                I'm Lavender, I live with Stella and a few others in the same head.
+                <br />
+                If you don't know what that means, this page is not for you. Go back to Stella's.
+            </p>
+
+            <p>
+                Alright? Good, all clear.
+                <br />
+                I'm a trans woman. I use she/they pronouns. I'm also a mouse in the <i>therian</i> sense.
+                <br />
+                I am chronologically older than everyone here. I am believed to be the first individual here. I retain most of our earliest memories. I contain most
+                of our traumas.
+                <br />
+                Back when Stella decided it was a mouse, it asked me what I am. I said to it: "I don't know what I am but I am everything you're not, and I guess
+                a bat is quite different from what you are. You're cutesy and charming and annoying, and I'm harsh, cold-blooded, and impatient."
+                <br />
+                And thus, I decided then-and-there that I was a bat.
+                <br />
+                I am apparently not a bat. I suppose I am embarrassed by this.
+                <br />
+                After some grueling identity questioning, I've come to the conclusion that I'm a mouse.
+            </p>
+
+            <p>Don't expect me to squeak, though.</p>
+
+            <p>
+                And, to speak of trauma...
+                <br />
+                I am deeply traumatised. I am not just incapable of communicating in a manner soft and kind, I am <i>unwilling</i> to.
+                <br />
+                We may still be good friends, but please bear in mind that I'm not going to change the way I talk. I do, however, maintain the necessary amount of
+                diligence to respect other people, as I expect from them too.
+                <br />
+                I also have anger issues, of the shouting kind. I am working on this.
+            </p>
+
+            <p>
+                I've been bullied a lot at school and online, so please don't come to me about your life tips. I do not need them, I do not seek them, I do not
+                want them.
+                <br />
+                I've been forced to grow up a lot in life. Learned to never waste a thing when I was 12, dropped out of highschool at 16, got a job at 18 years old,
+                that type of stuff.
+            </p>
+
+            <p>
+                I would not call myself 'broken', but I am deeply troubled by these struggles in my past and my present, so please be patient with me. Kay?
+                <br />
+                Kay.
+            </p>
+        </Section>
+
+        <Section>
+            <h2>What do you do?</h2>
+
+            <p>
+                In my free time, I like to draw. I also like playing videogames that challenge my mechanics, like Dead Cells or Hollow Knight.
+                <br />
+                I've yet to try Dark Souls :)
+                <br />
+                I also like being strategic. I like card games and board games, though I rarely get to play them.
+                <br />
+                I really like <i>Noita</i> as well.
+            </p>
+
+            <p>
+                Outside of entertainment, I enjoy doing chores, and I really like cooking. Especially stir-fry.
+                <br />
+                I also tend to be the "chore-doer" of the system... And I also tend to be the "serious" guy.
+                <br />
+                Oh, and, we work in software.
+            </p>
+
+            <p>
+                In the past, I used to really enjoy translating songs from English to Mandarin, particularly <i>My Little Pony</i> fan songs.
+                <br />
+                I've stopped doing it though, as it is a relatively niche field of work for far too much effort.
+                <br />
+                I have complicated thoughts for the pony fandom... Not the topic for this page, though.
+            </p>
+
+            <p>
+                Oh, and, I'd like to try doing some handiwork, though I have no knowledge of resources and no prior experience, and no space for the more
+                complicated or heavy-duty stuff.
+            </p>
+        </Section>
+
+        <Section>
+            <h2>Where can I talk to you?</h2>
+
+            <p>My Email address is <code>lavender at mouse dot lgbt</code>.</p>
+            <p>My Discord is <code>thorny.lav</code></p>
+            <p>Or, you <i>could</i> just talk to Stella's account instead. Just be sure to say you're seeking to message me in specific.</p>
+        </Section>
+    </EmojiWrapper>
+</MainPage>
