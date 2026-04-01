@@ -10,87 +10,90 @@ const size = 96;
     <p>Trans Cube</p>
 
     <label class="sr-only">A 3 dimensional cube with the transgender flag on every side, infinitely rotating in a symmetrical manner.</label>
-    <div role="img" class="transcube">
-        <div class="anim" style="animation: 4s linear infinite rotate; transform: rotate3d(1, 0, 0, 45deg)">
-            <div class="anim" style="animation: 6s linear infinite rotate; transform: rotate3d(0, 1, 0, 90deg)">
-                <div class="anim" style="animation: 8s linear infinite rotate; transform: rotate3d(0, 0, 1, 135deg)">
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
-                    />
 
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
-                    />
+    <div class="transcube-box">
+        <div role="img" class="transcube">
+            <div class="anim" style="animation: 4s linear infinite rotate; transform: rotate3d(1, 0, 0, 45deg)">
+                <div class="anim" style="animation: 6s linear infinite rotate; transform: rotate3d(0, 1, 0, 90deg)">
+                    <div class="anim" style="animation: 8s linear infinite rotate; transform: rotate3d(0, 0, 1, 135deg)">
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateZ(90deg) translateZ(calc(var(--s) / 2));`
+                        />
 
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
-                    />
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateZ(90deg) rotateY(180deg) translateZ(calc(var(--s) / 2));`
+                        />
 
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
-                    />
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));`
+                        />
 
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
-                    />
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateY(90deg) translateZ(calc(var(--s) / 2));`
+                        />
 
-                    <Image
-                        alt=""
-                        src={transflag}
-                        width={size}
-                        height={size}
-                        format="png"
-                        quality="max"
-                        class="face"
-                        draggable="false"
-                        loading="eager"
-                        style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
-                    />
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateX(90deg) translateZ(calc(var(--s) / 2));`
+                        />
+
+                        <Image
+                            alt=""
+                            src={transflag}
+                            width={size}
+                            height={size}
+                            format="png"
+                            quality="max"
+                            class="face"
+                            draggable="false"
+                            loading="eager"
+                            style=`transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));`
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,8 +103,20 @@ const size = 96;
 <style>
     @media (prefers-reduced-motion) {
         .transcube-container {
-            display: none;
+            display: none !important;
         }
+    }
+
+    .transcube-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: auto;
+
+        margin-inline: auto;
+
+        flex: 1 1;
     }
 
     .transcube {
@@ -111,10 +126,9 @@ const size = 96;
 
         min-width: calc(var(--s) * 2);
         min-height: calc(var(--s) * 2);
-        height: auto;
 
+        margin-inline: 0.5rem;
         margin-block: 1.5em;
-        margin-inline: auto;
 
         user-select: none;
 
