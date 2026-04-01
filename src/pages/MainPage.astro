@@ -6,6 +6,8 @@ type Props = Omit<PageProps, "siteName" | "desc">;
 ---
 
 <Page {...Astro.props} siteName="squeaky one" desc="the mouse is squeaking at you, would you accept its request?,">
+    <slot slot="head-tags" name="head-tags" />
+
     <Navigation slot="nav">
         <slot name="nav:page-links" slot="nav:page-links" />
         <slot name="nav:other-categories" slot="nav:other-categories" />
