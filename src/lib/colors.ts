@@ -1,3 +1,5 @@
+import Color from "colorjs.io";
+
 export const babypink100 = "#ffe4f7ff";
 export const babypink200 = "#ffd1f1ff";
 export const babypink300 = "#fabee9ff";
@@ -247,3 +249,11 @@ export const semanticUtilsLight = {
 
 export const semanticColorsLight = semanticColorsDark;
 export const semanticUtilsLight = semanticUtilsDark;
+
+export function colorsToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
+}
+
+export function stylesToCssStyle(colors: [string, string][]) {
+    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
+}
