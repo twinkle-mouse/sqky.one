@@ -4,10 +4,9 @@ import "$assets/anims.css";
 
 import type { HTMLAttributes } from "astro/types";
 import { Font } from "astro:assets";
-import Color from "colorjs.io";
 
 import Noscript from "$assets/noscript.html";
-import { colors, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight } from "$lib/colors";
+import { colors, colorsToCssStyle, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight, stylesToCssStyle } from "$lib/colors";
 
 export type Props = HTMLAttributes<"main"> & {
     siteName: string;
@@ -26,14 +25,6 @@ function getTitle() {
 }
 
 const title = getTitle();
-
-function colorsToCssStyle(colors: [string, string][]) {
-    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
-}
-
-function stylesToCssStyle(colors: [string, string][]) {
-    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
-}
 
 const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
 const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
@@ -74,8 +65,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         <Font preload cssVariable="--font-noseyrodent" />
         <Font preload cssVariable="--font-besley" />
         <Font preload cssVariable="--font-iosevka-curly" />
-
-        <slot name="head-tags" />
 
         <style is:raw set:text={`:root{${colorsStyle}}`}></style>
 
