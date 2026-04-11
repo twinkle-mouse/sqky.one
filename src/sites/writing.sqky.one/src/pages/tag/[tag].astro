@@ -1,9 +1,9 @@
 ---
-import WritingsPage from "$common/WritingsPage.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import WritingEntries from "$layouts/WritingEntries.astro";
 
+import WritingEntries from "../../components/WritingEntries.astro";
+import WritingsPage from "../../layouts/WritingsPage.astro";
 import { getWritingEntries } from "../index.astro";
 
 export async function getStaticPaths() {

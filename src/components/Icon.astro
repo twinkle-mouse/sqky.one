@@ -3,17 +3,17 @@ import type { HTMLAttributes } from "astro/types";
 
 export type Props = HTMLAttributes<"img">;
 
-const { alt, title, ...props } = Astro.props;
+const { alt, ...props } = Astro.props;
 ---
 
-<img {...props} alt={alt ?? title} title={title ?? alt} loading="eager" />
+<img {...props} alt={alt} loading="eager" />
 
 <style>
     img {
         color: transparent;
         display: inline-block;
-        width: 1.25em;
-        height: 1.25em;
+        width: 1.2em;
+        height: 1.2em;
         vertical-align: text-bottom;
     }
 </style>

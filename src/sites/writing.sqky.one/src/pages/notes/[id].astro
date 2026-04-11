@@ -1,22 +1,18 @@
 ---
 import { getEntry, render } from "astro:content";
 
-import Section from "$layouts/Section.astro";
-
-import { defaultDescription } from "../../components/WritingDescription.astro";
-import WritingDetails from "../../components/WritingDetails.astro";
 import WritingsContent from "../../layouts/WritingsContent.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
-import { getWritingEntries } from "../index.astro";
+import { getNotesEntries } from "../index.astro";
 
 export async function getStaticPaths() {
-    return (await getWritingEntries()).map((entry) => {
+    return (await getNotesEntries()).map((entry) => {
         return { params: { id: entry.id } };
     });
 }
 
 const { id } = Astro.params;
-const entry = await getEntry("writings", id);
+const entry = await getEntry("notes", id);
 if (entry === undefined) {
     return Astro.redirect("/404");
 }
@@ -24,7 +20,7 @@ if (entry === undefined) {
 const { Content, headings } = await render(entry);
 ---
 
-<WritingsPage pageName={`'${entry.data.title}'`} desc={entry.data.description || defaultDescription}>
+<WritingsPage pageName={`'${entry.data.title}'`} desc="">
     <Fragment slot="nav:page-links">
         {
             headings.map((v) => (
@@ -36,12 +32,6 @@ const { Content, headings } = await render(entry);
     </Fragment>
 
     <Fragment slot="page-title">{entry.data.title}</Fragment>
-
-    <Section>
-        <h2><i>Information</i></h2>
-
-        <WritingDetails entry={entry} />
-    </Section>
 
     <WritingsContent Content={Content} />
 </WritingsPage>

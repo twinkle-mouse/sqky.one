@@ -1,12 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 
-import WritingsPage from "$common/WritingsPage.astro";
-import RssIcon from "$components/RssIcon.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import WritingEntries from "$layouts/WritingEntries.astro";
 import { siteDesc } from "$lib/writings";
+
+import RssIcon from "../components/RssIcon.astro";
+import WritingEntries from "../components/WritingEntries.astro";
+import WritingsPage from "../layouts/WritingsPage.astro";
 
 export function cmpEntry<T extends { data: { date: Date } }>(a: T, b: T) {
     return b.data.date.valueOf() - a.data.date.valueOf();
@@ -14,6 +15,10 @@ export function cmpEntry<T extends { data: { date: Date } }>(a: T, b: T) {
 
 export async function getWritingEntries() {
     return (await getCollection("writings")).sort(cmpEntry);
+}
+
+export async function getNotesEntries() {
+    return await getCollection("notes");
 }
 
 const entries = await getWritingEntries();

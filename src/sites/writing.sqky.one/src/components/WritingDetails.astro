@@ -1,0 +1,91 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { type CollectionEntry, render } from "astro:content";
+
+import { countWords } from "$lib/writings";
+
+type Props = {
+    entry: CollectionEntry<"writings">;
+} & HTMLAttributes<"table">;
+
+const { entry, class: cls, ...props } = Astro.props;
+
+const entries = Object.entries(entry.data.relations);
+const { Content } = await render(entry);
+
+const wordCount = countWords(Content);
+---
+
+<table class:list={[cls, "entry-details"]}>
+    <tbody>
+        <tr>
+            <th scope="row">Authors</th>
+            <td>
+                {entry.data.authors.join(", ")}
+            </td>
+        </tr>
+
+        <tr>
+            <th scope="row">Word count</th>
+            <td>{wordCount}</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Tags</th>
+            <td>
+                {
+                    entry.data.tags
+                        .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
+                        .flatMap((v, index) => {
+                            if (index < entry.data.tags.length - 1) {
+                                return [v, ", "];
+                            } else {
+                                return v;
+                            }
+                        }) || "(none)"
+                }
+            </td>
+        </tr>
+
+        {
+            entries.length > 0 && (
+                <tr>
+                    <th scope="row">Relations</th>
+                    <td>
+                        {entries
+                            .map(([name, link]) => <a href={link}>{name}</a>)
+                            .flatMap((v, index) => {
+                                if (index < entry.data.tags.length - 1) {
+                                    return [v, "\n"];
+                                } else {
+                                    return v;
+                                }
+                            })}
+                    </td>
+                </tr>
+            )
+        }
+    </tbody>
+</table>
+
+<style>
+    .entry-details {
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+
+        border-top: 1px solid var(--slate600);
+
+        font-family: var(--sans);
+    }
+
+    .entry-details th {
+        color: var(--space200);
+        text-align: right;
+        text-wrap: nowrap;
+    }
+
+    .entry-details td {
+        color: var(--babypink200);
+        width: 100%;
+    }
+</style>

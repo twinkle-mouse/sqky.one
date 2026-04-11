@@ -2,17 +2,19 @@ import mdx from "@astrojs/mdx/server.js";
 import rss from "@astrojs/rss";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
-import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import sanitizeHtml from "sanitize-html";
 
-import { defaultDescription, siteDesc, siteName } from "$lib/writings";
+import { siteDesc, siteName } from "$lib/writings";
+
+import { defaultDescription } from "../components/WritingDescription.astro";
+import { getWritingEntries } from "./index.astro";
 
 const container = await experimental_AstroContainer.create();
 container.addServerRenderer({ renderer: mdx });
 
 export async function GET(context: AstroGlobal) {
-    const writings = await getCollection("writings");
+    const writings = await getWritingEntries();
 
     return rss({
         title: siteName,

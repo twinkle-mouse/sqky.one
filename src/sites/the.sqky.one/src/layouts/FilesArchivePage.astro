@@ -1,9 +1,9 @@
 ---
 import { ClientRouter } from "astro:transitions";
 
-import Page, { type Props as PageProps } from "$common/CommonPage.astro";
 import Emoji from "$components/Emoji.astro";
-import Navigation from "$layouts/widgets/Navigation.astro";
+import Navigation from "$components/Navigation.astro";
+import Page, { type Props as PageProps } from "$layouts/CommonPage.astro";
 
 type Props = Omit<PageProps, "siteName" | "desc">;
 ---
