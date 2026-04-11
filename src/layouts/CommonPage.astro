@@ -537,7 +537,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
 
         color: var(--textAreaColor);
         background-color: var(--textAreaBgColor);
-
         border: 3px solid var(--textAreaBorderColor);
         border-radius: 5px;
 
@@ -577,6 +576,95 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         border: 1px solid var(--tdBorderColor);
     }
 
+    details,
+    summary {
+        border-radius: 6px;
+    }
+
+    details {
+        margin-top: 1.75rem;
+        margin-bottom: 0.5rem;
+        background-color: var(--detailsBgColor);
+    }
+
+    summary {
+        display: flex;
+
+        padding: 0.35rem;
+
+        color: var(--summaryColor);
+        text-decoration: underline dotted;
+        background-color: var(--detailsBorderColor);
+        outline: 3px solid var(--detailsBorderColor);
+
+        user-select: none;
+    }
+
+    summary::before {
+        content: "";
+
+        flex: 0 0;
+
+        width: min-content;
+        height: min-content;
+        margin: 4px;
+
+        display: inline-block;
+
+        border: 8px solid;
+        border-color: transparent transparent transparent #fff;
+        box-sizing: content-box;
+
+        transform-origin: center center;
+        transition: transform 0.2s ease;
+    }
+
+    @media (prefers-reduced-motion) {
+        summary::before {
+            transition: none;
+        }
+    }
+
+    summary label {
+        margin-left: 0.3em;
+        margin-right: 1em;
+    }
+
+    summary a {
+        display: inline-block;
+        height: min-content;
+        margin-left: auto;
+    }
+
+    details[open] > summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    details[open] > summary::before {
+        transform: scaleX(0.75) rotate(90deg) translateX(25%);
+    }
+
+    details:not([open]) > summary::before {
+        transform: scaleY(0.75) rotate(0deg) translateX(25%);
+    }
+
+    details > :not(summary) {
+        background: none;
+        border: none;
+
+        padding-block: 0.1px;
+
+        margin-top: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        outline: 3px solid var(--detailsBorderColor);
+    }
+
+    details > :not(summary) p {
+        margin-inline: 1rem;
+    }
+
     a:focus-visible,
     input:focus-visible {
         outline: 2px solid var(--focusColor);
@@ -587,6 +675,14 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
     textarea:focus-visible,
     button:focus-visible {
         outline: 3px solid var(--focusColor);
+    }
+
+    summary:focus {
+        outline-color: var(--focusColor);
+    }
+
+    textarea:focus {
+        outline-color: var(--focusColor);
     }
 
     abbr {

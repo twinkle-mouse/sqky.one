@@ -4,11 +4,12 @@ import path from "node:path";
 
 import { ROOT_DIR } from "astro:env/server";
 
-import FilesArchivePage from "$common/FilesArchivePage.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import FileTableEntry from "$layouts/widgets/FileTableEntry.astro";
 import { compare, type FileEntry, SortMethod } from "$lib/files";
+
+import FileTableEntry from "../components/FileTableEntry.astro";
+import FilesArchivePage from "../layouts/FilesArchivePage.astro";
 
 const params = Astro.params;
 const url = new URL(Astro.request.url);

@@ -1,0 +1,82 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+
+type Props = {
+    Content: AstroComponentFactory;
+};
+
+const { Content } = Astro.props;
+---
+
+<LargeSection class="writing">
+    <style>
+        .writing {
+            padding-block: 0.8em;
+            padding-inline: 0.6rem;
+        }
+    </style>
+
+    <div id="content">
+        <EmojiWrapper>
+            <Content
+                components={{
+                    section: Section,
+                }}
+            />
+        </EmojiWrapper>
+
+        <style is:global>
+            #content ::before,
+            #content ::after {
+                all: unset;
+            }
+
+            #content {
+                font-size: larger;
+
+                padding-inline: 1rem;
+            }
+
+            #content aside {
+                float: right;
+                background-color: var(--codeBgColor);
+
+                margin-left: 1rem;
+                margin-block: 1.5rem;
+                padding-inline: 1rem;
+
+                border-left: 3px solid var(--codeBorderColor);
+                border-radius: 4px;
+            }
+
+            #content p {
+                margin-block: 1.5rem;
+                line-height: 1.5;
+                white-space: pre-line;
+            }
+
+            #content h1,
+            #content h2,
+            #content h3,
+            #content h4,
+            #content h5,
+            #content h6 {
+                text-align: center;
+                font-weight: 500;
+            }
+
+            #content section {
+                margin-inline: 0;
+                margin-block: 1rem;
+            }
+
+            #content blockquote > * {
+                margin: 0;
+            }
+        </style>
+    </div>
+</LargeSection>

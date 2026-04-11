@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { getEntry } from "astro:content";
 
-import { renderSvg } from "$src/lib/renderSvg";
+import { renderSvg } from "$lib/render-svg";
 
 export type Props = HTMLAttributes<"span"> & {
     e: string;
@@ -42,8 +42,8 @@ const name = getEmojiName(e);
 const emojiEntry = await getEntry("emojis", name);
 const emoji = renderSvg(emojiEntry?.data.src, {
     "aria-hidden": "true",
-    width: width ?? "1.25em",
-    height: height ?? "1.25em",
+    width: width ?? "1.2em",
+    height: height ?? "1.2em",
 });
 ---
 

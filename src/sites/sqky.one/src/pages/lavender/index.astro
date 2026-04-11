@@ -1,8 +1,9 @@
 ---
-import EmojiWrapper from "$src/components/EmojiWrapper.astro";
-import Section from "$src/layouts/Section.astro";
-import { colorsToCssStyle, semanticColorsDarkLavenderOverride, semanticColorsLightLavenderOverride } from "$src/lib/colors";
-import MainPage from "$src/pages/MainPage.astro";
+import EmojiWrapper from "$components/EmojiWrapper.astro";
+import Section from "$layouts/Section.astro";
+import { colorsToCssStyle, semanticColorsDarkLavenderOverride, semanticColorsLightLavenderOverride } from "$lib/colors";
+
+import MainPage from "../../../layouts/MainPage.astro";
 
 const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDarkLavenderOverride));
 const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLightLavenderOverride));

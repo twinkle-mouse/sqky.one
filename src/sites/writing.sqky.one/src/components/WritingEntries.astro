@@ -2,7 +2,9 @@
 import type { CollectionEntry } from "astro:content";
 
 import EmojiWrapper from "$components/EmojiWrapper.astro";
-import { defaultDescription } from "$lib/writings";
+
+import WritingDescription from "./WritingDescription.astro";
+import WritingDetails from "./WritingDetails.astro";
 
 type Props = {
     entries: CollectionEntry<"writings">[];
@@ -19,28 +21,15 @@ type Props = {
                             <a href={`/${entry.collection}/${entry.id}`}>{entry.data.title}</a>
                         </h3>
 
-                        <time class="entry-date mono" datetime={entry.data.date.toISOString()}>
-                            {entry.data.date.toLocaleDateString("en-GB", { dateStyle: "long" })}
+                        <time class="entry-date mono" datetime={entry.data.date!.toISOString()}>
+                            {entry.data.date!.toLocaleDateString("en-GB", { dateStyle: "long" })}
                         </time>
                     </div>
 
-                    <div class="entry-content">{entry.data.description || defaultDescription}</div>
+                    <WritingDescription entry={entry} />
+
                     <div class="entry-details">
-                        <p>
-                            <em>Authors:</em> {entry.data.authors.join(", ")}
-                        </p>
-                        <p>
-                            <em>Tags:</em>{" "}
-                            {entry.data.tags
-                                .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
-                                .flatMap((v, index) => {
-                                    if (index < entry.data.tags.length - 1) {
-                                        return [v, ", "];
-                                    } else {
-                                        return v;
-                                    }
-                                }) || "(none)"}
-                        </p>
+                        <WritingDetails entry={entry} />
                     </div>
                 </article>
             </EmojiWrapper>
@@ -59,7 +48,8 @@ type Props = {
             width: 100%;
             height: max-content;
             border-radius: 1rem;
-            padding: 1rem;
+            padding-block: 1rem;
+            padding-inline: 1.25rem;
 
             background-color: var(--cuteblue800);
             border: 2px solid var(--cuteblue600);
@@ -75,7 +65,6 @@ type Props = {
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
-            padding-block: 0.2rem;
         }
 
         .entry-title {
@@ -109,22 +98,8 @@ type Props = {
             color: var(--slate400);
         }
 
-        .entry-content {
-            white-space: pre-line;
-            font-family: var(--sans);
-            font-style: italic;
-            color: var(--lavender200);
-        }
-
         .entry-details {
-            margin-top: 1rem;
-            padding-top: 0.5rem;
-
-            border-top: 1px solid var(--slate600);
-
             font-size: 0.85rem;
-            font-family: var(--sans);
-            color: var(--slate400);
         }
     </style>
 </div>
