@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+    entry: CollectionEntry<"writings">;
+};
+
+const { entry } = Astro.props;
+
+export const defaultDescription = "(no description)";
+---
+
+<div class="entry-description">
+    {entry.data.description || defaultDescription}
+</div>
+
+<style>
+    .entry-description {
+        white-space: pre-line;
+
+        margin-block: 1.25rem;
+
+        font-family: var(--sans);
+        font-style: italic;
+
+        color: var(--lavender200);
+    }
+</style>
