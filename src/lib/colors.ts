@@ -191,8 +191,8 @@ export const semanticColorsDark = {
 
 export const semanticUtilsDark = {
     cardBoxShadow: `
-        0px 0px 6px 3px rgba(0, 0, 0, 0.5),
-        inset 0px 0px 3px 2px rgba(90, 90, 160, 0.2)
+        0px 0px 6px 4px rgba(0, 0, 0, 0.5),
+        inset 0px 0px 4px 3px rgba(60, 60, 90, 0.3)
     `,
 };
 
