@@ -46,6 +46,7 @@ if (Astro.slots.has("nav:page-links")) {
         left: 0;
 
         backdrop-filter: blur(2px);
+        outline: 3px solid var(--navBorderColor);
         box-shadow: var(--cardBoxShadow);
     }
 
@@ -73,10 +74,6 @@ if (Astro.slots.has("nav:page-links")) {
         min-width: 320px;
         max-width: 320px;
         height: 100dvh;
-
-        border: none;
-        border: 3px solid var(--navBorderColor);
-        border-block: none;
     }
 
     #nav-items {
@@ -99,12 +96,6 @@ if (Astro.slots.has("nav:page-links")) {
             max-width: unset;
             width: 100%;
             height: 240px;
-
-            border: none;
-            border: 3px solid var(--navBorderColor);
-            border-top: none;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
         }
 
         #nav-items {
