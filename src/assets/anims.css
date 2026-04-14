@@ -53,15 +53,18 @@
     }
 }
 
-@keyframes hearts-rotate-x {
-    to {
-        transform: translateX(var(--radius));
-    }
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
 }
 
-@keyframes hearts-rotate-y {
+@keyframes hearts-rotate {
+    from {
+        --angle: 0deg;
+    }
     to {
-        transform: translateY(var(--radius));
+        --angle: 360deg;
     }
 }
 
