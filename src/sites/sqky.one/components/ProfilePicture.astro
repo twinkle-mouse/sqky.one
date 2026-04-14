@@ -10,13 +10,14 @@ import Picture from "$components/Picture.astro";
 
     <div class="pfp">
         <div class="pfp-image-container">
-            <div aria-hidden="true" class="ear-left"></div>
-            <div aria-hidden="true" class="ear-right"></div>
+            <!-- hidden cuz current image doesn't work with this :pensive: -->
+            <div aria-hidden="true" class="ear-left" style="display: none;"></div>
+            <div aria-hidden="true" class="ear-right" style="display: none;"></div>
 
             <Picture
                 src={Pfp}
                 class="pfp-image"
-                alt="The mouse in Resonite, it has a pacifier in colours of the transgender flag in its mouth, it is facing the viewer and smiling with wide-open eyes."
+                alt="A drawing of the mouse. It's looking at the viewer with heart eyes and a happy expression. It has light blue hair, big ears, and pinkish fur. It's wearing a leather collar and tugging on it with its finger."
                 draggable="false"
             />
         </div>
@@ -33,10 +34,7 @@ import Picture from "$components/Picture.astro";
         </p>
 
         <p>
-            picture taken on <a href="https://resonite.com/">Resonite</a>
-            <br />
-
-            <small>(better picture incoming, i've been <abbr title="Attention-Deficit/Hyperactivity Disorder">ADHD</abbr>ing about this for months)</small>
+            (art by <em>wereaegirnul</em>)
         </p>
     </figcaption>
 </figure>
