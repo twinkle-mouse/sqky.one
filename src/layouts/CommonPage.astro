@@ -155,28 +155,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
             width: 100%;
         }
     }
-
-    #popout-fakeroot {
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        padding: 0;
-        margin: 0;
-
-        display: contents;
-    }
-
-    #popout-fakeroot * {
-        text-rendering: optimizeLegibility;
-        will-change: transform;
-
-        overflow: hidden;
-        pointer-events: auto;
-
-        user-select: none;
-        text-rendering: optimizeLegibility;
-    }
 </style>
 
 <style is:global>
@@ -718,5 +696,48 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         .animation-rotate {
             animation: none;
         }
+    }
+
+    #popout-fakeroot {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        width: 100%;
+        height: 100%;
+
+        overflow: clip;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    #popout-fakeroot > * {
+        text-rendering: optimizeLegibility;
+        will-change: transform;
+
+        pointer-events: auto;
+        user-select: none;
+    }
+
+    #popout-fakeroot::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .cursor-grab,
+    #popout-fakeroot:has(> .cursor-grab)::before {
+        cursor: grab !important;
+        pointer-events: auto;
+    }
+
+    .cursor-grabbing,
+    #popout-fakeroot:has(> .cursor-grabbing)::before {
+        cursor: grabbing !important;
+        pointer-events: auto;
     }
 </style>
