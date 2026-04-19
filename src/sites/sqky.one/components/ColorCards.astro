@@ -329,7 +329,7 @@ import ColorCard from "./ColorCard.astro";
             state.stopping = true;
 
             if (state.draggingElement) {
-                state.draggingElement.style.cursor = "";
+                state.draggingElement.classList.remove("cursor-grabbing");
             }
         }
     });
@@ -380,7 +380,7 @@ import ColorCard from "./ColorCard.astro";
 
                     const e = state.draggedElement.cloneNode(true) as HTMLElement;
                     e.style.position = "absolute";
-                    e.style.cursor = "grabbing";
+                    e.classList.add("cursor-grabbing");
                     fakeroot.appendChild(e);
 
                     state.draggingElement = e;
