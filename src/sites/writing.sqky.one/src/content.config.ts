@@ -15,6 +15,7 @@ const writings = defineCollection({
         authors: z.array(z.string()).default(["Stella Sparkles"]),
         tags: z.array(z.string()).default([]),
         relations: z.record(z.string(), z.string()).default({}),
+        wip: z.boolean().default(false),
     }),
 });
 

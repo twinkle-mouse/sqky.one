@@ -1,5 +1,6 @@
 ---
 import { getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
 
 import Section from "$layouts/Section.astro";
 
@@ -7,10 +8,9 @@ import { defaultDescription } from "../../components/WritingDescription.astro";
 import WritingDetails from "../../components/WritingDetails.astro";
 import WritingsContent from "../../layouts/WritingsContent.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
-import { getWritingEntries } from "../index.astro";
 
 export async function getStaticPaths() {
-    return (await getWritingEntries()).map((entry) => {
+    return (await getCollection("writings")).map((entry) => {
         return { params: { id: entry.id } };
     });
 }
