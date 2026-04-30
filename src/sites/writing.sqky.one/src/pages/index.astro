@@ -14,7 +14,7 @@ export function cmpEntry<T extends { data: { date: Date } }>(a: T, b: T) {
 }
 
 export async function getWritingEntries() {
-    return (await getCollection("writings")).sort(cmpEntry);
+    return (await getCollection("writings")).filter((writing) => !writing.data.wip).sort(cmpEntry);
 }
 
 export async function getNotesEntries() {
