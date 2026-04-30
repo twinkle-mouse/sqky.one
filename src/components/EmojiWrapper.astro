@@ -16,7 +16,7 @@ async function replaceAllAsync(str: string, searchValue: string | RegExp, replac
 
 import { experimental_AstroContainer } from "astro/container";
 import emojiRegex from "emoji-regex";
-import { NodeType, parse } from "node-html-parser";
+import { HTMLElement, NodeType, parse } from "node-html-parser";
 
 import Emoji from "./Emoji.astro";
 
@@ -26,28 +26,34 @@ const container = await experimental_AstroContainer.create();
 
 const regex = emojiRegex();
 const element = parse(rendered);
-let children = [...element.childNodes];
-for (const child of children) {
-    if (child.childNodes.length > 0) {
-        children.push(...child.childNodes);
-    }
+let children = [{ nodes: [...element.childNodes], emojiNonVisualOnly: false }];
+for (const { nodes, emojiNonVisualOnly } of children) {
+    for (const child of nodes) {
+        if (child.childNodes.length > 0) {
+            var newEmojiNonVisualOnly = emojiNonVisualOnly;
+            if (child instanceof HTMLElement && child.attributes?.["data-emoji-non-visual-only"] == "true") {
+                newEmojiNonVisualOnly = true;
+            }
 
-    if (child.nodeType == NodeType.TEXT_NODE && !!child.textContent) {
-        const parent = child.parentNode;
-        if (parent == undefined) {
-            continue;
+            children.push({ nodes: [...child.childNodes], emojiNonVisualOnly: newEmojiNonVisualOnly });
         }
 
-        if (parent.attributes?.["data-emoji"] == "true") {
-            continue;
+        if (child.nodeType == NodeType.TEXT_NODE && !!child.textContent) {
+            const parent = child.parentNode;
+            if (parent == undefined) {
+                continue;
+            }
+            if (parent.attributes?.["data-emoji"] == "true") {
+                continue;
+            }
+
+            const htmlSrc = child.textContent;
+            const htmlDst = await replaceAllAsync(htmlSrc, regex, async (emoji) => {
+                return (await container.renderToString(Emoji, { props: { e: emoji, "aria-hidden": !emojiNonVisualOnly } })).trim();
+            });
+
+            parent.exchangeChild(child, parse(htmlDst));
         }
-
-        const htmlSrc = child.textContent;
-        const htmlDst = await replaceAllAsync(htmlSrc, regex, async (emoji) => {
-            return (await container.renderToString(Emoji, { props: { e: emoji } })).trim();
-        });
-
-        parent.exchangeChild(child, parse(htmlDst));
     }
 }
 ---

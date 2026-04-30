@@ -1,10 +1,10 @@
 ---
 import { TFHazard, ThetaDelta } from "$assets/Icons.astro";
-import Emoji from "$components/Emoji.astro";
 import Icon from "$components/Icon.astro";
 import Section from "$layouts/Section.astro";
 
 import AboutMeContent from "./AboutMe.mdx";
+import AboutMeContentMore from "./AboutMeMore.mdx";
 import Hearts from "./Hearts.astro";
 ---
 
@@ -14,63 +14,11 @@ import Hearts from "./Hearts.astro";
     </div>
 
     <section>
-        <h3>By The Way, There's More</h3>
+        <h3>By The Way, There’s More</h3>
 
         <div class="by-the-way">
-            <div class="by-the-way-text">
-                <p>
-                    we're <a href="https://morethanone.info/">plural</a>!!!!!!! if referring to us collectively, call us <em>Madeline</em> or <em>Maddie</em>
-                    <small>(they/them)</small>
-                    <Emoji aria-hidden="false" e="💜" />
-                </p>
-
-                <p>
-                    also, our system tag is <Emoji aria-hidden="false" e="💫" />!!
-                </p>
-
-                <p>
-                    here is a
-                    <small>(hopefully up-to-date when you read this)</small>
-                    list of the headmates (:
-                    <br />
-
-                    <small>
-                        <strong>(note: we might add pages for specific headmates later!!!!!)</strong>
-                    </small>
-                </p>
-
-                <ul>
-                    <li>
-                        <a href="/">Stella Sparkles</a>
-                        <Emoji aria-hidden="false" e="🐭" />
-                        <small>(mouse/it/they)</small>
-                        <Emoji aria-hidden="false" e="🩷" />
-                    </li>
-                    <li>
-                        <a href="/lavender">Lavender Sparkles</a>
-                        <Emoji aria-hidden="false" e="🐭" />
-                        <small>(she/they)</small>
-                        <Emoji aria-hidden="false" e="🤎" />
-                    </li>
-                    <li>
-                        Azalea Sparkles
-                        <Emoji aria-hidden="false" e="🐈" />
-                        <small>(it/she)</small>
-                        <Emoji aria-hidden="false" e="🤍" />
-                    </li>
-                    <li>
-                        Petals aka. <i>Patricia</i>
-                        <Emoji aria-hidden="false" e="🦌" />
-                        <small>(she/it)</small>
-                        <Emoji aria-hidden="false" e="💛" />
-                    </li>
-                    <li>
-                        Mary
-                        <Emoji aria-hidden="false" e="🐇" />
-                        <small>(she/her)</small>
-                        <Emoji aria-hidden="false" e="🧡" />
-                    </li>
-                </ul>
+            <div class="by-the-way-text" data-emoji-non-visual-only="true">
+                <AboutMeContentMore />
             </div>
 
             <div class="by-the-way-hearts-container">
@@ -112,13 +60,13 @@ import Hearts from "./Hearts.astro";
         <h3>Some Assorted Facts</h3>
 
         <p>
-            we're <i class="transgender">transgender</i>!!! and also <i class="nonbinary">nonbinary</i>!!!!!
+            we’re <i class="transgender">transgender</i>!!! and also <i class="nonbinary">nonbinary</i>!!!!!
             <br />
 
-            and also also <i class="agere">age regressors</i>!!!!!!!!!! i'm <em>permakid</em> and due to complicated reasons, stuck at 12!!!!!!!
+            and also also <i class="agere">age regressors</i>!!!!!!!!!! i’m <em>permakid</em> and due to complicated reasons, stuck at 12!!!!!!!
             <br />
 
-            we're also on the <i class="aroace">aro-ace spectrum</i>!!!!!!
+            we’re also on the <i class="aroace">aro-ace spectrum</i>!!!!!!
         </p>
 
         <style>
@@ -178,14 +126,14 @@ import Hearts from "./Hearts.astro";
     </p>
 
     <p>
-        We're <em>Therian</em>
+        We’re <em>Therian</em>
         <Icon src={ThetaDelta.src} alt="The Theta-Delta symbol" />!!!!
         <br />
 
         <small>(i dont know a good source of info on what this means, if you know a site lmk please)</small>
         <br />
 
-        We're a <a href="https://yaodema.com/tf-hazard/" target="_blank">Transformation Hazard</a>
+        We’re a <a href="https://yaodema.com/tf-hazard/">Transformation Hazard</a>
         <Icon src={TFHazard.src} alt="The TF Hazard symbol" />!!!!!
     </p>
 </Section>
