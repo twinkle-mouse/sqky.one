@@ -30,22 +30,24 @@ const wordCount = countWords(Content);
             <td>{wordCount}</td>
         </tr>
 
-        <tr>
-            <th scope="row">Tags</th>
-            <td>
-                {
-                    entry.data.tags
-                        .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
-                        .flatMap((v, index) => {
-                            if (index < entry.data.tags.length - 1) {
-                                return [v, ", "];
-                            } else {
-                                return v;
-                            }
-                        }) || "(none)"
-                }
-            </td>
-        </tr>
+        {
+            entry.data.tags.length > 0 && (
+                <tr>
+                    <th scope="row">Tags</th>
+                    <td>
+                        {entry.data.tags
+                            .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
+                            .flatMap((v, index) => {
+                                if (index < entry.data.tags.length - 1) {
+                                    return [v, ", "];
+                                } else {
+                                    return v;
+                                }
+                            }) || "(none)"}
+                    </td>
+                </tr>
+            )
+        }
 
         {
             entries.length > 0 && (
