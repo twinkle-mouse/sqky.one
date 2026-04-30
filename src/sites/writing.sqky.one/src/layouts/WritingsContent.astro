@@ -45,16 +45,17 @@ const { Content } = Astro.props;
                 float: right;
                 background-color: var(--codeBgColor);
 
+                font-size: 0.8em;
                 margin-left: 1rem;
                 margin-block: 1.5rem;
-                padding-inline: 1rem;
+                padding-inline: 0.75rem;
 
                 border-left: 3px solid var(--codeBorderColor);
                 border-radius: 4px;
             }
 
             #content p {
-                margin-block: 1.5rem;
+                margin-block: 1.2em;
                 line-height: 1.5;
                 white-space: pre-line;
             }
@@ -72,6 +73,10 @@ const { Content } = Astro.props;
             #content section {
                 margin-inline: 0;
                 margin-block: 1rem;
+            }
+
+            #content blockquote {
+                font-style: normal;
             }
 
             #content blockquote > * {
