@@ -4,6 +4,10 @@ import "$assets/anims.css";
 
 import type { HTMLAttributes } from "astro/types";
 import { Font } from "astro:assets";
+import { absolutize, parsePath, serialize } from "path-data-parser";
+import { uniformInt } from "pure-rand/distribution/uniformInt";
+import { xoroshiro128plus } from "pure-rand/generator/xoroshiro128plus";
+import Voronoi from "voronoi";
 
 import Noscript from "$assets/noscript.html";
 import { colors, colorsToCssStyle, semanticColorsDark, semanticColorsLight, semanticUtilsDark, semanticUtilsLight, stylesToCssStyle } from "$lib/colors";
@@ -31,6 +35,45 @@ const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDa
 const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
 const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
 const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
+
+const rng = xoroshiro128plus(42069); // haha funny
+const tileSize = 32; // px
+const bgTiles = 32;
+const bgSize = tileSize * bgTiles;
+
+const voronoi = new Voronoi();
+const bbox = { xl: 0, xr: bgSize, yt: 0, yb: bgSize }; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+const points = [];
+for (let i = 0; i < bgTiles / 2; i++) {
+    for (let j = 0; j < bgTiles / 2; j++) {
+        const x = uniformInt(rng, 0, bgSize * 256) / 256; // for decimals
+        const y = uniformInt(rng, 0, bgSize * 256) / 256;
+        points.push({ x, y });
+    }
+}
+
+const diagram = voronoi.compute(points, bbox);
+const stars = [];
+for (const cell of diagram.cells) {
+    for (const halfedge of cell.halfedges) {
+        const p = halfedge.getStartpoint();
+        if (p && p.x > bbox.xl && p.y > bbox.yt && p.x < bbox.xr && p.y < bbox.yb) {
+            let skip = false;
+
+            for (const star of stars) {
+                const disSq = Math.pow(p.x - star.x, 2) + Math.pow(p.y - star.y, 2);
+                if (disSq < Math.pow(tileSize * 0.7, 2)) {
+                    skip = true;
+                    continue;
+                }
+            }
+
+            if (!skip) stars.push({ x: p.x, y: p.y, angle: halfedge.angle });
+        }
+    }
+}
+stars.sort((a, b) => a.x - b.x);
+stars.sort((a, b) => a.y - b.y);
 ---
 
 <!doctype html>
@@ -105,6 +148,85 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
     </head>
 
     <body>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={bgSize}
+            height={bgSize}
+            viewBox=`0 0 ${bgSize} ${bgSize}`
+            style={{ "--tile-size": tileSize, "--bg-size": bgSize }}
+            id="body-background"
+        >
+            <defs>
+                <!-- originally picked in inkscape with 600x600 viewport -->
+                <linearGradient
+                    id="grad"
+                    x1={(51.926197 * bgSize) / 600}
+                    x2={(550.01068 * bgSize) / 600}
+                    y1={(-70.590981 * bgSize) / 600}
+                    y2={(670.95251 * bgSize) / 600}
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0%" stop-color="#ff8aad" id="stop1"></stop>
+                    <stop offset="50%" stop-color="#ff96fc" id="stop2"></stop>
+                    <stop offset="100%" stop-color="#99a8ff" id="stop3"></stop>
+                </linearGradient>
+            </defs>
+
+            <style>
+                #body-background path {
+                    --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                    --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                }
+
+                #body-background path {
+                    transform: translate(calc(var(--star-x) * var(--offset-x)), calc(var(--star-y) * var(--offset-y)));
+                }
+            </style>
+
+            {
+                stars.map(({ x: ox, y: oy, angle }) => {
+                    const cos = Math.cos(angle);
+                    const sin = Math.sin(angle);
+
+                    const cx = tileSize / 2;
+                    const cy = tileSize / 2;
+
+                    const originalPath = "m16 11.855-1.346 2.729-3.004.437 2.174 2.124-.513 3.001 2.687-1.417 2.691 1.417-.515-3.001 2.176-2.124-3.006-.435z";
+                    const originalSegments = absolutize(parsePath(originalPath));
+                    const segments = originalSegments.map((segment) => {
+                        let data = segment.data;
+                        if (segment.key == "M" || segment.key == "L") {
+                            const [x, y] = segment.data;
+
+                            const nx = cos * (x - cx) + sin * (y - cy) + cx;
+                            const ny = cos * (y - cy) - sin * (x - cx) + cy;
+
+                            data = [nx + ox - cx, ny + oy - cy];
+                        } else if (segment.key == "Z") {
+                            // pass
+                        } else {
+                            console.warn("Unhandled segment: " + segment);
+                        }
+
+                        return { ...segment, data };
+                    });
+                    const path = serialize(segments);
+
+                    return (
+                        <path
+                            d={path}
+                            style={
+                                "fill:url(#grad);fill-opacity:.1;stroke:url(#grad);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:.125;paint-order:stroke fill markers" +
+                                `;--star-x:${(ox / bgSize) * 2 - 1.0};--star-y:${(oy / bgSize) * 2 - 1.0}`
+                            }
+                        />
+                    );
+                })
+            }
+        </svg>
+
+        <div></div>
+
         <div class="site">
             <slot name="nav" />
 
@@ -191,6 +313,16 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
 
     body {
         position: relative;
+    }
+
+    #body-background {
+        position: fixed;
+        width: calc(max(100vw, var(--bg-size) * 1px));
+        height: calc(max(100vh, var(--bg-size) * 1px));
+        z-index: -100000;
+
+        left: calc(min(100vw - var(--bg-size) * 1px, 0px) * 0.5);
+        top: calc(min(100vh - var(--bg-size) * 1px, 0px) * 0.5);
     }
 
     .sans {
