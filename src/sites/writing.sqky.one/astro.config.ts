@@ -8,6 +8,5 @@ export default defineConfig({
     site: "https://writing.sqky.one",
     markdown: {
         remarkPlugins: [remarkSectionize],
-        smartypants: false,
     },
 });

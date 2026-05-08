@@ -214,10 +214,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         display: contents;
     }
 
-    .markdown p {
-        white-space: pre-line;
-    }
-
     h1,
     h2,
     h3,
@@ -458,17 +454,16 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
 
     blockquote > * {
         display: inline;
-        white-space: pre-line;
     }
 
     blockquote::before {
         content: "“" / "";
-        margin-inline: 0.35em;
+        margin-left: 0.35em;
     }
 
     blockquote::after {
         content: "”" / "";
-        margin-inline: 0.35em;
+        margin-right: 0.35em;
     }
 
     cite {
@@ -573,8 +568,6 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         text-decoration: underline dotted;
         background-color: var(--detailsBorderColor);
         outline: 3px solid var(--detailsBorderColor);
-
-        user-select: none;
     }
 
     summary::before {
@@ -602,12 +595,12 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
         }
     }
 
-    summary label {
+    summary > span {
         margin-left: 0.3em;
         margin-right: 1em;
     }
 
-    summary a {
+    summary > a {
         display: inline-block;
         height: min-content;
         margin-left: auto;
@@ -678,12 +671,12 @@ const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLig
 
     #page-title::before {
         content: "“" / "";
-        margin-inline: 0.2em;
+        margin-left: 0.2em;
     }
 
     #page-title::after {
         content: "”" / "";
-        margin-inline: 0.2em;
+        margin-right: 0.2em;
     }
 
     .animation-rotate {

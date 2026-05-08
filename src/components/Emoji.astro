@@ -47,7 +47,7 @@ const emoji = renderSvg(emojiEntry?.data.src, {
 });
 ---
 
-<span {...props} aria-hidden={ariaHidden ?? "true"} class:list={["emoji", cls]}>
+<span {...props} aria-hidden={(ariaHidden ?? "true") ? "true" : undefined} class:list={["emoji", cls]}>
     <span data-emoji="true">{e}</span>
     <Fragment set:html={emoji} />
 </span>

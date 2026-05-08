@@ -1,3 +1,5 @@
+import remarkBreaks from "remark-breaks";
+
 export class Site {
     static Main = "Main_SqkyOne";
     static Writing = "Writing_SqkyOne";
@@ -96,6 +98,12 @@ export default defineConfig({
             transformer: "postcss",
         },
         cacheDir: path.join(dir, "node_modules", ".vite"),
+    },
+
+    markdown: {
+        smartypants: false,
+        ...(config.markdown || {}),
+        remarkPlugins: [remarkBreaks, ...(config.markdown?.remarkPlugins || [])],
     },
 
     integrations: [

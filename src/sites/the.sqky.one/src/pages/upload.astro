@@ -58,7 +58,7 @@ import FilesArchivePage from "../layouts/FilesArchivePage.astro";
         button.disabled = true;
 
         try {
-            message.innerHTML = "Uploading...";
+            message.innerHTML = "Uploading…";
 
             const response = await fetch(`/upload/accept/${file.name}`, {
                 method: "PUT",
