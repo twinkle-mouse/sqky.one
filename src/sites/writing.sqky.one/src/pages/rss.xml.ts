@@ -8,6 +8,7 @@ import sanitizeHtml from "sanitize-html";
 import { siteDesc, siteName } from "$lib/writings";
 
 import { defaultDescription } from "../components/WritingDescription.astro";
+import WritingDetails from "../components/WritingDetails.astro";
 import { getWritingEntries } from "./index.astro";
 
 const container = await experimental_AstroContainer.create();
@@ -34,6 +35,9 @@ export async function GET(context: AstroGlobal) {
                 const content = await container.renderToString(Content, {
                     props: { components: [] },
                 });
+                const details = await container.renderToString(WritingDetails, {
+                    props: { entry: post },
+                });
 
                 return {
                     title: post.data.title,
@@ -41,7 +45,7 @@ export async function GET(context: AstroGlobal) {
                     pubDate: post.data.date,
                     categories: post.data.tags,
                     link: `/writings/${post.id}/`,
-                    content: sanitizeHtml(content.trim(), {
+                    content: sanitizeHtml(details.trim() + content.trim(), {
                         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
                     }),
                     customData: [...post.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
