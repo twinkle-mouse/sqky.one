@@ -248,7 +248,9 @@
                 const imageFetcher = new WebsocketWrapper((ws, data) => {
                     ws?.send("artwork/0");
 
-                    currentImage = data;
+                    if (data != undefined) {
+                        currentImage = data;
+                    }
                 }, 250);
 
                 const ws = new WebsocketWrapper((ws, data) => {
