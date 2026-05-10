@@ -42,8 +42,8 @@ export const cuteblue = {
     cuteblue900,
 };
 
-export const lavender100 = "#f2e5ffff";
-export const lavender200 = "#e8d2ffff";
+export const lavender100 = "#ecd8ff";
+export const lavender200 = "#e2c7ff";
 export const lavender300 = "#e5c2ffff";
 export const lavender400 = "#d8b1ffff";
 export const lavender500 = "#d7a6ffff";
@@ -173,7 +173,8 @@ export const semanticColorsDark = {
     codeBorderColor: slate400,
     strongColor: space300,
     emColor: cuteblue300,
-    quoteColor: slate600,
+    quoteColor: lavender100,
+    quoteBorderColor: slate600,
     citeColor: lavender400,
     separatorColor: babypink400,
     blockFocusBorderColor: space500,
