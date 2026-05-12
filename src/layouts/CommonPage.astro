@@ -583,16 +583,12 @@ stars.sort((a, b) => a.y - b.y);
         font-style: italic;
     }
 
-    blockquote > * {
-        display: inline;
-    }
-
-    blockquote::before {
+    blockquote > :first-child::before {
         content: "“" / "";
         margin-left: 0.35em;
     }
 
-    blockquote::after {
+    blockquote > :last-child::after {
         content: "”" / "";
         margin-right: 0.35em;
     }

@@ -78,8 +78,16 @@ const { Content } = Astro.props;
                 font-style: normal;
             }
 
-            #content blockquote > * {
-                margin: 0;
+            #content code {
+                word-break: break-all;
+            }
+
+            #content u {
+                text-decoration: underline solid;
+            }
+
+            #content del {
+                text-decoration: line-through solid;
             }
         </style>
     </div>

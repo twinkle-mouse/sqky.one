@@ -1,5 +1,7 @@
 import remarkBreaks from "remark-breaks";
 
+import remarkPreserveConsecutiveBlankLines from "./remark-preserve-consecutive-blank-lines";
+
 export class Site {
     static Main = "Main_SqkyOne";
     static Writing = "Writing_SqkyOne";
@@ -103,7 +105,7 @@ export default defineConfig({
     markdown: {
         smartypants: false,
         ...(config.markdown || {}),
-        remarkPlugins: [remarkBreaks, ...(config.markdown?.remarkPlugins || [])],
+        remarkPlugins: [remarkPreserveConsecutiveBlankLines, remarkBreaks, ...(config.markdown?.remarkPlugins || [])],
     },
 
     integrations: [
