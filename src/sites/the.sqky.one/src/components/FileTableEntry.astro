@@ -1,11 +1,11 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
 
-import type { FileEntry } from "$lib/files";
+import type { FileStats } from "$lib/files";
 import { getMaterialFileIcon, getMaterialFolderIcon } from "$lib/material-icon";
 
 export type Props = {
-    entry: FileEntry;
+    entry: FileStats;
 };
 
 const { entry } = Astro.props;
