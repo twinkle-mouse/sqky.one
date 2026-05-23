@@ -1,12 +1,12 @@
 ---
-import { readdirSync, Stats, statSync } from "node:fs";
+import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 import { ROOT_DIR } from "astro:env/server";
 
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import { compare, type FileEntry, SortMethod } from "$lib/files";
+import { compare, type FileStats, getFileStat, SortMethod } from "$lib/files";
 
 import FileTableEntry from "../components/FileTableEntry.astro";
 import FilesArchivePage from "../layouts/FilesArchivePage.astro";
@@ -22,10 +22,9 @@ const ascending = url.searchParams.get("asc") === "true";
 const sortBy = SortMethod.fromId(url.searchParams.get("sort") || "") || SortMethod.Name;
 
 let fileNames = null;
-const files = new Map<string, { stats: Stats }>();
 
 try {
-    fileNames = readdirSync(filePath);
+    fileNames = await readdir(filePath);
 } catch (err) {
     console.error(err);
 }
@@ -34,33 +33,24 @@ if (!fileNames) {
     return Astro.rewrite("/404");
 }
 
-try {
-    fileNames?.forEach((fileName) => {
-        const stats = statSync(path.resolve(filePath, fileName));
+const fileStats: FileStats[] = [];
 
-        files.set(fileName, { stats });
-    });
+try {
+    for (const fileName of fileNames) {
+        const stats = await getFileStat(ROOT_DIR, filePath, fileName);
+        if (stats) {
+            fileStats.push(stats);
+        }
+    }
 } catch (err) {
     console.error(err);
     return Astro.rewrite("/404");
 }
 
-const entries = Array.from(
-    files.entries().map(([fileName, file]) => {
-        return {
-            name: fileName,
-            size: file.stats.size,
-            mtime: file.stats.mtime,
-            isDir: file.stats.isDirectory(),
-            isFile: file.stats.isFile(),
-        };
-    }),
-);
+const fileEntries = fileStats.filter((v) => v.isFile);
+const dirEntries = fileStats.filter((v) => v.isDir);
 
-const fileEntries = entries.filter((v) => v.isFile);
-const dirEntries = entries.filter((v) => v.isDir);
-
-const cmp = (a: FileEntry, b: FileEntry) => compare(sortBy, ascending, a, b);
+const cmp = (a: FileStats, b: FileStats) => compare(sortBy, ascending, a, b);
 fileEntries.sort(cmp);
 dirEntries.sort(cmp);
 
