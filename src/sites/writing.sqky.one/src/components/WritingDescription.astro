@@ -1,13 +1,13 @@
 ---
 import type { CollectionEntry } from "astro:content";
 
+import { defaultDescription } from "$lib/writings";
+
 type Props = {
     entry: CollectionEntry<"writings">;
 };
 
 const { entry } = Astro.props;
-
-export const defaultDescription = "(no description)";
 ---
 
 <div class="entry-description">

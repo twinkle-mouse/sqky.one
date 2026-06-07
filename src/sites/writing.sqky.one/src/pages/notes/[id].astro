@@ -1,9 +1,10 @@
 ---
 import { getEntry, render } from "astro:content";
 
+import { getNotesEntries } from "$lib/writings";
+
 import WritingsContent from "../../layouts/WritingsContent.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
-import { getNotesEntries } from "../index.astro";
 
 export async function getStaticPaths() {
     return (await getNotesEntries()).map((entry) => {
