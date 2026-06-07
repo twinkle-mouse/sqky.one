@@ -2,6 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { getEntry } from "astro:content";
 
+import { getEmojiName } from "$lib/emoji";
 import { renderSvg } from "$lib/render-svg";
 
 export type Props = HTMLAttributes<"span"> & {
@@ -11,32 +12,6 @@ export type Props = HTMLAttributes<"span"> & {
 };
 
 const { e, width, height, "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
-
-// this is the most evil code i could've ever done
-export function getEmojiName(e: string) {
-    let codes: string[] = [];
-    const codesList = [codes];
-
-    for (let i = 0; ; i++) {
-        const code = e.codePointAt(i);
-        if (!code) break;
-
-        const encoded = code.toString(16);
-        if (encoded == "200d") {
-            codes = [];
-            codesList.push(codes);
-            continue;
-        }
-        if (encoded.startsWith("fe0")) {
-            continue;
-        }
-
-        codes.push(encoded);
-    }
-
-    const path = codesList.map((codes) => codes.filter((_, index) => index % 2 == 0).join("_")).join("_200d_");
-    return `emoji_u${path}`;
-}
 
 const name = getEmojiName(e);
 const emojiEntry = await getEntry("emojis", name);

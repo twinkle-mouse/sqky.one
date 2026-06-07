@@ -5,11 +5,9 @@ import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
 import sanitizeHtml from "sanitize-html";
 
-import { siteDesc, siteName } from "$lib/writings";
+import { defaultDescription, getWritingEntries, siteDesc, siteName } from "$lib/writings";
 
-import { defaultDescription } from "../components/WritingDescription.astro";
 import WritingDetails from "../components/WritingDetails.astro";
-import { getWritingEntries } from "./index.astro";
 
 const container = await experimental_AstroContainer.create();
 container.addServerRenderer({ renderer: mdx });

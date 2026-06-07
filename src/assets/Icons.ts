@@ -1,6 +1,4 @@
----
 import TFHazard from "./icons/tf-hazard.png";
 import ThetaDelta from "./icons/theta-delta.png";
 
 export { TFHazard, ThetaDelta };
----
