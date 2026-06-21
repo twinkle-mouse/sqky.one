@@ -37,21 +37,35 @@ const { Content } = Astro.props;
 
             #content {
                 font-size: large;
+                overflow: auto;
 
                 padding-inline: 1rem;
             }
 
             #content aside {
                 float: right;
+                clear: both;
+                max-width: 40%;
                 background-color: var(--codeBgColor);
 
                 font-size: 0.8em;
                 margin-left: 1rem;
                 margin-block: 1.5rem;
-                padding-inline: 0.75rem;
+                padding-inline: 1rem;
+                padding-block: 1px; /* to avoid margin collapse */
 
-                border-left: 3px solid var(--codeBorderColor);
-                border-radius: 4px;
+                border: 0px solid var(--codeBorderColor);
+                border-left-width: 3px;
+                border-radius: 5px;
+            }
+
+            @media (max-width: 580px) {
+                #content aside {
+                    max-width: 100%;
+                    width: 100%;
+                    float: none;
+                    margin-left: 0;
+                }
             }
 
             #content p {
