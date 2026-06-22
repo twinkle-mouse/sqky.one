@@ -1,11 +1,13 @@
 ---
+import BackToTopIcon from "$assets/back-to-top.svg";
+
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
     pageLinks = (await Astro.slots.render("nav:page-links")).trim();
 }
 ---
 
-<nav>
+<nav id="nav">
     <div id="nav-items">
         <div>
             <p>This Page</p>
@@ -38,8 +40,17 @@ if (Astro.slots.has("nav:page-links")) {
     </div>
 </nav>
 
+<div class="back-to-top">
+    <a href="#nav" class="back-to-top-icon">
+        <span class="sr-only">Back to top</span>
+        <BackToTopIcon aria-hidden="true" width={36} height={36} />
+    </a>
+</div>
+
 <style>
     nav {
+        z-index: 10000000;
+
         overflow: auto;
 
         top: 0;
@@ -49,20 +60,6 @@ if (Astro.slots.has("nav:page-links")) {
         backdrop-filter: blur(2px);
         outline: 3px solid var(--navBorderColor);
         box-shadow: var(--cardBoxShadow);
-    }
-
-    #nav-items {
-        display: flex;
-
-        width: 100%;
-        min-width: fit-content;
-        height: max-content;
-        min-height: 100%;
-
-        flex-wrap: nowrap;
-
-        gap: 2px;
-        background-color: var(--navTitleBorderColor);
     }
 
     nav {
@@ -77,15 +74,6 @@ if (Astro.slots.has("nav:page-links")) {
         height: 100dvh;
     }
 
-    #nav-items {
-        flex-direction: column;
-    }
-
-    #nav-items .filler {
-        flex: 1 2;
-        margin-top: -2px;
-    }
-
     @media (max-width: 1300px) {
         nav {
             position: static;
@@ -98,7 +86,34 @@ if (Astro.slots.has("nav:page-links")) {
             width: 100%;
             height: 240px;
         }
+    }
+</style>
 
+<style>
+    #nav-items {
+        display: flex;
+
+        width: 100%;
+        min-width: fit-content;
+        height: max-content;
+        min-height: 100%;
+
+        flex-wrap: nowrap;
+
+        gap: 2px;
+        background-color: var(--navTitleBorderColor);
+    }
+
+    #nav-items {
+        flex-direction: column;
+    }
+
+    #nav-items .filler {
+        flex: 1 2;
+        margin-top: -2px;
+    }
+
+    @media (max-width: 1300px) {
         #nav-items {
             max-height: 100%;
 
@@ -202,5 +217,45 @@ if (Astro.slots.has("nav:page-links")) {
     #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:hover),
     #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:focus) {
         background-color: var(--sitemapLinkBgColorActive);
+    }
+</style>
+
+<style>
+    .back-to-top-icon {
+        box-sizing: content-box;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: var(--buttonBgColor);
+        border: 2px dashed var(--buttonBorderColor);
+        border-radius: 50%;
+
+        width: 48px;
+        height: 48px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .back-to-top {
+        z-index: 100000;
+
+        position: fixed;
+
+        right: 0;
+        top: 1rem;
+        translate: -30% 0%;
+        margin-right: calc(max(100dvw - 800px, 1rem) / 5);
+    }
+
+    @media (min-width: 1300px) {
+        .back-to-top {
+            display: none;
+        }
+    }
+
+    .back-to-top:has(.back-to-top-icon:focus-visible) {
+        z-index: 1000000000;
     }
 </style>
