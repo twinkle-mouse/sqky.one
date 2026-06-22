@@ -174,12 +174,12 @@ stars.sort((a, b) => a.y - b.y);
             </defs>
 
             <style>
-                path {
+                #body-background path {
                     --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
                     --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
                 }
 
-                path {
+                #body-background path {
                     transform: translate(calc(var(--star-x) * var(--offset-x)), calc(var(--star-y) * var(--offset-y)));
                 }
             </style>
