@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 ./icons/
+
+# backup files by krita
+*.*~
