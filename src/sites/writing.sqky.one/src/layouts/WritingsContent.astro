@@ -103,6 +103,15 @@ const { Content } = Astro.props;
             #content del {
                 text-decoration: line-through solid;
             }
+
+            #content img,
+            #content picture {
+                display: block;
+                object-fit: scale-down;
+                width: 100%;
+                height: fit-content;
+                image-rendering: smooth;
+            }
         </style>
     </div>
 </LargeSection>
