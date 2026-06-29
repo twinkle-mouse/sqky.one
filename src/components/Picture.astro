@@ -1,9 +1,121 @@
 ---
-import El, { type Props as P } from "astro/components/Picture.astro";
+import type { GetImageResult, ImageOutputFormat, UnresolvedImageTransform } from "astro";
+import { resolveSrc } from "astro/assets/utils";
+import type { HTMLAttributes } from "astro/types";
+import { getImage, imageConfig, type LocalImageProps, type RemoteImageProps } from "astro:assets";
+import * as mime from "mrmime";
 
-export type Props = P;
+export type Props = (LocalImageProps | RemoteImageProps) & {
+    formats?: ImageOutputFormat[];
+    pictureAttributes?: HTMLAttributes<"picture">;
+} & {
+    widths?: number[];
+    densities?: never;
+};
 
-const { alt, ...props } = Astro.props;
+const defaultFormats = ["webp", "avif", "png"] as const;
+
+const { formats = defaultFormats, pictureAttributes = {}, ...props } = Astro.props;
+
+// Picture attribute inherit scoped styles from class and attributes
+const scopedStyleClass = props.class?.match(/\bastro-\w{8}\b/)?.[0];
+if (scopedStyleClass) {
+    if (pictureAttributes.class) {
+        pictureAttributes.class = `${pictureAttributes.class} ${scopedStyleClass}`;
+    } else {
+        pictureAttributes.class = scopedStyleClass;
+    }
+}
+
+const layout = props.layout ?? imageConfig.layout ?? "none";
+const useResponsive = layout !== "none";
+
+if (useResponsive) {
+    props.layout ??= imageConfig.layout;
+    props.fit ??= imageConfig.objectFit ?? "cover";
+    props.position ??= imageConfig.objectPosition ?? "center";
+} else if (imageConfig.objectFit || imageConfig.objectPosition) {
+    props.fit ??= imageConfig.objectFit;
+    props.position ??= imageConfig.objectPosition;
+}
+
+for (const key in props) {
+    if (key.startsWith("data-astro-cid")) {
+        // @ts-expect-error This is for island props so they're not properly typed
+        pictureAttributes[key] = props[key];
+    }
+}
+
+const originalSrc = await resolveSrc(props.src);
+if (typeof originalSrc === "object") {
+    if (!props.widths) {
+        props.widths = [1.0, 0.8, 0.6, 0.4, 0.2].map((v) => Math.round(originalSrc.width * v));
+    }
+}
+const optimizedImages: GetImageResult[] = await Promise.all(
+    formats.map(
+        async (format) =>
+            await getImage({
+                ...props,
+                src: originalSrc,
+                format: format,
+                widths: props.widths,
+                densities: props.densities,
+            } as UnresolvedImageTransform),
+    ),
+);
+
+const fallbackImage = await getImage({
+    ...props,
+    src: originalSrc,
+    width: undefined,
+    widths: undefined,
+    densities: undefined,
+    height: undefined,
+    quality: undefined,
+    format: undefined,
+    fit: undefined,
+    position: undefined,
+    background: undefined,
+} as UnresolvedImageTransform);
+
+const imgAdditionalAttributes: HTMLAttributes<"img"> = {};
+const sourceAdditionalAttributes: HTMLAttributes<"source"> = {};
+
+// Propagate the `sizes` attribute to the `source` elements
+if (props.sizes) {
+    sourceAdditionalAttributes.sizes = props.sizes;
+}
+
+if (fallbackImage.srcSet.values.length > 0) {
+    imgAdditionalAttributes.srcset = fallbackImage.srcSet.attribute;
+}
+
+if (import.meta.env.DEV) {
+    imgAdditionalAttributes["data-image-component"] = "true";
+}
+
+const { class: className, ...attributes } = {
+    ...imgAdditionalAttributes,
+    ...fallbackImage.attributes,
+};
 ---
 
-<El quality="max" formats={["webp", "avif", "png"]} {...props} alt={alt!} />
+<picture {...pictureAttributes}>
+    {
+        Object.entries(optimizedImages).map(([, image]) => {
+            const srcsetAttribute =
+                props.densities || (!props.densities && !props.widths && !useResponsive)
+                    ? `${image.src}${image.srcSet.values.length > 0 ? ", " + image.srcSet.attribute : ""}`
+                    : image.srcSet.attribute;
+            return (
+                <source
+                    srcset={srcsetAttribute}
+                    type={mime.lookup(image.options.format ?? image.src) ?? `image/${image.options.format}`}
+                    {...sourceAdditionalAttributes}
+                />
+            );
+        })
+    }
+    <img src={fallbackImage.src} {...attributes} class={className} />
+</picture>
