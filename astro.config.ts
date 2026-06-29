@@ -96,6 +96,27 @@ export default defineConfig({
         inlineStylesheets: "always",
     },
 
+    image: {
+        service: {
+            entrypoint: "astro/assets/services/sharp",
+            config: {
+                png: {
+                    compressionLevel: 9,
+                },
+                avif: {
+                    quality: 90,
+                    effort: 9,
+                },
+                webp: {
+                    preset: "drawing",
+                    nearLossless: true,
+                    quality: 90,
+                    effort: 6,
+                },
+            },
+        },
+    },
+
     vite: {
         css: {
             transformer: "postcss",
