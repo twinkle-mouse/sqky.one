@@ -1,8 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 
-import { defaultDescription } from "$lib/writings";
-
 type Props = {
     entry: CollectionEntry<"writings">;
 };
@@ -10,16 +8,10 @@ type Props = {
 const { entry } = Astro.props;
 ---
 
-<div class="entry-description">
-    {entry.data.description || defaultDescription}
-</div>
+<div class="entry-description" set:html={entry.data.description} />
 
 <style>
     .entry-description {
-        white-space: pre-line;
-
-        margin-block: 1.25rem;
-
         font-family: var(--sans);
         font-style: italic;
 

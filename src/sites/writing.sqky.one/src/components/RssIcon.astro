@@ -2,19 +2,29 @@
 import RssSvg from "$assets/icons/rss.svg";
 ---
 
-<a href="/rss.xml">
+<a class="rss-link" href="/rss.xml">
     <label class="sr-only">Subscribe to the Squeakenings (RSS)</label>
-    <RssSvg width={32} height={32} class="rss-icon" role="img" />
+    <RssSvg class="rss-icon" role="img" aria-hidden="true" width={32} height={32} />
 </a>
 
 <style>
     a {
-        height: auto;
         display: inline-block;
-        line-height: 0;
+
+        width: 32px;
+        height: 32px;
     }
 
     .rss-icon {
-        color: rgb(255, 199, 96);
+        --glow-blur-size: 2px;
+
+        color: #ffc760;
+        transition: filter 0.2s;
+        filter: drop-shadow(0px 0px var(--glow-blur-size));
+    }
+
+    .rss-icon:hover,
+    .rss-link:focus > .rss-icon {
+        filter: drop-shadow(0px 0px var(--glow-blur-size)) drop-shadow(0px 0px 6px #ffc76050);
     }
 </style>

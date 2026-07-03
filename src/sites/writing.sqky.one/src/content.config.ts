@@ -8,15 +8,20 @@ const ROOT = "./src/sites/writing.sqky.one";
 
 const writings = defineCollection({
     loader: glob({ pattern: "**/*.mdx", base: `${ROOT}/src/entries/writings` }),
-    schema: z.object({
-        title: z.string(),
-        description: z.string().nullable().default(null),
-        date: z.coerce.date(),
-        authors: z.array(z.string()).default(["Stella Sparkles"]),
-        tags: z.array(z.string()).default([]),
-        relations: z.record(z.string(), z.string()).default({}),
-        wip: z.boolean().default(false),
-    }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            cover: image().nullable().default(null),
+            thumbnail: image().nullable().default(null),
+            description: z.string().nullable().default(null),
+            date: z.coerce.date().default(new Date(0)),
+            authors: z.array(z.string()).default(["Stella Sparkles"]),
+            tags: z.array(z.string()).default([]),
+            cw: z.string().nullable().default(null),
+            redirect: z.string().nullable().default(null),
+            relations: z.record(z.string(), z.string()).default({}),
+            wip: z.boolean().default(false),
+        }),
 });
 
 const notes = defineCollection({
@@ -27,4 +32,12 @@ const notes = defineCollection({
     }),
 });
 
-export const collections = { writings, notes, ...parent };
+const people = defineCollection({
+    loader: glob({ pattern: "**/*.mdx", base: `${ROOT}/src/entries/people` }),
+    schema: z.object({
+        name: z.string(),
+        bluesky: z.string().nullable().default(null),
+    }),
+});
+
+export const collections = { writings, notes, people, ...parent };

@@ -2,6 +2,8 @@
 import type { CollectionEntry } from "astro:content";
 
 import EmojiWrapper from "$components/EmojiWrapper.astro";
+import Picture from "$components/Picture.astro";
+import { coverArtAlt } from "$lib/writings";
 
 import WritingDescription from "./WritingDescription.astro";
 import WritingDetails from "./WritingDetails.astro";
@@ -26,7 +28,15 @@ type Props = {
                         </time>
                     </div>
 
-                    <WritingDescription entry={entry} />
+                    <div class="entry-desc-container">
+                        <div class="entry-desc">
+                            <WritingDescription entry={entry} />
+                        </div>
+
+                        {entry.data.cover && (
+                            <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />
+                        )}
+                    </div>
 
                     <div class="entry-details">
                         <WritingDetails entry={entry} />
@@ -35,6 +45,61 @@ type Props = {
             </EmojiWrapper>
         ))
     }
+
+    <style>
+        .entry-desc-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap-reverse;
+            justify-content: center;
+        }
+
+        .entry-desc {
+            max-width: 100%;
+            flex: 1;
+        }
+
+        .cover-art {
+            flex: none;
+
+            width: 240px;
+
+            margin-left: 1.5rem;
+            margin-right: 0.25rem;
+
+            filter: drop-shadow(-4px -4px 4px #00000020) drop-shadow(-4px 4px 4px #00000020) drop-shadow(4px -4px 4px #00000020)
+                drop-shadow(4px 4px 4px #00000020) drop-shadow(0px 0px 3px #00000060);
+        }
+
+        .cover-art-img {
+            height: fit-content;
+        }
+
+        @media (max-width: 1300px) {
+            .cover-art {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 920px) {
+            .cover-art {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .entry-desc {
+                flex: none;
+            }
+
+            .cover-art {
+                margin: 0;
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+                flex-shrink: 1;
+            }
+        }
+    </style>
 
     <style>
         .entries {

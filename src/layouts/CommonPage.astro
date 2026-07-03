@@ -1,6 +1,8 @@
 ---
 import "$assets/reset.css";
 import "$assets/anims.css";
+import "bluesky-profile-card-embed/style.css";
+import "bluesky-profile-card-embed/themes/dark.css"; // we don't currently have a light mode colour scheme :(
 
 import type { HTMLAttributes } from "astro/types";
 import { Font } from "astro:assets";
@@ -101,6 +103,8 @@ stars.sort((a, b) => a.y - b.y);
         <meta property="og:type" content="website" />
         <meta property="og:description" content={desc} />
 
+        <slot name="head-tags" />
+
         <meta name="generator" content={Astro.generator} />
 
         <Font preload cssVariable="--font-noseyrodent" />
@@ -144,7 +148,7 @@ stars.sort((a, b) => a.y - b.y);
             }`}
         ></style>
 
-        <slot name="head-tags" />
+        <slot name="style-overrides" />
     </head>
 
     <body>

@@ -70,6 +70,26 @@ const wordCount = countWords(Content);
     </tbody>
 </table>
 
+{
+    entry.data.cw && (
+        <details>
+            <summary>
+                <span>Content Warnings</span>
+            </summary>
+            <div>
+                <p>This writing has the following content warnings attached:</p>
+                <div class="cw-content" set:html={entry.data.cw} />
+            </div>
+        </details>
+    )
+}
+
+<style>
+    .cw-content {
+        color: var(--strongColor);
+    }
+</style>
+
 <style>
     .entry-details {
         margin-top: 1rem;

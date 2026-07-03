@@ -7,11 +7,11 @@ import WritingEntries from "../../components/WritingEntries.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
 
 export async function getStaticPaths() {
-    return (await getWritingEntries()).flatMap((entry) => {
-        return entry.data.tags.map((tag) => {
+    return [
+        ...new Set((await getWritingEntries()).flatMap((entry) => entry.data.tags)).values().map((tag) => {
             return { params: { tag } };
-        });
-    });
+        }),
+    ];
 }
 
 const { tag } = Astro.params;

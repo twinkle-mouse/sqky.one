@@ -1,0 +1,66 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import { fetchProfileCard, renderProfileCard } from "bluesky-profile-card-embed/core";
+
+import LargeSection from "$layouts/LargeSection.astro";
+import Section from "$layouts/Section.astro";
+import { renderMd, siteDesc } from "$lib/writings";
+
+import WritingsPage from "../../layouts/WritingsPage.astro";
+
+export async function getStaticPaths() {
+    return (await getCollection("people")).map((entry) => {
+        return { params: { id: entry.id } };
+    });
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("people", id);
+if (entry === undefined) {
+    return Astro.redirect("/404");
+}
+
+let blueskyEmbed = null;
+if (entry.data.bluesky) {
+    // fetch the profile
+    const controller = new AbortController();
+    const data = await fetchProfileCard({
+        actor: entry.data.bluesky,
+        signal: controller.signal,
+    });
+
+    // render the profile
+    blueskyEmbed = renderProfileCard(data);
+}
+
+let descHtml = renderMd(entry.body);
+---
+
+<WritingsPage pageName={entry.data.name} desc={siteDesc}>
+    <Fragment slot="page-title">Profile — {entry.data.name}</Fragment>
+
+    <LargeSection>
+        <Section>
+            <div class="profiles">
+                {blueskyEmbed && <bluesky-profile-card actor={entry.data.bluesky} set:html={blueskyEmbed} />}
+            </div>
+
+            <div class="desc" set:html={descHtml} />
+        </Section>
+
+        <style>
+            .profiles {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+
+                padding: 1rem;
+            }
+
+            .desc {
+                font-size: large;
+            }
+        </style>
+    </LargeSection>
+</WritingsPage>

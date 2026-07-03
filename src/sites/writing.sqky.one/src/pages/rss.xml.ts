@@ -3,17 +3,46 @@ import rss from "@astrojs/rss";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
-import sanitizeHtml from "sanitize-html";
+import sanitizeHtml, { type Attributes, type Tag } from "sanitize-html";
 
-import { defaultDescription, getWritingEntries, siteDesc, siteName } from "$lib/writings";
+import Picture from "$components/Picture.astro";
+import { coverArtAlt, getValidWritingEntires, htmlToTextContent, siteDesc, siteName } from "$lib/writings";
 
 import WritingDetails from "../components/WritingDetails.astro";
 
 const container = await experimental_AstroContainer.create();
 container.addServerRenderer({ renderer: mdx });
 
+function transformLinks(context: AstroGlobal, tagName: string, attribs: Attributes): Tag {
+    if (tagName == "a") {
+        attribs["href"] = new URL(attribs["href"] ?? "", context.site).href;
+    }
+
+    if (tagName == "img" || tagName == "source") {
+        if (attribs["src"]) {
+            attribs["src"] = new URL(attribs["src"], context.site).href;
+        }
+        if (attribs["srcset"]) {
+            attribs["srcset"] = attribs["srcset"]
+                .split(",")
+                .map((v) => {
+                    const [uri, dim] = v.trim().split(" ");
+
+                    return `${new URL(uri, context.site).href} ${dim}`;
+                })
+                .join(", ");
+        }
+    }
+
+    return {
+        tagName,
+        attribs,
+    };
+}
+
 export async function GET(context: AstroGlobal) {
-    const writings = await getWritingEntries();
+    const writings = await getValidWritingEntires();
+    const _transformLinks = (tagName: string, attribs: Attributes) => transformLinks(context, tagName, attribs);
 
     return rss({
         title: siteName,
@@ -28,25 +57,46 @@ export async function GET(context: AstroGlobal) {
             "<webMaster>twinkle@sqky.one (Stella Sparkles)</webMaster>",
         ].join(""),
         items: await Promise.all(
-            writings.map(async (post) => {
-                const { Content } = await render(post);
+            writings.map(async (entry) => {
+                const { Content } = await render(entry);
                 const content = await container.renderToString(Content, {
                     props: { components: [] },
                 });
                 const details = await container.renderToString(WritingDetails, {
-                    props: { entry: post },
+                    props: { entry: entry },
                 });
 
+                let coverArt = "";
+                if (entry.data.cover) {
+                    coverArt = await container.renderToString(Picture, {
+                        props: {
+                            src: entry.data.cover,
+                            alt: coverArtAlt(entry),
+                        },
+                    });
+                }
+
                 return {
-                    title: post.data.title,
-                    description: post.data.description || defaultDescription,
-                    pubDate: post.data.date,
-                    categories: post.data.tags,
-                    link: `/writings/${post.id}/`,
-                    content: sanitizeHtml(details.trim() + content.trim(), {
-                        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+                    title: entry.data.title,
+                    description: htmlToTextContent(entry.data.description),
+                    pubDate: entry.data.date,
+                    categories: entry.data.tags,
+                    link: `/writings/${entry.id}/`,
+                    content: sanitizeHtml(details.trim() + coverArt.trim() + content.trim(), {
+                        allowedAttributes: Object.fromEntries([
+                            ...Object.entries(sanitizeHtml.defaults.allowedAttributes),
+                            ...Object.entries({
+                                source: ["srcset", "type"],
+                            }),
+                        ]),
+                        transformTags: {
+                            a: _transformLinks,
+                            img: _transformLinks,
+                            source: _transformLinks,
+                        },
+                        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "source", "picture", "details", "summary"]),
                     }),
-                    customData: [...post.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
+                    customData: [...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
                 };
             }),
         ),

@@ -1,16 +1,17 @@
 ---
 import { getEntry, render } from "astro:content";
-import { getCollection } from "astro:content";
+import * as mime from "mrmime";
 
+import Picture from "$components/Picture.astro";
 import Section from "$layouts/Section.astro";
-import { defaultDescription } from "$lib/writings";
+import { coverArtAlt, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd } from "$lib/writings";
 
 import WritingDetails from "../../components/WritingDetails.astro";
 import WritingsContent from "../../layouts/WritingsContent.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
 
 export async function getStaticPaths() {
-    return (await getCollection("writings")).map((entry) => {
+    return (await getWritingEntries()).map((entry) => {
         return { params: { id: entry.id } };
     });
 }
@@ -20,11 +21,31 @@ const entry = await getEntry("writings", id);
 if (entry === undefined) {
     return Astro.redirect("/404");
 }
+if (entry.data.redirect) {
+    return Astro.redirect(entry.data.redirect);
+}
+renderWritingFrontmatterMd(entry);
 
 const { Content, headings } = await render(entry);
 ---
 
-<WritingsPage pageName={`'${entry.data.title}'`} desc={entry.data.description || defaultDescription}>
+<WritingsPage pageName={`'${entry.data.title}'`} desc={htmlToTextContent(entry.data.description)}>
+    <Fragment slot="head-tags">
+        {
+            entry.data.thumbnail && (
+                <Fragment>
+                    <meta property="og:image" content={new URL(entry.data.thumbnail.src, import.meta.env.SITE)} />
+                    <meta property="og:image:type" content={mime.lookup(entry.data.thumbnail.format ?? entry.data.thumbnail.src)} />
+                    <meta property="og:image:width" content={entry.data.thumbnail.width.toString()} />
+                    <meta property="og:image:height" content={entry.data.thumbnail.height.toString()} />
+                    <meta property="og:image:alt" content={coverArtAlt(entry)} />
+
+                    <meta name="twitter:card" content="summary_large_image" />
+                </Fragment>
+            )
+        }
+    </Fragment>
+
     <Fragment slot="nav:page-links">
         {
             headings.map((v) => (
@@ -37,11 +58,64 @@ const { Content, headings } = await render(entry);
 
     <Fragment slot="page-title">{entry.data.title}</Fragment>
 
-    <Section>
-        <h2><i>Information</i></h2>
+    <div class="top-panel">
+        <Section class="info">
+            <h2><i>Information</i></h2>
 
-        <WritingDetails entry={entry} />
-    </Section>
+            <WritingDetails entry={entry} />
+        </Section>
+
+        {entry.data.cover && <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />}
+    </div>
+
+    <style>
+        .top-panel {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            gap: 0.5rem;
+        }
+
+        .cover-art {
+            flex: 1;
+
+            margin-block: 1.5rem;
+
+            filter: drop-shadow(-8px -8px 8px #00000030) drop-shadow(-8px 8px 8px #00000030) drop-shadow(8px -8px 8px #00000030)
+                drop-shadow(8px 8px 8px #00000030) drop-shadow(0px 0px 4px #00000080);
+        }
+
+        .cover-art-img {
+            height: fit-content;
+        }
+
+        .info {
+            flex: 1.8 1;
+            height: fit-content;
+        }
+
+        @media (max-width: 900px) {
+            .cover-art {
+                margin: 0;
+
+                min-width: 100%;
+                padding-inline: 7.5%;
+                padding-block: 2rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .cover-art {
+                min-width: 100%;
+                padding-inline: 7.5%;
+                padding-block: 1rem;
+                margin-bottom: 0;
+            }
+        }
+    </style>
 
     <WritingsContent Content={Content} />
 </WritingsPage>

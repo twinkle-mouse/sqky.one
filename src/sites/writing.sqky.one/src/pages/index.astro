@@ -1,13 +1,13 @@
 ---
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import { getWritingEntries, siteDesc } from "$lib/writings";
+import { getValidWritingEntires, siteDesc } from "$lib/writings";
 
 import RssIcon from "../components/RssIcon.astro";
 import WritingEntries from "../components/WritingEntries.astro";
 import WritingsPage from "../layouts/WritingsPage.astro";
 
-const entries = await getWritingEntries();
+const entries = await getValidWritingEntires();
 ---
 
 <WritingsPage pageName="Home" desc={siteDesc}>
