@@ -40,6 +40,10 @@ if (config == undefined || markdownProcessor == undefined) {
     throw new Error(`Invalid site selection: ${site}`);
 }
 
+if (import.meta.env.DEV) {
+    config.site = "https://testing.the.sqky.one";
+}
+
 const IosevkaWeights = {
     100: "Thin",
     200: "ExtraLight",
