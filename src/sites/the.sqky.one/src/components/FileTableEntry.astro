@@ -43,7 +43,7 @@ if (entry.isFile) {
 
 <tr>
     <td
-        ><AstroIcon role="img" class="file-icon" name=`material-file/${icon}` width="1.5em" height="1.5em" /><a
+        ><AstroIcon aria-hidden="true" role="img" class="file-icon" name=`material-file/${icon}` width="1.5em" height="1.5em" /><a
             href={URL.parse(`${entry.name}${suffix}`, url)?.pathname}>{`${entry.name}${suffix}`}</a
         >
     </td>
