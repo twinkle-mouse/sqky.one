@@ -181,6 +181,7 @@ import Picture from "$components/Picture.astro";
 
     document.querySelectorAll<HTMLElement>(".pfp-image, .ear-left, .ear-right").forEach((element) => {
         element.style.cursor = "pointer";
+        element.role = "button";
 
         element.addEventListener("click", play);
     });
