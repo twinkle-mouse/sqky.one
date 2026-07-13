@@ -27,9 +27,10 @@ if (entry.data.redirect) {
 renderWritingFrontmatterMd(entry);
 
 const { Content, headings } = await render(entry);
+const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " - ").replaceAll("\n", " ");
 ---
 
-<WritingsPage pageName={`'${entry.data.title}'`} desc={htmlToTextContent(entry.data.description)}>
+<WritingsPage pageName={`'${entry.data.title}'`} desc={desc}>
     <Fragment slot="head-tags">
         {
             entry.data.thumbnail && (
