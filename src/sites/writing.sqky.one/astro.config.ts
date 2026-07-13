@@ -1,16 +1,14 @@
 // @ts-check
-import { unified } from "@astrojs/markdown-remark";
+import { satteri } from "@astrojs/markdown-satteri";
 import { defineConfig } from "astro/config";
 
-import { defaultMarkdownProcessor } from "../../lib/markdown";
-import remarkSectionize from "../../lib/remark-sectionize";
+import { defaultMarkdownConfig } from "../../lib/markdown";
 
 // https://astro.build/config
 export default defineConfig({
     site: "https://writing.sqky.one",
 });
 
-export const markdownProcessor = unified({
-    ...defaultMarkdownProcessor.options,
-    remarkPlugins: [...defaultMarkdownProcessor.options.remarkPlugins, remarkSectionize],
+export const markdownProcessor = satteri({
+    ...defaultMarkdownConfig,
 });

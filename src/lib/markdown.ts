@@ -1,6 +1,17 @@
-import { unified } from "@astrojs/markdown-remark";
-import remarkBreaks from "remark-breaks";
+import type { SatteriProcessorOptions } from "@astrojs/markdown-satteri";
 
-import remarkPreserveConsecutiveBlankLines from "./remark-preserve-consecutive-blank-lines";
+import hardBreaks from "./mdast-hard-breaks";
+import preserveBlankSpace from "./mdast-preserve-blank-space";
+import sectionize, { type Options as SectionizeOptions } from "./mdast-sectionize";
 
-export const defaultMarkdownProcessor = unified({ smartypants: false, remarkPlugins: [remarkPreserveConsecutiveBlankLines, remarkBreaks] });
+export type Options = {
+    sectionize: SectionizeOptions;
+};
+
+export function createMarkdownConfig(options: Options = { sectionize: { maxDepth: 6 } }): SatteriProcessorOptions {
+    return {
+        mdastPlugins: [hardBreaks, preserveBlankSpace, sectionize(options.sectionize)],
+    };
+}
+
+export const defaultMarkdownConfig = createMarkdownConfig();

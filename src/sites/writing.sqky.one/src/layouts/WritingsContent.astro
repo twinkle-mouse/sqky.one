@@ -3,7 +3,8 @@ import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 
 import EmojiWrapper from "$components/EmojiWrapper.astro";
 import LargeSection from "$layouts/LargeSection.astro";
-import Section from "$layouts/Section.astro";
+
+import WritingsSection from "./WritingsSection.astro";
 
 type Props = {
     Content: AstroComponentFactory;
@@ -12,7 +13,7 @@ type Props = {
 const { Content } = Astro.props;
 ---
 
-<LargeSection class="writing">
+<LargeSection type="article" class="writing">
     <style>
         .writing {
             padding-block: 0.8em;
@@ -24,7 +25,7 @@ const { Content } = Astro.props;
         <EmojiWrapper>
             <Content
                 components={{
-                    section: Section,
+                    section: WritingsSection,
                 }}
             />
         </EmojiWrapper>

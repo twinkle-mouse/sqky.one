@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Section from "$layouts/Section.astro";
+
+export type Props = HTMLAttributes<"section">;
+
+const { "data-section-depth": sectionDepthProp, ...props } = Astro.props;
+
+const sectionDepth = Number.parseInt(sectionDepthProp ?? "1");
+---
+
+{
+    // avoid creating sections unless it's h3 or smaller
+    sectionDepth >= 3 ? (
+        <Section {...props}>
+            <slot />
+        </Section>
+    ) : (
+        <section>
+            <slot />
+        </section>
+    )
+}

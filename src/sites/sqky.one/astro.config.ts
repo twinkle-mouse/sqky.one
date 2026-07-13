@@ -1,11 +1,14 @@
 // @ts-check
+import { satteri } from "@astrojs/markdown-satteri";
 import { defineConfig } from "astro/config";
 
-import { defaultMarkdownProcessor } from "../../lib/markdown";
+import { defaultMarkdownConfig } from "../../lib/markdown";
 
 // https://astro.build/config
 export default defineConfig({
     site: "https://sqky.one",
 });
 
-export const markdownProcessor = defaultMarkdownProcessor;
+export const markdownProcessor = satteri({
+    ...defaultMarkdownConfig,
+});

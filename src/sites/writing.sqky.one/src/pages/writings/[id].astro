@@ -27,7 +27,7 @@ if (entry.data.redirect) {
 renderWritingFrontmatterMd(entry);
 
 const { Content, headings } = await render(entry);
-const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " - ").replaceAll("\n", " ");
+const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").replaceAll("   ", " - ");
 ---
 
 <WritingsPage pageName={`'${entry.data.title}'`} desc={desc}>
