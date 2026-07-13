@@ -1,17 +1,14 @@
 ---
-import { TFHazard, ThetaDelta } from "$assets/Icons.ts";
-import Icon from "$components/Icon.astro";
 import Section from "$layouts/Section.astro";
 
 import AboutMeContent from "./AboutMe.mdx";
+import AboutMeContentMisc from "./AboutMeMisc.mdx";
 import AboutMeContentMore from "./AboutMeMore.mdx";
 import Hearts from "./Hearts.astro";
 ---
 
 <Section id="about-me">
-    <div class="markdown">
-        <AboutMeContent />
-    </div>
+    <AboutMeContent />
 
     <section>
         <h3>By The Way, There’s More</h3>
@@ -56,84 +53,5 @@ import Hearts from "./Hearts.astro";
         </style>
     </section>
 
-    <section>
-        <h3>Some Assorted Facts</h3>
-
-        <p>
-            we’re <i class="transgender">transgender</i>!!! and also <i class="nonbinary">nonbinary</i>!!!!!
-            <br />
-
-            and also also <i class="agere">age regressors</i>!!!!!!!!!! i’m <em>permakid</em> and due to complicated reasons, stuck at 12!!!!!!!
-            <br />
-
-            we’re also on the <i class="aroace">aro-ace spectrum</i>!!!!!!
-        </p>
-
-        <style>
-            .transgender,
-            .nonbinary,
-            .aroace,
-            .agere {
-                background-clip: text;
-                color: #ffffff80;
-            }
-
-            .transgender {
-                background-image: linear-gradient(
-                    -45deg,
-                    #5ccefa,
-                    #5ccefa 20%,
-                    #f6a8b7 20%,
-                    #f6a8b7 40%,
-                    #fff 40%,
-                    #fff 60%,
-                    #f6a8b7 60%,
-                    #f6a8b7 80%,
-                    #5ccefa 80%,
-                    #5ccefa
-                );
-            }
-
-            .nonbinary {
-                background-image: linear-gradient(-45deg, #fdf52f, #fdf52f 25%, #fff 25%, #fff 50%, #9d5ad2 50%, #9d5ad2 75%, #000 75%, #000);
-            }
-
-            .aroace {
-                background-image: linear-gradient(
-                    -45deg,
-                    #e38c01,
-                    #e38c01 20%,
-                    #eccd00 20%,
-                    #eccd00 40%,
-                    #fff 40%,
-                    #fff 60%,
-                    #62afde 60%,
-                    #62afde 80%,
-                    #203857 80%,
-                    #203857
-                );
-            }
-
-            .agere {
-                background-image: linear-gradient(-45deg, #fff, #fff 25%, #fdc1c8 25%, #fdc1c8 50%, #afe1fd 50%, #afe1fd 75%, #fcf77c 75%, #fcf77c);
-            }
-        </style>
-    </section>
-
-    <p>
-        We live in <em lang="es">España</em> 🇪🇸 !!!
-        <mark><i><strong lang="es">Puta Renfe</strong>!!!!</i></mark>
-    </p>
-
-    <p>
-        We’re <em>Therian</em>
-        <Icon src={ThetaDelta.src} alt="The Theta-Delta symbol" />!!!!
-        <br />
-
-        <small>(i dont know a good source of info on what this means, if you know a site lmk please)</small>
-        <br />
-
-        We’re a <a href="https://yaodema.com/tf-hazard/">Transformation Hazard</a>
-        <Icon src={TFHazard.src} alt="The TF Hazard symbol" />!!!!!
-    </p>
+    <AboutMeContentMisc />
 </Section>
