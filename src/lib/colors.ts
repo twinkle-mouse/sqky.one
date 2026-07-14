@@ -173,6 +173,8 @@ export const semanticColorsDark = {
     codeBorderColor: slate400,
     strongColor: space300,
     emColor: cuteblue300,
+    markColor: babypink900,
+    markBgColor: grass300,
     quoteColor: lavender100,
     quoteBorderColor: slate600,
     citeColor: lavender400,
