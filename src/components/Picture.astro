@@ -49,7 +49,7 @@ for (const key in props) {
 const originalSrc = await resolveSrc(props.src);
 if (typeof originalSrc === "object") {
     if (!props.widths) {
-        props.widths = [1.0, 0.8, 0.6, 0.4, 0.2].map((v) => Math.round(originalSrc.width * v));
+        props.widths = [1.0, 0.8, 0.7, 0.6, 0.4, 0.2].map((v) => Math.round(originalSrc.width * v));
     }
 }
 const optimizedImages: GetImageResult[] = await Promise.all(
@@ -59,8 +59,6 @@ const optimizedImages: GetImageResult[] = await Promise.all(
                 ...props,
                 src: originalSrc,
                 format: format,
-                widths: props.widths,
-                densities: props.densities,
             } as UnresolvedImageTransform),
     ),
 );
@@ -68,15 +66,6 @@ const optimizedImages: GetImageResult[] = await Promise.all(
 const fallbackImage = await getImage({
     ...props,
     src: originalSrc,
-    width: undefined,
-    widths: undefined,
-    densities: undefined,
-    height: undefined,
-    quality: undefined,
-    format: undefined,
-    fit: undefined,
-    position: undefined,
-    background: undefined,
 } as UnresolvedImageTransform);
 
 const imgAdditionalAttributes: HTMLAttributes<"img"> = {};
