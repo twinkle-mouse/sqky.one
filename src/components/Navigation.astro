@@ -1,5 +1,5 @@
 ---
-import BackToTopIcon from "$assets/back-to-top.svg";
+import { BackToTop } from "$assets/Icons";
 
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
@@ -43,7 +43,7 @@ if (Astro.slots.has("nav:page-links")) {
 <div class="back-to-top">
     <a href="#nav" class="back-to-top-icon">
         <span class="sr-only">Back to top</span>
-        <BackToTopIcon aria-hidden="true" width={36} height={36} />
+        <BackToTop aria-hidden="true" width={36} height={36} />
     </a>
 </div>
 
