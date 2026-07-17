@@ -66,13 +66,16 @@ type Props = {
 
             margin-left: 1.5rem;
             margin-right: 0.25rem;
-
-            filter: drop-shadow(-4px -4px 4px #00000020) drop-shadow(-4px 4px 4px #00000020) drop-shadow(4px -4px 4px #00000020)
-                drop-shadow(4px 4px 4px #00000020) drop-shadow(0px 0px 3px #00000060);
         }
 
         .cover-art-img {
             height: fit-content;
+
+            box-shadow:
+                -4px -4px 8px #00000035,
+                -4px 4px 8px #00000035,
+                4px -4px 8px #00000035,
+                4px 4px 8px #00000035;
         }
 
         @media (max-width: 1300px) {

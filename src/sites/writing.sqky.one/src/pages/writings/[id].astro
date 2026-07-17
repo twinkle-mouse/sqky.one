@@ -83,13 +83,17 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
             flex: 1;
 
             margin-block: 1.5rem;
-
-            filter: drop-shadow(-8px -8px 8px #00000030) drop-shadow(-8px 8px 8px #00000030) drop-shadow(8px -8px 8px #00000030)
-                drop-shadow(8px 8px 8px #00000030) drop-shadow(0px 0px 4px #00000080);
         }
 
         .cover-art-img {
             height: fit-content;
+
+            box-shadow:
+                -8px -8px 8px #00000030,
+                -8px 8px 8px #00000030,
+                8px -8px 8px #00000030,
+                8px 8px 8px #00000030,
+                0px 0px 8px #00000060;
         }
 
         .info {
