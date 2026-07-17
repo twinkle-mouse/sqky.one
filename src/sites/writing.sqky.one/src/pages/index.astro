@@ -1,4 +1,5 @@
 ---
+import EmojiWrapper from "$components/EmojiWrapper.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
 import { getValidWritingEntires, siteDesc } from "$lib/writings";
@@ -21,6 +22,33 @@ const entries = await getValidWritingEntires();
             }
         </style>
 
+        <EmojiWrapper>
+            <Section>
+                <h2>Welcome!</h2>
+
+                <p>
+                    In this glimmering library, we tell the stories of the stars in your heart,
+                    <br />
+                    we sing the lyrics of the twinkles in your eyes,
+                    <br />
+                    and we hurt, we cry, we live, we love—and we hope to make you feel a little less lonely.
+                </p>
+
+                <p>
+                    Most works here are created by <em>Stella Sparkles</em>, though you may occasionally see others on here.
+                    <br />
+                    If you have any thoughts, please <a href="https://sqky.one/#contacts">reach out</a>!
+                    <br />
+                    We're always <em>ecstatic</em> to hear your thoughts.
+                    <br />
+                    <small>(P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)</small>
+                </p>
+
+            </Section>
+        </EmojiWrapper>
+    </LargeSection>
+
+    <LargeSection>
         <Section>
             <h2>Entries</h2>
 
