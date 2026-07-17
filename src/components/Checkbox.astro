@@ -1,0 +1,86 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { Cross } from "$assets/Icons";
+
+export type Props = Omit<HTMLAttributes<"input">, "type">;
+
+const { id, ...props } = Astro.props;
+---
+
+<input id={id} type="checkbox" {...props} />
+<label for={id}>
+    <Cross class="icon" />
+    <slot />
+</label>
+
+<style>
+    input {
+        width: 1px;
+        height: 0px;
+        opacity: 0;
+    }
+
+    label {
+        padding-block: 0.25rem;
+        padding-inline: 0.15rem;
+        margin-block: 0.25rem;
+    }
+
+    input:checked,
+    input:checked + label {
+        color: var(--buttonActiveTextColor);
+    }
+
+    input:hover,
+    input:hover + label,
+    input:focus-visible,
+    input:focus-visible + label {
+        color: var(--buttonHoverTextColor);
+    }
+
+    input:active,
+    input:active + label {
+        color: var(--buttonActiveTextColor);
+    }
+
+    input:focus-visible + label {
+        outline: 2px solid var(--focusColor);
+    }
+
+    .icon {
+        padding: 0.15em;
+        margin-right: 0.275em;
+
+        vertical-align: middle;
+
+        box-sizing: content-box;
+
+        width: 0.7em;
+        height: 0.7em;
+
+        border-radius: 9999px;
+        border: 0.3em solid;
+
+        background-color: var(--inputBgColor);
+        border-color: var(--inputBorderColor);
+        color: transparent;
+    }
+
+    input:checked + label > .icon {
+        background-color: var(--inputActiveBgColor);
+        border-color: var(--inputActiveBorderColor);
+        color: #000;
+    }
+
+    input:hover + label > .icon,
+    input:focus-visible + label > .icon {
+        background-color: var(--inputHoverBgColor);
+        border-color: var(--inputHoverBorderColor);
+    }
+
+    input:active + label > .icon {
+        background-color: var(--inputActiveBgColor);
+        border-color: var(--inputActiveBorderColor);
+    }
+</style>

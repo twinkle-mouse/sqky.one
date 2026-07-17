@@ -1,0 +1,74 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { CaretRight } from "$assets/Icons";
+
+export type Props = HTMLAttributes<"details"> & {
+    src?: string;
+    summary?: string;
+};
+
+const { src, summary, ...props } = Astro.props;
+---
+
+<details {...props}>
+    <summary>
+        <CaretRight class="icon" />
+        <span>{summary}</span>
+        {
+            src && (
+                <a class="mono" href={src}>
+                    {src}
+                </a>
+            )
+        }
+    </summary>
+
+    <slot />
+</details>
+
+<style>
+    .icon {
+        flex: none;
+
+        width: 1.5em;
+        height: 1.5em;
+
+        margin-top: -0.1em;
+
+        color: #fff;
+
+        transform-origin: center center;
+        transition: transform 0.2s ease;
+    }
+
+    @media (prefers-reduced-motion) {
+        .icon {
+            transition: none;
+        }
+    }
+
+    summary > span {
+        margin-left: 0.3em;
+        margin-right: 1em;
+    }
+
+    summary > a {
+        display: inline-block;
+        height: min-content;
+        margin-left: auto;
+    }
+
+    details[open] > summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    details[open] > summary > .icon {
+        transform: rotate(90deg);
+    }
+
+    details:not([open]) > summary > .icon {
+        transform: rotate(0deg);
+    }
+</style>

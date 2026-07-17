@@ -136,38 +136,16 @@ export const colors = {
 };
 
 export const semanticColorsDark = {
+    // global
+    pageBgColor: lavender900,
     focusColor: "#ff1d1d",
-    bgColor: lavender900,
-    articleBgColor: cuteblue900,
-    articleBorderColor: cuteblue700,
-    sectionBgColor: space900,
-    sectionBorderColor: space700,
-    navBgColor: lavender800,
-    navBorderColor: lavender600,
-    navLinkBorderColor: space500,
-    navLinkBgColor: space900,
-    navLinkBgColorActive: space800,
-    navTitleBgColor: slate700,
-    navTitleBorderColor: slate300,
-    sitemapBgColor: babypink800,
-    sitemapLinkBorderColor: cuteblue400,
-    sitemapLinkBgColor: cuteblue800,
-    sitemapLinkBgColorActive: cuteblue700,
+    //
+
+    // generic
     textColor: babypink100,
     linkColor: grass200,
     linkHoverColor: grass500,
-    buttonColor: space800,
-    buttonTextColor: space400,
-    buttonBorderColor: space500,
-    buttonBgColor: cuteblue800,
-    buttonHoverColor: space400,
-    buttonHoverTextColor: space200,
-    buttonHoverBorderColor: space700,
-    buttonActiveColor: cuteblue100,
-    buttonActiveTextColor: cuteblue100,
-    buttonActiveBorderColor: cuteblue600,
     headingColor: lavender300,
-    articleHeadingColor: lavender400,
     smallColor: slate300,
     codeBgColor: slate600,
     codeBorderColor: slate400,
@@ -179,17 +157,63 @@ export const semanticColorsDark = {
     quoteBorderColor: slate600,
     citeColor: lavender400,
     separatorColor: babypink400,
-    blockFocusBorderColor: space500,
-    textAreaColor: cuteblue100,
-    textAreaBgColor: slate900,
-    textAreaBorderColor: slate700,
+
     detailsBgColor: slate900,
     detailsBorderColor: slate700,
     summaryColor: space300,
+
     tableHeadBgColor: lavender800,
     tableBodyBgColor: lavender900,
     thBorderColor: lavender600,
     tdBorderColor: lavender600,
+    //
+
+    // sections
+    articleBgColor: cuteblue900,
+    articleBorderColor: cuteblue700,
+
+    sectionBgColor: space900,
+    sectionBorderColor: space700,
+
+    // navigation
+    navTitleBgColor: slate700,
+    navTitleBorderColor: slate300,
+
+    navBgColor: lavender800,
+    navBorderColor: lavender600,
+    navLinkBgColor: space900,
+    navLinkBorderColor: space500,
+    navLinkActiveBgColor: space800,
+
+    sitemapBgColor: babypink800,
+    //sitemapBorderColor
+    sitemapLinkBgColor: cuteblue800,
+    sitemapLinkBorderColor: cuteblue400,
+    sitemapLinkActiveBgColor: cuteblue700,
+    //
+
+    // interactive
+    textAreaColor: cuteblue100,
+    textAreaBgColor: slate900,
+    textAreaBorderColor: slate700,
+
+    buttonTextColor: lavender300,
+    buttonBgColor: cuteblue800,
+    buttonBorderColor: space500,
+    buttonHoverTextColor: lavender100,
+    buttonHoverBgColor: cuteblue700,
+    buttonHoverBorderColor: space100,
+    buttonActiveTextColor: lavender500,
+    buttonActiveBgColor: cuteblue900,
+    buttonActiveBorderColor: space400,
+
+    inputBgColor: lavender400,
+    inputBorderColor: space700,
+    inputHoverBgColor: lavender100,
+    inputHoverBorderColor: cuteblue600,
+    inputActiveBgColor: lavender400,
+    inputActiveBorderColor: space700,
+    //
 };
 
 export const semanticUtilsDark = {
@@ -199,65 +223,11 @@ export const semanticUtilsDark = {
     `,
 };
 
-/*
-export const semanticColorsLight = {
-    bgColor: "#fff",
-    articleBgColor: cuteblue100,
-    articleBorderColor: cuteblue600,
-    sectionBgColor: lavender100,
-    sectionBorderColor: lavender600,
-    navBgColor: lavender100,
-    navBorderColor: lavender600,
-    navLinkBorderColor: space500,
-    navLinkBgColor: slate100,
-    navLinkBgColorActive: cuteblue100,
-    navTitleBgColor: slate100,
-    navTitleBorderColor: slate500,
-    sitemapBgColor: babypink100,
-    sitemapLinkBorderColor: lavender600,
-    sitemapLinkBgColor: slate100,
-    sitemapLinkBgColorActive: lavender100,
-    textColor: space800,
-    linkColor: grass700,
-    linkFocusColor: grass600,
-    buttonColor: cuteblue400,
-    buttonBorderColor: cuteblue300,
-    buttonBgColor: cuteblue200,
-    buttonActiveColor: cuteblue600,
-    buttonActiveBorderColor: cuteblue400,
-    headingColor: cuteblue600,
-    articleHeadingColor: lavender600,
-    smallColor: slate600,
-    codeBgColor: slate100,
-    codeBorderColor: slate300,
-    strongColor: cuteblue600,
-    emColor: babypink700,
-    quoteColor: slate700,
-    citeColor: lavender700,
-    separatorColor: babypink700,
-    blockFocusBorderColor: cuteblue400,
-    textAreaColor: cuteblue900,
-    textAreaBgColor: slate400,
-    textAreaBorderColor: slate200,
-    tableHeadBgColor: lavender100,
-    tableBodyBgColor: lavender200,
-    thBorderColor: lavender500,
-    tdBorderColor: lavender500,
-};
-
-export const semanticUtilsLight = {
-    cardBoxShadow: `
-        0px 0px 6px 3px rgba(219, 219, 219, 0.5),
-        inset 0px 0px 3px 2px rgba(112, 169, 184, 0.2)
-    `,
-};
-*/
-
 export const semanticColorsLight = semanticColorsDark;
 export const semanticUtilsLight = semanticUtilsDark;
 
 export const semanticColorsDarkLavenderOverride = {
-    bgColor: "#101020",
+    pageBgColor: "#101020",
     textColor: "#fff2f2",
     headingColor: cuteblue100,
     sectionBgColor: "#201c24",

@@ -2,6 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { type CollectionEntry, render } from "astro:content";
 
+import Details from "$components/Details.astro";
 import { countWords } from "$lib/writings";
 
 type Props = {
@@ -72,15 +73,12 @@ const wordCount = countWords(Content);
 
 {
     entry.data.cw && (
-        <details>
-            <summary>
-                <span>Content Warnings</span>
-            </summary>
+        <Details summary="Content Warnings">
             <div>
                 <p>This writing has the following content warnings attached:</p>
                 <div class="cw-content" set:html={entry.data.cw} />
             </div>
-        </details>
+        </Details>
     )
 }
 

@@ -1,4 +1,5 @@
 ---
+import Checkbox from "$components/Checkbox.astro";
 import Section from "$layouts/Section.astro";
 import { colors } from "$lib/colors";
 
@@ -23,8 +24,7 @@ import ColorCard from "./ColorCard.astro";
         <p class="text-center">all the colours are personally picked by me :3</p>
 
         <div id="toggle-card-names" class="text-center">
-            <input type="checkbox" id="toggle-card-names-visibility" />
-            <label for="toggle-card-names-visibility">Toggle card names</label>
+            <Checkbox id="toggle-card-names-visibility">Toggle card names</Checkbox>
         </div>
 
         <div class="color-cards-container">
@@ -186,10 +186,6 @@ import ColorCard from "./ColorCard.astro";
 
         text-decoration: underline;
         text-transform: capitalize;
-    }
-
-    #toggle-card-names {
-        margin-top: 2em;
     }
 </style>
 

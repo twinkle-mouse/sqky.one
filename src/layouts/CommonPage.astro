@@ -304,7 +304,7 @@ stars.sort((a, b) => a.y - b.y);
         scrollbar-gutter: auto;
 
         color: var(--textColor);
-        background-color: var(--bgColor);
+        background-color: var(--pageBgColor);
     }
 
     html,
@@ -511,77 +511,6 @@ stars.sort((a, b) => a.y - b.y);
         font-family: var(--mono);
     }
 
-    button,
-    input,
-    input + label,
-    input::file-selector-button {
-        display: inline-block;
-        cursor: pointer;
-        user-select: none;
-        font-family: var(--sans);
-        color: var(--buttonTextColor);
-    }
-
-    button,
-    input::file-selector-button {
-        margin-inline: 0.6rem;
-        margin-block: 0.6rem;
-        padding: 0.6rem;
-        border-radius: 0.4rem;
-
-        background-color: var(--buttonBgColor);
-        border: 3px solid var(--buttonActiveColor);
-    }
-
-    input[type="checkbox"] {
-        width: 1.35em;
-        height: 1.35em;
-        vertical-align: top;
-    }
-
-    input[type="checkbox"]::after {
-        content: "";
-        display: inline-block;
-
-        width: 100%;
-        height: 100%;
-
-        border-radius: 9999px;
-        background-color: var(--buttonColor);
-        border: 4px solid;
-        border-color: var(--buttonBorderColor);
-    }
-
-    input[type="checkbox"]:hover::after {
-        background-color: var(--buttonHoverColor);
-        border-color: var(--buttonHoverBorderColor);
-    }
-
-    input[type="checkbox"]:checked::after {
-        background-color: var(--buttonActiveColor);
-        border-color: var(--buttonActiveBorderColor);
-    }
-
-    input[type="checkbox"] + label {
-        margin-left: 0.35em;
-    }
-
-    input + label {
-        text-decoration: underline;
-        text-underline-offset: 30%;
-    }
-
-    button:hover,
-    input:hover,
-    input:hover + label,
-    input:hover::file-selector-button {
-        color: var(--buttonHoverTextColor);
-    }
-
-    input:checked + label {
-        color: var(--buttonActiveTextColor);
-    }
-
     blockquote {
         margin-block: 1.25rem;
         margin-left: 1rem;
@@ -699,6 +628,9 @@ stars.sort((a, b) => a.y - b.y);
     summary {
         display: flex;
 
+        min-width: max-content;
+        width: 100%;
+
         padding: 0.35rem;
 
         color: var(--summaryColor);
@@ -707,59 +639,12 @@ stars.sort((a, b) => a.y - b.y);
         outline: 3px solid var(--detailsBorderColor);
     }
 
-    summary::before {
-        content: "";
-
-        flex: 0 0;
-
-        height: 0.15em;
-        margin-inline: 0.2em;
-
-        display: inline-block;
-
-        border: 0.5em solid;
-        border-color: transparent transparent transparent #fff;
-        box-sizing: content-box;
-
-        transform-origin: center center;
-        transition: transform 0.2s ease;
-    }
-
-    @media (prefers-reduced-motion) {
-        summary::before {
-            transition: none;
-        }
-    }
-
-    summary > span {
-        margin-left: 0.3em;
-        margin-right: 1em;
-    }
-
-    summary > a {
-        display: inline-block;
-        height: min-content;
-        margin-left: auto;
-    }
-
-    details[open] > summary {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-
-    details[open] > summary::before {
-        transform: scaleX(0.75) rotate(90deg) translateX(25%);
-    }
-
-    details:not([open]) > summary::before {
-        transform: scaleY(0.75) rotate(0deg) translateX(25%);
-    }
-
     details > :not(summary) {
         background: none;
         border: none;
 
-        padding-block: 0.1px;
+        padding-block: 1px;
+        padding-inline: 0.5rem;
 
         margin-top: 6px;
         border-top-left-radius: 0;
@@ -767,8 +652,45 @@ stars.sort((a, b) => a.y - b.y);
         outline: 3px solid var(--detailsBorderColor);
     }
 
-    details > :not(summary) p {
-        margin-inline: 1rem;
+    input,
+    label,
+    button,
+    input::file-selector-button {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+
+        font-family: var(--sans);
+        text-decoration: underline;
+        text-underline-offset: 15%;
+
+        color: var(--buttonTextColor);
+    }
+
+    button,
+    input::file-selector-button {
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.4rem;
+
+        background-color: var(--buttonBgColor);
+        border: 3px solid var(--buttonBorderColor);
+    }
+
+    button:hover,
+    button:focus-visible,
+    input:hover::file-selector-button,
+    input:focus-visible::file-selector-button {
+        color: var(--buttonHoverTextColor);
+        background-color: var(--buttonHoverBgColor);
+        border-color: var(--buttonHoverBorderColor);
+    }
+
+    button:active,
+    input:active::file-selector-button {
+        color: var(--buttonActiveTextColor);
+        background-color: var(--buttonActiveBgColor);
+        border-color: var(--buttonActiveBorderColor);
     }
 
     a:focus-visible,

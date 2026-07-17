@@ -6,25 +6,22 @@ import path from "node:path";
 import type { HTMLAttributes } from "astro/types";
 import { root } from "astro:config/server";
 
+import Details from "./Details.astro";
+
 export type Props = HTMLAttributes<"textarea"> & {
     src: string;
-    desc?: string;
+    summary?: string;
 };
 
-const { src, desc, class: cls, ...props } = Astro.props;
+const { src, summary, class: cls, ...props } = Astro.props;
 const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding: "utf8" });
 
 const uuid = `textfile-${randomUUID()}`;
 ---
 
-<details>
-    <summary>
-        <span>{desc}</span>
-        <a class="mono" href={src}>{src}</a>
-    </summary>
-
+<Details src={src} summary={summary}>
     <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", cls]}>{file}</textarea>
-</details>
+</Details>
 
 <style>
     summary {
@@ -33,6 +30,7 @@ const uuid = `textfile-${randomUUID()}`;
     }
 
     textarea {
+        padding-block: 0.25rem;
         text-wrap: nowrap;
     }
 </style>
