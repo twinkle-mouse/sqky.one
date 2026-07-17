@@ -57,7 +57,7 @@ export function htmlToTextContent(content: string | undefined | null) {
     const flatChildren = flattenTreeDepthFirst(element);
 
     let text = "";
-    for (const child of flatChilren) {
+    for (const child of flatChildren) {
         if (child.rawTagName == "br") {
             text += "\n";
             continue;
@@ -106,6 +106,13 @@ export async function getValidWritingEntires() {
 
 export async function getNotesEntries() {
     return await getCollection("notes");
+}
+
+export async function getAllTags() {
+    const tags = [...new Set((await getValidWritingEntires()).flatMap((entry) => entry.data.tags)).values()];
+    tags.sort();
+
+    return tags;
 }
 
 export function coverArtAlt(entry: CollectionEntry<"writings">) {
