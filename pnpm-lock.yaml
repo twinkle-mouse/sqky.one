@@ -14,6 +14,9 @@ importers:
       astro-icon:
         specifier: github:twinkle-mouse/astro-icon
         version: https://codeload.github.com/twinkle-mouse/astro-icon/tar.gz/5a5f872460ac1ee4e4f63cfc4c6df58035a0ff9f
+      fuse.js:
+        specifier: ^7.5.0
+        version: 7.5.0
     devDependencies:
       '@astrojs/markdown-satteri':
         specifier: ^0.3.3
@@ -1622,6 +1625,10 @@ packages:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+
+  fuse.js@7.5.0:
+    resolution: {integrity: sha512-sQtrEfA+ez/3G0cCZecF70oqpCRttCexYUG4mUrtWL49ULUzUyxokt5kyqwtKzj1270RaKih+hcP3qLcumccow==}
+    engines: {node: '>=10'}
 
   get-tsconfig@5.0.0-beta.4:
     resolution: {integrity: sha512-7nF7C9fIPFEMHgEMEfgIlO9wDdZ8CyHw27rWciFZfHvHDReIiPhsYuzPRXsfvBCqFy1l8RRyyWV7QLM+ZhUJsQ==}
@@ -4200,6 +4207,8 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
+
+  fuse.js@7.5.0: {}
 
   get-tsconfig@5.0.0-beta.4:
     dependencies:

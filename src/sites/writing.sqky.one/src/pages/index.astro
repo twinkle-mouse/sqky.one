@@ -1,14 +1,17 @@
 ---
+import Details from "$components/Details.astro";
 import EmojiWrapper from "$components/EmojiWrapper.astro";
+import SearchInput from "$components/SearchInput.astro";
 import LargeSection from "$layouts/LargeSection.astro";
 import Section from "$layouts/Section.astro";
-import { getValidWritingEntires, siteDesc } from "$lib/writings";
+import { getAllTags, getValidWritingEntires, siteDesc } from "$lib/writings";
 
 import RssIcon from "../components/RssIcon.astro";
 import WritingEntries from "../components/WritingEntries.astro";
 import WritingsPage from "../layouts/WritingsPage.astro";
 
 const entries = await getValidWritingEntires();
+const tags = await getAllTags();
 ---
 
 <WritingsPage pageName="Home" desc={siteDesc}>
@@ -44,6 +47,99 @@ const entries = await getValidWritingEntires();
                     <small>(P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)</small>
                 </p>
 
+                <section>
+                    <h3>Entry Filters</h3>
+
+                    <Details summary="List of all tags">
+                        <div>
+                            <div class="search-input-container" hidden>
+                                <SearchInput id="writings-tags-filter-input" class="filter-input" data-search-values={JSON.stringify(tags)}>
+                                    Search tags by name:
+                                </SearchInput>
+                            </div>
+
+                            <ul id="writings-tags">
+                                {
+                                    tags.map((v) => (
+                                        <li>
+                                            <a href={`#${v}`}>{v}</a>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </Details>
+
+                    <style>
+                        .search-input-container {
+                            margin-block: 0.5rem;
+                        }
+                    </style>
+
+                    <script>
+                        import Fuse from "fuse.js";
+
+                        const searchInputContainers = document.querySelectorAll<HTMLElement>(".search-input-container");
+                        searchInputContainers.forEach((e) => (e.hidden = false));
+
+                        const writingsTagsFilterInput = document.getElementById("writings-tags-filter-input")! as HTMLInputElement;
+                        const writingsTags = document.querySelectorAll<HTMLElement>("#writings-tags > li");
+                        const writingsTagsValues = JSON.parse(writingsTagsFilterInput.dataset.searchValues ?? "[]") as string[];
+
+                        const tagsFuse = new Fuse(writingsTagsValues, { includeScore: true, threshold: 0.4 });
+
+                        function onSearchChanged() {
+                            writingsTags.forEach((li) => {
+                                const score = Number.parseFloat(li.dataset.searchScore ?? "0");
+
+                                if (score >= 1) {
+                                    li.hidden = true;
+                                } else {
+                                    li.hidden = false;
+
+                                    while (true) {
+                                        const prev = li.previousElementSibling;
+                                        if (!prev) break;
+
+                                        const prevScore = Number.parseFloat((prev as HTMLElement).dataset.searchScore ?? "0");
+                                        if (score < prevScore) {
+                                            li.parentNode?.insertBefore(li, prev);
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        function updateSearch() {
+                            if (writingsTagsFilterInput.value) {
+                                const results = new Map(tagsFuse.search(writingsTagsFilterInput.value).map((v) => [v.item, v]));
+
+                                writingsTags.forEach((li) => {
+                                    const result = results.get(li.textContent);
+                                    li.dataset.searchScore = result?.score?.toString() ?? "1";
+
+                                    onSearchChanged();
+                                });
+                            } else {
+                                writingsTags.forEach((li) => {
+                                    li.dataset.searchScore = "0";
+
+                                    onSearchChanged();
+                                });
+                            }
+                        }
+
+                        writingsTagsFilterInput.addEventListener("input", () => {
+                            updateSearch();
+                        });
+
+                        document.addEventListener("DOMContentLoaded", () => {
+                            updateSearch();
+                        });
+                    </script>
+                </section>
             </Section>
         </EmojiWrapper>
     </LargeSection>
