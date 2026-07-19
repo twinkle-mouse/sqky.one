@@ -15,6 +15,12 @@ const { id, ...props } = Astro.props;
 </label>
 
 <style>
+    input,
+    label {
+        user-select: none;
+        cursor: pointer;
+    }
+
     input {
         width: 1px;
         height: 0px;
@@ -25,11 +31,6 @@ const { id, ...props } = Astro.props;
         padding-block: 0.25rem;
         padding-inline: 0.15rem;
         margin-block: 0.25rem;
-    }
-
-    input:checked,
-    input:checked + label {
-        color: var(--buttonActiveTextColor);
     }
 
     input:hover,

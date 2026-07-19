@@ -657,8 +657,6 @@ stars.sort((a, b) => a.y - b.y);
     button,
     input::file-selector-button {
         display: inline-block;
-        cursor: pointer;
-        user-select: none;
 
         font-family: var(--sans);
         text-decoration: underline;
@@ -669,6 +667,9 @@ stars.sort((a, b) => a.y - b.y);
 
     button,
     input::file-selector-button {
+        user-select: none;
+        cursor: pointer;
+
         margin: 0.5rem;
         padding: 0.5rem;
         border-radius: 0.4rem;

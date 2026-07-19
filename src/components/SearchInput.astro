@@ -10,16 +10,6 @@ const { id, ...props } = Astro.props;
 <input id={id} type="search" {...props} />
 
 <style>
-    input,
-    label {
-        cursor: unset;
-        text-decoration: unset;
-    }
-
-    label {
-        color: var(--strongColor);
-    }
-
     input {
         color: var(--textColor);
     }
