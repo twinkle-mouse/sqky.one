@@ -43,13 +43,19 @@ function flattenTreeDepthFirst(rootNode: Node) {
     return nodes;
 }
 
-export async function renderMd(content: string | undefined | null) {
-    return (await mdRenderer.render(content ?? "")).code
+export function normalizeHtml(content: string | undefined | null) {
+    return (content ?? "")
         .trim()
         .replaceAll("&lt;", "<") // unescape
         .replaceAll("&gt;", ">")
         .replaceAll("\r", "") // remove \r
         .replaceAll("\n", " "); // replace \n with a space, it wouldn't render in HTML but it can be used in `htmlToTextContent`;
+}
+
+export async function renderMd(content: string | undefined | null) {
+    const rendered = await mdRenderer.render(content ?? "");
+
+    return normalizeHtml(rendered.code);
 }
 
 export function htmlToTextContent(content: string | undefined | null) {

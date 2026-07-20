@@ -6,7 +6,7 @@ import { render } from "astro:content";
 import sanitizeHtml, { type Attributes, type Tag } from "sanitize-html";
 
 import Picture from "$components/Picture.astro";
-import { coverArtAlt, getValidWritingEntires, htmlToTextContent, siteDesc, siteName } from "$lib/writings";
+import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, siteDesc, siteName } from "$lib/writings";
 
 import WritingDetails from "../components/WritingDetails.astro";
 
@@ -59,21 +59,27 @@ export async function GET(context: AstroGlobal) {
         items: await Promise.all(
             writings.map(async (entry) => {
                 const { Content } = await render(entry);
-                const content = await container.renderToString(Content, {
-                    props: { components: [] },
-                });
-                const details = await container.renderToString(WritingDetails, {
-                    props: { entry: entry },
-                });
+                const content = normalizeHtml(
+                    await container.renderToString(Content, {
+                        props: { components: [] },
+                    }),
+                );
+                const details = normalizeHtml(
+                    await container.renderToString(WritingDetails, {
+                        props: { entry: entry },
+                    }),
+                );
 
                 let coverArt = "";
                 if (entry.data.cover) {
-                    coverArt = await container.renderToString(Picture, {
-                        props: {
-                            src: entry.data.cover,
-                            alt: coverArtAlt(entry),
-                        },
-                    });
+                    coverArt = normalizeHtml(
+                        await container.renderToString(Picture, {
+                            props: {
+                                src: entry.data.cover,
+                                alt: coverArtAlt(entry),
+                            },
+                        }),
+                    );
                 }
 
                 return {
@@ -82,7 +88,7 @@ export async function GET(context: AstroGlobal) {
                     pubDate: entry.data.date,
                     categories: entry.data.tags,
                     link: `/writings/${entry.id}/`,
-                    content: sanitizeHtml(details.trim() + coverArt.trim() + content.trim(), {
+                    content: sanitizeHtml(details + coverArt + content, {
                         allowedAttributes: Object.fromEntries([
                             ...Object.entries(sanitizeHtml.defaults.allowedAttributes),
                             ...Object.entries({
