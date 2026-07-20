@@ -8,11 +8,12 @@ export type Props = HTMLAttributes<"section">;
 const { "data-section-depth": sectionDepthProp, ...props } = Astro.props;
 
 const sectionDepth = Number.parseInt(sectionDepthProp ?? "1");
+// avoid creating sections unless it's h2 or larger
+const shouldStyle = sectionDepth <= 2;
 ---
 
 {
-    // avoid creating sections unless it's h3 or smaller
-    sectionDepth >= 3 ? (
+    shouldStyle ? (
         <Section {...props}>
             <slot />
         </Section>
