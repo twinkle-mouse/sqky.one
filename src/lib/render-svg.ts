@@ -1,7 +1,7 @@
 /// https://github.com/jasikpark/astro-svg-loader/blob/main/src/components/Svg/overrideSvgAttributes.ts
 
 import type { HTMLAttributes } from "astro/types";
-import { type Node, NodeType, parse } from "node-html-parser";
+import { HTMLElement, type Node, NodeType, parse } from "node-html-parser";
 
 // Type guard to check if a node is an ElementNode with SVG tag
 function isSvgElementNode(node: Node): node is Node & HTMLElement {
