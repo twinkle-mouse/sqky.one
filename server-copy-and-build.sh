@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm -rf ./dist || exit
 rm -rf /usr/local/etc/nginx-indexing/ || exit
 mkdir -p /usr/local/etc/nginx-indexing/ || exit
 cp -r ./* /usr/local/etc/nginx-indexing/ || exit
