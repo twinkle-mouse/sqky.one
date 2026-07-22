@@ -7,7 +7,7 @@ import WritingEntries from "../../components/WritingEntries.astro";
 import WritingsPage from "../../layouts/WritingsPage.astro";
 
 export async function getStaticPaths() {
-    return (await getAllTags()).map((tag) => {
+    return (await getAllTags()).map(([tag]) => {
         return { params: { tag } };
     });
 }
