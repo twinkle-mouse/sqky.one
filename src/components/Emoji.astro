@@ -22,7 +22,12 @@ const emoji = renderSvg(emojiEntry?.data.src, {
     id: undefined,
     width: width ?? "1.2em",
     height: height ?? "1.2em",
-});
+})
+    .toString()
+    .trim()
+    .replaceAll("\t", "")
+    .replaceAll("\n", "")
+    .replaceAll("\r", "");
 
 const spaceWidth = 0.263;
 ---
