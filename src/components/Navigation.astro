@@ -19,6 +19,8 @@ if (Astro.slots.has("nav:page-links")) {
             </ul>
         </div>
 
+        <slot name="nav:other-categories" />
+
         <div class="sitemap">
             <p>Sitemap</p>
             <ul>
@@ -30,8 +32,6 @@ if (Astro.slots.has("nav:page-links")) {
                 <li><a href="https://status.sqky.one/">Uptime Status</a></li>
             </ul>
         </div>
-
-        <slot name="nav:other-categories" />
 
         <slot name="nav:footer" />
 
