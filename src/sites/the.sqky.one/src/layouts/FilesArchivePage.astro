@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
 
-import Emoji from "$components/Emoji.astro";
 import Navigation from "$components/Navigation.astro";
 import Page, { type Props as PageProps } from "$layouts/CommonPage.astro";
 
@@ -20,8 +19,8 @@ type Props = Omit<PageProps, "siteName" | "desc">;
             <div>
                 <p>Navigation</p>
                 <ul>
-                    <li><a href="/">Back to root <Emoji e="⤴️" /> </a></li>
-                    <li><a href="../">Back up <Emoji e="⬆️" /> </a></li>
+                    <li><a href="/">Back to root ⤴️ </a></li>
+                    <li><a href="../">Back up ⬆️ </a></li>
                 </ul>
             </div>
             <slot name="nav:other-categories" />

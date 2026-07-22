@@ -1,6 +1,8 @@
 ---
 import { BackToTop } from "$assets/Icons";
 
+import EmojiWrapper from "./EmojiWrapper.astro";
+
 let pageLinks = undefined;
 if (Astro.slots.has("nav:page-links")) {
     pageLinks = (await Astro.slots.render("nav:page-links")).trim();
@@ -8,36 +10,38 @@ if (Astro.slots.has("nav:page-links")) {
 ---
 
 <nav id="nav">
-    <div id="nav-items">
-        <div>
-            <p>This Page</p>
-            <ul>
-                <li>
-                    <a href="#maincontent">Skip to content</a>
-                </li>
-                {pageLinks && <Fragment set:html={pageLinks} />}
-            </ul>
+    <EmojiWrapper>
+        <div id="nav-items">
+            <div>
+                <p>This Page</p>
+                <ul>
+                    <li>
+                        <a href="#maincontent">Skip to content</a>
+                    </li>
+                    {pageLinks && <Fragment set:html={pageLinks} />}
+                </ul>
+            </div>
+
+            <slot name="nav:other-categories" />
+
+            <div class="sitemap">
+                <p>Sitemap</p>
+                <ul>
+                    <li><a href="https://sqky.one/#">Stella’s Home</a></li>
+                    <li><a href="https://sqky.one/lavender/#">Lavender’s Home</a></li>
+                    <li><a href="https://writing.sqky.one/#">Stardew Library</a></li>
+                    <li><a href="https://the.sqky.one/#">Files Archive</a></li>
+                    <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
+                    <li><a href="https://status.sqky.one/">Uptime Status</a></li>
+                </ul>
+            </div>
+
+            <slot name="nav:footer" />
+
+            <!-- to fill up space -->
+            <div class="filler"></div>
         </div>
-
-        <slot name="nav:other-categories" />
-
-        <div class="sitemap">
-            <p>Sitemap</p>
-            <ul>
-                <li><a href="https://sqky.one/#">Stella’s Home</a></li>
-                <li><a href="https://sqky.one/lavender/#">Lavender’s Home</a></li>
-                <li><a href="https://writing.sqky.one/#">Stardew Library</a></li>
-                <li><a href="https://the.sqky.one/#">Files Archive</a></li>
-                <li><a href="https://media.sqky.one/">Public Jellyfin</a></li>
-                <li><a href="https://status.sqky.one/">Uptime Status</a></li>
-            </ul>
-        </div>
-
-        <slot name="nav:footer" />
-
-        <!-- to fill up space -->
-        <div class="filler"></div>
-    </div>
+    </EmojiWrapper>
 </nav>
 
 <div class="back-to-top">
