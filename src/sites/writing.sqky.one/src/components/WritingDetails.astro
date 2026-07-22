@@ -36,15 +36,13 @@ const wordCount = countWords(Content);
                 <tr>
                     <th scope="row">Tags</th>
                     <td>
-                        {entry.data.tags
-                            .map((tag) => <a href={`/tag/${tag}`}>{tag}</a>)
-                            .flatMap((v, index) => {
-                                if (index < entry.data.tags.length - 1) {
-                                    return [v, ", "];
-                                } else {
-                                    return v;
-                                }
-                            }) || "(none)"}
+                        <ul>
+                            {entry.data.tags.map((tag) => (
+                                <li>
+                                    <a href={`/tag/${tag}`}>{tag}</a>
+                                </li>
+                            )) || "(none)"}
+                        </ul>
                     </td>
                 </tr>
             )
@@ -107,5 +105,14 @@ const wordCount = countWords(Content);
     .entry-details td {
         color: var(--babypink200);
         width: 100%;
+    }
+
+    .entry-details ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        list-style: inside;
     }
 </style>
