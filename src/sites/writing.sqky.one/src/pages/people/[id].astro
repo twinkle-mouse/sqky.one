@@ -42,7 +42,10 @@ let descHtml = renderMd(entry.body);
     <LargeSection>
         <Section>
             <div class="profiles">
-                {blueskyEmbed && <bluesky-profile-card actor={entry.data.bluesky} set:html={blueskyEmbed} />}
+                <section>
+                    <h2 class="sr-only">BlueSky Profile</h2>
+                    {blueskyEmbed && <bluesky-profile-card actor={entry.data.bluesky} set:html={blueskyEmbed} />}
+                </section>
             </div>
 
             <div class="desc" set:html={descHtml} />
