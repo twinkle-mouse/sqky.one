@@ -9,9 +9,11 @@ export type Props = HTMLAttributes<"span"> & {
     e: string;
     width?: string | number | undefined;
     height?: string | number | undefined;
+    spaceBefore?: string;
+    spaceAfter?: string;
 };
 
-const { e, width, height, "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
+const { e, width, height, spaceBefore = "", spaceAfter = "", "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
 
 const name = getEmojiName(e);
 const emojiEntry = await getEntry("emojis", name);
@@ -21,10 +23,17 @@ const emoji = renderSvg(emojiEntry?.data.src, {
     width: width ?? "1.2em",
     height: height ?? "1.2em",
 });
+
+const spaceWidth = 0.263;
 ---
 
-<span {...props} aria-hidden={(ariaHidden ?? "true") ? "true" : undefined} class:list={["emoji", cls]}>
-    <span data-emoji="true">{e}</span>
+<span
+    {...props}
+    style={{ marginLeft: `${spaceBefore.length * spaceWidth}em`, marginRight: `${spaceAfter.length * spaceWidth}em` }}
+    aria-hidden={(ariaHidden ?? "true") ? "true" : undefined}
+    class:list={["emoji", cls]}
+>
+    <span data-emoji="true">{spaceBefore}{e}{spaceAfter}</span>
     <Fragment set:html={emoji} />
 </span>
 

@@ -30,6 +30,7 @@ const rendered = await Astro.slots.render("default");
 const container = await experimental_AstroContainer.create();
 
 const regex = emojiRegex();
+const emojiElementRegex = /(\s*)<__EMOJI__>(.*)<__EMOJI__>(\s*)/g;
 const element = parse(rendered);
 let children = [{ nodes: [...element.childNodes], isContentful: props.isContentful ?? false }];
 for (const { nodes, isContentful: isContentful } of children) {
@@ -53,8 +54,18 @@ for (const { nodes, isContentful: isContentful } of children) {
             }
 
             const htmlSrc = child.textContent;
-            const htmlDst = await replaceAllAsync(htmlSrc, regex, async (emoji) => {
-                return (await container.renderToString(Emoji, { props: { e: emoji, "aria-hidden": !isContentful } })).trim();
+            const htmlSrcPre = htmlSrc.replaceAll(regex, (emoji) => {
+                return `<__EMOJI__>${emoji}<__EMOJI__>`;
+            });
+            const htmlDst = await replaceAllAsync(htmlSrcPre, emojiElementRegex, async (match) => {
+                const matches = match.matchAll(emojiElementRegex).next();
+                const before = matches.value![1];
+                const emoji = matches.value![2];
+                const after = matches.value![3];
+
+                return (
+                    await container.renderToString(Emoji, { props: { e: emoji, spaceBefore: before, spaceAfter: after, "aria-hidden": !isContentful } })
+                ).trim();
             });
 
             parent.exchangeChild(child, parse(htmlDst));
