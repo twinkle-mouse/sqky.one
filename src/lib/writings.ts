@@ -115,8 +115,18 @@ export async function getNotesEntries() {
 }
 
 export async function getAllTags() {
-    const tags = [...new Set((await getValidWritingEntires()).flatMap((entry) => entry.data.tags)).values()];
-    tags.sort();
+    const map = new Map<string, number>();
+
+    const entires = await getValidWritingEntires();
+
+    for (const entry of entires) {
+        for (const tag of entry.data.tags) {
+            map.set(tag, map.getOrInsert(tag, 0) + 1);
+        }
+    }
+
+    const tags = [...map.entries()];
+    tags.sort((a, b) => a[0].localeCompare(b[0], undefined));
 
     return tags;
 }

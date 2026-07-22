@@ -52,93 +52,25 @@ const tags = await getAllTags();
 
                     <Details summary="List of all tags">
                         <div>
-                            <div class="search-input-container" hidden>
-                                <SearchInput id="writings-tags-filter-input" class="filter-input" data-search-values={JSON.stringify(tags)}>
-                                    Search tags by name:
-                                </SearchInput>
-                            </div>
+                            <SearchInput
+                                class="js-necessary search-input"
+                                data-search-target="writings-tags"
+                                data-search-values={JSON.stringify(tags.map(([key]) => key))}
+                            >
+                                Search tags by name:
+                            </SearchInput>
 
                             <ul id="writings-tags">
                                 {
-                                    tags.map((v) => (
-                                        <li>
-                                            <a href={`/tag/${v}`}>{v}</a>
+                                    tags.map(([tag, count]) => (
+                                        <li data-search-value={tag}>
+                                            <a href={`/tag/${tag}`}>{tag}</a> ({count})
                                         </li>
                                     ))
                                 }
                             </ul>
                         </div>
                     </Details>
-
-                    <style>
-                        .search-input-container {
-                            margin-block: 0.8rem;
-                        }
-                    </style>
-
-                    <script>
-                        import Fuse from "fuse.js";
-
-                        const searchInputContainers = document.querySelectorAll<HTMLElement>(".search-input-container");
-                        searchInputContainers.forEach((e) => (e.hidden = false));
-
-                        const writingsTagsFilterInput = document.getElementById("writings-tags-filter-input")! as HTMLInputElement;
-                        const writingsTags = document.querySelectorAll<HTMLElement>("#writings-tags > li");
-                        const writingsTagsValues = JSON.parse(writingsTagsFilterInput.dataset.searchValues ?? "[]") as string[];
-
-                        const tagsFuse = new Fuse(writingsTagsValues, { includeScore: true, threshold: 0.4 });
-
-                        function onSearchChanged() {
-                            writingsTags.forEach((li) => {
-                                const score = Number.parseFloat(li.dataset.searchScore ?? "0");
-
-                                if (score >= 1) {
-                                    li.hidden = true;
-                                } else {
-                                    li.hidden = false;
-
-                                    while (true) {
-                                        const prev = li.previousElementSibling;
-                                        if (!prev) break;
-
-                                        const prevScore = Number.parseFloat((prev as HTMLElement).dataset.searchScore ?? "0");
-                                        if (score < prevScore) {
-                                            li.parentNode?.insertBefore(li, prev);
-                                        } else {
-                                            break;
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-                        function updateSearch() {
-                            if (writingsTagsFilterInput.value) {
-                                const results = new Map(tagsFuse.search(writingsTagsFilterInput.value).map((v) => [v.item, v]));
-
-                                writingsTags.forEach((li) => {
-                                    const result = results.get(li.textContent);
-                                    li.dataset.searchScore = result?.score?.toString() ?? "1";
-
-                                    onSearchChanged();
-                                });
-                            } else {
-                                writingsTags.forEach((li) => {
-                                    li.dataset.searchScore = "0";
-
-                                    onSearchChanged();
-                                });
-                            }
-                        }
-
-                        writingsTagsFilterInput.addEventListener("input", () => {
-                            updateSearch();
-                        });
-
-                        document.addEventListener("DOMContentLoaded", () => {
-                            updateSearch();
-                        });
-                    </script>
                 </section>
             </Section>
         </EmojiWrapper>
@@ -152,3 +84,89 @@ const tags = await getAllTags();
         </Section>
     </LargeSection>
 </WritingsPage>
+
+<style>
+    .search-input {
+        margin-top: 0.8rem;
+    }
+</style>
+
+<script>
+    import Fuse from "fuse.js";
+
+    const searchInputs = document.querySelectorAll<HTMLInputElement>(".search-input");
+    for (const searchInput of searchInputs) {
+        const searchTarget = searchInput.dataset.searchTarget!;
+        const searchItems = document.querySelectorAll<HTMLElement>(`#${searchTarget} > li`);
+        const searchValues = JSON.parse(searchInput.dataset.searchValues ?? "[]") as string[];
+
+        const fuse = new Fuse(searchValues, { includeScore: true, threshold: 0.4 });
+
+        function onSearchChanged() {
+            searchItems.forEach((li) => {
+                // first sort by tag name
+                while (true) {
+                    const prev = li.previousElementSibling;
+                    if (!prev) break;
+
+                    const searchValue = li.dataset.searchValue ?? "";
+                    const prevSearchValue = (prev as HTMLElement).dataset.searchValue ?? "";
+                    if (searchValue.localeCompare(prevSearchValue, undefined) < 0) {
+                        li.parentNode?.insertBefore(li, prev);
+                    } else {
+                        break;
+                    }
+                }
+            });
+
+            searchItems.forEach((li) => {
+                const score = Number.parseFloat(li.dataset.searchScore ?? "0");
+
+                // score of 1 => complete mismatch
+                if (score >= 1) {
+                    li.hidden = true;
+                } else {
+                    li.hidden = false;
+
+                    // then sort by score
+                    while (true) {
+                        const prev = li.previousElementSibling;
+                        if (!prev) break;
+
+                        const prevScore = Number.parseFloat((prev as HTMLElement).dataset.searchScore ?? "0");
+                        if (score < prevScore) {
+                            li.parentNode?.insertBefore(li, prev);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSearch() {
+            if (searchInput.value) {
+                const results = new Map(fuse.search(searchInput.value).map((v) => [v.item, v]));
+
+                searchItems.forEach((li) => {
+                    const result = results.get(li.dataset.searchValue ?? "");
+                    li.dataset.searchScore = result?.score?.toString() ?? "1";
+                });
+            } else {
+                searchItems.forEach((li) => {
+                    li.dataset.searchScore = "0";
+                });
+            }
+
+            onSearchChanged();
+        }
+
+        searchInput.addEventListener("input", () => {
+            updateSearch();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateSearch();
+        });
+    }
+</script>
