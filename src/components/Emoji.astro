@@ -17,6 +17,7 @@ const name = getEmojiName(e);
 const emojiEntry = await getEntry("emojis", name);
 const emoji = renderSvg(emojiEntry?.data.src, {
     "aria-hidden": "true",
+    id: undefined,
     width: width ?? "1.2em",
     height: height ?? "1.2em",
 });

@@ -24,7 +24,11 @@ export function renderSvg(svgSource: string, attributeOverrides: HTMLAttributes<
     }
 
     for (const [key, value] of Object.entries(attributeOverrides)) {
-        firstSVGNode.setAttribute(key, value.toString());
+        if (!value) {
+            firstSVGNode.removeAttribute(key);
+        } else {
+            firstSVGNode.setAttribute(key, value.toString());
+        }
     }
 
     return firstSVGNode;
