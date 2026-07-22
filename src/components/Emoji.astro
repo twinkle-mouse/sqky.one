@@ -51,13 +51,12 @@ const spaceWidth = 0.263;
         vertical-align: text-bottom;
     }
 
-    .emoji span {
+    .emoji :global(span) {
         position: absolute;
-        opacity: 0;
-        font-size: 1px;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
     }
 </style>
