@@ -1,0 +1,24 @@
+---
+import Section from "@sqky-one/common/layouts/Section.astro";
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"section">;
+
+const { "data-section-depth": sectionDepthProp, ...props } = Astro.props;
+
+const sectionDepth = Number.parseInt(sectionDepthProp ?? "1");
+// avoid creating sections unless it's h2 or larger
+const shouldStyle = sectionDepth <= 2;
+---
+
+{
+    shouldStyle ? (
+        <Section {...props}>
+            <slot />
+        </Section>
+    ) : (
+        <section>
+            <slot />
+        </section>
+    )
+}

@@ -1,0 +1,173 @@
+---
+import Details from "@sqky-one/common/components/Details.astro";
+import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
+import SearchInput from "@sqky-one/common/components/SearchInput.astro";
+import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
+import Section from "@sqky-one/common/layouts/Section.astro";
+import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
+import WritingEntries from "@sqky-one/writing/components/WritingEntries.astro";
+import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import { getAllTags, getValidWritingEntires } from "@sqky-one/writing/lib/content";
+import { siteDesc } from "@sqky-one/writing/lib/page";
+
+const entries = await getValidWritingEntires();
+const tags = await getAllTags();
+---
+
+<WritingsPage pageName="Home" desc={siteDesc}>
+    <Fragment slot="page-title">Stardew Library</Fragment>
+
+    <LargeSection>
+        <p class="icons"><RssIcon /></p>
+        <style>
+            .icons {
+                padding-inline: 1.5rem;
+            }
+        </style>
+
+        <EmojiWrapper>
+            <Section>
+                <h2>Welcome!</h2>
+
+                <p>
+                    In this glimmering library, we tell the stories of the stars in your heart,
+                    <br />
+                    we sing the lyrics of the twinkles in your eyes,
+                    <br />
+                    and we hurt, we cry, we live, we love—and we hope to make you feel a little less lonely.
+                </p>
+
+                <p>
+                    Most works here are created by <em>Stella Sparkles</em>, though you may occasionally see others on here.
+                    <br />
+                    If you have any thoughts, please <a href="https://sqky.one/#contacts">reach out</a>!
+                    <br />
+                    We're always <em>ecstatic</em> to hear your thoughts.
+                    <br />
+                    <small>(P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)</small>
+                </p>
+
+                <section>
+                    <h3>Entry Filters</h3>
+
+                    <Details summary="List of all tags">
+                        <div>
+                            <SearchInput
+                                id="writings-tags-search-input"
+                                class="js-necessary search-input"
+                                data-search-target="writings-tags"
+                                data-search-values={JSON.stringify(tags.map(([key]) => key))}
+                            >
+                                Search tags by name:
+                            </SearchInput>
+
+                            <ul id="writings-tags">
+                                {
+                                    tags.map(([tag, count]) => (
+                                        <li data-search-value={tag}>
+                                            <a href={`/tag/${tag}`}>{tag}</a> ({count})
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </Details>
+                </section>
+            </Section>
+        </EmojiWrapper>
+    </LargeSection>
+
+    <LargeSection>
+        <Section>
+            <h2>Entries</h2>
+
+            <WritingEntries entries={entries} />
+        </Section>
+    </LargeSection>
+</WritingsPage>
+
+<style>
+    .search-input {
+        margin-top: 0.8rem;
+    }
+</style>
+
+<script>
+    import Fuse from "fuse.js";
+
+    const searchInputs = document.querySelectorAll<HTMLInputElement>(".search-input");
+    for (const searchInput of searchInputs) {
+        const searchTarget = searchInput.dataset.searchTarget!;
+        const searchItems = document.querySelectorAll<HTMLElement>(`#${searchTarget} > li`);
+        const searchValues = JSON.parse(searchInput.dataset.searchValues ?? "[]") as string[];
+
+        const fuse = new Fuse(searchValues, { includeScore: true, threshold: 0.4 });
+
+        function onSearchChanged() {
+            searchItems.forEach((li) => {
+                // first sort by tag name
+                while (true) {
+                    const prev = li.previousElementSibling;
+                    if (!prev) break;
+
+                    const searchValue = li.dataset.searchValue ?? "";
+                    const prevSearchValue = (prev as HTMLElement).dataset.searchValue ?? "";
+                    if (searchValue.localeCompare(prevSearchValue, undefined) < 0) {
+                        li.parentNode?.insertBefore(li, prev);
+                    } else {
+                        break;
+                    }
+                }
+            });
+
+            searchItems.forEach((li) => {
+                const score = Number.parseFloat(li.dataset.searchScore ?? "0");
+
+                // score of 1 => complete mismatch
+                if (score >= 1) {
+                    li.hidden = true;
+                } else {
+                    li.hidden = false;
+
+                    // then sort by score
+                    while (true) {
+                        const prev = li.previousElementSibling;
+                        if (!prev) break;
+
+                        const prevScore = Number.parseFloat((prev as HTMLElement).dataset.searchScore ?? "0");
+                        if (score < prevScore) {
+                            li.parentNode?.insertBefore(li, prev);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSearch() {
+            if (searchInput.value) {
+                const results = new Map(fuse.search(searchInput.value).map((v) => [v.item, v]));
+
+                searchItems.forEach((li) => {
+                    const result = results.get(li.dataset.searchValue ?? "");
+                    li.dataset.searchScore = result?.score?.toString() ?? "1";
+                });
+            } else {
+                searchItems.forEach((li) => {
+                    li.dataset.searchScore = "0";
+                });
+            }
+
+            onSearchChanged();
+        }
+
+        searchInput.addEventListener("input", () => {
+            updateSearch();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateSearch();
+        });
+    }
+</script>

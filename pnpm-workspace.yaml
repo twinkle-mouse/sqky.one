@@ -1,0 +1,6 @@
+allowBuilds:
+    esbuild: true
+minimumReleaseAge: 0
+packages:
+    - common
+    - sites/*/src

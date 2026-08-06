@@ -1,0 +1,119 @@
+---
+import Details from "@sqky-one/common/components/Details.astro";
+import { countWords } from "@sqky-one/writing/lib/content";
+import type { HTMLAttributes } from "astro/types";
+import { type CollectionEntry, render } from "astro:content";
+
+type Props = {
+    entry: CollectionEntry<"writings">;
+} & HTMLAttributes<"table">;
+
+const { entry, class: cls, ...props } = Astro.props;
+
+const entries = Object.entries(entry.data.relations);
+const { Content } = await render(entry);
+
+const wordCount = countWords(Content);
+---
+
+<table {...props} class:list={[cls, "entry-details"]}>
+    <tbody>
+        <tr>
+            <th scope="row">Authors</th>
+            <td>
+                {entry.data.authors.join(", ")}
+            </td>
+        </tr>
+
+        <tr>
+            <th scope="row">Word count</th>
+            <td>{wordCount}</td>
+        </tr>
+
+        {
+            entry.data.tags.length > 0 && (
+                <tr>
+                    <th scope="row">Tags</th>
+                    <td>
+                        <ul>
+                            {entry.data.tags.map((tag) => (
+                                <li>
+                                    <a href={`/tag/${tag}`}>{tag}</a>
+                                </li>
+                            )) || "(none)"}
+                        </ul>
+                    </td>
+                </tr>
+            )
+        }
+
+        {
+            entries.length > 0 && (
+                <tr>
+                    <th scope="row">Relations</th>
+                    <td>
+                        {entries
+                            .map(([name, link]) => <a href={link}>{name}</a>)
+                            .flatMap((v, index) => {
+                                if (index < entry.data.tags.length - 1) {
+                                    return [v, "\n"];
+                                } else {
+                                    return v;
+                                }
+                            })}
+                    </td>
+                </tr>
+            )
+        }
+    </tbody>
+</table>
+
+{
+    entry.data.cw && (
+        <Details summary="Content Warnings">
+            <div>
+                <p>This writing has the following content warnings attached:</p>
+                <div class="cw-content" set:html={entry.data.cw} />
+            </div>
+        </Details>
+    )
+}
+
+<style>
+    .cw-content {
+        color: var(--strongColor);
+    }
+</style>
+
+<style>
+    .entry-details {
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+
+        border-top: 1px solid var(--slate600);
+
+        font-family: var(--sans);
+    }
+
+    .entry-details th {
+        color: var(--space200);
+        text-align: right;
+        text-wrap: nowrap;
+    }
+
+    .entry-details td {
+        color: var(--babypink200);
+        width: 100%;
+    }
+
+    .entry-details ul {
+        padding: 0;
+        margin: 0;
+        margin-top: 0.25em;
+        margin-bottom: 0.5em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        list-style: inside;
+    }
+</style>

@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = Omit<HTMLAttributes<"input">, "type">;
+
+const { id, ...props } = Astro.props;
+---
+
+<label for={id}><slot /></label>
+<input id={id} type="search" {...props} />
+
+<style>
+    input {
+        color: var(--textColor);
+        text-decoration: none;
+    }
+
+    label {
+        margin-right: 0.6rem;
+    }
+
+    input {
+        background-color: var(--buttonBgColor);
+        border: 1px solid var(--buttonBorderColor);
+    }
+</style>

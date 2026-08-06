@@ -1,0 +1,174 @@
+---
+import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
+import Picture from "@sqky-one/common/components/Picture.astro";
+import { coverArtAlt } from "@sqky-one/writing/lib/content";
+import type { CollectionEntry } from "astro:content";
+
+import WritingDescription from "./WritingDescription.astro";
+import WritingDetails from "./WritingDetails.astro";
+
+type Props = {
+    entries: CollectionEntry<"writings">[];
+};
+---
+
+<div class="entries">
+    {
+        Astro.props.entries.map((entry) => (
+            <EmojiWrapper>
+                <article class="entry-card">
+                    <hgroup class="entry-header">
+                        <h3 class="entry-title">
+                            <a href={`/${entry.collection}/${entry.id}`}>{entry.data.title}</a>
+                        </h3>
+
+                        <time class="entry-date mono" datetime={entry.data.date!.toISOString()}>
+                            {entry.data.date!.toLocaleDateString("en-GB", { dateStyle: "medium" })}
+                        </time>
+                    </hgroup>
+
+                    <div class="entry-desc-container">
+                        <div class="entry-desc">
+                            <WritingDescription entry={entry} />
+                        </div>
+
+                        {entry.data.cover && (
+                            <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />
+                        )}
+                    </div>
+
+                    <div class="entry-details">
+                        <WritingDetails entry={entry} />
+                    </div>
+                </article>
+            </EmojiWrapper>
+        ))
+    }
+
+    <style>
+        .entry-desc-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap-reverse;
+            justify-content: center;
+        }
+
+        .entry-desc {
+            max-width: 100%;
+            flex: 1;
+        }
+
+        .cover-art {
+            flex: none;
+
+            width: 240px;
+
+            margin-left: 1.25rem;
+            margin-right: 0.3rem;
+            margin-top: 0.3rem;
+        }
+
+        .cover-art-img {
+            height: fit-content;
+
+            box-shadow:
+                -4px -4px 8px #00000035,
+                -4px 4px 8px #00000035,
+                4px -4px 8px #00000035,
+                4px 4px 8px #00000035;
+        }
+
+        @media (max-width: 1300px) {
+            .cover-art {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .cover-art {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .entry-desc {
+                flex: none;
+            }
+
+            .cover-art {
+                margin: 0;
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+                flex-shrink: 1;
+            }
+        }
+    </style>
+
+    <style>
+        .entries {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1.5rem;
+            gap: 1.25rem;
+        }
+
+        .entry-card {
+            width: 100%;
+            height: max-content;
+            border-radius: 1rem;
+            padding-block: 1rem;
+            padding-inline: 1.25rem;
+
+            background-color: var(--cuteblue800);
+            border: 2px solid var(--cuteblue600);
+        }
+
+        .entry-title::before,
+        .entry-title::after {
+            all: unset;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+        }
+
+        .entry-title {
+            padding: 0;
+            margin: 0;
+            border: none;
+
+            font-size: 1.55rem;
+
+            width: fit-content;
+        }
+
+        .entry-title a {
+            font-family: var(--serif);
+            font-style: italic;
+        }
+
+        @media (max-width: 640px) {
+            .entry-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        .entry-date {
+            width: max-content;
+            margin-left: 0.7rem;
+
+            text-align: right;
+            text-wrap: nowrap;
+
+            font-size: 0.85rem;
+            color: var(--slate400);
+        }
+
+        .entry-details {
+            font-size: 0.85rem;
+        }
+    </style>
+</div>

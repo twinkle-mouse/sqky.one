@@ -1,0 +1,11 @@
+*.mdx
+*.md
+*.svg
+*.png
+*.avif
+*.webp
+*.gif
+
+**/fonts/
+**/icons/
+**/dist/

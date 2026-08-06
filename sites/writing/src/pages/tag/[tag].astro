@@ -1,0 +1,29 @@
+---
+import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
+import Section from "@sqky-one/common/layouts/Section.astro";
+import WritingEntries from "@sqky-one/writing/components/WritingEntries.astro";
+import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import { getAllTags, getWritingEntries } from "@sqky-one/writing/lib/content";
+
+export async function getStaticPaths() {
+    return (await getAllTags()).map(([tag]) => {
+        return { params: { tag } };
+    });
+}
+
+const { tag } = Astro.params;
+
+const entries = (await getWritingEntries()).filter((entry) => entry.data.tags.includes(tag));
+---
+
+<WritingsPage pageName=`Tag View - '${tag}'` desc="">
+    <Fragment slot="page-title">Entires tagged '<i>{tag}</i>'</Fragment>
+
+    <LargeSection>
+        <Section>
+            <h2>Entries</h2>
+
+            <WritingEntries entries={entries} />
+        </Section>
+    </LargeSection>
+</WritingsPage>

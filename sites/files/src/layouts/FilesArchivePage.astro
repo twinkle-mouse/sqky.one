@@ -1,0 +1,32 @@
+---
+import Navigation from "@sqky-one/common/components/Navigation.astro";
+import Page, { type Props as PageProps } from "@sqky-one/common/layouts/CommonPage.astro";
+import { ClientRouter } from "astro:transitions";
+
+type Props = Omit<PageProps, "siteName" | "desc">;
+---
+
+<Page {...Astro.props} siteName="Files Archive" desc="who made my files squeaky?? anyways,">
+    <Fragment slot="head-tags">
+        <ClientRouter />
+    </Fragment>
+
+    <Navigation slot="nav">
+        <slot name="nav:page-links" slot="nav:page-links" />
+
+        <Fragment slot="nav:other-categories">
+            <div>
+                <p>Navigation</p>
+                <ul>
+                    <li><a href="/">Back to root ⤴️</a></li>
+                    <li><a href="../">Back up ⬆️</a></li>
+                </ul>
+            </div>
+            <slot name="nav:other-categories" />
+        </Fragment>
+        <slot name="nav:footer" slot="nav:footer" />
+    </Navigation>
+
+    <slot name="page-title" slot="page-title" />
+    <slot />
+</Page>

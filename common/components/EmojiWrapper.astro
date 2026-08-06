@@ -1,0 +1,77 @@
+---
+export type Props = {
+    isContentful?: boolean;
+};
+const props = Astro.props;
+
+async function replaceAllAsync(str: string, searchValue: string | RegExp, replacer: (substring: string, ...args: unknown[]) => Promise<string>) {
+    const promises: Promise<string>[] = [];
+    str.replaceAll(searchValue, (full, ...args) => {
+        promises.push(replacer(full, ...args));
+        return full;
+    });
+    const data = await Promise.all(promises);
+    let index = 0;
+    return str.replaceAll(searchValue, () => {
+        const v = data[index];
+        index += 1;
+        return v;
+    });
+}
+
+import { experimental_AstroContainer } from "astro/container";
+import emojiRegex from "emoji-regex";
+import { HTMLElement, NodeType, parse } from "node-html-parser";
+
+import Emoji from "./Emoji.astro";
+
+const rendered = await Astro.slots.render("default");
+
+const container = await experimental_AstroContainer.create();
+
+const regex = emojiRegex();
+const emojiElementRegex = /(\s*)<__EMOJI__>(.*?)<\/__EMOJI__>(\s*)/g;
+const element = parse(rendered);
+let children = [{ nodes: [...element.childNodes], isContentful: props.isContentful ?? false }];
+for (const { nodes, isContentful: isContentful } of children) {
+    for (const child of nodes) {
+        if (child.childNodes.length > 0) {
+            let v = isContentful;
+            if (child instanceof HTMLElement && child.attributes?.["data-emoji-is-contentful"] == "true") {
+                v = true;
+            }
+
+            children.push({ nodes: [...child.childNodes], isContentful: v });
+        }
+
+        if (child.nodeType == NodeType.TEXT_NODE && !!child.textContent) {
+            const parent = child.parentNode;
+            if (parent == undefined) {
+                continue;
+            }
+            if (parent.attributes?.["data-emoji"] == "true") {
+                continue;
+            }
+
+            const htmlSrc = child.textContent;
+            const htmlSrcPre = htmlSrc.replaceAll(regex, (emoji) => {
+                return `<__EMOJI__>${emoji}</__EMOJI__>`;
+            });
+            const htmlDst = await replaceAllAsync(htmlSrcPre, emojiElementRegex, async (match) => {
+                const matches = match.matchAll(emojiElementRegex).next();
+                const before = matches.value![1];
+                const emoji = matches.value![2];
+                const after = matches.value![3];
+
+                return (
+                    await container.renderToString(Emoji, { props: { e: emoji, spaceBefore: before, spaceAfter: after, "aria-hidden": !isContentful } })
+                ).trim();
+            });
+
+            parent.exchangeChild(child, parse(htmlDst));
+        }
+    }
+}
+---
+
+<Fragment set:html={element} />
