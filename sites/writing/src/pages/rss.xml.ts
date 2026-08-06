@@ -2,19 +2,18 @@ import mdx from "@astrojs/mdx/server.js";
 import rss from "@astrojs/rss";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
-import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig, transformLinks } from "@sqky-one/writing/lib/content";
+import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { siteDesc, siteName } from "@sqky-one/writing/lib/page";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
-import sanitizeHtml, { type Attributes } from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 
 const container = await experimental_AstroContainer.create();
 container.addServerRenderer({ renderer: mdx });
 
 export async function GET(context: AstroGlobal) {
     const writings = await getValidWritingEntires();
-    const _transformLinks = (tagName: string, attribs: Attributes) => transformLinks(context, tagName, attribs);
 
     return rss({
         title: siteName,
@@ -61,7 +60,7 @@ export async function GET(context: AstroGlobal) {
                     categories: entry.data.tags,
                     link: `/writings/${entry.id}/`,
                     content: sanitizeHtml(details + coverArt + content, {
-                        ...sanitizeHtmlConfig({ transformLinks: _transformLinks }),
+                        ...sanitizeHtmlConfig({ site: context.site }),
                     }),
                     customData: [...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
                 };

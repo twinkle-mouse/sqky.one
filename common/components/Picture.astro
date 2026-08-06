@@ -47,11 +47,16 @@ for (const key in props) {
 }
 
 const originalSrc = await resolveSrc(props.src);
+let originalSrcProp: string | undefined;
 if (typeof originalSrc === "object") {
+    originalSrcProp = originalSrc.src;
     if (!props.widths) {
         props.widths = [1.0, 0.8, 0.7, 0.6, 0.4, 0.2].map((v) => Math.round(originalSrc.width * v));
     }
+} else {
+    originalSrcProp = originalSrc;
 }
+
 const optimizedImages: GetImageResult[] = await Promise.all(
     formats.map(
         async (format) =>
@@ -106,5 +111,5 @@ const { class: className, ...attributes } = {
             );
         })
     }
-    <img src={fallbackImage.src} {...attributes} class={className} />
+    <img data-original-src={originalSrcProp} src={fallbackImage.src} {...attributes} class={className} />
 </picture>

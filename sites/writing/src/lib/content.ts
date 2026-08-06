@@ -1,6 +1,7 @@
+import { readFile } from "node:fs/promises";
+
 import { getContainerRenderer } from "@astrojs/mdx/container-renderer";
 import { count } from "@wordpress/wordcount";
-import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { loadRenderers } from "astro:container";
@@ -133,22 +134,29 @@ export function coverArtAlt(entry: CollectionEntry<"writings">) {
     return `Cover art for '${entry.data.title}'`;
 }
 
-export function transformLinks(context: AstroGlobal, tagName: string, attribs: Attributes): Tag {
+function transformAnchors(site: URL | string | undefined, tagName: string, attribs: Attributes): Tag {
     if (tagName == "a") {
-        attribs["href"] = new URL(attribs["href"] ?? "", context.site).href;
+        attribs["href"] = new URL(attribs["href"] ?? "", site).href;
     }
 
+    return {
+        tagName,
+        attribs,
+    };
+}
+
+function transformImages(site: URL | string | undefined, srcset: boolean, tagName: string, attribs: Attributes): Tag {
     if (tagName == "img" || tagName == "source") {
         if (attribs["src"]) {
-            attribs["src"] = new URL(attribs["src"], context.site).href;
+            attribs["src"] = new URL(attribs["src"], site).href;
         }
-        if (attribs["srcset"]) {
+        if (srcset && attribs["srcset"]) {
             attribs["srcset"] = attribs["srcset"]
                 .split(",")
                 .map((v) => {
                     const [uri, dim] = v.trim().split(" ");
 
-                    return `${new URL(uri, context.site).href} ${dim}`;
+                    return `${new URL(uri, site).href} ${dim}`;
                 })
                 .join(", ");
         }
@@ -160,21 +168,21 @@ export function transformLinks(context: AstroGlobal, tagName: string, attribs: A
     };
 }
 
-export function sanitizeHtmlConfig(config: { transformLinks?: (tagName: string, attribs: Attributes) => Tag; allowedTags?: string[] }): SanitizeHtmlConfig {
+export function sanitizeHtmlConfig(config: { site: URL | string | undefined; allowedTags?: string[]; srcset?: boolean }): SanitizeHtmlConfig {
     return {
-        allowedAttributes: Object.fromEntries([
-            ...Object.entries(sanitizeHtml.defaults.allowedAttributes),
-            ...Object.entries({
-                source: ["srcset", "type"],
-            }),
-        ]),
-        transformTags: config.transformLinks
+        allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            img: (sanitizeHtml.defaults.allowedAttributes.img ?? []).concat(["data-original-src"]),
+            source: (sanitizeHtml.defaults.allowedAttributes.source ?? []).concat(["srcset", "type"]),
+        },
+        transformTags: config.site
             ? {
-                  a: config.transformLinks,
-                  img: config.transformLinks,
-                  source: config.transformLinks,
+                  a: (tagName, attribs) => transformAnchors(config.site, tagName, attribs),
+                  img: (tagName, attribs) => transformImages(config.site, config.srcset ?? true, tagName, attribs),
               }
             : {},
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "details", "summary"]).concat(config.allowedTags ?? []),
     };
 }
+
+export const contentStyles = (await readFile("./common/assets/content.css")).toString();
