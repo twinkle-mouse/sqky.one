@@ -99,7 +99,7 @@ export async function GET(context: AstroGlobal) {
                             img: _transformLinks,
                             source: _transformLinks,
                         },
-                        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "source", "picture", "details", "summary"]),
+                        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "details", "summary"]),
                     }),
                     customData: [...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
                 };
