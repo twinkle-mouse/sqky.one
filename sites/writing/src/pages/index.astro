@@ -18,7 +18,12 @@ const tags = await getAllTags();
     <Fragment slot="page-title">Stardew Library</Fragment>
 
     <LargeSection>
-        <p class="icons"><RssIcon /></p>
+        <p class="icons">
+            <a class="rss-link" href="/rss.xml">
+                <label class="sr-only">Subscribe to the Stardew Library (RSS)</label>
+                <RssIcon width="2.5rem" height="2.5rem" data-glow="true" />
+            </a>
+        </p>
         <style>
             .icons {
                 padding-inline: 1.5rem;

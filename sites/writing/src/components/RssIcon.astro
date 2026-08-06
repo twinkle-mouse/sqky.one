@@ -1,30 +1,29 @@
 ---
 import RssSvg from "@sqky-one/common/assets/icons/rss.svg";
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"svg">;
+const props = Astro.props;
 ---
 
-<a class="rss-link" href="/rss.xml">
-    <label class="sr-only">Subscribe to the Squeakenings (RSS)</label>
-    <RssSvg class="rss-icon" role="img" aria-hidden="true" width={32} height={32} />
-</a>
+<RssSvg width="1.5em" height="1.5em" {...props} class="rss-icon" role="img" aria-hidden="true" />
 
 <style>
-    a {
+    .rss-icon {
+        color: #ffc760;
         display: inline-block;
-
-        width: 32px;
-        height: 32px;
+        vertical-align: -0.4em;
+        margin-right: 0.3em;
     }
 
-    .rss-icon {
+    .rss-icon[data-glow="true"] {
         --glow-blur-size: 2px;
-
-        color: #ffc760;
         transition: filter 0.2s;
         filter: drop-shadow(0px 0px var(--glow-blur-size));
     }
 
-    .rss-icon:hover,
-    .rss-link:focus > .rss-icon {
+    .rss-icon[data-glow="true"]:hover,
+    .rss-link:focus > .rss-icon[data-glow="true"] {
         filter: drop-shadow(0px 0px var(--glow-blur-size)) drop-shadow(0px 0px 6px #ffc76050);
     }
 </style>
