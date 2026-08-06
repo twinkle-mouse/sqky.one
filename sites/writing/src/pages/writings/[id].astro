@@ -1,6 +1,8 @@
 ---
+import FileIcon from "@sqky-one/common/components/FileIcon.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
+import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import WritingsContent from "@sqky-one/writing/layouts/WritingsContent.astro";
 import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
@@ -56,6 +58,26 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
     </Fragment>
 
     <Fragment slot="page-title">{entry.data.title}</Fragment>
+
+    <Section>
+        <h2>Other Formats</h2>
+        <ul class="formats-list">
+            <li>
+                <FileIcon icon="epub" />
+                <a href=`/writings/${entry.id}.epub`>EPub version</a>
+            </li>
+            <li>
+                <RssIcon />
+                <a href="/rss.xml">RSS (entire feed)</a>
+            </li>
+        </ul>
+
+        <style>
+            .formats-list > li {
+                margin-block: 0.25em;
+            }
+        </style>
+    </Section>
 
     <div class="top-panel">
         <Section class="info">
