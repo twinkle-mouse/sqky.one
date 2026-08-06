@@ -1,7 +1,7 @@
 ---
+import FileIcon from "@sqky-one/common/components/FileIcon.astro";
 import { getMaterialFileIcon, getMaterialFolderIcon } from "@sqky-one/common/lib/material-icon";
 import type { FileStats } from "@sqky-one/files/lib/files";
-import { Icon as AstroIcon } from "astro-icon/components";
 
 export type Props = {
     entry: FileStats;
@@ -43,12 +43,7 @@ const anchorExtraProps = entry.isDir ? { "data-astro-prefetch": "" } : {};
 ---
 
 <tr>
-    <td
-        ><AstroIcon aria-hidden="true" role="img" class="file-icon" name=`material-file/${icon}` width="1.5em" height="1.5em" /><a
-            href={URL.parse(`${entry.name}${suffix}`, url)?.pathname}
-            {...anchorExtraProps}>{`${entry.name}${suffix}`}</a
-        >
-    </td>
+    <td><FileIcon icon={icon} /><a href={URL.parse(`${entry.name}${suffix}`, url)?.pathname} {...anchorExtraProps}>{`${entry.name}${suffix}`}</a> </td>
     <td class="mono">{formatBytes(entry.size)}</td>
     <td class="mono"
         ><time datetime={entry.mtime.toISOString()}>
@@ -60,13 +55,6 @@ const anchorExtraProps = entry.isDir ? { "data-astro-prefetch": "" } : {};
 </tr>
 
 <style>
-    .file-icon {
-        color: var(--slate300);
-        display: inline-block;
-        vertical-align: -0.4em;
-        margin-right: 0.3em;
-    }
-
     td {
         white-space: pre;
     }
