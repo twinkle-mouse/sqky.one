@@ -7,6 +7,8 @@ import type { MarkdownProcessor } from "astro/markdown";
 import compressor from "astro-compressor";
 import icon from "astro-icon";
 
+import SiteConfigs from "./site-configs.json";
+
 function processSitePath(path: string) {
     return path.replace("./", "").split("/")[0];
 }
@@ -18,37 +20,17 @@ const sitesDir = path.join(dir, "sites");
 const globbedSites = import.meta.glob<{ config: AstroUserConfig; markdownProcessor: MarkdownProcessor }>(`./*/astro.config.ts`, { base: "./sites" });
 const sites = new Map(Object.entries(globbedSites).map(([key, value]) => [processSitePath(key), value]));
 
-export class Site {
-    static Main = "Main_SqkyOne";
-    static Files = "Files_SqkyOne";
-    static FilesProxy = "The_SqkyOne";
-    static Writing = "Writing_SqkyOne";
-}
+const siteConfigs = new Map(Object.entries(SiteConfigs));
+const siteConfig = process.env["SITE_CONFIG"] || "Main_SqkyOne";
 
-export const siteConfig = process.env["SITE_CONFIG"] || Site.Main;
-let sitePath = undefined;
-
-if (siteConfig === Site.Main) {
-    sitePath = "main";
-}
-if (siteConfig === Site.Writing) {
-    sitePath = "writing";
-}
-if (siteConfig === Site.Files) {
-    sitePath = "files";
-}
-if (siteConfig === Site.FilesProxy) {
-    sitePath = "files-proxy";
-}
-
+const sitePath = siteConfigs.get(siteConfig);
 if (sitePath == undefined) {
-    throw new Error(`Invalid site selection: ${siteConfig}`);
+    throw new Error(`Invalid site selection (couldn't get site path): ${siteConfig}`);
 }
 
 const resolvedSite = await sites.get(sitePath)?.();
-
 if (resolvedSite == undefined) {
-    throw new Error(`Invalid site selection: ${siteConfig}`);
+    throw new Error(`Invalid site selection (couldn't resolve config): ${siteConfig}`);
 }
 
 const { config, markdownProcessor } = resolvedSite;
@@ -56,7 +38,7 @@ config.srcDir = path.join(sitesDir, sitePath, "src");
 config.outDir = path.join(sitesDir, sitePath, "dist");
 
 if (config == undefined || markdownProcessor == undefined) {
-    throw new Error(`Invalid site selection: ${siteConfig}`);
+    throw new Error(`Invalid site selection (config incomplete): ${siteConfig}`);
 }
 
 if (import.meta.env.DEV) {
