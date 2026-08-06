@@ -1,0 +1,11 @@
+---
+import NotFound from "@sqky-one/common/components/NotFound.astro";
+import { pageName } from "@sqky-one/common/lib/not-found";
+import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
+---
+
+<FilesArchivePage pageName={pageName}>
+    <Fragment slot="page-title">ERROR</Fragment>
+
+    <NotFound />
+</FilesArchivePage>

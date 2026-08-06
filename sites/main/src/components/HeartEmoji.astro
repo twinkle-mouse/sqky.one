@@ -1,0 +1,48 @@
+---
+import Emoji from "@sqky-one/common/components/Emoji.astro";
+
+export type Props = {
+    e: string;
+    radius: number;
+    delay: number;
+    length: number;
+};
+
+const { e, radius, delay, length } = Astro.props;
+---
+
+<div
+    class="headmate-heart"
+    style={{
+        "--radius": `${radius}px`,
+        "--delay": `${delay}s`,
+        "--length": `${length}s`,
+    }}
+>
+    <Emoji class="headmate-heart-emoji" e={e} width={32} height={32} />
+</div>
+
+<style>
+    .headmate-heart {
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
+
+    .headmate-heart {
+        animation: hearts-rotate var(--length, 0s) var(--delay, 0s) infinite linear;
+
+        transform: translate(-50%, -50%) translate(calc(var(--radius) * cos(var(--angle))), calc(var(--radius) * sin(var(--angle))));
+    }
+
+    @media (prefers-reduced-motion) {
+        .headmate-heart {
+            animation-play-state: paused;
+        }
+    }
+
+    .headmate-heart-emoji {
+        display: block;
+    }
+</style>

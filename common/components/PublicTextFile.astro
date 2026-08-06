@@ -1,0 +1,36 @@
+---
+import { randomUUID } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+
+import type { HTMLAttributes } from "astro/types";
+import { root } from "astro:config/server";
+
+import Details from "./Details.astro";
+
+export type Props = HTMLAttributes<"textarea"> & {
+    src: string;
+    summary?: string;
+};
+
+const { src, summary, class: cls, ...props } = Astro.props;
+const file = fs.readFileSync(path.join(root.pathname, "public", src), { encoding: "utf8" });
+
+const uuid = `textfile-${randomUUID()}`;
+---
+
+<Details src={src} summary={summary}>
+    <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", cls]}>{file}</textarea>
+</Details>
+
+<style>
+    summary {
+        min-width: max-content;
+        width: 100%;
+    }
+
+    textarea {
+        padding: 0.4rem;
+        text-wrap: nowrap;
+    }
+</style>

@@ -1,0 +1,66 @@
+---
+import Checkbox from "@sqky-one/common/components/Checkbox.astro";
+import Details from "@sqky-one/common/components/Details.astro";
+import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
+import PublicTextFile from "@sqky-one/common/components/PublicTextFile.astro";
+import SearchInput from "@sqky-one/common/components/SearchInput.astro";
+import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
+import Section from "@sqky-one/common/layouts/Section.astro";
+import MainPage from "@sqky-one/main/layouts/MainPage.astro";
+import WritingsSection from "@sqky-one/writing/layouts/WritingsSection.astro";
+---
+
+<MainPage>
+    <Fragment slot="page-title">TESTING TESTS</Fragment>
+
+    <Fragment slot="nav:page-links">
+        <li>
+            <a>The Good Shit™</a>
+        </li>
+    </Fragment>
+
+    <EmojiWrapper>
+        <LargeSection>
+            <Section>
+                <div>
+                    <input id="test-file-input" type="file" />
+                    <button id="test-button">Submit</button>
+                </div>
+                <div>
+                    <SearchInput id="test-search-input">Lalala</SearchInput>
+                </div>
+                <div>
+                    <Checkbox id="test-checkbox1">Foobar</Checkbox>
+                    <Checkbox id="test-checkbox2" checked>Barfoo</Checkbox>
+                </div>
+
+                <PublicTextFile src="pubkey.asc" summary="my PGP public key" />
+
+                <Details summary="Content Warnings">
+                    <div>
+                        <p>THIS IS A TEST</p>
+                    </div>
+                </Details>
+
+                <p>
+                    meow💀meow<br />🥰meow™meow💀✌️🌴🐢🐐🍄⚽🍻👑📸😬👀🚨🏡🕊️🏆😻🌟🧿🍀🎨🍜
+                </p>
+
+                <p style="font-size: 60px;">
+                    meow💀meow<br />🥰meow™meow💀✌️🌴🐢🐐🍄⚽🍻👑📸😬👀🚨🏡🕊️🏆😻🌟🧿🍀🎨🍜
+                </p>
+
+                <p style="font-size: 10px;">
+                    meow💀meow<br />🥰meow™meow💀✌️🌴🐢🐐🍄⚽🍻👑📸😬👀🚨🏡🕊️🏆😻🌟🧿🍀🎨🍜
+                </p>
+
+                <WritingsSection data-section-depth="2">
+                    <h2>The Good Shit™</h2>
+                </WritingsSection>
+                <WritingsSection data-section-depth="2">
+                    <h2>The Bad Shit</h2>
+                </WritingsSection>
+            </Section>
+        </LargeSection>
+    </EmojiWrapper>
+</MainPage>

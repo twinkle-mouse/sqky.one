@@ -1,0 +1,32 @@
+---
+import Section from "@sqky-one/common/layouts/Section.astro";
+
+import IntroContent from "./Intro.mdx";
+import ProfilePicture from "./ProfilePicture.astro";
+---
+
+<Section>
+    <div class="profile">
+        <div class="profile-intro">
+            <h2 aria-hidden="true">hiiiiiiiiiiii</h2>
+            <h2 class="sr-only">hi!</h2>
+
+            <IntroContent />
+        </div>
+
+        <ProfilePicture />
+    </div>
+</Section>
+
+<style>
+    .profile {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .profile-intro {
+        flex: 2 1 340px;
+    }
+</style>

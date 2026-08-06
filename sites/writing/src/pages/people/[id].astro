@@ -1,0 +1,68 @@
+---
+import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
+import Section from "@sqky-one/common/layouts/Section.astro";
+import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import { renderMd } from "@sqky-one/writing/lib/content";
+import { siteDesc } from "@sqky-one/writing/lib/page";
+import { getCollection, getEntry } from "astro:content";
+import { fetchProfileCard, renderProfileCard } from "bluesky-profile-card-embed/core";
+
+export async function getStaticPaths() {
+    return (await getCollection("people")).map((entry) => {
+        return { params: { id: entry.id } };
+    });
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("people", id);
+if (entry === undefined) {
+    return Astro.redirect("/404");
+}
+
+let blueskyEmbed = null;
+if (entry.data.bluesky) {
+    // fetch the profile
+    const controller = new AbortController();
+    const data = await fetchProfileCard({
+        actor: entry.data.bluesky,
+        signal: controller.signal,
+    });
+
+    // render the profile
+    blueskyEmbed = renderProfileCard(data);
+}
+
+let descHtml = renderMd(entry.body);
+---
+
+<WritingsPage pageName={entry.data.name} desc={siteDesc}>
+    <Fragment slot="page-title">Profile — {entry.data.name}</Fragment>
+
+    <LargeSection>
+        <Section>
+            <div class="profiles">
+                <section>
+                    <h2 class="sr-only">BlueSky Profile</h2>
+                    {blueskyEmbed && <bluesky-profile-card actor={entry.data.bluesky} set:html={blueskyEmbed} />}
+                </section>
+            </div>
+
+            <div class="desc" set:html={descHtml} />
+        </Section>
+
+        <style>
+            .profiles {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+
+                padding: 1rem;
+            }
+
+            .desc {
+                font-size: large;
+            }
+        </style>
+    </LargeSection>
+</WritingsPage>

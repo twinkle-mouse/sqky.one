@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+    # Trigger the workflow every time you push to the `main` branch
+    # Using a different branch name? Replace `main` with your branch’s name
+    push:
+        branches: [main]
+    # Allows you to run this workflow manually from the Actions tab on GitHub.
+    workflow_dispatch:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout your repository using git
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+                  fetch-depth: 1
+            - id: read_site_config
+              run: |
+                  echo 'SITE_CONFIGS<<EOF' >> $GITHUB_ENV
+                  cat ./site-configs.json >> $GITHUB_ENV
+                  echo 'EOF' >> $GITHUB_ENV
+            - name: Install, build, and upload your site output
+              uses: withastro/action@v6
+              env:
+                  SITE_CONFIG: ${{ vars.SITE_CONFIG }}
+              with:
+                  # path: . # The root location of your Astro project inside the repository. (optional)
+                  node-version: 26 # The specific version of Node that should be used to build your site. Defaults to 22. (optional)
+                  package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+                  out-dir: "${{ format('sites/{0}/dist', fromJson(env.SITE_CONFIGS)[vars.SITE_CONFIG] || 'main' ) }}"
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4

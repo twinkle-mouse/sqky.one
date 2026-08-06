@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"img">;
+
+const { alt, ...props } = Astro.props;
+---
+
+<img {...props} alt={alt} loading="eager" />
+
+<style>
+    img {
+        color: transparent;
+        display: inline-block;
+        width: 1.2em;
+        height: 1.2em;
+        vertical-align: text-bottom;
+    }
+</style>

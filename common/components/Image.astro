@@ -1,0 +1,18 @@
+---
+import { resolveSrc } from "astro/assets/utils";
+import type { LocalImageProps, RemoteImageProps } from "astro:assets";
+
+export type Props = LocalImageProps | RemoteImageProps;
+
+const { alt, src, ...props } = Astro.props;
+
+const resolvedStrOrObj = await resolveSrc(src);
+let resolvedSrc;
+if (typeof resolvedStrOrObj === "string") {
+    resolvedSrc = resolvedStrOrObj;
+} else {
+    resolvedSrc = resolvedStrOrObj.src;
+}
+---
+
+<img alt={alt || ""} src={resolvedSrc} {...props} />
