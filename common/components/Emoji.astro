@@ -1,0 +1,72 @@
+---
+import { getEmojiName } from "@sqky-one/common/lib/emoji";
+import { renderSvg } from "@sqky-one/common/lib/render-svg";
+import type { HTMLAttributes } from "astro/types";
+import { getEntry } from "astro:content";
+
+export type Props = HTMLAttributes<"span"> & {
+    e: string;
+    width?: string | number | undefined;
+    height?: string | number | undefined;
+    spaceBefore?: string;
+    spaceAfter?: string;
+};
+
+const { e, width, height, spaceBefore = "", spaceAfter = "", "aria-hidden": ariaHidden, class: cls, ...props } = Astro.props;
+
+const name = getEmojiName(e);
+const emojiEntry = await getEntry("emojis", name);
+const emoji = renderSvg(emojiEntry?.data.src, {
+    "aria-hidden": "true",
+    id: undefined,
+    width: width ?? "1.2em",
+    height: height ?? "1.2em",
+})
+    .toString()
+    .trim()
+    .replaceAll("\t", "")
+    .replaceAll("\n", "")
+    .replaceAll("\r", "");
+
+const spaceWidth = 0.263;
+const extraProps = {
+    style:
+        spaceBefore || spaceAfter
+            ? {
+                  marginLeft: spaceBefore && `${spaceBefore.length * spaceWidth}em`,
+                  marginRight: spaceAfter && `${spaceAfter.length * spaceWidth}em`,
+              }
+            : undefined,
+};
+---
+
+<span {...props} {...extraProps} aria-hidden={(ariaHidden ?? "true") ? "true" : undefined} class:list={["emoji", cls]}>
+    <span class="emoji-text" data-emoji="true">{spaceBefore}{e}{spaceAfter}</span>
+    <span class="emoji-inner">
+        <template shadowrootmode="open">
+            <Fragment set:html={emoji} />
+        </template>
+    </span>
+</span>
+
+<style>
+    .emoji {
+        display: inline-block;
+        position: relative;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+
+        vertical-align: text-top;
+        line-height: 0;
+    }
+
+    .emoji-text {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+</style>

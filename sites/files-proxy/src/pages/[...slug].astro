@@ -1,0 +1,10 @@
+---
+import { getCurrentServer } from "@sqky-one/files-proxy/lib/server";
+
+const url = new URL(Astro.request.url);
+
+const currentServer = await getCurrentServer();
+if (!currentServer) return 502;
+
+return Astro.redirect(`http://${currentServer}${url.pathname}${url.search}`);
+---

@@ -1,0 +1,6 @@
+[submodule "noto-emoji"]
+	path = noto-emoji
+	url = https://github.com/googlefonts/noto-emoji.git
+[submodule "writing-entries"]
+	path = writing-entries
+	url = git@github.com:twinkle-mouse/writing-entries.git

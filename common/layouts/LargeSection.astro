@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type SectionType = "section" | "article";
+
+export type Props = HTMLAttributes<"div"> & {
+    type?: SectionType;
+};
+
+const { type: ty, class: cls, ...props } = Astro.props;
+---
+
+{
+    (!ty || ty == "section") && (
+        <section class:list={["large-section", cls]} {...props}>
+            <slot />
+        </section>
+    )
+}
+
+{
+    ty === "article" && (
+        <article class:list={["large-section", cls]} {...props}>
+            <slot />
+        </article>
+    )
+}
+
+<style>
+    .large-section {
+        height: fit-content;
+
+        border: 2px var(--articleBorderColor) solid;
+        border-radius: 1.2rem;
+        background-color: var(--articleBgColor);
+
+        box-shadow: var(--cardBoxShadow);
+
+        overflow: auto;
+        margin-block: 1rem;
+    }
+
+    .large-section > :global(h2),
+    .large-section > :global(h3),
+    .large-section > :global(h4),
+    .large-section > :global(h5),
+    .large-section > :global(h6) {
+        text-align: center;
+        margin-top: 0.5em;
+        margin-bottom: 0.2em;
+    }
+</style>

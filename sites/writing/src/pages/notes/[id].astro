@@ -1,0 +1,36 @@
+---
+import WritingsContent from "@sqky-one/writing/layouts/WritingsContent.astro";
+import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import { getNotesEntries } from "@sqky-one/writing/lib/content";
+import { getEntry, render } from "astro:content";
+
+export async function getStaticPaths() {
+    return (await getNotesEntries()).map((entry) => {
+        return { params: { id: entry.id } };
+    });
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("notes", id);
+if (entry === undefined) {
+    return Astro.redirect("/404");
+}
+
+const { Content, headings } = await render(entry);
+---
+
+<WritingsPage pageName={`'${entry.data.title}'`} desc="">
+    <Fragment slot="nav:page-links">
+        {
+            headings.map((v) => (
+                <li>
+                    <a href={`#${v.slug}`}>{v.text}</a>
+                </li>
+            ))
+        }
+    </Fragment>
+
+    <Fragment slot="page-title">{entry.data.title}</Fragment>
+
+    <WritingsContent Content={Content} />
+</WritingsPage>

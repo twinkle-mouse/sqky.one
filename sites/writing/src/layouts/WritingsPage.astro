@@ -1,0 +1,22 @@
+---
+import Navigation from "@sqky-one/common/components/Navigation.astro";
+import Page, { type Props as PageProps } from "@sqky-one/common/layouts/CommonPage.astro";
+import { siteName } from "@sqky-one/writing/lib/page";
+
+type Props = Omit<PageProps, "siteName">;
+---
+
+<Page {...Astro.props} siteName={siteName}>
+    <slot name="head-tags" slot="head-tags">
+        <link rel="alternate" type="application/rss+xml" title={siteName} href={new URL("rss.xml", import.meta.env.SITE).href} />
+    </slot>
+
+    <Navigation slot="nav">
+        <slot name="nav:page-links" slot="nav:page-links" />
+        <slot name="nav:other-categories" slot="nav:other-categories" />
+        <slot name="nav:footer" slot="nav:footer" />
+    </Navigation>
+
+    <slot name="page-title" slot="page-title" />
+    <slot />
+</Page>

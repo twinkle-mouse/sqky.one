@@ -1,0 +1,885 @@
+---
+import "@sqky-one/common/assets/reset.css";
+import "@sqky-one/common/assets/anims.css";
+import "bluesky-profile-card-embed/style.css";
+import "bluesky-profile-card-embed/themes/dark.css"; // we don't currently have a light mode colour scheme :(
+
+import Noscript from "@sqky-one/common/assets/noscript.html";
+import {
+    colors,
+    colorsToCssStyle,
+    semanticColorsDark,
+    semanticColorsLight,
+    semanticUtilsDark,
+    semanticUtilsLight,
+    stylesToCssStyle,
+} from "@sqky-one/common/lib/colors";
+import type { HTMLAttributes } from "astro/types";
+import { Font } from "astro:assets";
+import { absolutize, parsePath, serialize } from "path-data-parser";
+import { uniformInt } from "pure-rand/distribution/uniformInt";
+import { xoroshiro128plus } from "pure-rand/generator/xoroshiro128plus";
+import Voronoi from "voronoi";
+
+export type Props = HTMLAttributes<"main"> & {
+    siteName: string;
+    desc: string;
+    pageName?: string;
+};
+
+const { siteName, pageName, desc, ...props } = Astro.props;
+
+function getTitle() {
+    if (!pageName) {
+        return `!!! ${siteName} !!!`;
+    }
+
+    return `${pageName} — ${siteName}`;
+}
+
+const title = getTitle();
+
+const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
+const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
+const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
+const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
+const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
+
+const rng = xoroshiro128plus(42069); // haha funny
+const tileSize = 32; // px
+const bgTiles = 32;
+const bgSize = tileSize * bgTiles;
+
+const voronoi = new Voronoi();
+const bbox = { xl: 0, xr: bgSize, yt: 0, yb: bgSize }; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+const points = [];
+for (let i = 0; i < bgTiles / 2; i++) {
+    for (let j = 0; j < bgTiles / 2; j++) {
+        const x = uniformInt(rng, 0, bgSize * 256) / 256; // for decimals
+        const y = uniformInt(rng, 0, bgSize * 256) / 256;
+        points.push({ x, y });
+    }
+}
+
+const diagram = voronoi.compute(points, bbox);
+const stars = [];
+for (const cell of diagram.cells) {
+    for (const halfedge of cell.halfedges) {
+        const p = halfedge.getStartpoint();
+        if (p && p.x > bbox.xl && p.y > bbox.yt && p.x < bbox.xr && p.y < bbox.yb) {
+            let skip = false;
+
+            for (const star of stars) {
+                const disSq = Math.pow(p.x - star.x, 2) + Math.pow(p.y - star.y, 2);
+                if (disSq < Math.pow(tileSize * 0.7, 2)) {
+                    skip = true;
+                    continue;
+                }
+            }
+
+            if (!skip) stars.push({ x: p.x, y: p.y, angle: halfedge.angle });
+        }
+    }
+}
+stars.sort((a, b) => a.x - b.x);
+stars.sort((a, b) => a.y - b.y);
+---
+
+<!doctype html>
+<html lang="en-US" transition:animate="none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="theme-color" content="#ffc2fe" />
+
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon_48.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon_152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon_180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon_192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon_512.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:url" content="https://sqky.one" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={desc} />
+
+        <slot name="head-tags" />
+
+        <meta name="generator" content={Astro.generator} />
+
+        <Font preload cssVariable="--font-noseyrodent" />
+        <Font preload cssVariable="--font-besley" />
+        <Font preload cssVariable="--font-iosevka-curly" />
+
+        <style is:raw set:text={`:root{${colorsStyle}}`}></style>
+
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticColorsDarkStyle}
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            :root {
+                ${semanticUtilsDarkStyle}
+            }`}
+        ></style>
+
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                /* sorry, the light mode colours right now are just bad, ill work on it eventually. */
+                :root {
+                    ${semanticColorsLightStyle}
+                }
+            }`}
+        ></style>
+        <style
+            is:raw
+            set:text={`
+            @media (prefers-color-scheme: light) {
+                :root {
+                    ${semanticUtilsLightStyle}
+                }
+            }`}
+        ></style>
+
+        <slot name="style-overrides" />
+    </head>
+
+    <body>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={bgSize}
+            height={bgSize}
+            viewBox=`0 0 ${bgSize} ${bgSize}`
+            style={{ "--tile-size": tileSize, "--bg-size": bgSize }}
+            id="body-background"
+            aria-hidden="true"
+        >
+            <defs>
+                <!-- originally picked in inkscape with 600x600 viewport -->
+                <linearGradient
+                    id="grad"
+                    x1={(51.926197 * bgSize) / 600}
+                    x2={(550.01068 * bgSize) / 600}
+                    y1={(-70.590981 * bgSize) / 600}
+                    y2={(670.95251 * bgSize) / 600}
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0%" stop-color="#ff8aad" id="stop1"></stop>
+                    <stop offset="50%" stop-color="#ff96fc" id="stop2"></stop>
+                    <stop offset="100%" stop-color="#99a8ff" id="stop3"></stop>
+                </linearGradient>
+            </defs>
+
+            <style>
+                #body-background path {
+                    --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                    --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                }
+
+                #body-background path {
+                    transform: translate(calc(var(--star-x) * var(--offset-x)), calc(var(--star-y) * var(--offset-y)));
+                }
+            </style>
+
+            {
+                stars.map(({ x: ox, y: oy, angle }) => {
+                    const cos = Math.cos(angle);
+                    const sin = Math.sin(angle);
+
+                    const cx = tileSize / 2;
+                    const cy = tileSize / 2;
+
+                    const originalPath = "m16 11.855-1.346 2.729-3.004.437 2.174 2.124-.513 3.001 2.687-1.417 2.691 1.417-.515-3.001 2.176-2.124-3.006-.435z";
+                    const originalSegments = absolutize(parsePath(originalPath));
+                    const segments = originalSegments.map((segment) => {
+                        let data = segment.data;
+                        if (segment.key == "M" || segment.key == "L") {
+                            const [x, y] = segment.data;
+
+                            const nx = cos * (x - cx) + sin * (y - cy) + cx;
+                            const ny = cos * (y - cy) - sin * (x - cx) + cy;
+
+                            data = [nx + ox - cx, ny + oy - cy];
+                        } else if (segment.key == "Z") {
+                            // pass
+                        } else {
+                            console.warn("Unhandled segment: " + segment);
+                        }
+
+                        return { ...segment, data };
+                    });
+                    const path = serialize(segments);
+
+                    return (
+                        <path
+                            d={path}
+                            style={
+                                "fill:url(#grad);fill-opacity:.1;stroke:url(#grad);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:.125;paint-order:stroke fill markers" +
+                                `;--star-x:${(ox / bgSize) * 2 - 1.0};--star-y:${(oy / bgSize) * 2 - 1.0}`
+                            }
+                        />
+                    );
+                })
+            }
+        </svg>
+
+        <div class="site">
+            <slot name="nav" />
+
+            <main {...props} id="maincontent">
+                <h1 id="page-title"><slot name="page-title" /></h1>
+
+                <slot />
+            </main>
+        </div>
+
+        <div id="popout-fakeroot"></div>
+
+        <Fragment set:html={Noscript({})} />
+    </body>
+</html>
+
+<style>
+    .site {
+        width: 100%;
+
+        display: flex;
+
+        padding-inline: calc(max(100dvw - 800px, 1rem) / 5);
+    }
+
+    main {
+        padding-block: 1rem;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    main {
+        /* navbar sidebar size */
+        width: calc(100% - (320px + 1.75rem));
+    }
+
+    @media (max-width: 1300px) {
+        .site {
+            flex-direction: column;
+        }
+
+        main {
+            width: 100%;
+        }
+    }
+</style>
+
+<style is:global>
+    .sr-only {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+    :focus-visible {
+        outline: 3px groove var(--focusColor);
+    }
+
+    :root {
+        --sans: var(--font-noseyrodent), sans-serif;
+        --serif: var(--font-besley), serif;
+        --mono: var(--font-iosevka-curly), monospace;
+
+        font-family: var(--sans);
+
+        scrollbar-width: thin;
+        scrollbar-gutter: auto;
+
+        color: var(--textColor);
+        background-color: var(--pageBgColor);
+    }
+
+    html,
+    body {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    body {
+        position: relative;
+    }
+
+    #body-background {
+        position: fixed;
+        width: calc(max(100vw, var(--bg-size) * 1px));
+        height: calc(max(100vh, var(--bg-size) * 1px));
+        z-index: -100000;
+
+        left: calc(min(100vw - var(--bg-size) * 1px, 0px) * 0.5);
+        top: calc(min(100vh - var(--bg-size) * 1px, 0px) * 0.5);
+    }
+
+    .sans {
+        font-family: var(--sans);
+    }
+
+    .serif {
+        font-family: var(--serif);
+    }
+
+    .mono {
+        font-family: var(--mono);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    cite,
+    blockquote,
+    li,
+    th,
+    td,
+    p,
+    a {
+        text-wrap: wrap stable;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--serif);
+        color: var(--headingColor);
+
+        border-bottom: 1px solid var(--headingColor);
+
+        line-height: 1;
+        padding-top: 0.1em;
+        padding-bottom: 0.6em;
+        margin-bottom: 0.1em;
+
+        display: inline-block;
+        width: 100%;
+    }
+
+    h1::before,
+    h2::before,
+    h3::before,
+    h4::before,
+    h5::before,
+    h6::before {
+        content: "#" / "";
+        margin-right: 0.35em;
+    }
+
+    h1::after,
+    h2::after,
+    h3::after,
+    h4::after,
+    h5::after,
+    h6::after {
+        content: "";
+        margin-left: 0.35em;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    h2 {
+        font-size: 2.75rem;
+        font-weight: 600;
+    }
+
+    h3 {
+        font-size: 1.9rem;
+        font-weight: 600;
+    }
+
+    h4 {
+        font-size: 1.7rem;
+        font-weight: 500;
+    }
+
+    h5 {
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+
+    h6 {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2.75rem;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+        }
+
+        h3 {
+            font-size: 1.7rem;
+        }
+
+        h4 {
+            font-size: 1.4rem;
+        }
+
+        h5 {
+            font-size: 1.2rem;
+        }
+
+        h6 {
+            font-size: 1rem;
+        }
+    }
+
+    a {
+        color: var(--linkColor);
+        text-decoration: underline;
+    }
+
+    a:hover,
+    a:focus {
+        color: var(--linkHoverColor);
+    }
+
+    p {
+        margin-block: 1.1em;
+    }
+
+    hr {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--separatorColor);
+        margin-block: 2em;
+    }
+
+    b,
+    strong {
+        font-weight: bold;
+    }
+
+    strong {
+        color: var(--strongColor);
+    }
+
+    i,
+    em {
+        font-style: italic;
+    }
+
+    em {
+        color: var(--emColor);
+    }
+
+    mark {
+        color: var(--markColor);
+        background-color: var(--markBgColor);
+    }
+
+    sup {
+        vertical-align: super;
+        font-size: 0.7em;
+    }
+
+    sub {
+        vertical-align: sub;
+        font-size: 0.7em;
+    }
+
+    small {
+        font-size: 0.85em;
+        color: var(--smallColor);
+    }
+
+    time {
+        font-size: 0.85em;
+        color: var(--smallColor);
+    }
+
+    code {
+        font-size: 0.85em;
+        vertical-align: 0.15em;
+
+        display: inline;
+        padding-inline: 0.15em;
+        border-radius: 0.25rem;
+
+        white-space: nowrap;
+
+        color: var(--textColor);
+        border: 1px solid var(--codeBorderColor);
+        background-color: var(--codeBgColor);
+
+        font-family: var(--mono);
+    }
+
+    blockquote {
+        margin-block: 1.25em;
+        margin-left: 1em;
+        padding-left: 0.75em;
+        border-radius: 0.35rem;
+        border-left: solid var(--quoteBorderColor) 4px;
+        color: var(--quoteColor);
+
+        font-style: italic;
+    }
+
+    blockquote > :first-child::before {
+        content: "“" / "";
+        margin-left: 0.35em;
+    }
+
+    blockquote > :last-child::after {
+        content: "”" / "";
+        margin-right: 0.35em;
+    }
+
+    cite {
+        display: block;
+        margin-top: -1rem;
+        margin-left: 2.75rem;
+
+        color: var(--citeColor);
+        font-weight: 600;
+        font-style: italic;
+    }
+
+    cite::before {
+        content: "—" / "";
+        margin-inline: 0.35em;
+    }
+
+    /*
+    cite::after {
+        content: "";
+        margin-inline: 0.35em;
+    }
+    */
+
+    ol {
+        list-style: decimal;
+        padding-left: 1.5em;
+        margin-block: 1em;
+    }
+
+    ul {
+        list-style: disc;
+        padding-left: 1em;
+        margin-block: 1em;
+    }
+
+    li {
+        color: var(--emColor);
+    }
+
+    textarea {
+        width: 100%;
+
+        color: var(--textAreaColor);
+        background-color: var(--textAreaBgColor);
+        border: 3px solid var(--textAreaBorderColor);
+        border-radius: 5px;
+
+        padding: 0.35rem;
+    }
+
+    table {
+        width: 100%;
+
+        white-space: nowrap;
+
+        margin-block: 0.25rem;
+    }
+
+    thead {
+        background-color: var(--tableHeadBgColor);
+    }
+
+    tbody {
+        background-color: var(--tableBodyBgColor);
+    }
+
+    th,
+    td {
+        padding-inline: 1em;
+        padding-block: 0.35em;
+        text-align: start;
+        vertical-align: middle;
+        min-width: fit-content;
+    }
+
+    th {
+        border: 1px solid var(--thBorderColor);
+    }
+
+    td {
+        border: 1px solid var(--tdBorderColor);
+    }
+
+    details,
+    summary {
+        border-radius: 6px;
+    }
+
+    details {
+        margin-top: 1.75rem;
+        margin-bottom: 0.5rem;
+        background-color: var(--detailsBgColor);
+    }
+
+    summary {
+        display: flex;
+
+        min-width: max-content;
+        width: 100%;
+
+        padding: 0.35rem;
+
+        color: var(--summaryColor);
+        text-decoration: underline dotted;
+        background-color: var(--detailsBorderColor);
+        outline: 3px solid var(--detailsBorderColor);
+    }
+
+    details > :not(summary) {
+        background: none;
+        border: none;
+
+        padding-block: 1px;
+        padding-inline: 0.9em;
+
+        margin-top: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        outline: 3px solid var(--detailsBorderColor);
+    }
+
+    input,
+    label,
+    button,
+    input::file-selector-button {
+        display: inline-block;
+
+        font-family: var(--sans);
+        text-decoration: underline;
+        text-underline-offset: 15%;
+
+        color: var(--buttonTextColor);
+    }
+
+    button,
+    input::file-selector-button {
+        user-select: none;
+        cursor: pointer;
+
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.4rem;
+
+        background-color: var(--buttonBgColor);
+        border: 3px solid var(--buttonBorderColor);
+    }
+
+    button:hover,
+    button:focus-visible,
+    input:hover::file-selector-button,
+    input:focus-visible::file-selector-button {
+        color: var(--buttonHoverTextColor);
+        background-color: var(--buttonHoverBgColor);
+        border-color: var(--buttonHoverBorderColor);
+    }
+
+    button:active,
+    input:active::file-selector-button {
+        color: var(--buttonActiveTextColor);
+        background-color: var(--buttonActiveBgColor);
+        border-color: var(--buttonActiveBorderColor);
+    }
+
+    a:focus-visible,
+    input:focus-visible {
+        outline: 2px solid var(--focusColor);
+    }
+
+    img:focus-visible,
+    summary:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+        outline: 3px solid var(--focusColor);
+    }
+
+    summary:focus {
+        outline-color: var(--focusColor);
+    }
+
+    textarea:focus {
+        outline-color: var(--focusColor);
+    }
+
+    abbr {
+        text-decoration: dotted underline;
+    }
+
+    img {
+        object-fit: scale-down;
+    }
+
+    picture,
+    img {
+        display: block;
+        line-height: 0;
+    }
+
+    #page-title {
+        text-align: center;
+
+        margin-top: 0.2em;
+        padding-bottom: 0.6em;
+        margin-bottom: 0.4em;
+
+        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.4);
+    }
+
+    #page-title::before {
+        content: "“" / "";
+        margin-left: 0.2em;
+    }
+
+    #page-title::after {
+        content: "”" / "";
+        margin-right: 0.2em;
+    }
+
+    .animation-rotate {
+        display: inline-block;
+        animation: rotate 2s linear infinite;
+    }
+
+    @media (prefers-reduced-motion) {
+        .animation-rotate {
+            animation: none;
+        }
+    }
+
+    #popout-fakeroot {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        width: 100%;
+        height: 100%;
+
+        overflow: clip;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    #popout-fakeroot > * {
+        text-rendering: optimizeLegibility;
+        will-change: transform;
+
+        pointer-events: auto;
+        user-select: none;
+    }
+
+    #popout-fakeroot::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .cursor-grab,
+    #popout-fakeroot:has(> .cursor-grab)::before {
+        cursor: grab !important;
+        pointer-events: auto;
+    }
+
+    .cursor-grabbing,
+    #popout-fakeroot:has(> .cursor-grabbing)::before {
+        cursor: grabbing !important;
+        pointer-events: auto;
+    }
+
+    .text-trans,
+    .text-nb,
+    .text-aroace,
+    .text-agere {
+        background-clip: text;
+        color: #ffffff80;
+    }
+
+    .text-trans {
+        background-image: linear-gradient(
+            -45deg,
+            #5ccefa,
+            #5ccefa 20%,
+            #f6a8b7 20%,
+            #f6a8b7 40%,
+            #fff 40%,
+            #fff 60%,
+            #f6a8b7 60%,
+            #f6a8b7 80%,
+            #5ccefa 80%,
+            #5ccefa
+        );
+    }
+
+    .text-nb {
+        background-image: linear-gradient(-45deg, #fdf52f, #fdf52f 25%, #fff 25%, #fff 50%, #9d5ad2 50%, #9d5ad2 75%, #000 75%, #000);
+    }
+
+    .text-aroace {
+        background-image: linear-gradient(
+            -45deg,
+            #e38c01,
+            #e38c01 20%,
+            #eccd00 20%,
+            #eccd00 40%,
+            #fff 40%,
+            #fff 60%,
+            #62afde 60%,
+            #62afde 80%,
+            #203857 80%,
+            #203857
+        );
+    }
+
+    .text-agere {
+        background-image: linear-gradient(-45deg, #fff, #fff 25%, #fdc1c8 25%, #fdc1c8 50%, #afe1fd 50%, #afe1fd 75%, #fcf77c 75%, #fcf77c);
+    }
+</style>
