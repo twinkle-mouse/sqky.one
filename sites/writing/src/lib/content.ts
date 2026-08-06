@@ -1,10 +1,12 @@
 import { getContainerRenderer } from "@astrojs/mdx/container-renderer";
 import { count } from "@wordpress/wordcount";
+import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { loadRenderers } from "astro:container";
 import { type CollectionEntry, getCollection } from "astro:content";
 import { Node, NodeType, parse } from "node-html-parser";
+import sanitizeHtml, { type Attributes, type IOptions as SanitizeHtmlConfig, type Tag } from "sanitize-html";
 
 import { markdownProcessor } from "../../astro.config";
 
@@ -129,4 +131,50 @@ export async function getAllTags() {
 
 export function coverArtAlt(entry: CollectionEntry<"writings">) {
     return `Cover art for '${entry.data.title}'`;
+}
+
+export function transformLinks(context: AstroGlobal, tagName: string, attribs: Attributes): Tag {
+    if (tagName == "a") {
+        attribs["href"] = new URL(attribs["href"] ?? "", context.site).href;
+    }
+
+    if (tagName == "img" || tagName == "source") {
+        if (attribs["src"]) {
+            attribs["src"] = new URL(attribs["src"], context.site).href;
+        }
+        if (attribs["srcset"]) {
+            attribs["srcset"] = attribs["srcset"]
+                .split(",")
+                .map((v) => {
+                    const [uri, dim] = v.trim().split(" ");
+
+                    return `${new URL(uri, context.site).href} ${dim}`;
+                })
+                .join(", ");
+        }
+    }
+
+    return {
+        tagName,
+        attribs,
+    };
+}
+
+export function sanitizeHtmlConfig(config: { transformLinks?: (tagName: string, attribs: Attributes) => Tag; allowedTags?: string[] }): SanitizeHtmlConfig {
+    return {
+        allowedAttributes: Object.fromEntries([
+            ...Object.entries(sanitizeHtml.defaults.allowedAttributes),
+            ...Object.entries({
+                source: ["srcset", "type"],
+            }),
+        ]),
+        transformTags: config.transformLinks
+            ? {
+                  a: config.transformLinks,
+                  img: config.transformLinks,
+                  source: config.transformLinks,
+              }
+            : {},
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "details", "summary"]).concat(config.allowedTags ?? []),
+    };
 }
