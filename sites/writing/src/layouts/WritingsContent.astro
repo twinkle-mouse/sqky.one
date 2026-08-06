@@ -1,4 +1,6 @@
 ---
+import "@sqky-one/common/assets/content.css";
+
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
@@ -72,32 +74,6 @@ const { Content } = Astro.props;
                 }
             }
 
-            #content aside {
-                float: right;
-                clear: both;
-                max-width: 40%;
-                background-color: var(--codeBgColor);
-
-                font-size: 0.8em;
-                margin-left: 1rem;
-                margin-block: 1.5rem;
-                padding-inline: 1rem;
-                padding-block: 1px; /* to avoid margin collapse */
-
-                border: 0px solid var(--codeBorderColor);
-                border-left-width: 3px;
-                border-radius: 5px;
-            }
-
-            @media (max-width: 640px) {
-                #content aside {
-                    max-width: 100%;
-                    width: 100%;
-                    float: none;
-                    margin-left: 0;
-                }
-            }
-
             #content p {
                 margin-block: 1em;
                 line-height: 1.4;
@@ -128,30 +104,6 @@ const { Content } = Astro.props;
 
             #content code {
                 word-break: break-all;
-            }
-
-            #content u {
-                text-decoration: underline solid;
-            }
-
-            #content del {
-                text-decoration: line-through solid;
-            }
-
-            #content figcaption {
-                text-align: center;
-            }
-
-            #content img,
-            #content picture {
-                height: min-content;
-                margin-inline: auto;
-            }
-
-            #content img:not(picture > img),
-            #content picture {
-                width: 100%;
-                filter: drop-shadow(0px 0px 6px #000000a0);
             }
         </style>
     </div>
