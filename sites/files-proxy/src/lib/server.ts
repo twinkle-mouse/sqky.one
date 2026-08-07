@@ -10,8 +10,8 @@ export async function getCurrentServer() {
         const diff = currDate.getTime() - lastCheck.getTime();
         if (diff > 1000 * 60 * 5) {
             currentServer = undefined;
+            lastCheck = currDate;
         }
-        lastCheck = currDate;
     }
 
     if (currentServer) {
