@@ -57,14 +57,16 @@ const tags = await getAllTags();
 
                     <Details summary="List of all tags">
                         <div>
-                            <SearchInput
-                                id="writings-tags-search-input"
-                                class="js-necessary search-input"
-                                data-search-target="writings-tags"
-                                data-search-values={JSON.stringify(tags.map(([key]) => key))}
-                            >
-                                Search tags by name:
-                            </SearchInput>
+                            <div class="js-necessary">
+                                <SearchInput
+                                    id="writings-tags-search-input"
+                                    class="search-input"
+                                    data-search-target="writings-tags"
+                                    data-search-values={JSON.stringify(tags.map(([key]) => key))}
+                                >
+                                    Search tags by name:
+                                </SearchInput>
+                            </div>
 
                             <ul id="writings-tags">
                                 {
