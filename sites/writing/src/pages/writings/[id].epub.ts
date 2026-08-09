@@ -90,7 +90,7 @@ export async function GET(context: AstroGlobal) {
     const epub = new EPub(
         {
             title: entry.data.title,
-            author: entry.data.authors,
+            author: entry.data.authors.join(", "),
             publisher: siteName,
             description: desc,
             cover,
