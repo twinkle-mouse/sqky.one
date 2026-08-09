@@ -61,7 +61,7 @@ export async function GET(context: AstroGlobal) {
 
     const element = parse(
         sanitizeHtml(content, {
-            ...sanitizeHtmlConfig({ site: import.meta.env.DEV ? context.site : undefined, srcset: false }),
+            ...sanitizeHtmlConfig({ site: context.site, srcset: false }),
         }),
     );
     if (!import.meta.env.DEV) {
