@@ -107,9 +107,10 @@ const { class: className, ...attributes } = {
                     srcset={srcsetAttribute}
                     type={mime.lookup(image.options.format ?? image.src) ?? `image/${image.options.format}`}
                     {...sourceAdditionalAttributes}
+                    sizes="auto"
                 />
             );
         })
     }
-    <img data-original-src={originalSrcProp} src={fallbackImage.src} {...attributes} class={className} />
+    <img data-original-src={originalSrcProp} src={fallbackImage.src} {...attributes} sizes="auto" class={className} />
 </picture>
