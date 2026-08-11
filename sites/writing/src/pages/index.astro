@@ -19,14 +19,19 @@ const tags = await getAllTags();
 
     <LargeSection>
         <p class="icons">
-            <a class="rss-link" href="/rss.xml">
-                <span class="sr-only">Subscribe to the Stardew Library (RSS)</span>
-                <RssIcon width="2.5rem" height="2.5rem" data-glow="true" />
+            <a href="/rss.xml">
+                <RssIcon data-glow="true" />
+                Subscribe to RSS
             </a>
         </p>
         <style>
             .icons {
                 padding-inline: 1.5rem;
+                font-size: 1.5rem;
+            }
+
+            .icons > a {
+                display: inline-block;
             }
         </style>
 
