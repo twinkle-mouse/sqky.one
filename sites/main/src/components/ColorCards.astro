@@ -9,9 +9,9 @@ import ColorCard from "./ColorCard.astro";
 <Section>
     <div>
         <h3 class="colors-text-container">
-            <div class="colors-text-box">
-                <div class="colors-text mono">colours</div>
-            </div>
+            <span class="colors-text-box">
+                <span class="colors-text mono">colours</span>
+            </span>
         </h3>
 
         <label class="sr-only">
@@ -60,6 +60,7 @@ import ColorCard from "./ColorCard.astro";
     }
 
     .colors-text-box {
+        display: block;
         width: max-content;
         overflow: hidden;
         margin-inline: auto;
