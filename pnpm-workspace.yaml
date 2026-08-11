@@ -1,5 +1,5 @@
 allowBuilds:
-    esbuild: true
+    esbuild: false
 minimumReleaseAge: 0
 packages:
     - common
