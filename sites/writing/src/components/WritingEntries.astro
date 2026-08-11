@@ -20,15 +20,15 @@ const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
         Astro.props.entries.map((entry) => (
             <EmojiWrapper>
                 <article class="entry-card">
-                    <hgroup class="entry-header">
+                    <div class="entry-header">
                         <h3 class="entry-title">
-                            <a href={`/${entry.collection}/${entry.id}`}>{entry.data.title}</a>
+                            <a href={encodeURI(`/${entry.collection}/${entry.id}`)}>{entry.data.title}</a>
                         </h3>
 
                         <time class="entry-date mono" datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)}>
                             {displayDateFmt.format(entry.data.date)}
                         </time>
-                    </hgroup>
+                    </div>
 
                     <div class="entry-desc-container">
                         <div class="entry-desc">
