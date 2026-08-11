@@ -155,6 +155,8 @@ stars.sort((a, b) => a.y - b.y);
             }`}
         ></style>
 
+        <Fragment set:html={Noscript({})} />
+
         <slot name="style-overrides" />
     </head>
 
@@ -248,8 +250,6 @@ stars.sort((a, b) => a.y - b.y);
         </div>
 
         <div id="popout-fakeroot"></div>
-
-        <Fragment set:html={Noscript({})} />
     </body>
 </html>
 

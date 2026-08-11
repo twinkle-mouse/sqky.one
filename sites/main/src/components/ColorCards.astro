@@ -189,13 +189,6 @@ import ColorCard from "./ColorCard.astro";
     }
 </style>
 
-<noscript>
-    <style>
-        #toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ * .color-set-item {
-            --color-override: transparent;
-        }
-    </style>
-</noscript>
 <script>
     const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
     const cards = document.querySelectorAll<HTMLElement>(".color-set-item .color-card");
