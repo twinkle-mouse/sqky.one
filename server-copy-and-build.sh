@@ -7,6 +7,9 @@ export REMOTE="madeline@v2202508295396374808.supersrv.de"
 
 FILES_TO_COPY=$(echo ./{"common","fonts","noto-emoji","public","sites","site-configs.json","astro.config.ts","tsconfig.json","typings","package.json","pnpm-lock.yaml","pnpm-workspace.yaml","server-build.sh"})
 
+echo "Deleting dist folders..."
+rm -r ./sites/*/dist
+
 echo "Installing local server..."
 chmod +x ./server-copy-and-build-local.sh
 ./server-copy-and-build-local.sh "$FILES_TO_COPY"
