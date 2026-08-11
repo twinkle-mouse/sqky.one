@@ -1,5 +1,6 @@
 ---
 import nowplaying from "@sqky-one/common/assets/nowplaying.html";
+import parse from "node-html-parser";
 ---
 
 <section class="text-center">
@@ -8,8 +9,7 @@ import nowplaying from "@sqky-one/common/assets/nowplaying.html";
 
     <div class="nowplaying-container js-necessary">
         <div class="nowplaying">
-            <div id="nowplaying-widget"></div>
-            <div id="nowplaying-widget-loader" hidden set:html={nowplaying({})} />
+            <div id="nowplaying-widget" data-src={parse(nowplaying({})).removeWhitespace().toString()}></div>
         </div>
     </div>
 </section>
@@ -17,14 +17,11 @@ import nowplaying from "@sqky-one/common/assets/nowplaying.html";
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const nowplayingWidget = document.getElementById("nowplaying-widget")!;
-        const nowplayingWidgetLoader = document.getElementById("nowplaying-widget-loader")!;
 
         nowplayingWidget.attachShadow({ mode: "open" });
 
         if (nowplayingWidget.shadowRoot) {
-            nowplayingWidget.shadowRoot.replaceChildren(...nowplayingWidgetLoader.childNodes);
-
-            nowplayingWidgetLoader.remove();
+            nowplayingWidget.shadowRoot.innerHTML = nowplayingWidget.dataset.src || "";
         }
     });
 </script>
