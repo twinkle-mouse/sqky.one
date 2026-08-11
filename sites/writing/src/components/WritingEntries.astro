@@ -10,6 +10,9 @@ import WritingDetails from "./WritingDetails.astro";
 type Props = {
     entries: CollectionEntry<"writings">[];
 };
+
+const readableDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
+const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 ---
 
 <div class="entries">
@@ -22,8 +25,8 @@ type Props = {
                             <a href={`/${entry.collection}/${entry.id}`}>{entry.data.title}</a>
                         </h3>
 
-                        <time class="entry-date mono" datetime={entry.data.date!.toISOString()}>
-                            {entry.data.date!.toLocaleDateString("en-GB", { dateStyle: "medium" })}
+                        <time class="entry-date mono" datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)}>
+                            {displayDateFmt.format(entry.data.date)}
                         </time>
                     </hgroup>
 
