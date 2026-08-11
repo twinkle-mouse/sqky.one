@@ -16,7 +16,7 @@ const { src, summary, ...props } = Astro.props;
         <span>{summary}</span>
         {
             src && (
-                <a class="mono" href={src}>
+                <a class="mono" href={encodeURI(src)}>
                     {src}
                 </a>
             )
