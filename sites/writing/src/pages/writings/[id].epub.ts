@@ -68,6 +68,10 @@ export async function GET(context: AstroGlobal) {
         for (const image of element.querySelectorAll("img")) {
             image.setAttribute("src", `file://${writingsOutDir}${image.attributes["data-original-src"]}`);
         }
+    } else {
+        for (const image of element.querySelectorAll("img")) {
+            image.setAttribute("src", `file://${image.attributes["data-original-src"].replace("/@fs", "")}`);
+        }
     }
     const sections = element.querySelectorAll("section");
 
