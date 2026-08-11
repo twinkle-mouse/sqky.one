@@ -16,5 +16,9 @@
             user-select: unset !important;
             touch-action: unset !important;
         }
+
+        #toggle-card-names:has(#toggle-card-names-visibility:not(:checked)) ~ * .color-set-item {
+            --color-override: transparent;
+        }
     </style>
 </noscript>
