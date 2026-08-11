@@ -7,6 +7,7 @@ import { siteDesc, siteName } from "@sqky-one/writing/lib/page";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
+import parse from "node-html-parser";
 import sanitizeHtml from "sanitize-html";
 
 const container = await experimental_AstroContainer.create();
@@ -59,9 +60,13 @@ export async function GET(context: AstroGlobal) {
                     pubDate: entry.data.date,
                     categories: entry.data.tags,
                     link: `/writings/${entry.id}/`,
-                    content: sanitizeHtml(details + coverArt + content, {
-                        ...sanitizeHtmlConfig({ site: context.site }),
-                    }),
+                    content: parse(
+                        sanitizeHtml(details + coverArt + content, {
+                            ...sanitizeHtmlConfig({ site: context.site }),
+                        }),
+                    )
+                        .removeWhitespace()
+                        .toString(),
                     customData: [...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
                 };
             }),

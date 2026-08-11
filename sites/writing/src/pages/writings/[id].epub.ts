@@ -63,7 +63,7 @@ export async function GET(context: AstroGlobal) {
         sanitizeHtml(content, {
             ...sanitizeHtmlConfig({ site: context.site, srcset: false }),
         }),
-    );
+    ).removeWhitespace();
     if (!import.meta.env.DEV) {
         for (const image of element.querySelectorAll("img")) {
             image.setAttribute("src", `file://${writingsOutDir}${image.attributes["data-original-src"]}`);
