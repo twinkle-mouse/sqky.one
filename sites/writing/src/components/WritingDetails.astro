@@ -38,7 +38,7 @@ const wordCount = countWords(Content);
                         <ul>
                             {entry.data.tags.map((tag) => (
                                 <li>
-                                    <a href={`/tag/${tag}`}>{tag}</a>
+                                    <a href={encodeURI(`/tag/${tag}`)}>{tag}</a>
                                 </li>
                             )) || "(none)"}
                         </ul>
@@ -53,7 +53,7 @@ const wordCount = countWords(Content);
                     <th scope="row">Relations</th>
                     <td>
                         {entries
-                            .map(([name, link]) => <a href={link}>{name}</a>)
+                            .map(([name, link]) => <a href={encodeURI(link)}>{name}</a>)
                             .flatMap((v, index) => {
                                 if (index < entry.data.tags.length - 1) {
                                     return [v, "\n"];
