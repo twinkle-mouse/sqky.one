@@ -72,7 +72,7 @@ const tags = await getAllTags();
                                 {
                                     tags.map(([tag, count]) => (
                                         <li data-search-value={tag}>
-                                            <a href={`/tag/${tag}`}>{tag}</a> ({count})
+                                            <a href={encodeURI(`/tag/${tag}`)}>{tag}</a> ({count})
                                         </li>
                                     ))
                                 }
