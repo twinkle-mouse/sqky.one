@@ -24,6 +24,10 @@
     }
 }
 
+#content hr {
+    clear: both;
+}
+
 #content u {
     text-decoration: underline solid;
 }
