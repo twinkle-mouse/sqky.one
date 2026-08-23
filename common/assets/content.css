@@ -10,7 +10,7 @@
     padding-inline: 1rem;
     padding-block: 1px; /* to avoid margin collapse */
 
-    border: 0px solid var(--codeBorderColor);
+    border: 0px solid var(--codeBorderColor, currentColor);
     border-left-width: 3px;
     border-radius: 5px;
 }
