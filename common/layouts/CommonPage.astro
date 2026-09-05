@@ -245,7 +245,7 @@ stars.sort((a, b) => a.y - b.y);
             }
         </svg>
 
-        <div class="site">
+        <div id="site">
             <slot name="nav" />
 
             <main {...props} id="maincontent">
@@ -260,7 +260,7 @@ stars.sort((a, b) => a.y - b.y);
 </html>
 
 <style>
-    .site {
+    #site {
         width: 100%;
 
         display: flex;
@@ -282,7 +282,7 @@ stars.sort((a, b) => a.y - b.y);
     }
 
     @media (max-width: 1300px) {
-        .site {
+        #site {
             flex-direction: column;
         }
 
