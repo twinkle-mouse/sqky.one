@@ -264,7 +264,7 @@ stars.sort((a, b) => a.y - b.y);
     </body>
 </html>
 
-<style>
+<style is:global>
     #site {
         width: 100%;
 
@@ -311,6 +311,10 @@ stars.sort((a, b) => a.y - b.y);
             /* unfortunately, i do need at least some space to have borders still look nice and not absolutely clipped or crammed. */
             /* this is the absolute minimum amount of padding possible */
             padding-inline: 6px;
+        }
+
+        main {
+            width: 100%;
         }
     }
 </style>
@@ -796,6 +800,11 @@ stars.sort((a, b) => a.y - b.y);
         padding-bottom: 1.2rem;
         margin-top: 1.2rem;
         background-color: var(--articleBgColor);
+    }
+
+    fieldset > :last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
 
     #page-title {
