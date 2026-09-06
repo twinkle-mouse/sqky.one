@@ -9,7 +9,7 @@ const { id, ...props } = Astro.props;
 
 <input id={id} type="checkbox" {...props} />
 <label for={id}>
-    <Cross class="icon" />
+    <Cross class="icon" aria-hidden="true" />
     <slot />
 </label>
 
