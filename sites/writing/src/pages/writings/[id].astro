@@ -122,8 +122,12 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
 
         .cover-art {
             flex: 1;
+            max-width: 330px;
 
+            margin-right: 1rem;
             margin-block: 1.5rem;
+
+            --responsive-padding: calc(min(max(50% - 300px, 0.05rem), 40%));
         }
 
         .cover-art-img {
@@ -138,7 +142,7 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
         }
 
         .info {
-            flex: 1.8 1;
+            flex: 2 1;
             height: fit-content;
         }
 
@@ -146,28 +150,29 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
             .cover-art {
                 margin: 0;
 
+                padding-inline: var(--responsive-padding);
+
                 min-width: 100%;
-                padding-inline: 7.5%;
-                padding-block: 2rem;
-                margin-bottom: 0.5rem;
+                padding-block: 1rem !important;
+                margin-bottom: 0.75rem !important;
             }
         }
 
         @media (max-width: 640px) {
             .cover-art {
-                min-width: 100%;
-                padding-inline: 7.5%;
-                padding-block: 1rem;
-                margin-bottom: 0;
+                padding-block: 0.5rem !important;
             }
         }
 
         body[data-force-mobile="true"] {
             .cover-art {
+                margin: 0;
+
+                padding-inline: var(--responsive-padding);
+
                 min-width: 100%;
-                padding-inline: 7.5%;
                 padding-block: 1rem;
-                margin-bottom: 0;
+                margin-bottom: 0.5rem;
             }
         }
     </style>
