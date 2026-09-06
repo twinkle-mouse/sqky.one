@@ -1,6 +1,9 @@
 ---
+import Checkbox from "@sqky-one/common/components/Checkbox.astro";
 import FileIcon from "@sqky-one/common/components/FileIcon.astro";
+import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
+import RadioInput from "@sqky-one/common/components/RadioInput.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
@@ -157,7 +160,476 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
                 margin-bottom: 0;
             }
         }
+
+        body[data-force-mobile="true"] {
+            .cover-art {
+                min-width: 100%;
+                padding-inline: 7.5%;
+                padding-block: 1rem;
+                margin-bottom: 0;
+            }
+        }
     </style>
 
-    <WritingsContent Content={Content} />
+    <Section class="controls js-necessary">
+        <h2>Controls</h2>
+
+        <p>
+            <i>Below is a few inputs for controlling the visuals of the writing.</i><br />
+            <i>Any values changed here will be saved to your browser for reuse across all writings on the Stardew Library.</i>
+        </p>
+
+        <fieldset>
+            <legend>Font size:</legend>
+
+            <div>
+                <label>Presets:</label>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">Site Default</RadioInput>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">Extra Small</RadioInput>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">Small</RadioInput>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">Normal</RadioInput>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">Large</RadioInput>
+                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">Extra Large</RadioInput>
+            </div>
+
+            <div>
+                <NumericInput id="controls-font-size-pixels" min="12" max="28">Pixel Value:</NumericInput>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Line height:</legend>
+
+            <div>
+                <label>Presets:</label>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">Site Default</RadioInput>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">Extra Small</RadioInput>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">Small</RadioInput>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">Normal</RadioInput>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">Large</RadioInput>
+                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">Extra Large</RadioInput>
+            </div>
+
+            <div>
+                <NumericInput id="controls-line-height-em" min="1.0" max="2.0" step="0.1">By Font Size (em):</NumericInput>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Layout stuffs:</legend>
+
+            <p>
+                On desktop view, the navigation is turned into a sidebar.<br />
+                You might not want this behaviour, and you can disable it below.
+                <br />
+                <Checkbox id="controls-layout-force-mobile">Force mobile layout?</Checkbox>
+            </p>
+
+            <p>
+                The website has a large amount of padding on the left and right edges in order to centre the page content and direct flow.<br />
+                If you would prefer not having any paddings and instead letting the content fill the entire width, you can do so below.
+                <br />
+                <Checkbox id="controls-layout-remove-page-padding">Remove page padding?</Checkbox>
+            </p>
+
+            <p>
+                On narrower displays, the site automatically adjusts to reduce the margins on the left and right sides of sections.<br />
+                However, that might not be enough for you, or you just do not want any margins whatsoever.<br />
+                If so, you can collapse all margins below. This also disables any kinds of borders or shadows on the sections.
+                <br />
+                <Checkbox id="controls-layout-collapse-margins">Collapse margins?</Checkbox>
+            </p>
+        </fieldset>
+    </Section>
+
+    <WritingsContent Content={Content}>
+        <script>
+            const content = document.getElementById("content")!;
+
+            function presetFontSizeChanged() {
+                const fontSize = window.getComputedStyle(content).fontSize.replace("px", "");
+
+                fontSizePixels.element.defaultValue = fontSize;
+                fontSizePixels.element.value = fontSize;
+            }
+
+            const fontSizePixels = {
+                key: "font-size-pixels",
+                element: document.getElementById("controls-font-size-pixels")! as HTMLInputElement,
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.fontSize = "";
+                    } else {
+                        content.style.fontSize = `${value}px`;
+                    }
+
+                    for (const e of fontSizePreset.elements) {
+                        e.checked = false;
+                    }
+                    fontSizePreset.clear();
+                },
+            };
+
+            const fontSizePreset = {
+                key: "font-size-preset",
+                elements: [
+                    "controls-font-size-preset-unset",
+                    "controls-font-size-preset-x-small",
+                    "controls-font-size-preset-small",
+                    "controls-font-size-preset-medium",
+                    "controls-font-size-preset-large",
+                    "controls-font-size-preset-x-large",
+                ].map((id) => document.getElementById(id)! as HTMLInputElement),
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.fontSize = "";
+                    } else {
+                        content.style.fontSize = value;
+                    }
+
+                    fontSizePixels.clear();
+                    presetFontSizeChanged();
+                },
+            };
+
+            {
+                const pixels = fontSizePixels.get();
+                const preset = fontSizePreset.get();
+
+                if (pixels) {
+                    fontSizePixels.element.value = pixels;
+                    fontSizePixels.set(pixels);
+                } else if (preset) {
+                    fontSizePreset.set(preset);
+                } else {
+                    fontSizePreset.set("");
+                }
+            }
+
+            {
+                fontSizePixels.element.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        fontSizePixels.set(target.value || target.defaultValue);
+                    }
+                });
+            }
+
+            for (const e of fontSizePreset.elements) {
+                const current = fontSizePreset.get();
+                if (current === e.value) {
+                    e.checked = true;
+                } else {
+                    e.checked = false;
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        fontSizePreset.set(target.value);
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            const content = document.getElementById("content")!;
+
+            function presetLineHeightChanged() {
+                const fontSize = Number.parseFloat(window.getComputedStyle(content).fontSize.replace("px", ""));
+                const lineHeight = (
+                    Math.floor((100.0 * Number.parseFloat(window.getComputedStyle(content).lineHeight.replace("px", ""))) / fontSize) / 100.0
+                ).toString();
+                lineHeightEm.element.defaultValue = lineHeight;
+                lineHeightEm.element.value = lineHeight;
+            }
+
+            const lineHeightEm = {
+                key: "line-height-em",
+                element: document.getElementById("controls-line-height-em")! as HTMLInputElement,
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.lineHeight = "";
+                    } else {
+                        content.style.lineHeight = value;
+                    }
+
+                    for (const e of lineHeightPreset.elements) {
+                        e.checked = false;
+                    }
+                    lineHeightPreset.clear();
+                },
+            };
+
+            const lineHeightPreset = {
+                key: "line-height-preset",
+                elements: [
+                    "controls-line-height-preset-unset",
+                    "controls-line-height-preset-x-small",
+                    "controls-line-height-preset-small",
+                    "controls-line-height-preset-medium",
+                    "controls-line-height-preset-large",
+                    "controls-line-height-preset-x-large",
+                ].map((id) => document.getElementById(id)! as HTMLInputElement),
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.lineHeight = "";
+                    } else {
+                        content.style.lineHeight = value;
+                    }
+
+                    lineHeightEm.clear();
+                    presetLineHeightChanged();
+                },
+            };
+
+            {
+                const em = lineHeightEm.get();
+                const preset = lineHeightPreset.get();
+
+                if (em) {
+                    lineHeightEm.element.value = em;
+                    lineHeightEm.set(em);
+                } else if (preset) {
+                    lineHeightPreset.set(preset);
+                } else {
+                    lineHeightPreset.set("");
+                }
+            }
+
+            {
+                lineHeightEm.element.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        lineHeightEm.set(target.value || target.defaultValue);
+                    }
+                });
+            }
+
+            for (const e of lineHeightPreset.elements) {
+                const current = lineHeightPreset.get();
+                if (current === e.value) {
+                    e.checked = true;
+                } else {
+                    e.checked = false;
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        lineHeightPreset.set(target.value);
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            {
+                const e = document.getElementById("controls-layout-force-mobile")! as HTMLInputElement;
+                const key = "force-mobile";
+
+                function set(checked: boolean) {
+                    if (checked) {
+                        window.localStorage.setItem(key, "true");
+                    } else {
+                        window.localStorage.removeItem(key);
+                    }
+
+                    document.body.dataset.forceMobile = checked.toString();
+                }
+
+                try {
+                    e.checked = window.localStorage.getItem(key) == "true" || false;
+                    set(e.checked);
+                } catch {
+                    // ignore
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        set(target.checked);
+                    }
+                });
+            }
+
+            {
+                const e = document.getElementById("controls-layout-remove-page-padding")! as HTMLInputElement;
+                const key = "remove-page-padding";
+
+                function set(checked: boolean) {
+                    if (checked) {
+                        window.localStorage.setItem(key, "true");
+                    } else {
+                        window.localStorage.removeItem(key);
+                    }
+
+                    document.body.dataset.removePagePadding = checked.toString();
+                }
+
+                try {
+                    e.checked = window.localStorage.getItem(key) == "true" || false;
+                    set(e.checked);
+                } catch {
+                    // ignore
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        set(target.checked);
+                    }
+                });
+            }
+
+            {
+                const e = document.getElementById("controls-layout-collapse-margins")! as HTMLInputElement;
+                const key = "collapse-margins";
+
+                function set(checked: boolean) {
+                    if (checked) {
+                        window.localStorage.setItem(key, "true");
+                    } else {
+                        window.localStorage.removeItem(key);
+                    }
+
+                    document.body.dataset.collapseMargins = checked.toString();
+                }
+
+                try {
+                    e.checked = window.localStorage.getItem(key) == "true" || false;
+                    set(e.checked);
+                } catch {
+                    // ignore
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        set(target.checked);
+                    }
+                });
+            }
+        </script>
+    </WritingsContent>
 </WritingsPage>

@@ -290,6 +290,24 @@ stars.sort((a, b) => a.y - b.y);
             width: 100%;
         }
     }
+
+    body[data-force-mobile="true"] {
+        #site {
+            flex-direction: column;
+        }
+
+        main {
+            width: 100%;
+        }
+    }
+
+    body[data-remove-page-padding="true"] {
+        #site {
+            /* unfortunately, i do need at least some space to have borders still look nice and not absolutely clipped or crammed. */
+            /* this is the absolute minimum amount of padding possible */
+            padding-inline: 6px;
+        }
+    }
 </style>
 
 <style is:global>
@@ -765,6 +783,14 @@ stars.sort((a, b) => a.y - b.y);
     img {
         display: block;
         line-height: 0;
+    }
+
+    fieldset {
+        border: 2px solid var(--articleBorderColor);
+        padding-inline: 1rem;
+        padding-bottom: 1.2rem;
+        margin-top: 1.2rem;
+        background-color: var(--articleBgColor);
     }
 
     #page-title {
