@@ -1,5 +1,6 @@
 ---
 import Checkbox from "@sqky-one/common/components/Checkbox.astro";
+import Details from "@sqky-one/common/components/Details.astro";
 import FileIcon from "@sqky-one/common/components/FileIcon.astro";
 import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
@@ -185,86 +186,98 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
             <i>Any values changed here will be saved to your browser for reuse across all writings on the Stardew Library.</i>
         </p>
 
-        <fieldset>
-            <legend>Font family:</legend>
+        <Details summary="Display Controls">
+            <div class="controls">
+                <fieldset>
+                    <legend>Font family:</legend>
 
-            <div>
-                <label>Presets:</label>
-                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">Site Default</RadioInput>
-                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)"
-                    >IBM Plex Sans</RadioInput
-                >
-                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">Inter</RadioInput>
-                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">Noto Sans</RadioInput>
-                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">Roboto</RadioInput>
+                    <div>
+                        <label>Presets:</label>
+                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">Site Default</RadioInput>
+                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)"
+                            >IBM Plex Sans</RadioInput
+                        >
+                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">Inter</RadioInput>
+                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)"
+                            >Noto Sans</RadioInput
+                        >
+                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">Roboto</RadioInput>
+                    </div>
+
+                    <div>
+                        <TextInput id="controls-font-family-custom">Custom font:</TextInput>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Font size:</legend>
+
+                    <div>
+                        <label>Presets:</label>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">Site Default</RadioInput>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">Extra Small</RadioInput>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">Small</RadioInput>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">Normal</RadioInput>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">Large</RadioInput>
+                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">Extra Large</RadioInput>
+                    </div>
+
+                    <div>
+                        <NumericInput id="controls-font-size-pixels" min="12" max="28">Pixel value:</NumericInput>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Line height:</legend>
+
+                    <div>
+                        <label>Presets:</label>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">Site Default</RadioInput>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">Extra Small</RadioInput>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">Small</RadioInput>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">Normal</RadioInput>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">Large</RadioInput>
+                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">Extra Large</RadioInput>
+                    </div>
+
+                    <div>
+                        <NumericInput id="controls-line-height-em" min="1.0" max="2.0" step="0.1">By font size (em):</NumericInput>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Layout stuffs:</legend>
+
+                    <p>
+                        On desktop view, the navigation is turned into a sidebar.<br />
+                        You might not want this behaviour, and you can disable it below.
+                        <br />
+                        <Checkbox id="controls-layout-force-mobile">Force mobile layout?</Checkbox>
+                    </p>
+
+                    <p>
+                        The website has a large amount of padding on the left and right edges in order to centre the page content and direct flow.<br />
+                        If you would prefer not having any paddings and instead letting the content fill the entire width, you can do so below.
+                        <br />
+                        <Checkbox id="controls-layout-remove-page-padding">Remove page padding?</Checkbox>
+                    </p>
+
+                    <p>
+                        On narrower displays, the website automatically adjusts to reduce the margins on the left and right sides of sections.<br />
+                        However, that might not be enough for you, or you just do not want any margins whatsoever.<br />
+                        If so, you can collapse all margins below; this also disables any kinds of borders or shadows on the sections.
+                        <br />
+                        <Checkbox id="controls-layout-collapse-margins">Collapse margins?</Checkbox>
+                    </p>
+                </fieldset>
             </div>
 
-            <div>
-                <TextInput id="controls-font-family-custom">Custom font:</TextInput>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Font size:</legend>
-
-            <div>
-                <label>Presets:</label>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">Site Default</RadioInput>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">Extra Small</RadioInput>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">Small</RadioInput>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">Normal</RadioInput>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">Large</RadioInput>
-                <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">Extra Large</RadioInput>
-            </div>
-
-            <div>
-                <NumericInput id="controls-font-size-pixels" min="12" max="28">Pixel value:</NumericInput>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Line height:</legend>
-
-            <div>
-                <label>Presets:</label>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">Site Default</RadioInput>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">Extra Small</RadioInput>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">Small</RadioInput>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">Normal</RadioInput>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">Large</RadioInput>
-                <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">Extra Large</RadioInput>
-            </div>
-
-            <div>
-                <NumericInput id="controls-line-height-em" min="1.0" max="2.0" step="0.1">By font size (em):</NumericInput>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Layout stuffs:</legend>
-
-            <p>
-                On desktop view, the navigation is turned into a sidebar.<br />
-                You might not want this behaviour, and you can disable it below.
-                <br />
-                <Checkbox id="controls-layout-force-mobile">Force mobile layout?</Checkbox>
-            </p>
-
-            <p>
-                The website has a large amount of padding on the left and right edges in order to centre the page content and direct flow.<br />
-                If you would prefer not having any paddings and instead letting the content fill the entire width, you can do so below.
-                <br />
-                <Checkbox id="controls-layout-remove-page-padding">Remove page padding?</Checkbox>
-            </p>
-
-            <p>
-                On narrower displays, the website automatically adjusts to reduce the margins on the left and right sides of sections.<br />
-                However, that might not be enough for you, or you just do not want any margins whatsoever.<br />
-                If so, you can collapse all margins below; this also disables any kinds of borders or shadows on the sections.
-                <br />
-                <Checkbox id="controls-layout-collapse-margins">Collapse margins?</Checkbox>
-            </p>
-        </fieldset>
+            <style>
+                .controls {
+                    padding-bottom: 1.4rem;
+                }
+            </style>
+        </Details>
     </Section>
 
     <WritingsContent renderResult={renderResult}>
