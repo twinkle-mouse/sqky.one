@@ -51,8 +51,8 @@ if (Astro.slots.has("nav:page-links")) {
     </a>
 </div>
 
-<style>
-    nav {
+<style is:global>
+    #nav {
         z-index: 10000000;
 
         overflow: auto;
@@ -65,7 +65,7 @@ if (Astro.slots.has("nav:page-links")) {
         box-shadow: var(--cardBoxShadow);
     }
 
-    nav {
+    #nav {
         position: sticky;
 
         /* navbar sidebar size */
@@ -78,7 +78,7 @@ if (Astro.slots.has("nav:page-links")) {
     }
 
     @media (max-width: 1300px) {
-        nav {
+        #nav {
             position: static;
 
             margin: 0;
@@ -92,7 +92,7 @@ if (Astro.slots.has("nav:page-links")) {
     }
 
     body[data-force-mobile="true"] {
-        nav {
+        #nav {
             position: static;
 
             margin: 0;
@@ -104,9 +104,15 @@ if (Astro.slots.has("nav:page-links")) {
             height: 240px;
         }
     }
+
+    body[data-remove-page-padding="true"] {
+        #nav {
+            margin-right: 10px;
+        }
+    }
 </style>
 
-<style>
+<style is:global>
     #nav-items {
         display: flex;
 
@@ -137,7 +143,7 @@ if (Astro.slots.has("nav:page-links")) {
             flex-direction: row;
         }
 
-        #nav-items > :global(div) {
+        #nav-items > div {
             width: 100%;
             height: auto;
         }
@@ -154,7 +160,7 @@ if (Astro.slots.has("nav:page-links")) {
             flex-direction: row;
         }
 
-        #nav-items > :global(div) {
+        #nav-items > div {
             width: 100%;
             height: auto;
         }
@@ -163,17 +169,19 @@ if (Astro.slots.has("nav:page-links")) {
             display: none;
         }
     }
+</style>
 
+<style is:global>
     /* reset styles */
-    #nav-items :global(ul),
-    #nav-items :global(li) {
+    #nav-items ul,
+    #nav-items li {
         margin: 0;
         padding: 0;
         list-style: none;
     }
 
-    #nav-items > :global(div) > :global(p),
-    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a) {
+    #nav-items > div > p,
+    #nav-items > div > ul > li > a {
         display: block;
 
         width: max-content;
@@ -181,7 +189,7 @@ if (Astro.slots.has("nav:page-links")) {
     }
     /* reset styles */
 
-    #nav-items > :global(div) > :global(p) {
+    #nav-items > div > p {
         width: 100%;
 
         margin: 0;
@@ -193,14 +201,14 @@ if (Astro.slots.has("nav:page-links")) {
         text-align: center;
     }
 
-    #nav-items > :global(div) {
+    #nav-items > div {
         display: flex;
         flex-direction: column;
 
         background-color: var(--navBgColor);
     }
 
-    #nav-items > :global(div) > :global(ul) {
+    #nav-items > div > ul {
         display: flex;
         overflow-y: auto;
 
@@ -214,7 +222,7 @@ if (Astro.slots.has("nav:page-links")) {
         align-items: start;
     }
 
-    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a) {
+    #nav-items > div > ul > li > a {
         padding: 0.15rem;
 
         border-width: 1px;
@@ -224,14 +232,14 @@ if (Astro.slots.has("nav:page-links")) {
         background-color: var(--navLinkBgColor);
     }
 
-    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a::before) {
+    #nav-items > div > ul > li > a::before {
         margin-right: 0.25em;
 
         content: "\>" / "";
     }
 
-    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a:hover),
-    #nav-items > :global(div) > :global(ul) > :global(li) > :global(a:focus) {
+    #nav-items > div > ul > li > a:hover,
+    #nav-items > div > ul > li > a:focus {
         background-color: var(--navLinkActiveBgColor);
     }
 
@@ -239,17 +247,17 @@ if (Astro.slots.has("nav:page-links")) {
         background-color: var(--sitemapBgColor);
     }
 
-    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a) {
+    #nav-items > div.sitemap > ul > li > a {
         border-color: var(--sitemapLinkBorderColor);
         background-color: var(--sitemapLinkBgColor);
     }
 
-    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a::before) {
+    #nav-items > div.sitemap > ul > li > a::before {
         content: "@" / "";
     }
 
-    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:hover),
-    #nav-items > div.sitemap > :global(ul) > :global(li) > :global(a:focus) {
+    #nav-items > div.sitemap > ul > li > a:hover,
+    #nav-items > div.sitemap > ul > li > a:focus {
         background-color: var(--sitemapLinkActiveBgColor);
     }
 </style>
@@ -281,6 +289,10 @@ if (Astro.slots.has("nav:page-links")) {
         margin-right: calc(max(100dvw - 800px, 1rem) / 5);
     }
 
+    .back-to-top:has(.back-to-top-icon:focus-visible) {
+        z-index: 1000000000;
+    }
+
     @media (min-width: 1300px) {
         .back-to-top {
             display: none;
@@ -297,9 +309,5 @@ if (Astro.slots.has("nav:page-links")) {
         .back-to-top {
             margin-right: 0.5rem;
         }
-    }
-
-    .back-to-top:has(.back-to-top-icon:focus-visible) {
-        z-index: 1000000000;
     }
 </style>
