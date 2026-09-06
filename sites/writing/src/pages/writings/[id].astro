@@ -4,6 +4,7 @@ import FileIcon from "@sqky-one/common/components/FileIcon.astro";
 import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import RadioInput from "@sqky-one/common/components/RadioInput.astro";
+import TextInput from "@sqky-one/common/components/TextInput.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import AO3Icon from "@sqky-one/writing/components/AO3Icon.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
@@ -180,6 +181,25 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
         </p>
 
         <fieldset>
+            <legend>Font family:</legend>
+
+            <div>
+                <label>Presets:</label>
+                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">Site Default</RadioInput>
+                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)"
+                    >IBM Plex Sans</RadioInput
+                >
+                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">Inter</RadioInput>
+                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">Noto Sans</RadioInput>
+                <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">Roboto</RadioInput>
+            </div>
+
+            <div>
+                <TextInput id="controls-font-family-custom">Custom font:</TextInput>
+            </div>
+        </fieldset>
+
+        <fieldset>
             <legend>Font size:</legend>
 
             <div>
@@ -243,6 +263,146 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
     </Section>
 
     <WritingsContent renderResult={renderResult}>
+        <script>
+            const content = document.getElementById("content")!;
+
+            const fontFamilyCustom = {
+                key: "font-family-custom",
+                element: document.getElementById("controls-font-family-custom")! as HTMLInputElement,
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.fontFamily = "";
+                    } else {
+                        content.style.fontFamily = value;
+                    }
+
+                    for (const e of fontSizePreset.elements) {
+                        e.checked = false;
+                    }
+                    fontSizePreset.clear();
+                },
+            };
+
+            const fontSizePreset = {
+                key: "font-family-preset",
+                elements: [
+                    "controls-font-family-preset-unset",
+                    "controls-font-family-preset-ibm-plex-sans",
+                    "controls-font-family-preset-inter",
+                    "controls-font-family-preset-noto-sans",
+                    "controls-font-family-preset-roboto",
+                ].map((id) => document.getElementById(id)! as HTMLInputElement),
+
+                get() {
+                    try {
+                        return window.localStorage.getItem(this.key);
+                    } catch {
+                        return null;
+                    }
+                },
+
+                clear() {
+                    try {
+                        window.localStorage.removeItem(this.key);
+                    } catch {
+                        // ignore
+                    }
+                },
+
+                set(value: string | null) {
+                    // don't want to compare it as a number like "0"
+                    const isNullish = value === null || value === "";
+
+                    try {
+                        if (isNullish) {
+                            window.localStorage.setItem(this.key, "");
+                        } else {
+                            window.localStorage.setItem(this.key, value);
+                        }
+                    } catch {
+                        // ignore
+                    }
+
+                    if (isNullish) {
+                        content.style.fontFamily = "";
+                    } else {
+                        content.style.fontFamily = value;
+                    }
+
+                    fontFamilyCustom.clear();
+                },
+            };
+
+            {
+                const custom = fontFamilyCustom.get();
+                const preset = fontSizePreset.get();
+
+                if (custom) {
+                    fontFamilyCustom.element.value = custom;
+                    fontFamilyCustom.set(custom);
+                } else if (preset) {
+                    fontSizePreset.set(preset);
+                } else {
+                    fontSizePreset.set("");
+                }
+            }
+
+            {
+                fontFamilyCustom.element.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        fontFamilyCustom.set(target.value || target.defaultValue);
+                    }
+                });
+            }
+
+            for (const e of fontSizePreset.elements) {
+                const current = fontSizePreset.get();
+                if (current === e.value) {
+                    e.checked = true;
+                } else {
+                    e.checked = false;
+                }
+
+                e.addEventListener("input", (event) => {
+                    const target = event.target;
+                    if (target instanceof HTMLInputElement) {
+                        fontSizePreset.set(target.value);
+                    }
+                });
+            }
+        </script>
+
         <script>
             const content = document.getElementById("content")!;
 
