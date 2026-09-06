@@ -105,6 +105,7 @@ const { Content, headings } = Astro.props.renderResult;
             #content h5,
             #content h6 {
                 text-align: center;
+                line-height: 1;
                 font-weight: 500;
             }
 
@@ -119,6 +120,16 @@ const { Content, headings } = Astro.props.renderResult;
 
             #content code {
                 word-break: break-all;
+            }
+
+            #content section > :first-child {
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            #content section > :last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
             }
 
             body[data-collapse-margins="true"] {
