@@ -3,15 +3,16 @@ import "@sqky-one/common/assets/content.css";
 
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import Section from "@sqky-one/common/layouts/Section.astro";
+import type { RenderResult } from "astro:content";
 
 import WritingsSection from "./WritingsSection.astro";
 
 type Props = {
-    Content: AstroComponentFactory;
+    renderResult: RenderResult;
 };
 
-const { Content } = Astro.props;
+const { Content, headings } = Astro.props.renderResult;
 ---
 
 <LargeSection type="article" class="writing">
@@ -38,11 +39,23 @@ const { Content } = Astro.props;
         <slot />
 
         <EmojiWrapper isContentful={true}>
-            <Content
-                components={{
-                    section: WritingsSection,
-                }}
-            />
+            {
+                headings.length == 0 ? (
+                    <Section>
+                        <Content
+                            components={{
+                                section: WritingsSection,
+                            }}
+                        />
+                    </Section>
+                ) : (
+                    <Content
+                        components={{
+                            section: WritingsSection,
+                        }}
+                    />
+                )
+            }
         </EmojiWrapper>
 
         <style is:global>
