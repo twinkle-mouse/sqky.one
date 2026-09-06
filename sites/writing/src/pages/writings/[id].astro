@@ -5,14 +5,13 @@ import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import RadioInput from "@sqky-one/common/components/RadioInput.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
+import AO3Icon from "@sqky-one/writing/components/AO3Icon.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import WritingsContent from "@sqky-one/writing/layouts/WritingsContent.astro";
 import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
 import { coverArtAlt, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
-import * as mime from "mrmime";
-
 import AO3Icon from "../../components/AO3Icon.astro";
 
 export async function getStaticPaths() {
