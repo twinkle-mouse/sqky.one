@@ -197,5 +197,86 @@ export default defineConfig({
                 variants: IosevkaFixedCurlyVariants(),
             },
         },
+
+        {
+            fallbacks: [],
+            provider: fontProviders.local(),
+            name: "IBM Plex Sans",
+            cssVariable: "--font-ibm-plex-sans",
+            options: {
+                variants: [
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                    {
+                        style: "italic",
+                        src: [fontsDir + "/IBM_Plex_Sans/IBMPlexSans-Italic-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                ],
+            },
+        },
+        {
+            fallbacks: [],
+            provider: fontProviders.local(),
+            name: "Inter",
+            cssVariable: "--font-inter",
+            options: {
+                variants: [
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/Inter/Inter-VariableFont_opsz,wght.woff2"],
+                        weight: "100 900",
+                    },
+                    {
+                        style: "italic",
+                        src: [fontsDir + "/Inter/Inter-Italic-VariableFont_opsz,wght.woff2"],
+                        weight: "100 900",
+                    },
+                ],
+            },
+        },
+        {
+            fallbacks: [],
+            provider: fontProviders.local(),
+            name: "Noto Sans",
+            cssVariable: "--font-noto-sans",
+            options: {
+                variants: [
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/Noto_Sans/NotoSans-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                    {
+                        style: "italic",
+                        src: [fontsDir + "/Noto_Sans/NotoSans-Italic-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                ],
+            },
+        },
+        {
+            fallbacks: [],
+            provider: fontProviders.local(),
+            name: "Roboto",
+            cssVariable: "--font-roboto",
+            options: {
+                variants: [
+                    {
+                        style: "normal",
+                        src: [fontsDir + "/Roboto/Roboto-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                    {
+                        style: "italic",
+                        src: [fontsDir + "/Roboto/Roboto-Italic-VariableFont_wdth,wght.woff2"],
+                        weight: "100 900",
+                    },
+                ],
+            },
+        },
     ],
 });
