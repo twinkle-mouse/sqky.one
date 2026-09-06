@@ -12,7 +12,7 @@ import WritingsContent from "@sqky-one/writing/layouts/WritingsContent.astro";
 import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
 import { coverArtAlt, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
-import AO3Icon from "../../components/AO3Icon.astro";
+import * as mime from "mrmime";
 
 export async function getStaticPaths() {
     return (await getWritingEntries()).map((entry) => {
@@ -30,7 +30,8 @@ if (entry.data.redirect) {
 }
 renderWritingFrontmatterMd(entry);
 
-const { Content, headings } = await render(entry);
+const renderResult = await render(entry);
+const { headings } = renderResult;
 const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").replaceAll("   ", " - ");
 ---
 
@@ -241,7 +242,7 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
         </fieldset>
     </Section>
 
-    <WritingsContent Content={Content}>
+    <WritingsContent renderResult={renderResult}>
         <script>
             const content = document.getElementById("content")!;
 

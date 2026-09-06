@@ -16,7 +16,8 @@ if (entry === undefined) {
     return Astro.redirect("/404");
 }
 
-const { Content, headings } = await render(entry);
+const renderResult = await render(entry);
+const { headings } = renderResult;
 ---
 
 <WritingsPage pageName={`'${entry.data.title}'`} desc="">
@@ -32,5 +33,5 @@ const { Content, headings } = await render(entry);
 
     <Fragment slot="page-title">{entry.data.title}</Fragment>
 
-    <WritingsContent Content={Content} />
+    <WritingsContent renderResult={renderResult} />
 </WritingsPage>
