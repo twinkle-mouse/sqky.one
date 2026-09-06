@@ -90,6 +90,20 @@ if (Astro.slots.has("nav:page-links")) {
             height: 240px;
         }
     }
+
+    body[data-force-mobile="true"] {
+        nav {
+            position: static;
+
+            margin: 0;
+            padding: 0;
+
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+            height: 240px;
+        }
+    }
 </style>
 
 <style>
@@ -117,6 +131,23 @@ if (Astro.slots.has("nav:page-links")) {
     }
 
     @media (max-width: 1300px) {
+        #nav-items {
+            max-height: 100%;
+
+            flex-direction: row;
+        }
+
+        #nav-items > :global(div) {
+            width: 100%;
+            height: auto;
+        }
+
+        #nav-items .filler {
+            display: none;
+        }
+    }
+
+    body[data-force-mobile="true"] {
         #nav-items {
             max-height: 100%;
 
@@ -255,6 +286,18 @@ if (Astro.slots.has("nav:page-links")) {
     @media (min-width: 1300px) {
         .back-to-top {
             display: none;
+        }
+    }
+
+    body[data-force-mobile="true"] {
+        .back-to-top {
+            display: unset;
+        }
+    }
+
+    body[data-remove-page-padding="true"] {
+        .back-to-top {
+            margin-right: 0.5rem;
         }
     }
 
