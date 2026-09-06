@@ -19,6 +19,7 @@ const writings = defineCollection({
             cw: z.string().nullable().default(null),
             redirect: z.string().nullable().default(null),
             relations: z.record(z.string(), z.string()).default({}),
+            ao3: z.number().nullable().default(null),
             wip: z.boolean().default(false),
         }),
 });

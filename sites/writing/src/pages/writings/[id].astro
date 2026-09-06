@@ -10,6 +10,8 @@ import { coverArtAlt, getWritingEntries, htmlToTextContent, renderWritingFrontma
 import { getEntry, render } from "astro:content";
 import * as mime from "mrmime";
 
+import AO3Icon from "../../components/AO3Icon.astro";
+
 export async function getStaticPaths() {
     return (await getWritingEntries()).map((entry) => {
         return { params: { id: entry.id } };
@@ -70,6 +72,16 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
                 <RssIcon />
                 <a href="/rss.xml">RSS (entire feed)</a>
             </li>
+            {
+                entry.data.ao3 && (
+                    <li>
+                        <AO3Icon />
+                        <a href={`https://archiveofourown.org/works/${entry.data.ao3}`}>
+                            <abbr title="Archive of Our Own">AO3</abbr>
+                        </a>
+                    </li>
+                )
+            }
         </ul>
 
         <style>

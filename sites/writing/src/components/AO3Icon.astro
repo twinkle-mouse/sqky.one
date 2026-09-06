@@ -1,0 +1,18 @@
+---
+import Svg from "@sqky-one/common/assets/icons/ao3.svg";
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"svg">;
+const props = Astro.props;
+---
+
+<Svg width="1.5em" height="1.5em" {...props} class="icon" role="img" aria-hidden="true" />
+
+<style>
+    .icon {
+        color: #ff0000;
+        display: inline-block;
+        vertical-align: -0.4em;
+        margin-right: 0.4em;
+    }
+</style>
