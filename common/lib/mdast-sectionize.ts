@@ -12,6 +12,9 @@ type ContainerDirectiveNode = Extract<MdastNode, { type: "containerDirective" }>
 
 export interface SectionData {
     hName: "section";
+    hProperties: {
+        "data-section-depth": number;
+    };
     depth: number;
 }
 
