@@ -41,7 +41,11 @@ const extraProps = {
 ---
 
 <span {...props} {...extraProps} aria-hidden={(ariaHidden ?? "true") ? "true" : undefined} class:list={["emoji", cls]}>
-    <span class="emoji-text" data-emoji="true">{spaceBefore}{e}{spaceAfter}</span>
+    <span class="emoji-text" data-emoji="true">
+        {spaceBefore}
+        {e}
+        {spaceAfter}
+    </span>
     <span class="emoji-inner">
         <template shadowrootmode="open">
             <Fragment set:html={emoji} />

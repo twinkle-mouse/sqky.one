@@ -17,7 +17,9 @@ const entries = (await getWritingEntries()).filter((entry) => entry.data.tags.in
 ---
 
 <WritingsPage pageName=`Tag View - '${tag}'` desc="">
-    <Fragment slot="page-title">Entires tagged '<i>{tag}</i>'</Fragment>
+    <Fragment slot="page-title">
+        Entires tagged '<i>{tag}</i>'
+    </Fragment>
 
     <LargeSection>
         <Section>

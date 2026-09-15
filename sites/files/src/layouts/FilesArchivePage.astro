@@ -18,8 +18,12 @@ type Props = Omit<PageProps, "siteName" | "desc">;
             <div>
                 <p>Navigation</p>
                 <ul>
-                    <li><a href="/">Back to root ⤴️</a></li>
-                    <li><a href="../">Back up ⬆️</a></li>
+                    <li>
+                        <a href="/">Back to root ⤴️</a>
+                    </li>
+                    <li>
+                        <a href="../">Back up ⬆️</a>
+                    </li>
                 </ul>
             </div>
             <slot name="nav:other-categories" />

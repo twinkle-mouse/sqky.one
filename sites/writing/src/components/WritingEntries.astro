@@ -16,49 +16,47 @@ const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
 ---
 
 <div class="entries" role="feed">
-    {
-        Astro.props.entries.map((entry, index) => (
-            <EmojiWrapper>
-                <article
-                    class="entry-card"
-                    tabindex="0"
-                    aria-posinset={index + 1}
-                    aria-setsize={Astro.props.entries.length}
-                    aria-labelledby={`${entry.id}-title`}
-                    aria-describedby={`${entry.id}-release-date ${entry.id}-description`}
-                >
-                    <div class="entry-header">
-                        <h3 class="entry-title" id={`${entry.id}-title`}>
-                            <a href={encodeURI(`/${entry.collection}/${entry.id}`)}>{entry.data.title}</a>
-                        </h3>
+    {Astro.props.entries.map((entry, index) => (
+        <EmojiWrapper>
+            <article
+                class="entry-card"
+                tabindex="0"
+                aria-posinset={index + 1}
+                aria-setsize={Astro.props.entries.length}
+                aria-labelledby={`${entry.id}-title`}
+                aria-describedby={`${entry.id}-release-date ${entry.id}-description`}
+            >
+                <div class="entry-header">
+                    <h3 class="entry-title" id={`${entry.id}-title`}>
+                        <a href={encodeURI(`/${entry.collection}/${entry.id}`)}>{entry.data.title}</a>
+                    </h3>
 
-                        <time
-                            class="entry-date mono"
-                            datetime={entry.data.date.toISOString()}
-                            title={readableDateFmt.format(entry.data.date)}
-                            id={`${entry.id}-release-date`}
-                        >
-                            {displayDateFmt.format(entry.data.date)}
-                        </time>
+                    <time
+                        class="entry-date mono"
+                        datetime={entry.data.date.toISOString()}
+                        title={readableDateFmt.format(entry.data.date)}
+                        id={`${entry.id}-release-date`}
+                    >
+                        {displayDateFmt.format(entry.data.date)}
+                    </time>
+                </div>
+
+                <div class="entry-desc-container">
+                    <div class="entry-desc" id={`${entry.id}-description`}>
+                        <WritingDescription entry={entry} />
                     </div>
 
-                    <div class="entry-desc-container">
-                        <div class="entry-desc" id={`${entry.id}-description`}>
-                            <WritingDescription entry={entry} />
-                        </div>
+                    {entry.data.cover && (
+                        <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />
+                    )}
+                </div>
 
-                        {entry.data.cover && (
-                            <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />
-                        )}
-                    </div>
-
-                    <div class="entry-details">
-                        <WritingDetails entry={entry} />
-                    </div>
-                </article>
-            </EmojiWrapper>
-        ))
-    }
+                <div class="entry-details">
+                    <WritingDetails entry={entry} />
+                </div>
+            </article>
+        </EmojiWrapper>
+    ))}
 
     <style>
         .entry-desc-container {

@@ -20,7 +20,9 @@ const speedMod = 2;
     </div>
 
     <div class="headmate-hearts">
-        {hearts.map((heart, idx) => <HeartEmoji e={heart} radius={radius} length={length * speedMod} delay={(idx / hearts.length) * speedMod * -length} />)}
+        {hearts.map((heart, idx) => (
+            <HeartEmoji e={heart} radius={radius} length={length * speedMod} delay={(idx / hearts.length) * speedMod * -length} />
+        ))}
     </div>
 </div>
 

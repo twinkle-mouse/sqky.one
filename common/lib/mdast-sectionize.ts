@@ -1,6 +1,6 @@
 /// https://github.com/baka-gourd/satteri-plugins/blob/main/packages/satteri-sectionize/src/index.ts
 
-import { defineMdastPlugin, type MdastNode, type MdastPluginDefinition } from "satteri";
+import { defineMdastPlugin, type MdastNode } from "satteri";
 
 export interface Options {
     /** Deepest heading level that starts a section. @default 6 */
@@ -84,7 +84,7 @@ function firstSectionHeadingIndex(children: readonly MdastNode[], maxDepth: numb
  * Sections end at the next heading of the same or a higher level. MDX ESM
  * nodes remain outside sections, matching `remark-sectionize`.
  */
-export default function plugin(options: Options = {}): MdastPluginDefinition {
+export default function plugin(options: Options = {}) {
     const maxDepth = options.maxDepth ?? defaultMaxDepth;
     const processedParents = new WeakSet<object>();
 

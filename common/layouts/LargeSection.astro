@@ -10,21 +10,17 @@ export type Props = HTMLAttributes<"div"> & {
 const { type: ty, class: cls, ...props } = Astro.props;
 ---
 
-{
-    (!ty || ty == "section") && (
-        <section class:list={["large-section", cls]} {...props}>
-            <slot />
-        </section>
-    )
-}
+{(!ty || ty == "section") && (
+    <section class:list={["large-section", cls]} {...props}>
+        <slot />
+    </section>
+)}
 
-{
-    ty === "article" && (
-        <article class:list={["large-section", cls]} {...props}>
-            <slot />
-        </article>
-    )
-}
+{ty === "article" && (
+    <article class:list={["large-section", cls]} {...props}>
+        <slot />
+    </article>
+)}
 
 <style>
     .large-section {
