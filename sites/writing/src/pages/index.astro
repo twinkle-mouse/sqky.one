@@ -54,7 +54,9 @@ const tags = await getAllTags();
                     <br />
                     We're always <em>ecstatic</em> to hear your thoughts.
                     <br />
-                    <small>(P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)</small>
+                    <small>
+                        (P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)
+                    </small>
                 </p>
 
                 <section>
@@ -74,13 +76,11 @@ const tags = await getAllTags();
                             </div>
 
                             <ul id="writings-tags">
-                                {
-                                    tags.map(([tag, count]) => (
-                                        <li data-search-value={tag}>
-                                            <a href={encodeURI(`/tag/${tag}`)}>{tag}</a> ({count})
-                                        </li>
-                                    ))
-                                }
+                                {tags.map(([tag, count]) => (
+                                    <li data-search-value={tag}>
+                                        <a href={encodeURI(`/tag/${tag}`)}>{tag}</a> ({count})
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </Details>

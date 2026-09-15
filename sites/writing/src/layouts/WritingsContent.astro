@@ -39,23 +39,21 @@ const { Content, headings } = Astro.props.renderResult;
         <slot />
 
         <EmojiWrapper isContentful={true}>
-            {
-                headings.length == 0 ? (
-                    <Section>
-                        <Content
-                            components={{
-                                section: WritingsSection,
-                            }}
-                        />
-                    </Section>
-                ) : (
+            {headings.length == 0 ? (
+                <Section>
                     <Content
                         components={{
                             section: WritingsSection,
                         }}
                     />
-                )
-            }
+                </Section>
+            ) : (
+                <Content
+                    components={{
+                        section: WritingsSection,
+                    }}
+                />
+            )}
         </EmojiWrapper>
 
         <style is:global>

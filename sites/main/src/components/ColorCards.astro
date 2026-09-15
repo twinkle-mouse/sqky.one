@@ -29,21 +29,19 @@ import ColorCard from "./ColorCard.astro";
 
         <div class="color-cards-container">
             <div class="color-cards">
-                {
-                    Object.entries(colors).map(([name, variants]) => (
-                        <div class="color-section">
-                            <label class="color-set-name">{name}</label>
+                {Object.entries(colors).map(([name, variants]) => (
+                    <div class="color-section">
+                        <label class="color-set-name">{name}</label>
 
-                            <ul aria-hidden="true" class="color-set">
-                                {variants.entries().map(([variant, color]) => (
-                                    <li class="color-set-item">
-                                        <ColorCard color={color} variant={variant} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))
-                }
+                        <ul aria-hidden="true" class="color-set">
+                            {variants.entries().map(([variant, color]) => (
+                                <li class="color-set-item">
+                                    <ColorCard color={color} variant={variant} />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         </div>
     </div>
