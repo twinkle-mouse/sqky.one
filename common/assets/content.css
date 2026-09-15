@@ -5,9 +5,9 @@
     background-color: var(--codeBgColor);
 
     font-size: 0.8em;
-    margin-left: 1rem;
-    margin-block: 1.5rem;
-    padding-inline: 1rem;
+    margin-left: 1em;
+    margin-block: 1.5em;
+    padding-inline: 1em;
     padding-block: 1px; /* to avoid margin collapse */
 
     border: 0px solid var(--codeBorderColor, currentColor);
