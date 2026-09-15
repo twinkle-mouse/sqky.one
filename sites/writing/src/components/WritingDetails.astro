@@ -20,9 +20,7 @@ const wordCount = countWords(Content);
     <tbody>
         <tr>
             <th scope="row">Authors</th>
-            <td>
-                {entry.data.authors.join(", ")}
-            </td>
+            <td>{entry.data.authors.join(", ")}</td>
         </tr>
 
         <tr>
@@ -30,54 +28,48 @@ const wordCount = countWords(Content);
             <td>{wordCount}</td>
         </tr>
 
-        {
-            entry.data.tags.length > 0 && (
-                <tr>
-                    <th scope="row">Tags</th>
-                    <td>
-                        <ul>
-                            {entry.data.tags.map((tag) => (
-                                <li>
-                                    <a href={encodeURI(`/tag/${tag}`)}>{tag}</a>
-                                </li>
-                            )) || "(none)"}
-                        </ul>
-                    </td>
-                </tr>
-            )
-        }
+        {entry.data.tags.length > 0 && (
+            <tr>
+                <th scope="row">Tags</th>
+                <td>
+                    <ul>
+                        {entry.data.tags.map((tag) => (
+                            <li>
+                                <a href={encodeURI(`/tag/${tag}`)}>{tag}</a>
+                            </li>
+                        )) || "(none)"}
+                    </ul>
+                </td>
+            </tr>
+        )}
 
-        {
-            entries.length > 0 && (
-                <tr>
-                    <th scope="row">Relations</th>
-                    <td>
-                        {entries
-                            .map(([name, link]) => <a href={encodeURI(link)}>{name}</a>)
-                            .flatMap((v, index) => {
-                                if (index < entry.data.tags.length - 1) {
-                                    return [v, "\n"];
-                                } else {
-                                    return v;
-                                }
-                            })}
-                    </td>
-                </tr>
-            )
-        }
+        {entries.length > 0 && (
+            <tr>
+                <th scope="row">Relations</th>
+                <td>
+                    {entries
+                        .map(([name, link]) => <a href={encodeURI(link)}>{name}</a>)
+                        .flatMap((v, index) => {
+                            if (index < entry.data.tags.length - 1) {
+                                return [v, "\n"];
+                            } else {
+                                return v;
+                            }
+                        })}
+                </td>
+            </tr>
+        )}
     </tbody>
 </table>
 
-{
-    entry.data.cw && (
-        <Details summary="Content Warnings">
-            <div>
-                <p>This writing has the following content warnings attached:</p>
-                <div class="cw-content" set:html={entry.data.cw} />
-            </div>
-        </Details>
-    )
-}
+{entry.data.cw && (
+    <Details summary="Content Warnings">
+        <div>
+            <p>This writing has the following content warnings attached:</p>
+            <div class="cw-content" set:html={entry.data.cw} />
+        </div>
+    </Details>
+)}
 
 <style>
     .cw-content {

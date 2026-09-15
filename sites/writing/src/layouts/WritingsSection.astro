@@ -11,14 +11,12 @@ const sectionDepth = Number.parseInt(sectionDepthProp ?? "1");
 const shouldStyle = sectionDepth <= 2;
 ---
 
-{
-    shouldStyle ? (
-        <Section {...props}>
-            <slot />
-        </Section>
-    ) : (
-        <section>
-            <slot />
-        </section>
-    )
-}
+{shouldStyle ? (
+    <Section {...props}>
+        <slot />
+    </Section>
+) : (
+    <section>
+        <slot />
+    </section>
+)}

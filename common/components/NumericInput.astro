@@ -6,7 +6,9 @@ export type Props = Omit<HTMLAttributes<"input">, "type">;
 const { id, ...props } = Astro.props;
 ---
 
-<label for={id}><slot /></label>
+<label for={id}>
+    <slot />
+</label>
 <input id={id} type="number" {...props} />
 
 <style>

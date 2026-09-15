@@ -14,13 +14,11 @@ const { src, summary, ...props } = Astro.props;
     <summary>
         <CaretRight class="icon" />
         <span>{summary}</span>
-        {
-            src && (
-                <a class="mono" href={encodeURI(src)}>
-                    {src}
-                </a>
-            )
-        }
+        {src && (
+            <a class="mono" href={encodeURI(src)}>
+                {src}
+            </a>
+        )}
     </summary>
 
     <slot />
