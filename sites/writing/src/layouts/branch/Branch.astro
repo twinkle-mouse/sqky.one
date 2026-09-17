@@ -1,0 +1,95 @@
+---
+import { type Element } from ".";
+
+export type Props = {
+    element: Element;
+    index: number;
+};
+
+const { element, index } = Astro.props;
+---
+
+<>
+    {(() => {
+        if (element.type == "root") {
+            return <slot />;
+        } else if (element.type == "branch") {
+            return (
+                <div class="writings-branch">
+                    <ol class="choices">
+                        {element.data.choices.map((choice, idx) => {
+                            return (
+                                <li>
+                                    <label {...choice.attributes} for={`${element.name}-${index}-${idx}`}>
+                                        <Fragment set:html={choice.text} />
+                                        <input
+                                            id={`${element.name}-${index}-${idx}`}
+                                            type="radio"
+                                            name={element.name}
+                                            value={`${idx + 1}`}
+                                            data-flag={choice.flag}
+                                        />
+                                    </label>
+                                </li>
+                            );
+                        })}
+                    </ol>
+                    <div class="branches">
+                        {element.data.choices.map((choice) => {
+                            return <div set:html={choice.content} hidden={choice.content == ""} />;
+                        })}
+                    </div>
+
+                    <div>
+                        <slot />
+                    </div>
+                </div>
+            );
+        } else if (element.type == "continue") {
+            return (
+                <>
+                    <div class="check continue">
+                        <label for={`${element.name}-${index}`}>
+                            {element.data.text}
+                            <input id={`${element.name}-${index}`} type="checkbox" name={element.name} />
+                        </label>
+                    </div>
+
+                    <div>
+                        <slot />
+                    </div>
+                </>
+            );
+        } else if (element.type == "tangent") {
+            return (
+                <>
+                    <div {...element.data.attributes}>
+                        <div class="check tangent">
+                            <label for={`${element.name}-${index}`}>
+                                {element.data.text}
+                                <input id={`${element.name}-${index}`} type="checkbox" name={element.name} />
+                            </label>
+                        </div>
+
+                        <div set:html={element.data.content} />
+                    </div>
+                    <slot />
+                </>
+            );
+        } else if (element.type == "text") {
+            return (
+                <>
+                    <Fragment set:html={element.data.html} />
+
+                    <slot />
+                </>
+            );
+        }
+    })()}
+</>
+
+<style>
+    li {
+        display: contents;
+    }
+</style>

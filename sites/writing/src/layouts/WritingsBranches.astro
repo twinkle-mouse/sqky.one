@@ -1,0 +1,288 @@
+---
+import { normalizeHtml, renderMd } from "@sqky-one/writing/lib/content";
+import { experimental_AstroContainer } from "astro/container";
+import parse, { HTMLElement } from "node-html-parser";
+
+import { type Element, type Tangent } from "./branch";
+import Branch from "./branch/Branch.astro";
+import Branches from "./branch/Branches.astro";
+
+const container = await experimental_AstroContainer.create();
+
+const content = await Astro.slots.render("default");
+const parsedContent = parse(normalizeHtml(content));
+
+async function renderMdText(text: string | undefined) {
+    const parsed = parse(await renderMd(text?.trim()));
+    if (!parsed.firstChild) return "";
+
+    return parsed.firstChild.childNodes.toString();
+}
+
+async function parseTangent(element: HTMLElement, name: string, idx: number) {
+    return {
+        type: "tangent",
+        name: `${name}-tangent-${idx + 1}`,
+        data: {
+            text: await renderMdText(element.getAttribute("text")),
+            attributes: (() => {
+                element.removeAttribute("text");
+
+                return element.attributes;
+            })(),
+            content: element.children.join(""),
+        },
+    } as Tangent;
+}
+
+const flags = new Set();
+const elements: Element[] = [{ type: "root", name: "root" }];
+
+let consecutiveCount = 1;
+let currentType = "root";
+for (const element of parsedContent.children) {
+    const type = element.rawTagName;
+    if (type == "branch") {
+        const choices = [];
+        const tangents: string[] = [];
+        if (!element.getAttribute("name")) {
+            throw Error("branch needs to have a `name` set!");
+        }
+        const name = `branch-${element.getAttribute("name")}`;
+
+        for (const child of element.children) {
+            if (child.rawTagName == "choice") {
+                const text = await renderMdText(child.getAttribute("text"));
+                if (!text) {
+                    throw Error("choice needs to have a `text` set!");
+                }
+
+                const choice = {
+                    text,
+                    content: "",
+                    flag: child.getAttribute("flag"),
+                    attributes: (() => {
+                        child.removeAttribute("flag");
+                        child.removeAttribute("text");
+                        return child.attributes;
+                    })(),
+                };
+
+                for (const inner of child.children) {
+                    if (inner.rawTagName == "tangent") {
+                        const index = tangents.length;
+                        const tangent = await parseTangent(inner, name, index);
+                        tangents.push(tangent.name);
+
+                        choice.content += await container.renderToString(Branch, { props: { element: tangent, index } });
+                    } else {
+                        choice.content += inner.toString();
+                    }
+                }
+
+                if (choice.flag) {
+                    flags.add(choice.flag);
+                }
+
+                choices.push(choice);
+            }
+        }
+
+        elements.push({
+            type,
+            name,
+            data: {
+                choices,
+            },
+        });
+    } else if (type == "continue") {
+        const text = element.innerText;
+        elements.push({
+            type,
+            name: `${elements.at(-1)!.name}-continue-${consecutiveCount}`,
+            data: {
+                text: (text === "true" ? undefined : await renderMdText(text)) || "Continue",
+            },
+        });
+
+        if (currentType != type) {
+            consecutiveCount = 1;
+            currentType = elements.at(-1)!.type;
+        } else {
+            consecutiveCount += 1;
+        }
+    } else if (type == "tangent") {
+        elements.push(await parseTangent(element, elements.at(-1)!.name, consecutiveCount));
+
+        if (currentType != type) {
+            consecutiveCount = 1;
+            currentType = elements.at(-1)!.type;
+        } else {
+            consecutiveCount += 1;
+        }
+    } else {
+        const type = "text";
+
+        elements.push({
+            type,
+            name: `${elements.at(-1)!.name}-content-${consecutiveCount}`,
+            data: {
+                html: element.toString(),
+            },
+        });
+
+        if (currentType != type) {
+            consecutiveCount = 1;
+            currentType = elements.at(-1)!.type;
+        } else {
+            consecutiveCount += 1;
+        }
+    }
+}
+
+const flagsCss = flags.values().map((flag) => {
+    return `
+#content:not(:has(input[data-flag~="${flag}"]:checked)) .show-with-flag[data-flag~="${flag}"] { display: none; }
+#content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] { display: none; }`;
+});
+---
+
+<div class="writings-branches">
+    <Branches elements={elements} />
+</div>
+
+<style is:global lang="scss">
+    .writings-branches {
+        .choices,
+        .check {
+            input:focus-visible {
+                all: unset;
+            }
+
+            label {
+                display: inline-block;
+                font-family: var(--mono);
+                text-decoration: none;
+                color: var(--buttonTextColor);
+
+                user-select: none;
+                cursor: pointer;
+
+                padding-block: 0.25em;
+                padding-inline: 0.2em;
+                border-radius: 0.3em;
+
+                background-color: var(--buttonBgColor);
+                border: 2px solid var(--buttonBorderColor);
+            }
+
+            label:hover,
+            label:has(> input:focus-visible) {
+                color: var(--buttonHoverTextColor);
+                background-color: var(--buttonHoverBgColor);
+                border-color: var(--buttonHoverBorderColor);
+            }
+
+            label:has(> input:focus-visible) {
+                outline: 2px solid var(--focusColor);
+            }
+
+            label:has(> input:checked) {
+                color: var(--buttonActiveTextColor);
+                background-color: var(--buttonActiveBgColor);
+                border-color: var(--buttonActiveBorderColor);
+
+                text-decoration: underline;
+                text-underline-offset: 15%;
+            }
+        }
+
+        .choices {
+            display: flex;
+            border: 1px solid var(--separatorColor);
+
+            font-size: 0.8em;
+            margin-bottom: 0.2em;
+            padding-inline: 0.75em;
+            padding-block: 1em;
+
+            gap: 0.6em;
+            flex-wrap: wrap;
+        }
+
+        .choices > * {
+            flex: none;
+            max-width: 40%;
+            height: fit-content;
+        }
+
+        .branches > *,
+        .branches + * {
+            display: none;
+        }
+
+        @for $i from 1 through 32 {
+            .writings-branch
+                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                ~ .branches /* go to branches */
+                    > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
+                display: block;
+                animation: fade-in 0.15s ease-in;
+            }
+
+            .writings-branch 
+                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                ~ .branches:not(:has(
+                    > :nth-child(#{$i}) /* go to the corresponding branch */    
+                        .tangent input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                ))
+                + * /* unhide if either there's no tangents, or all tangents are checked */ {
+                display: block;
+                animation: fade-in 0.15s ease-in;
+            }
+        }
+
+        .check {
+            margin-block: 1.1em;
+        }
+
+        .check::before {
+            content: "→" / "" !important;
+            display: inline-block;
+
+            font-size: 1.2em;
+            font-family: var(--sans);
+            color: var(--focusColor);
+
+            margin-left: 0.25em;
+            margin-right: 0.5em;
+            padding-top: 0.2rlh;
+            vertical-align: top;
+        }
+
+        .check {
+            text-wrap: nowrap;
+        }
+
+        .check > label {
+            text-wrap: wrap;
+        }
+
+        .check + * {
+            display: none;
+        }
+
+        .check:has(input:checked) + * {
+            display: block;
+            animation: fade-in 0.15s ease-in;
+        }
+
+        @media (prefers-reduced-motion) {
+            * {
+                animation: none !important;
+            }
+        }
+    }
+</style>
+
+<style is:raw set:text={flagsCss}></style>
