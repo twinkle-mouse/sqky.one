@@ -6,7 +6,7 @@ import { defineCollection } from "astro:content";
 const ROOT = "writing-entries";
 
 const writings = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: `${ROOT}/writings` }),
+    loader: glob({ pattern: "*.mdx", base: `${ROOT}/writings` }),
     schema: ({ image }) =>
         z.object({
             title: z.string(),
@@ -25,7 +25,7 @@ const writings = defineCollection({
 });
 
 const notes = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: `${ROOT}/notes` }),
+    loader: glob({ pattern: "*.mdx", base: `${ROOT}/notes` }),
     schema: z.object({
         title: z.string(),
         relations: z.record(z.string(), z.string()).default({}),
@@ -33,7 +33,7 @@ const notes = defineCollection({
 });
 
 const people = defineCollection({
-    loader: glob({ pattern: "**/*.mdx", base: `${ROOT}/people` }),
+    loader: glob({ pattern: "*.mdx", base: `${ROOT}/people` }),
     schema: z.object({
         name: z.string(),
         bluesky: z.string().nullable().default(null),
