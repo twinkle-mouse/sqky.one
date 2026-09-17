@@ -1,0 +1,80 @@
+---
+import { type Element } from ".";
+
+export type Props = {
+    element: Element;
+};
+
+const { element } = Astro.props;
+---
+
+<>
+    {(() => {
+        if (element.type == "root") {
+            return <slot />;
+        } else if (element.type == "branch") {
+            return (
+                <div class="writings-branch">
+                    <div class="choices">
+                        {element.data.choices.map((choice, idx) => {
+                            return (
+                                <label {...choice.attributes}>
+                                    <Fragment set:html={choice.text} />
+                                    <input type="radio" name={element.name} value={`${idx + 1}`} data-flag={choice.flag} />
+                                </label>
+                            );
+                        })}
+                    </div>
+                    <div class="branches">
+                        {element.data.choices.map((choice) => {
+                            return <div set:html={choice.content} />;
+                        })}
+                    </div>
+
+                    <div>
+                        <slot />
+                    </div>
+                </div>
+            );
+        } else if (element.type == "continue") {
+            return (
+                <>
+                    <div class="check continue">
+                        <label>
+                            {element.data.text}
+                            <input type="checkbox" name={element.name} />
+                        </label>
+                    </div>
+
+                    <div>
+                        <slot />
+                    </div>
+                </>
+            );
+        } else if (element.type == "tangent") {
+            return (
+                <>
+                    <div {...element.data.attributes}>
+                        <div class="check tangent">
+                            <label>
+                                {element.data.text}
+                                <input type="checkbox" name={element.name} />
+                            </label>
+                        </div>
+
+                        <div set:html={element.data.content} />
+                    </div>
+                    <slot />
+                </>
+            );
+        } else if (element.type == "text") {
+            return (
+                <>
+                    <Fragment set:html={element.data.html} />
+
+                    <slot />
+                </>
+            );
+        }
+    })()}
+</>
