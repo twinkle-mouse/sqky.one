@@ -58,7 +58,7 @@ export async function renderMd(content: string | undefined | null) {
 }
 
 export function htmlToTextContent(content: string | undefined | null) {
-    const element = parse(content ?? "");
+    const element = parse(normalizeHtml(content ?? ""));
     const flatChildren = flattenTreeDepthFirst(element);
 
     let text = "";
