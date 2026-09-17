@@ -48,7 +48,7 @@ export function normalizeHtml(content: string | undefined | null) {
         .replaceAll("&lt;", "<") // unescape
         .replaceAll("&gt;", ">")
         .replaceAll("\r", "") // remove \r
-        .replaceAll("\n", " "); // replace \n with a space, it wouldn't render in HTML but it can be used in `htmlToTextContent`;
+        .replaceAll("\n", " "); // replace \n with a space; `mdast-hard-breaks` already converts it all to <br>
 }
 
 export async function renderMd(content: string | undefined | null) {
