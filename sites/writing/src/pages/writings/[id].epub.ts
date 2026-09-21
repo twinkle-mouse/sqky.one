@@ -36,6 +36,9 @@ export async function GET(context: AstroGlobal) {
     if (entry.data.redirect) {
         return context.redirect(`${entry.data.redirect}.epub`);
     }
+    if (entry.data.web == true) {
+        return context.redirect("/404");
+    }
     renderWritingFrontmatterMd(entry);
 
     const { Content } = await render(entry);

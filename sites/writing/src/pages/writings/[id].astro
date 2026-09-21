@@ -67,10 +67,12 @@ const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").rep
             <i>Other Formats</i>
         </h2>
         <ul class="formats-list">
-            <li>
-                <FileIcon icon="epub" />
-                <a href=`/writings/${entry.id}.epub`>EPub</a>
-            </li>
+            {!entry.data.web && (
+                <li>
+                    <FileIcon icon="epub" />
+                    <a href=`/writings/${entry.id}.epub`>EPub</a>
+                </li>
+            )}
             <li>
                 <RssIcon />
                 <a href="/rss.xml">RSS (entire feed)</a>

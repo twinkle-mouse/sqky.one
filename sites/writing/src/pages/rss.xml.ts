@@ -31,6 +31,12 @@ export async function GET(context: AstroGlobal) {
         ].join(""),
         items: await Promise.all(
             writings.map(async (entry) => {
+                let warningPretext = "";
+
+                if (entry.data.web == true) {
+                    warningPretext += "<p><strong>NOTE: THIS ENTRY IS BEST VIEWED ON THE WEBSITE.</strong></p>";
+                }
+
                 const { Content } = await render(entry);
                 const content = normalizeHtml(
                     await container.renderToString(Content, {
@@ -62,7 +68,7 @@ export async function GET(context: AstroGlobal) {
                     categories: entry.data.tags,
                     link: `/writings/${entry.id}/`,
                     content: parse(
-                        sanitizeHtml(details + coverArt + content, {
+                        sanitizeHtml(warningPretext + details + coverArt + content, {
                             ...sanitizeHtmlConfig({ site: context.site }),
                         }),
                     )
