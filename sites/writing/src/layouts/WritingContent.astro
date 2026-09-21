@@ -6,7 +6,7 @@ import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import type { RenderResult } from "astro:content";
 
-import WritingsSection from "./WritingsSection.astro";
+import WritingSection from "./WritingSection.astro";
 
 type Props = {
     renderResult: RenderResult;
@@ -43,14 +43,14 @@ const { Content, headings } = Astro.props.renderResult;
                 <Section>
                     <Content
                         components={{
-                            section: WritingsSection,
+                            section: WritingSection,
                         }}
                     />
                 </Section>
             ) : (
                 <Content
                     components={{
-                        section: WritingsSection,
+                        section: WritingSection,
                     }}
                 />
             )}

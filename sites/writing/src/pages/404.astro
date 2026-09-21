@@ -1,11 +1,11 @@
 ---
 import NotFound from "@sqky-one/common/components/NotFound.astro";
 import { pageName } from "@sqky-one/common/lib/not-found";
-import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
 ---
 
-<WritingsPage pageName={pageName} desc="This Entry Does Not Exist,">
+<WritingPage pageName={pageName} desc="This Entry Does Not Exist,">
     <Fragment slot="page-title">ERROR</Fragment>
 
     <NotFound />
-</WritingsPage>
+</WritingPage>
