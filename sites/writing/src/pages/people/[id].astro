@@ -1,7 +1,7 @@
 ---
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
-import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
 import { renderMd } from "@sqky-one/writing/lib/content";
 import { siteDesc } from "@sqky-one/writing/lib/page";
 import { getCollection, getEntry } from "astro:content";
@@ -35,7 +35,7 @@ if (entry.data.bluesky) {
 let descHtml = renderMd(entry.body);
 ---
 
-<WritingsPage pageName={entry.data.name} desc={siteDesc}>
+<WritingPage pageName={entry.data.name} desc={siteDesc}>
     <Fragment slot="page-title">Profile — {entry.data.name}</Fragment>
 
     <LargeSection>
@@ -65,4 +65,4 @@ let descHtml = renderMd(entry.body);
             }
         </style>
     </LargeSection>
-</WritingsPage>
+</WritingPage>
