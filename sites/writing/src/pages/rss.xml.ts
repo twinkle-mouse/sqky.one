@@ -4,6 +4,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { siteDesc, siteName } from "@sqky-one/writing/lib/page";
+import { components } from "@sqky-one/writing/lib/render";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
@@ -33,7 +34,7 @@ export async function GET(context: AstroGlobal) {
                 const { Content } = await render(entry);
                 const content = normalizeHtml(
                     await container.renderToString(Content, {
-                        props: {},
+                        props: { components },
                     }),
                 );
                 const details = normalizeHtml(

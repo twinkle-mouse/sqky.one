@@ -10,6 +10,7 @@ import { Node, NodeType, parse } from "node-html-parser";
 import sanitizeHtml, { type Attributes, type IOptions as SanitizeHtmlConfig, type Tag } from "sanitize-html";
 
 import { markdownProcessor } from "../../astro.config";
+import { components } from "./render";
 
 const renderers = await loadRenderers([getContainerRenderer()]);
 const container = await experimental_AstroContainer.create({ renderers });
@@ -81,7 +82,7 @@ export function htmlToTextContent(content: string | undefined | null) {
 }
 
 export async function countWords(Content: AstroComponentFactory) {
-    const body = htmlToTextContent(await container.renderToString(Content));
+    const body = htmlToTextContent(await container.renderToString(Content, { props: { components } }));
 
     return count(body, "words", {});
 }
