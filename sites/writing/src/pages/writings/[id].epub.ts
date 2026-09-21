@@ -6,6 +6,7 @@ import mdx from "@astrojs/mdx/server.js";
 import { contentStyles, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { normalizeHtml } from "@sqky-one/writing/lib/content";
 import { siteName } from "@sqky-one/writing/lib/page";
+import { components } from "@sqky-one/writing/lib/render";
 import type { AstroGlobal } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { getEntry, render } from "astro:content";
@@ -40,7 +41,7 @@ export async function GET(context: AstroGlobal) {
     const { Content } = await render(entry);
     const content = normalizeHtml(
         await container.renderToString(Content, {
-            props: {},
+            props: { components },
         }),
     );
 
