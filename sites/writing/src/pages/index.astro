@@ -6,7 +6,7 @@ import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
 import WritingEntries from "@sqky-one/writing/components/WritingEntries.astro";
-import WritingsPage from "@sqky-one/writing/layouts/WritingsPage.astro";
+import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
 import { getAllTags, getValidWritingEntires } from "@sqky-one/writing/lib/content";
 import { siteDesc } from "@sqky-one/writing/lib/page";
 
@@ -14,7 +14,7 @@ const entries = await getValidWritingEntires();
 const tags = await getAllTags();
 ---
 
-<WritingsPage pageName="Home" desc={siteDesc}>
+<WritingPage pageName="Home" desc={siteDesc}>
     <Fragment slot="page-title">Stardew Library</Fragment>
 
     <LargeSection>
@@ -96,7 +96,7 @@ const tags = await getAllTags();
             <WritingEntries entries={entries} />
         </Section>
     </LargeSection>
-</WritingsPage>
+</WritingPage>
 
 <style>
     .search-input {
