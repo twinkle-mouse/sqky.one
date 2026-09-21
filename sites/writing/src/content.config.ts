@@ -8,20 +8,30 @@ const ROOT = "writing-entries";
 const writings = defineCollection({
     loader: glob({ pattern: "*.mdx", base: `${ROOT}/writings` }),
     schema: ({ image }) =>
-        z.object({
-            title: z.string(),
-            cover: image().nullable().default(null),
-            thumbnail: image().nullable().default(null),
-            description: z.string().nullable().default(null),
-            date: z.coerce.date().default(new Date(0)),
-            authors: z.array(z.string()).default(["Stella Sparkles"]),
-            tags: z.array(z.string()).default([]),
-            cw: z.string().nullable().default(null),
-            redirect: z.string().nullable().default(null),
-            relations: z.record(z.string(), z.string()).default({}),
-            ao3: z.number().nullable().default(null),
-            wip: z.boolean().default(false),
-        }),
+        z
+            .object({
+                title: z.string(),
+                cover: image().nullable().default(null),
+                thumbnail: image().nullable().default(null),
+                description: z.string().nullable().default(null),
+                date: z.coerce.date().default(new Date(0)),
+                authors: z.array(z.string()).default(["Stella Sparkles"]),
+                tags: z.array(z.string()).default([]),
+                cw: z.string().nullable().default(null),
+                redirect: z.string().nullable().default(null),
+                relations: z.record(z.string(), z.string()).default({}),
+                ao3: z.number().nullable().default(null),
+                wip: z.boolean().default(false),
+                web: z.boolean().default(false),
+            })
+            .pipe(
+                z.transform((val) => {
+                    if (val.web) {
+                        val.tags.unshift("should view on web");
+                    }
+                    return val;
+                }),
+            ),
 });
 
 const notes = defineCollection({
