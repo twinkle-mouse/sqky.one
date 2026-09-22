@@ -1,11 +1,10 @@
 ---
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
-import { colorsToCssStyle, semanticColorsDarkLavenderOverride, semanticColorsLightLavenderOverride } from "@sqky-one/common/lib/colors";
+import { colorsToCssStyle, semanticColorsDarkLavenderOverride } from "@sqky-one/common/lib/colors";
 import MainPage from "@sqky-one/main/layouts/MainPage.astro";
 
 const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDarkLavenderOverride));
-const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLightLavenderOverride));
 ---
 
 <MainPage pageName="Lavender Sparkles">
@@ -15,15 +14,6 @@ const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsL
             set:text={`
             :root {
                 ${semanticColorsDarkStyle}
-            }`}
-        ></style>
-        <style
-            is:raw
-            set:text={`
-            @media (prefers-color-scheme: light) {
-                :root {
-                    ${semanticColorsLightStyle}
-                }
             }`}
         ></style>
     </Fragment>
