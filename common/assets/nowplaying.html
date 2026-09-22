@@ -111,6 +111,13 @@
                     currentImageUrlCss = "";
                 }
 
+                if (!data) {
+                    elements["root"].style.display = "none";
+                    return;
+                } else {
+                    elements["root"].style.display = "";
+                }
+
                 const titleElement = elements["title"];
                 const artistElement = elements["artist"];
                 const albumElement = elements["album"];
@@ -121,9 +128,9 @@
                 const artElement = elements["art"];
                 const artLabelElement = elements["artLabel"];
 
-                const paused = data?.playbackState == "paused";
-                const position = data?.position;
-                const metadata = data?.metadata;
+                const paused = data.playbackState == "paused";
+                const position = data.position;
+                const metadata = data.metadata;
 
                 let title = metadata?.title;
                 if (!title) {
@@ -182,9 +189,7 @@
 
                 if (statusElement) {
                     if (length !== undefined && length > 0) {
-                        if (statusElement.hidden !== false) {
-                            statusElement.hidden = false;
-                        }
+                        statusElement.hidden = false;
 
                         if (barCircleElement) {
                             let pos = "0.0%";
@@ -222,9 +227,7 @@
                             }
                         }
                     } else {
-                        if (statusElement.hidden !== true) {
-                            statusElement.hidden = true;
-                        }
+                        statusElement.hidden = true;
                     }
                 }
             }
@@ -232,16 +235,19 @@
 
         <script>
             function load() {
+                const shadowRoot = document.getElementById("nowplaying-widget").shadowRoot;
+
                 const elements = {
-                    title: document.getElementById("np-title"),
-                    artist: document.getElementById("np-artist"),
-                    album: document.getElementById("np-album"),
-                    status: document.getElementById("np-status"),
-                    bar: document.getElementById("np-bar"),
-                    barCircle: document.getElementById("np-bar-circle"),
-                    position: document.getElementById("np-position"),
-                    art: document.getElementById("np-art"),
-                    artLabel: document.getElementById("np-art-label"),
+                    root: shadowRoot.getElementById("nowplaying"),
+                    title: shadowRoot.getElementById("np-title"),
+                    artist: shadowRoot.getElementById("np-artist"),
+                    album: shadowRoot.getElementById("np-album"),
+                    status: shadowRoot.getElementById("np-status"),
+                    bar: shadowRoot.getElementById("np-bar"),
+                    barCircle: shadowRoot.getElementById("np-bar-circle"),
+                    position: shadowRoot.getElementById("np-position"),
+                    art: shadowRoot.getElementById("np-art"),
+                    artLabel: shadowRoot.getElementById("np-art-label"),
                 };
 
                 let currentImage = undefined;
@@ -251,13 +257,13 @@
                     if (data != undefined) {
                         currentImage = data;
                     }
-                }, 250);
+                }, 1000);
 
                 const ws = new WebsocketWrapper((ws, data) => {
                     ws?.send(null);
 
                     applyStatus(data, elements, currentImage);
-                }, 250);
+                }, 1000);
             }
 
             document.addEventListener("DOMContentLoaded", load);
@@ -380,7 +386,7 @@
         </style>
     </head>
     <body>
-        <div id="nowplaying">
+        <div id="nowplaying" style="display: none">
             <div id="np-info">
                 <div id="np-text">
                     <h4 id="np-title"></h4>
