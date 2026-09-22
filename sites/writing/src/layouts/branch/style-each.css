@@ -1,0 +1,15 @@
+#content:has(input[data-flag~="${flag}"]:checked) .show-with-flag[data-flag~="${flag}"] {
+    display: unset !important;
+}
+
+#content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] {
+    display: none !important;
+}
+
+#content:has(input[data-flag~="${flag}"]:checked) .writing-branch:has(> .choices .show-with-flag[data-flag~="${flag}"] > input:checked) {
+    --display-override: unset;
+}
+
+#content:has(input[data-flag~="${flag}"]:checked) .writing-branch:has(> .choices .hide-with-flag[data-flag~="${flag}"] > input:checked) {
+    --display-override: none;
+}

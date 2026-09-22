@@ -1,0 +1,71 @@
+---
+import TextInput from "@sqky-one/common/components/TextInput.astro";
+
+import { customPronounFlag, pronouns } from "./cases/util";
+---
+
+<branch name="__settings-pronouns">
+    {pronouns.map((pronoun) => (
+        <choice data-word-count-ignore="true" text={pronoun.text} flag={pronoun.flag}></choice>
+    ))}
+    <choice data-word-count-ignore="true" text="Custom" flag={customPronounFlag}>
+        <div data-word-count-ignore="true" class="custom-pronouns-inputs">
+            <p>
+                <TextInput id="__pronouns-input-nominative" data-target="__p-custom-n">
+                    The nominative case (“‘they’ lived.”):{" "}
+                </TextInput>
+            </p>
+            <p>
+                <TextInput id="__pronouns-input-accusative" data-target="__p-custom-a">
+                    The accusative case (told ‘them’.”):{" "}
+                </TextInput>
+            </p>
+            <p>
+                <TextInput id="__pronouns-input-pronomial-possessive" data-target="__p-custom-pnp">
+                    The pronomial possessive case (“‘their’ art.”):{" "}
+                </TextInput>
+            </p>
+            <p>
+                <TextInput id="__pronouns-input-predicative-possessive" data-target="__p-custom-pdp">
+                    The predicative possessive case (“passion of ‘theirs’.”):{" "}
+                </TextInput>
+            </p>
+            <p>
+                <TextInput id="__pronouns-input-reflexive" data-target="__p-custom-r">
+                    The reflexive case (draw ‘themselves’.”):{" "}
+                </TextInput>
+            </p>
+        </div>
+    </choice>
+</branch>
+
+<style>
+    .custom-pronouns-inputs {
+        margin-block: 1em;
+    }
+</style>
+
+<script>
+    const inputs = [
+        "__pronouns-input-nominative",
+        "__pronouns-input-accusative",
+        "__pronouns-input-pronomial-possessive",
+        "__pronouns-input-predicative-possessive",
+        "__pronouns-input-reflexive",
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        for (const input of inputs) {
+            const element = document.getElementById(input)! as HTMLInputElement;
+            const target = element.dataset.target!;
+            const targets = document.querySelectorAll(`.${target}`);
+            function changed() {
+                for (const target of targets) {
+                    target.textContent = element.value.toLowerCase();
+                }
+            }
+            element.addEventListener("input", changed);
+            changed();
+        }
+    });
+</script>

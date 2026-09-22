@@ -1,0 +1,360 @@
+---
+import { renderMd } from "@sqky-one/writing/lib/content";
+import { container } from "@sqky-one/writing/lib/content";
+import parse, { HTMLElement, Node } from "node-html-parser";
+
+import { type Choice, type Element, type Tangent } from "./branch";
+import Branch from "./branch/Branch.astro";
+import baseStyle from "./branch/style.css?raw";
+import styleEach from "./branch/style-each.css?raw";
+
+let content: Node = parse(await Astro.slots.render("default"));
+
+function removeAstroData(element: HTMLElement) {
+    Object.keys(element.attributes)
+        .filter((k) => k.startsWith("data-astro"))
+        .forEach((k) => element.removeAttribute(k));
+}
+
+async function renderMdText(text: string | undefined) {
+    const parsed = parse(await renderMd(text?.trim()));
+    if (!parsed.firstChild) return "";
+
+    return parsed.firstChild.childNodes.join("");
+}
+
+async function parseTangent(element: HTMLElement, branchName: string, index: number): Promise<Tangent> {
+    return {
+        type: "tangent",
+        name: `${branchName}-tangent-${index}`,
+        class: element.getAttribute("class") ?? "",
+        required: !(element.getAttribute("optional") != undefined),
+        data: {
+            text: await renderMdText(element.getAttribute("text")),
+            content: element.children.join(""),
+            attributes: (() => {
+                element.removeAttribute("class");
+                element.removeAttribute("text");
+                element.removeAttribute("optional");
+                return element.attributes;
+            })(),
+        },
+    };
+}
+
+const flags = new Set<string>();
+function flagsCss() {
+    const flagsStyleEach = [...flags]
+        .sort()
+        .map((flag) => styleEach.replaceAll("${flag}", flag))
+        .join("\n");
+
+    return `${baseStyle} 
+${flagsStyleEach}`;
+}
+
+const defaultCounts = { tangent: 0 };
+let counts = { ...defaultCounts };
+let currentParentName = "root";
+
+async function processNode(root: Node) {
+    let reparse;
+
+    let runs = 0;
+    do {
+        runs++;
+        reparse = false;
+
+        let processedNodes: Node[] = [];
+        async function renderBranchElement(element: Element) {
+            reparse = true;
+            const rendered = await container.renderToString(Branch, {
+                props: { element },
+                slots: { default: root.childNodes.splice(0).join("") },
+            });
+            return parse(rendered);
+        }
+
+        let node: Node | undefined;
+        while ((node = root.childNodes.shift())) {
+            if (node instanceof HTMLElement) {
+                const type = node.rawTagName;
+                if (type == "branch") {
+                    if (!node.getAttribute("name")) {
+                        throw Error("branch needs to have a `name` set!");
+                    }
+                    const name = `branch-${node.getAttribute("name")}`;
+                    node.removeAttribute("name");
+                    const clazz = node.getAttribute("class") ?? "";
+                    node.removeAttribute("class");
+
+                    counts = { ...defaultCounts };
+                    currentParentName = name;
+
+                    const choices: Choice[] = [];
+                    const tangents: string[] = [];
+
+                    for (const child of node.children) {
+                        if (child.rawTagName == "choice") {
+                            const text = await renderMdText(child.getAttribute("text"));
+                            if (!text) {
+                                throw Error("choice needs to have a `text` set!");
+                            }
+
+                            const choice: Choice = {
+                                text,
+                                content: "",
+                                flags: child.getAttribute("flag")?.split(" ") ?? [],
+                                attributes: (() => {
+                                    child.removeAttribute("flag");
+                                    child.removeAttribute("text");
+                                    return child.attributes;
+                                })(),
+                            };
+
+                            const currentParentName = `${name}-${choices.length + 1}`;
+                            const counts = { ...defaultCounts };
+                            for (const inner of child.children) {
+                                if (inner.rawTagName == "tangent") {
+                                    counts.tangent += 1;
+
+                                    const tangent = await parseTangent(inner, currentParentName, counts.tangent);
+                                    tangents.push(tangent.name);
+
+                                    choice.content += await container.renderToString(Branch, { props: { element: tangent } });
+                                } else {
+                                    choice.content += inner.toString();
+                                }
+                            }
+
+                            for (const flag of choice.flags) {
+                                flags.add(flag);
+                            }
+
+                            choices.push(choice);
+                        }
+                    }
+
+                    removeAstroData(node);
+                    processedNodes.push(
+                        await renderBranchElement({
+                            type,
+                            name,
+                            class: clazz,
+                            data: {
+                                choices,
+                            },
+                            attributes: node.attributes,
+                        }),
+                    );
+                } else if (type == "continue") {
+                    const name = `${currentParentName}-continue`;
+                    const text = node.innerText;
+                    const clazz = node.getAttribute("class") ?? "";
+                    node.removeAttribute("class");
+
+                    counts = { ...defaultCounts };
+                    currentParentName = name;
+
+                    removeAstroData(node);
+                    processedNodes.push(
+                        await renderBranchElement({
+                            type,
+                            name,
+                            class: clazz,
+                            data: {
+                                text: (text === "true" ? undefined : await renderMdText(text)) || "Continue",
+                            },
+                        }),
+                    );
+                } else if (type == "tangent") {
+                    counts.tangent++;
+                    // set optional by default for freestanding tangents
+                    if (node.getAttribute("optional") === undefined) {
+                        node.setAttribute("optional", "");
+                    }
+
+                    removeAstroData(node);
+                    processedNodes.push(await renderBranchElement(await parseTangent(node, currentParentName, counts.tangent)));
+                } else {
+                    processedNodes.push(node);
+                }
+            } else {
+                processedNodes.push(node);
+            }
+        }
+
+        root.childNodes = processedNodes;
+    } while (reparse);
+
+    // if it only ran once (or less), then it means it didn't need reparsing
+    // if it didn't need reparsing at all, then it means the work is done on this root
+    if (runs > 1) {
+        return await processNode(root);
+    }
+}
+
+await processNode(content);
+
+const childNodes: Node[] = [];
+childNodes.push(...content.childNodes);
+
+for (const child of childNodes) {
+    await processNode(child);
+    childNodes.push(...child.childNodes);
+}
+---
+
+<Fragment set:html={content.toString()} />
+
+<style is:global lang="scss">
+    #content {
+        .writing-branch > .choices > li >,
+        .writing-check > {
+            label {
+                display: inline-block;
+                font-family: var(--mono);
+                text-decoration: none;
+                color: var(--buttonTextColor);
+
+                user-select: none;
+                cursor: pointer;
+
+                padding-block: 0.25em;
+                padding-inline: 0.2em;
+                border-radius: 0.3em;
+
+                background-color: var(--buttonBgColor);
+                border: 2px solid var(--buttonBorderColor);
+            }
+
+            label > input:focus-visible {
+                all: unset;
+            }
+
+            label:hover,
+            label:has(> input:focus-visible) {
+                color: var(--buttonHoverTextColor);
+                background-color: var(--buttonHoverBgColor);
+                border-color: var(--buttonHoverBorderColor);
+            }
+
+            label:has(> input:focus-visible) {
+                outline: 2px solid var(--focusColor);
+            }
+
+            label:has(> input:checked) {
+                color: var(--buttonActiveTextColor);
+                background-color: var(--buttonActiveBgColor);
+                border-color: var(--buttonActiveBorderColor);
+
+                text-decoration: underline;
+                text-underline-offset: 15%;
+            }
+        }
+
+        .writing-branch > .choices {
+            display: flex;
+            border: 1px solid var(--separatorColor);
+
+            font-size: 0.8em;
+            margin-bottom: 0.2em;
+            padding-inline: 0.75em;
+            padding-block: 1em;
+
+            gap: 0.6em;
+            flex-wrap: wrap;
+        }
+
+        .writing-branch > .choices > li {
+            display: contents;
+        }
+
+        .writing-branch > .choices > * {
+            flex: none;
+            max-width: 40%;
+            height: fit-content;
+        }
+
+        .writing-branch > .branches > *,
+        .writing-branch > .branches + .slot {
+            display: none;
+        }
+
+        @for $i from 1 through 32 {
+            .writing-branch
+                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                        ~ .branches /* go to branches */
+                            > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
+                display: var(--display-override, block);
+                animation: fade-in 0.15s ease-in;
+            }
+
+            .writing-branch
+                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                        ~ .branches:not(:has(
+                            > :nth-child(#{$i}) /* go to the corresponding branch */
+                                .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                        ))
+                        + .slot /* unhide if either there's no tangents, or all tangents are checked */ {
+                display: var(--display-override, block);
+                animation: fade-in 0.15s ease-in;
+            }
+        }
+
+        .writing-check {
+            margin-block: 1.1em;
+        }
+
+        .writing-check[data-required="true"]::before {
+            content: "↳" / "" !important;
+            color: var(--focusColor);
+        }
+
+        .writing-check:not([data-required="true"])::before {
+            content: "⋯" / "" !important;
+            color: var(--linkColor);
+        }
+
+        .writing-check::before {
+            display: inline-block;
+
+            font-size: 1.2em;
+            font-family: var(--sans);
+
+            margin-left: 0.25em;
+            margin-right: 0.5em;
+            padding-top: 0.2rlh;
+            vertical-align: top;
+        }
+
+        .writing-check {
+            text-wrap: nowrap;
+        }
+
+        .writing-check > label {
+            text-wrap: wrap;
+        }
+
+        .writing-check > label:has(> input:not(:checked)) + * {
+            display: none;
+        }
+
+        .writing-check[data-required="true"]:has(> label > input:not(:checked)) ~ * {
+            display: none;
+        }
+
+        .writing-check > label:has(> input:checked) + *,
+        .writing-check[data-required="true"]:has(> label > input:checked) ~ * {
+            animation: fade-in 0.15s ease-in;
+        }
+
+        @media (prefers-reduced-motion) {
+            * {
+                animation: none !important;
+            }
+        }
+    }
+</style>
+
+<style is:global set:html={flagsCss()}></style>

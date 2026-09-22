@@ -1,0 +1,33 @@
+---
+import { allPronounsFlags, customPronounFlag, pronouns, transform } from "./util";
+
+export type Props = {
+    cap?: boolean;
+};
+
+const { cap = false } = Astro.props;
+---
+
+<span>
+    <span class="hide-with-flag" data-flag={allPronounsFlags}>
+        [empty]
+    </span>
+    {pronouns.map((pronoun) => {
+        return (
+            <span class:list={["show-with-flag"]} data-flag={pronoun.flag}>
+                {transform(cap, pronoun.accusative)}
+            </span>
+        );
+    })}
+    <span class="show-with-flag __p-custom-a" data-cap={cap} data-flag={customPronounFlag}></span>
+</span>
+
+<style is:global>
+    .__p-custom-a[data-cap="false"] {
+        text-transform: lowercase;
+    }
+
+    .__p-custom-a[data-cap="true"] {
+        text-transform: capitalize;
+    }
+</style>

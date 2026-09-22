@@ -7,9 +7,12 @@ import Section from "@sqky-one/common/layouts/Section.astro";
 import { components } from "@sqky-one/writing/lib/render";
 import type { RenderResult } from "astro:content";
 
+import WritingBranches from "./WritingBranches.astro";
+
 type Props = {
     renderResult: RenderResult;
 };
+
 const { Content, headings } = Astro.props.renderResult;
 ---
 
@@ -37,13 +40,15 @@ const { Content, headings } = Astro.props.renderResult;
         <slot />
 
         <EmojiWrapper isContentful={true}>
-            {headings.length == 0 ? (
-                <Section>
+            <WritingBranches>
+                {headings.length == 0 ? (
+                    <Section>
+                        <Content components={components} />
+                    </Section>
+                ) : (
                     <Content components={components} />
-                </Section>
-            ) : (
-                <Content components={components} />
-            )}
+                )}
+            </WritingBranches>
         </EmojiWrapper>
 
         <style is:global>

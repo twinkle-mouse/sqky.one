@@ -1,0 +1,62 @@
+---
+import { type Element } from ".";
+
+export type Props = {
+    element: Element;
+};
+
+const { element } = Astro.props;
+---
+
+{element.type == "branch" && (
+    <div class:list={["writing-branch", element.class]} {...element.attributes}>
+        <ol class="choices">
+            {element.data.choices.map((choice, idx) => {
+                return (
+                    <li>
+                        <label {...choice.attributes} for={`${element.name}-${idx + 1}`}>
+                            <Fragment set:html={choice.text} />
+                            <input id={`${element.name}-${idx + 1}`} type="radio" name={element.name} value={`${idx + 1}`} data-flag={choice.flags.join(" ")} />
+                        </label>
+                    </li>
+                );
+            })}
+        </ol>
+        <div class="branches">
+            {element.data.choices.map((choice) => {
+                return <div set:html={choice.content} hidden={choice.content == ""} />;
+            })}
+        </div>
+
+        <div class="slot">
+            <slot />
+        </div>
+    </div>
+)}
+{element.type == "continue" && (
+    <div class:list={["writing-check continue", element.class]} data-required="true">
+        <label for={element.name}>
+            {element.data.text}
+            <input id={element.name} type="checkbox" name={element.name} />
+        </label>
+
+        <div class="slot">
+            <slot />
+        </div>
+    </div>
+)}
+{element.type == "tangent" && (
+    <>
+        <div class:list={["writing-check tangent", element.class]} data-required={element.required ? "true" : undefined} {...element.data.attributes}>
+            <label for={element.name}>
+                {!element.required && <span class="sr-only">Optional text: </span>}
+                {element.data.text}
+                <input id={element.name} type="checkbox" name={element.name} />
+            </label>
+
+            <div class="slot" set:html={element.data.content} />
+        </div>
+
+        <slot />
+    </>
+)}

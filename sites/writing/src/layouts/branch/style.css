@@ -1,0 +1,12 @@
+@property --display-override {
+    syntax: "*";
+    inherits: true;
+}
+
+#content .show-with-flag {
+    display: none !important;
+}
+
+#content .writing-branch:has(> .choices .show-with-flag > input:checked) {
+    --display-override: none;
+}
