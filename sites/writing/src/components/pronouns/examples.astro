@@ -1,0 +1,60 @@
+---
+import Details from "@sqky-one/common/components/Details.astro";
+
+import Accusative from "./cases/accusative.astro";
+import Nominative from "./cases/nominative.astro";
+import PredicativeP from "./cases/predicative-p.astro";
+import PronomialP from "./cases/pronomial-p.astro";
+import Reflexive from "./cases/reflexive.astro";
+---
+
+<Details summary="Pronouns example">
+    <div>
+        <p>
+            I think
+            <em>
+                {" "}
+                <Nominative />
+            </em>{" "}
+            lived here.
+        </p>
+        <p>
+            I told
+            <em>
+                {" "}
+                <Accusative />
+            </em>{" "}
+            about this.
+        </p>
+        <p>
+            I like
+            <em>
+                {" "}
+                <PronomialP />
+            </em>{" "}
+            art.
+        </p>
+        <p>
+            I enjoy this passion of
+            <em>
+                {" "}
+                <PredicativeP />
+            </em>
+            .
+        </p>
+        <p>
+            <Nominative cap /> would like to draw{" "}
+            <em>
+                <Reflexive />
+            </em>
+            .
+        </p>
+    </div>
+</Details>
+
+<p>
+    <em>
+        (Note: the pronouns system cannot automatically change conjugations (<u>she likes this</u> versus <u>they like this</u>). Please excuse any grammatical
+        errors.)
+    </em>
+</p>
