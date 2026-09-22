@@ -3,6 +3,7 @@ import Checkbox from "@sqky-one/common/components/Checkbox.astro";
 import Details from "@sqky-one/common/components/Details.astro";
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
 import PublicTextFile from "@sqky-one/common/components/PublicTextFile.astro";
+import RadioInput from "@sqky-one/common/components/RadioInput.astro";
 import SearchInput from "@sqky-one/common/components/SearchInput.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
@@ -34,6 +35,25 @@ import WritingSection from "@sqky-one/writing/layouts/WritingSection.astro";
                     <Checkbox id="test-checkbox2" checked>
                         Barfoo
                     </Checkbox>
+                </div>
+
+                <div>
+                    <label>Presets:</label>
+                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
+                        Site Default
+                    </RadioInput>
+                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
+                        IBM Plex Sans
+                    </RadioInput>
+                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
+                        Inter
+                    </RadioInput>
+                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
+                        Noto Sans
+                    </RadioInput>
+                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
+                        Roboto
+                    </RadioInput>
                 </div>
 
                 <PublicTextFile src="pubkey.asc" summary="my PGP public key" />
