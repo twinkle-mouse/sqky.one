@@ -107,13 +107,13 @@ export const grass = {
 
 export const slate100 = "#dedbf0ff";
 export const slate200 = "#c9c6e7ff";
-export const slate300 = "#b8b2ddff";
-export const slate400 = "#b1b1d4ff";
-export const slate500 = "#9b99bbff";
+export const slate300 = "#b8b3d8ff";
+export const slate400 = "#a7a7cdff";
+export const slate500 = "#918fb0ff";
 export const slate600 = "#7c7994ff";
-export const slate700 = "#6f6b86ff";
-export const slate800 = "#454555ff";
-export const slate900 = "#36363fff";
+export const slate700 = "#5b576dff";
+export const slate800 = "#414150ff";
+export const slate900 = "#2f2f39ff";
 export const slate = {
     slate100,
     slate200,
@@ -138,7 +138,7 @@ export const colors = {
 export const semanticColorsDark = {
     // global
     pageBgColor: lavender900,
-    focusColor: "#ff1d1d",
+    focusColor: "#ff1313",
     //
 
     // generic
@@ -147,8 +147,8 @@ export const semanticColorsDark = {
     linkHoverColor: grass500,
     headingColor: lavender300,
     smallColor: slate300,
-    codeBgColor: slate600,
-    codeBorderColor: slate400,
+    codeBgColor: slate800,
+    codeBorderColor: slate300,
     strongColor: space300,
     emColor: cuteblue300,
     markColor: babypink900,
@@ -160,7 +160,7 @@ export const semanticColorsDark = {
 
     detailsBgColor: slate900,
     detailsBorderColor: slate700,
-    summaryColor: space300,
+    summaryColor: lavender200,
 
     tableHeadBgColor: lavender800,
     tableBodyBgColor: lavender900,
@@ -177,7 +177,7 @@ export const semanticColorsDark = {
 
     // navigation
     navTitleBgColor: slate700,
-    navTitleBorderColor: slate300,
+    navTitleBorderColor: slate400,
 
     navBgColor: lavender800,
     navBorderColor: lavender600,
