@@ -1,0 +1,40 @@
+---
+import { transform } from "./util";
+
+export type Props = {
+    cap?: boolean;
+};
+
+const { cap = false } = Astro.props;
+---
+
+<span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-he">
+        {transform(cap, "his")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-she">
+        {transform(cap, "her")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-they">
+        {transform(cap, "their")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-it">
+        {transform(cap, "its")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-one">
+        {transform(cap, "one's")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-ze">
+        {transform(cap, "zir")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-ae">
+        {transform(cap, "aer")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-xe">
+        {transform(cap, "xyr")}
+    </span>
+    <span class="show-with-flag" data-flag="__settings-pronouns-fae">
+        {transform(cap, "faer")}
+    </span>
+    <span class="show-with-flag __pronouns-pronomial-possessive-custom" data-flag="__settings-pronouns-custom"></span>
+</span>

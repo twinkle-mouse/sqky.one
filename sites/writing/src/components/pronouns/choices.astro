@@ -1,0 +1,75 @@
+---
+import TextInput from "@sqky-one/common/components/TextInput.astro";
+---
+
+<branch name="__settings-pronouns">
+    <choice text="he/him" flag="__settings-pronouns-he"></choice>
+    <choice text="she/her" flag="__settings-pronouns-she"></choice>
+    <choice text="they/them" flag="__settings-pronouns-they"></choice>
+    <choice text="it/its" flag="__settings-pronouns-it"></choice>
+    <choice text="one/one’s" flag="__settings-pronouns-one"></choice>
+    <choice text="ze/zir" flag="__settings-pronouns-ze"></choice>
+    <choice text="ae/aer" flag="__settings-pronouns-ae"></choice>
+    <choice text="xe/xem" flag="__settings-pronouns-xe"></choice>
+    <choice text="fae/faer" flag="__settings-pronouns-fae"></choice>
+    <choice text="Custom" flag="__settings-pronouns-custom"></choice>
+</branch>
+
+<div class="custom-pronouns-inputs show-with-flag" data-flag="__settings-pronouns-custom">
+    <p>
+        <TextInput id="__pronouns-input-nominative" data-target="__pronouns-nominative-custom">
+            The nominative case (“‘they’ lived.”):{" "}
+        </TextInput>
+    </p>
+    <p>
+        <TextInput id="__pronouns-input-accusative" data-target="__pronouns-accusative-custom">
+            The accusative case (told ‘them’.”):{" "}
+        </TextInput>
+    </p>
+    <p>
+        <TextInput id="__pronouns-input-pronomial-possessive" data-target="__pronouns-pronomial-possessive-custom">
+            The pronomial possessive case (“‘their’ art.”):{" "}
+        </TextInput>
+    </p>
+    <p>
+        <TextInput id="__pronouns-input-predicative-possessive" data-target="__pronouns-predicative-possessive-custom">
+            The predicative possessive case (“passion of ‘theirs’.”):{" "}
+        </TextInput>
+    </p>
+    <p>
+        <TextInput id="__pronouns-input-reflexive" data-target="__pronouns-reflexive-custom">
+            The reflexive case (draw ‘themselves’.”):{" "}
+        </TextInput>
+    </p>
+</div>
+
+<style>
+    .custom-pronouns-inputs {
+        margin-block: 1em;
+    }
+</style>
+
+<script>
+    const inputs = [
+        "__pronouns-input-nominative",
+        "__pronouns-input-accusative",
+        "__pronouns-input-pronomial-possessive",
+        "__pronouns-input-predicative-possessive",
+        "__pronouns-input-reflexive",
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        for (const input of inputs) {
+            const element = document.getElementById(input)! as HTMLInputElement;
+            const target = element.dataset.target!;
+            const targets = document.querySelectorAll(`.${target}`);
+            function changed() {
+                for (const target of targets) {
+                    target.textContent = element.value;
+                }
+            }
+            element.addEventListener("input", changed);
+            changed();
+        }
+    });
+</script>
