@@ -5,21 +5,14 @@ import "bluesky-profile-card-embed/style.css";
 import "bluesky-profile-card-embed/themes/dark.css"; // we don't currently have a light mode colour scheme :(
 
 import Noscript from "@sqky-one/common/assets/noscript.html";
-import {
-    colors,
-    colorsToCssStyle,
-    semanticColorsDark,
-    semanticColorsLight,
-    semanticUtilsDark,
-    semanticUtilsLight,
-    stylesToCssStyle,
-} from "@sqky-one/common/lib/colors";
 import type { HTMLAttributes } from "astro/types";
 import { Font } from "astro:assets";
 import { absolutize, parsePath, serialize } from "path-data-parser";
 import { uniformInt } from "pure-rand/distribution/uniformInt";
 import { xoroshiro128plus } from "pure-rand/generator/xoroshiro128plus";
 import Voronoi from "voronoi";
+
+import { colorsCss } from "../lib/colors";
 
 export type Props = HTMLAttributes<"main"> & {
     siteName: string;
@@ -38,12 +31,6 @@ function getTitle() {
 }
 
 const title = getTitle();
-
-const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
-const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
-const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
-const semanticColorsLightStyle = colorsToCssStyle(Object.entries(semanticColorsLight));
-const semanticUtilsLightStyle = stylesToCssStyle(Object.entries(semanticUtilsLight));
 
 const rng = xoroshiro128plus(42069); // haha funny
 const tileSize = 32; // px
@@ -114,6 +101,13 @@ stars.sort((a, b) => a.y - b.y);
 
         <meta name="generator" content={Astro.generator} />
 
+        <style
+            is:raw
+            set:text={`:root {
+${colorsCss}
+}`}
+        ></style>
+
         <Font preload={[{ weight: 400, style: "normal" }]} cssVariable="--font-noseyrodent" />
         <Font preload cssVariable="--font-besley" />
         <Font
@@ -128,43 +122,6 @@ stars.sort((a, b) => a.y - b.y);
         <Font cssVariable="--font-inter" />
         <Font cssVariable="--font-noto-sans" />
         <Font cssVariable="--font-roboto" />
-
-        <style is:raw set:text={`:root{${colorsStyle}}`}></style>
-
-        <style
-            is:raw
-            set:text={`
-            :root {
-                ${semanticColorsDarkStyle}
-            }`}
-        ></style>
-        <style
-            is:raw
-            set:text={`
-            :root {
-                ${semanticUtilsDarkStyle}
-            }`}
-        ></style>
-
-        <style
-            is:raw
-            set:text={`
-            @media (prefers-color-scheme: light) {
-                /* sorry, the light mode colours right now are just bad, ill work on it eventually. */
-                :root {
-                    ${semanticColorsLightStyle}
-                }
-            }`}
-        ></style>
-        <style
-            is:raw
-            set:text={`
-            @media (prefers-color-scheme: light) {
-                :root {
-                    ${semanticUtilsLightStyle}
-                }
-            }`}
-        ></style>
 
         <Fragment set:html={Noscript({})} />
 

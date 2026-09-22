@@ -186,7 +186,6 @@ export const semanticColorsDark = {
     navLinkActiveBgColor: space800,
 
     sitemapBgColor: babypink800,
-    //sitemapBorderColor
     sitemapLinkBgColor: cuteblue800,
     sitemapLinkBorderColor: cuteblue400,
     sitemapLinkActiveBgColor: cuteblue700,
@@ -219,12 +218,8 @@ export const semanticColorsDark = {
 export const semanticUtilsDark = {
     cardBoxShadow: `
         0px 0px 6px 4px rgba(0, 0, 0, 0.5),
-        inset 0px 0px 4px 3px rgba(60, 60, 90, 0.3)
-    `,
+        inset 0px 0px 4px 3px rgba(60, 60, 90, 0.3)`,
 };
-
-export const semanticColorsLight = semanticColorsDark;
-export const semanticUtilsLight = semanticUtilsDark;
 
 export const semanticColorsDarkLavenderOverride = {
     pageBgColor: "#101020",
@@ -234,12 +229,21 @@ export const semanticColorsDarkLavenderOverride = {
     sectionBorderColor: "#1b112b",
 };
 
-export const semanticColorsLightLavenderOverride = semanticColorsDarkLavenderOverride;
-
 export function colorsToCssStyle(colors: [string, string][]) {
-    return Array.from(colors.map(([key, value]) => `--${key}:${new Color(value).toString()}`)).join(";");
+    return colors.map(([key, value]) => `--${key}:${new Color(value).toString()};`).join("\n");
 }
 
 export function stylesToCssStyle(colors: [string, string][]) {
-    return Array.from(colors.map(([key, value]) => `--${key}:${value}`)).join(";");
+    return colors.map(([key, value]) => `--${key}:${value};`).join("\n");
 }
+
+export const colorsCss = (() => {
+    const colorsStyle = colorsToCssStyle(Object.entries(colors).flatMap(([, v]) => Array.from(v.entries())));
+    const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDark));
+    const semanticUtilsDarkStyle = stylesToCssStyle(Object.entries(semanticUtilsDark));
+
+    return `${colorsStyle}
+${semanticColorsDarkStyle}
+${semanticUtilsDarkStyle}
+`;
+})();
