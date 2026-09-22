@@ -20,7 +20,7 @@ const uuid = `textfile-${randomUUID()}`;
 ---
 
 <Details src={src} summary={summary}>
-    <textarea id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", cls]}>{file}</textarea>
+    <textarea aria-label={`Content of file ${src}`} id={uuid} readonly cols="64" rows="14" {...props} class:list={["mono", cls]}>{file}</textarea>
 </Details>
 
 <style>
