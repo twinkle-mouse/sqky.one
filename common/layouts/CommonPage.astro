@@ -132,85 +132,99 @@ ${colorsCss}
     </head>
 
     <body>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={bgSize}
-            height={bgSize}
-            viewBox=`0 0 ${bgSize} ${bgSize}`
-            style={{ "--bg-size": bgSize }}
-            id="body-background"
-            aria-hidden="true"
-        >
-            <defs>
-                <linearGradient
-                    id="grad"
-                    x1="88.62070954666667"
-                    x2="938.6848938666667"
-                    y1="−120.47527424"
-                    y2="1145.092283733333"
-                    gradientUnits="userSpaceOnUse"
+        <div>
+            <template shadowrootmode="closed">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={bgSize}
+                    height={bgSize}
+                    viewBox=`0 0 ${bgSize} ${bgSize}`
+                    style={{ "--bg-size": bgSize }}
+                    aria-hidden="true"
                 >
-                    <stop offset="0%" stop-color="#ff8aad" id="stop1"></stop>
-                    <stop offset="50%" stop-color="#ff96fc" id="stop2"></stop>
-                    <stop offset="100%" stop-color="#99a8ff" id="stop3"></stop>
-                </linearGradient>
-            </defs>
+                    <defs>
+                        <linearGradient
+                            id="grad"
+                            x1="88.62070954666667"
+                            x2="938.6848938666667"
+                            y1="−120.47527424"
+                            y2="1145.092283733333"
+                            gradientUnits="userSpaceOnUse"
+                        >
+                            <stop offset="0%" stop-color="#ff8aad" id="stop1"></stop>
+                            <stop offset="50%" stop-color="#ff96fc" id="stop2"></stop>
+                            <stop offset="100%" stop-color="#99a8ff" id="stop3"></stop>
+                        </linearGradient>
+                    </defs>
 
-            <style>
-                path {
-                    fill: url(#grad);
-                    fill-opacity: 0.1;
-                    stroke: url(#grad);
-                    stroke-width: 1.5;
-                    stroke-linecap: round;
-                    stroke-linejoin: round;
-                    stroke-dasharray: none;
-                    stroke-opacity: 0.125;
-                    paint-order: stroke fill markers;
+                    <style>
+                        svg {
+                            position: fixed;
+                            z-index: -100000;
 
-                    --bg-size: inherit;
-                    --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
-                    --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
-                    transform: translate(calc(var(--x) * var(--offset-x)), calc(var(--y) * var(--offset-y)));
-                }
-            </style>
+                            width: calc(max(100vw, var(--bg-size) * 1px));
+                            height: calc(max(100vh, var(--bg-size) * 1px));
 
-            {stars.map(({ x: ox, y: oy, angle }) => {
-                const cos = Math.cos(angle);
-                const sin = Math.sin(angle);
+                            left: calc(min(100vw - var(--bg-size) * 1px, 0px) * 0.5);
+                            top: calc(min(100vh - var(--bg-size) * 1px, 0px) * 0.5);
+                        }
 
-                const round = (n: number) => Math.round(n * 10) / 10;
+                        path {
+                            fill: url(#grad);
+                            fill-opacity: 0.1;
+                            stroke: url(#grad);
+                            stroke-width: 1.5;
+                            stroke-linecap: round;
+                            stroke-linejoin: round;
+                            stroke-dasharray: none;
+                            stroke-opacity: 0.125;
+                            paint-order: stroke fill markers;
 
-                const segments = starSegments.map((segment) => {
-                    let data = segment.data;
-                    if (segment.key == "M" || segment.key == "L") {
-                        const [x, y] = segment.data;
+                            --bg-size: inherit;
+                            --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                            --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
+                            transform: translate(calc(var(--x) * var(--offset-x)), calc(var(--y) * var(--offset-y)));
+                        }
+                    </style>
 
-                        const rx = x * cos - y * sin;
-                        const ry = x * sin + y * cos;
+                    {stars.map(({ x: ox, y: oy, angle }) => {
+                        const cos = Math.cos(angle);
+                        const sin = Math.sin(angle);
 
-                        data = [rx + ox, ry + oy].map(round);
-                    } else if (segment.key == "Z") {
-                        // pass
-                    } else {
-                        console.warn("Unhandled segment: " + segment);
-                    }
+                        const round = (n: number) => Math.round(n * 10) / 10;
 
-                    return { ...segment, data };
-                });
-                const path = serialize(segments);
+                        const segments = starSegments.map((segment) => {
+                            let data = segment.data;
+                            if (segment.key == "M" || segment.key == "L") {
+                                const [x, y] = segment.data;
 
-                return (
-                    <path
-                        d={path}
-                        style={{
-                            "--x": Math.round(((ox / bgSize) * 2 - 1) * 1000) / 1000,
-                            "--y": Math.round(((oy / bgSize) * 2 - 1) * 1000) / 1000,
-                        }}
-                    />
-                );
-            })}
-        </svg>
+                                const rx = x * cos - y * sin;
+                                const ry = x * sin + y * cos;
+
+                                data = [rx + ox, ry + oy].map(round);
+                            } else if (segment.key == "Z") {
+                                // pass
+                            } else {
+                                console.warn("Unhandled segment: " + segment);
+                            }
+
+                            return { ...segment, data };
+                        });
+                        const path = serialize(segments);
+
+                        return (
+                            <path
+                                d={path}
+                                style={{
+                                    "--x": Math.round(((ox / bgSize) * 2 - 1) * 1000) / 1000,
+                                    "--y": Math.round(((oy / bgSize) * 2 - 1) * 1000) / 1000,
+                                }}
+                            />
+                        );
+                    })}
+                </svg>
+            </template>
+        </div>
 
         <div id="site">
             <slot name="nav" />
@@ -319,17 +333,6 @@ ${colorsCss}
 
     body {
         position: relative;
-    }
-
-    #body-background {
-        position: fixed;
-        z-index: -100000;
-
-        width: calc(max(100vw, var(--bg-size) * 1px));
-        height: calc(max(100vh, var(--bg-size) * 1px));
-
-        left: calc(min(100vw - var(--bg-size) * 1px, 0px) * 0.5);
-        top: calc(min(100vh - var(--bg-size) * 1px, 0px) * 0.5);
     }
 
     .sans {
