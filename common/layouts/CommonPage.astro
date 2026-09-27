@@ -32,10 +32,11 @@ function getTitle() {
 
 const title = getTitle();
 
+const bgSize = 1024; // px
+
 const rng = xoroshiro128plus(42069); // haha funny
 const tileSize = 32; // px
-const bgTiles = 32;
-const bgSize = tileSize * bgTiles;
+const bgTiles = bgSize / tileSize;
 
 const voronoi = new Voronoi();
 const bbox = { xl: 0, xr: bgSize, yt: 0, yb: bgSize }; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
@@ -58,7 +59,7 @@ for (const cell of diagram.cells) {
 
             for (const star of stars) {
                 const disSq = Math.pow(p.x - star.x, 2) + Math.pow(p.y - star.y, 2);
-                if (disSq < Math.pow(tileSize * 0.7, 2)) {
+                if (disSq < Math.pow(tileSize * 0.5, 2)) {
                     skip = true;
                     continue;
                 }
@@ -70,6 +71,8 @@ for (const cell of diagram.cells) {
 }
 stars.sort((a, b) => a.x - b.x);
 stars.sort((a, b) => a.y - b.y);
+
+const starSegments = absolutize(parsePath("m0-4.15-1.346 2.732-3.004.437 2.174 2.127-.513 3.004 2.687-1.418L2.689 4.15l-.515-3.004L4.35-.981l-3.006-.435z"));
 ---
 
 <!doctype html>
@@ -134,18 +137,17 @@ ${colorsCss}
             width={bgSize}
             height={bgSize}
             viewBox=`0 0 ${bgSize} ${bgSize}`
-            style={{ "--tile-size": tileSize, "--bg-size": bgSize }}
+            style={{ "--bg-size": bgSize }}
             id="body-background"
             aria-hidden="true"
         >
             <defs>
-                <!-- originally picked in inkscape with 600x600 viewport -->
                 <linearGradient
                     id="grad"
-                    x1={(51.926197 * bgSize) / 600}
-                    x2={(550.01068 * bgSize) / 600}
-                    y1={(-70.590981 * bgSize) / 600}
-                    y2={(670.95251 * bgSize) / 600}
+                    x1="88.62070954666667"
+                    x2="938.6848938666667"
+                    y1="−120.47527424"
+                    y2="1145.092283733333"
                     gradientUnits="userSpaceOnUse"
                 >
                     <stop offset="0%" stop-color="#ff8aad" id="stop1"></stop>
@@ -155,13 +157,21 @@ ${colorsCss}
             </defs>
 
             <style>
-                #body-background path {
+                path {
+                    fill: url(#grad);
+                    fill-opacity: 0.1;
+                    stroke: url(#grad);
+                    stroke-width: 1.5;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    stroke-dasharray: none;
+                    stroke-opacity: 0.125;
+                    paint-order: stroke fill markers;
+
+                    --bg-size: inherit;
                     --offset-x: calc((max(100vw, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
                     --offset-y: calc((max(100vh, var(--bg-size) * 1px) - var(--bg-size) * 1px) * 0.5);
-                }
-
-                #body-background path {
-                    transform: translate(calc(var(--star-x) * var(--offset-x)), calc(var(--star-y) * var(--offset-y)));
+                    transform: translate(calc(var(--x) * var(--offset-x)), calc(var(--y) * var(--offset-y)));
                 }
             </style>
 
@@ -169,20 +179,17 @@ ${colorsCss}
                 const cos = Math.cos(angle);
                 const sin = Math.sin(angle);
 
-                const cx = tileSize / 2;
-                const cy = tileSize / 2;
+                const round = (n: number) => Math.round(n * 10) / 10;
 
-                const originalPath = "m16 11.855-1.346 2.729-3.004.437 2.174 2.124-.513 3.001 2.687-1.417 2.691 1.417-.515-3.001 2.176-2.124-3.006-.435z";
-                const originalSegments = absolutize(parsePath(originalPath));
-                const segments = originalSegments.map((segment) => {
+                const segments = starSegments.map((segment) => {
                     let data = segment.data;
                     if (segment.key == "M" || segment.key == "L") {
                         const [x, y] = segment.data;
 
-                        const nx = cos * (x - cx) + sin * (y - cy) + cx;
-                        const ny = cos * (y - cy) - sin * (x - cx) + cy;
+                        const rx = x * cos - y * sin;
+                        const ry = x * sin + y * cos;
 
-                        data = [nx + ox - cx, ny + oy - cy];
+                        data = [rx + ox, ry + oy].map(round);
                     } else if (segment.key == "Z") {
                         // pass
                     } else {
@@ -196,10 +203,10 @@ ${colorsCss}
                 return (
                     <path
                         d={path}
-                        style={
-                            "fill:url(#grad);fill-opacity:.1;stroke:url(#grad);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:.125;paint-order:stroke fill markers" +
-                            `;--star-x:${(ox / bgSize) * 2 - 1.0};--star-y:${(oy / bgSize) * 2 - 1.0}`
-                        }
+                        style={{
+                            "--x": Math.round(((ox / bgSize) * 2 - 1) * 1000) / 1000,
+                            "--y": Math.round(((oy / bgSize) * 2 - 1) * 1000) / 1000,
+                        }}
                     />
                 );
             })}
@@ -316,9 +323,10 @@ ${colorsCss}
 
     #body-background {
         position: fixed;
+        z-index: -100000;
+
         width: calc(max(100vw, var(--bg-size) * 1px));
         height: calc(max(100vh, var(--bg-size) * 1px));
-        z-index: -100000;
 
         left: calc(min(100vw - var(--bg-size) * 1px, 0px) * 0.5);
         top: calc(min(100vh - var(--bg-size) * 1px, 0px) * 0.5);
