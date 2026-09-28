@@ -6,7 +6,7 @@ export type Props = {
 };
 ---
 
-<AstroIcon aria-hidden="true" role="img" class="file-icon" name=`material-file/${Astro.props.icon}` width="1.5em" height="1.5em" />
+<AstroIcon aria-hidden="true" class="file-icon" name=`material-file/${Astro.props.icon}` width="1.5em" height="1.5em" />
 
 <style>
     .file-icon {
@@ -14,5 +14,6 @@ export type Props = {
         display: inline-block;
         vertical-align: -0.4em;
         margin-right: 0.4em;
+        line-height: 0;
     }
 </style>
