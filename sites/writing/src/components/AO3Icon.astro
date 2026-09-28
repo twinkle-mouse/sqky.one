@@ -6,7 +6,11 @@ export type Props = HTMLAttributes<"svg">;
 const props = Astro.props;
 ---
 
-<Svg width="1.5em" height="1.5em" {...props} class="icon" role="img" aria-hidden="true" />
+<span class="icon">
+    <template shadowrootmode="open">
+        <Svg width="1.5em" height="1.5em" {...props} aria-hidden="true" />
+    </template>
+</span>
 
 <style>
     .icon {
@@ -14,5 +18,6 @@ const props = Astro.props;
         display: inline-block;
         vertical-align: -0.4em;
         margin-right: 0.4em;
+        line-height: 0;
     }
 </style>
