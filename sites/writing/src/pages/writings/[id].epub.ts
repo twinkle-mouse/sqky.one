@@ -48,7 +48,7 @@ export async function GET(context: AstroGlobal) {
         }),
     );
 
-    const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").replaceAll("   ", " - ");
+    const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " — ").replaceAll("\n", " ");
 
     const writingsOutDir = join(cwd(), "sites/writing/dist");
 
