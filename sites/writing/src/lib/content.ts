@@ -58,22 +58,57 @@ export async function renderMd(content: string | undefined | null) {
 }
 
 export function htmlToTextContent(content: string | undefined | null) {
-    const element = parse(normalizeHtml(content ?? ""));
-    const flatChildren = flattenTreeDepthFirst(element);
+    const blockElements = new Set([
+        "div",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "ul",
+        "ol",
+        "li",
+        "aside",
+        "blockquote",
+        "section",
+        "figure",
+        "figcaption",
+        "br",
+    ]);
+    const inlineElements = new Set(["span", "label", "a", "small", "code", "em", "strong", "u", "i", "mark", "sup", "del", "ins", "abbr", "samp", "pre"]);
+    const ignoredElements = [
+        "img",
+        "picture",
+        "input",
+        "hr",
+        "style",
+        "script",
+        "svg",
+        "details", // don't include details because it's most likely stuff that's not supposed to be "source text"
+    ];
+
+    const root = parse(normalizeHtml(content ?? ""));
+    root.querySelectorAll(ignoredElements.join(", ")).map((e) => e.remove());
+    root.querySelectorAll(`*[data-word-count-ignore="true"]`).map((e) => e.remove());
+    const flatChildren = flattenTreeDepthFirst(root);
 
     let text = "";
     for (const child of flatChildren) {
-        if (child.rawTagName == "br") {
-            text += "\n";
-            continue;
-        }
-
         if (child.nodeType == NodeType.TEXT_NODE) {
             text += child.textContent;
         }
 
-        if (child.rawTagName == "p") {
-            text += "\n\n";
+        if (child.nodeType == NodeType.ELEMENT_NODE) {
+            if (child.rawTagName == "p") {
+                text += "\n\n";
+            } else if (blockElements.has(child.rawTagName)) {
+                text += "\n";
+            } else if (inlineElements.has(child.rawTagName)) {
+                // pass
+            } else {
+                console.warn("htmlToTextContent: Unhandled tag:", child.rawTagName);
+            }
         }
     }
 
