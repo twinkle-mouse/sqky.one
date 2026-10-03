@@ -1,5 +1,6 @@
 ---
 import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
+import WritingControls from "@sqky-one/writing/layouts/WritingControls.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
 import { getNotesEntries } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
@@ -30,6 +31,8 @@ const { headings } = renderResult;
     </Fragment>
 
     <Fragment slot="page-title">{entry.data.title}</Fragment>
+
+    <WritingControls />
 
     <WritingContent renderResult={renderResult} />
 </WritingPage>
