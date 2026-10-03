@@ -120,6 +120,10 @@ const { Content, headings } = Astro.props.renderResult;
                 padding-bottom: 0;
             }
 
+            #content[data-collapse-manual-linebreaks="true"] {
+                white-space: normal;
+            }
+
             body[data-collapse-margins="true"] {
                 .writing {
                     padding: 0;

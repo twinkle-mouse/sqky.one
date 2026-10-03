@@ -115,6 +115,16 @@ import Section from "@sqky-one/common/layouts/Section.astro";
                 <legend>Layout stuffs:</legend>
 
                 <p>
+                    In most of my writings, I manually enter linebreaks to break up long lines, targeting a specific view width.
+                    <br />
+                    However, this might not be ideal if you are, for example, reading on mobile. You can collapse all manual linebreaks below.
+                    <br />
+                    (This does not, however, affect quotes, because they are usually intentionally formatted in a specific way.)
+                    <br />
+                    <Checkbox id="controls-layout-collapse-manual-linebreaks">Collapse manual linebreaks?</Checkbox>
+                </p>
+
+                <p>
                     On desktop view, the navigation is turned into a sidebar.
                     <br />
                     You might not want this behaviour, and you can disable it below.
@@ -602,6 +612,38 @@ import Section from "@sqky-one/common/layouts/Section.astro";
 <!-- controls: layout stuffs -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const content = document.getElementById("content")!;
+
+        {
+            const e = document.getElementById("controls-layout-collapse-manual-linebreaks")! as HTMLInputElement;
+
+            const key = "collapse-manual-linebreaks";
+
+            function set(checked: boolean) {
+                if (checked) {
+                    window.localStorage.setItem(key, "true");
+                } else {
+                    window.localStorage.removeItem(key);
+                }
+
+                content.dataset.collapseManualLinebreaks = checked.toString();
+            }
+
+            try {
+                e.checked = window.localStorage.getItem(key) == "true" || false;
+                set(e.checked);
+            } catch {
+                // ignore
+            }
+
+            e.addEventListener("input", (event) => {
+                const target = event.target;
+                if (target instanceof HTMLInputElement) {
+                    set(target.checked);
+                }
+            });
+        }
+
         {
             const e = document.getElementById("controls-layout-force-mobile")! as HTMLInputElement;
             const key = "force-mobile";
