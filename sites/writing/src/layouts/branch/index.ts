@@ -14,6 +14,7 @@ export type Branch = {
             attributes: Record<string, string>;
         }[];
     };
+    attributes?: Record<string, string>;
 };
 
 export type Continue = {

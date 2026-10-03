@@ -16,7 +16,7 @@ async function renderMdText(text: string | undefined) {
     const parsed = parse(await renderMd(text?.trim()));
     if (!parsed.firstChild) return "";
 
-    return parsed.firstChild.childNodes.toString();
+    return parsed.firstChild.childNodes.join("");
 }
 
 async function parseTangent(element: HTMLElement, name: string, idx: number) {
@@ -41,6 +41,10 @@ const elements: Element[] = [{ type: "root", name: "root" }];
 let consecutiveCount = 1;
 let currentType = "root";
 for (const element of parsedContent.children) {
+    Object.keys(element.attributes)
+        .filter((k) => k.startsWith("data-astro"))
+        .forEach((k) => element.removeAttribute(k));
+
     const type = element.rawTagName;
     if (type == "branch") {
         const choices = [];
@@ -49,6 +53,7 @@ for (const element of parsedContent.children) {
             throw Error("branch needs to have a `name` set!");
         }
         const name = `branch-${element.getAttribute("name")}`;
+        element.removeAttribute("name");
 
         for (const child of element.children) {
             if (child.rawTagName == "choice") {
@@ -94,6 +99,7 @@ for (const element of parsedContent.children) {
             data: {
                 choices,
             },
+            attributes: element.attributes,
         });
     } else if (type == "continue") {
         const text = element.innerText;
@@ -230,10 +236,10 @@ const flagsCss = flags.values().map((flag) => {
                 animation: fade-in 0.15s ease-in;
             }
 
-            .writings-branch 
+            .writings-branch
                 > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
                 ~ .branches:not(:has(
-                    > :nth-child(#{$i}) /* go to the corresponding branch */    
+                    > :nth-child(#{$i}) /* go to the corresponding branch */
                         .tangent input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
                 ))
                 + * /* unhide if either there's no tangents, or all tangents are checked */ {

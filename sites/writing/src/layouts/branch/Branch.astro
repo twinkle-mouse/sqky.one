@@ -16,7 +16,7 @@ const { element, index } = Astro.props;
         } else if (element.type == "branch") {
             return (
                 <div class="writings-branch">
-                    <ol class="choices">
+                    <ol class="choices" {...element.attributes}>
                         {element.data.choices.map((choice, idx) => {
                             return (
                                 <li>
@@ -34,7 +34,7 @@ const { element, index } = Astro.props;
                             );
                         })}
                     </ol>
-                    <div class="branches">
+                    <div class="branches" {...element.attributes}>
                         {element.data.choices.map((choice) => {
                             return <div set:html={choice.content} hidden={choice.content == ""} />;
                         })}
