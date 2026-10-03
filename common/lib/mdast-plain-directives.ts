@@ -2,15 +2,14 @@ import { defineMdastPlugin, type MdastNode, type MdastVisitorContext } from "sat
 
 type ContainerDirective = Extract<MdastNode, { type: "containerDirective" }>;
 type LeafDirective = Extract<MdastNode, { type: "leafDirective" }>;
-type TextDirective = Extract<MdastNode, { type: "textDirective" }>;
 
 export default function plugin() {
-    const visitNode = (node: Readonly<ContainerDirective | LeafDirective | TextDirective>, ctx: MdastVisitorContext) => {
+    const visitNode = (node: Readonly<ContainerDirective | LeafDirective>, ctx: MdastVisitorContext) => {
         ctx.replaceNode(node, {
             ...node,
             data: {
-                hName: node.name,
-                hProperties: { ...node.attributes, className: node.attributes?.["class"]?.split(" ") },
+                hName: node.data?.hName ?? node.name,
+                hProperties: { ...node.data?.hProperties, ...node.attributes, className: node.attributes?.["class"]?.split(" ") },
             },
         });
     };
@@ -19,7 +18,6 @@ export default function plugin() {
         name: "plain-directives",
         containerDirective: visitNode,
         leafDirective: visitNode,
-        //textDirective: visitNode,
-        // ^ don't consume textDirective because they're incredibly bad at parsing *actual* colons (like :D)
+        // don't consume textDirective because they're incredibly bad at parsing *actual* colons (like :D)
     });
 }

@@ -12,7 +12,7 @@ export type Options = {
 
 export function createMarkdownConfig(options: Options = { sectionize: { maxDepth: 6 } }): SatteriProcessorOptions {
     return {
-        mdastPlugins: [hardBreaks, preserveBlankSpace, () => sectionize(options.sectionize), plainDirectives, pronouns],
+        mdastPlugins: [hardBreaks, preserveBlankSpace, plainDirectives, () => sectionize(options.sectionize), pronouns],
         features: {
             subscript: true,
             superscript: true,
