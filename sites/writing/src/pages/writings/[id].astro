@@ -34,7 +34,7 @@ renderWritingFrontmatterMd(entry);
 
 const renderResult = await render(entry);
 const { headings } = renderResult;
-const desc = htmlToTextContent(entry.data.description).replaceAll("\n", " ").replaceAll("   ", " - ");
+const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " — ").replaceAll("\n", " ");
 ---
 
 <WritingPage pageName={`'${entry.data.title}'`} desc={desc}>

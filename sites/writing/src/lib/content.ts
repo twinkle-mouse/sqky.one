@@ -48,8 +48,7 @@ export function normalizeHtml(content: string | undefined | null) {
         .trim()
         .replaceAll("&lt;", "<") // unescape
         .replaceAll("&gt;", ">")
-        .replaceAll("\r", "") // remove \r
-        .replaceAll("\n", " "); // replace \n with a space; `mdast-hard-breaks` already converts it all to <br>
+        .replaceAll("\r", ""); // remove \r
 }
 
 export async function renderMd(content: string | undefined | null) {
