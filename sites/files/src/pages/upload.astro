@@ -73,7 +73,7 @@ import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
             if (response.status >= 200 && response.status < 300) {
                 message.innerHTML = "Successfully uploaded.";
             } else {
-                message.innerHTML = `Upload failed!<br/>Reason: ${response.status} ${response.statusText}`;
+                message.innerHTML = `Upload failed!<br>Reason: ${response.status} ${response.statusText}`;
             }
         } catch (e) {
             console.error(e);
