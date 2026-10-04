@@ -5,12 +5,14 @@ import type { HTMLAttributes } from "astro/types";
 export type Props = Omit<HTMLAttributes<"input">, "type">;
 
 const { id, ...props } = Astro.props;
+
+const slot = await Astro.slots.render("default");
 ---
 
-<input id={id} type="checkbox" {...props} />
 <label for={id}>
     <Cross class="icon" aria-hidden="true" />
-    <slot />
+    {slot.trim()}
+    <input id={id} type="checkbox" {...props} />
 </label>
 
 <style>
@@ -21,30 +23,29 @@ const { id, ...props } = Astro.props;
     }
 
     input {
-        width: 1px;
+        width: 0px;
         height: 0px;
         opacity: 0;
     }
 
     label {
-        padding-block: 0.2rem;
-        padding-inline: 0.2rem;
-        margin-block: 0.2rem;
+        padding-block: 0.125rem;
+        padding-right: 0.5rem;
     }
 
     input:hover,
-    input:hover + label,
+    label:has(> input:hover),
     input:focus-visible,
-    input:focus-visible + label {
+    label:has(> input:focus-visible) {
         color: var(--buttonHoverTextColor);
     }
 
     input:active,
-    input:active + label {
+    label:has(> input:active) {
         color: var(--buttonActiveTextColor);
     }
 
-    input:focus-visible + label {
+    label:has(> input:focus-visible) {
         outline: 2px solid var(--focusColor);
     }
 
@@ -65,19 +66,19 @@ const { id, ...props } = Astro.props;
         color: transparent;
     }
 
-    input:checked + label > .icon {
+    label:has(> input:checked) > .icon {
         background-color: var(--inputActiveBgColor);
         border-color: var(--inputActiveBorderColor);
         color: #000;
     }
 
-    input:hover + label > .icon,
-    input:focus-visible + label > .icon {
+    label:has(> input:hover) > .icon,
+    label:has(> input:focus-visible) > .icon {
         background-color: var(--inputHoverBgColor);
         border-color: var(--inputHoverBorderColor);
     }
 
-    input:active + label > .icon {
+    label:has(> input:active) > .icon {
         background-color: var(--inputActiveBgColor);
         border-color: var(--inputActiveBorderColor);
     }
