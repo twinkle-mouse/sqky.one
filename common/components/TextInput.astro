@@ -8,8 +8,8 @@ const { id, ...props } = Astro.props;
 
 <label for={id}>
     <slot />
+    <input id={id} type="text" {...props} />
 </label>
-<input id={id} type="text" {...props} />
 
 <style>
     input {
@@ -18,7 +18,12 @@ const { id, ...props } = Astro.props;
     }
 
     label {
-        margin-right: 0.6rem;
+        width: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-block: 1rem;
     }
 
     input {
