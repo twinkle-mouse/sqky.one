@@ -2,9 +2,11 @@
 import Checkbox from "@sqky-one/common/components/Checkbox.astro";
 import Details from "@sqky-one/common/components/Details.astro";
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
+import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import PublicTextFile from "@sqky-one/common/components/PublicTextFile.astro";
 import RadioInput from "@sqky-one/common/components/RadioInput.astro";
 import SearchInput from "@sqky-one/common/components/SearchInput.astro";
+import TextInput from "@sqky-one/common/components/TextInput.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import MainPage from "@sqky-one/main/layouts/MainPage.astro";
@@ -28,7 +30,15 @@ import WritingSection from "@sqky-one/writing/layouts/WritingSection.astro";
                     <button id="test-button">Submit</button>
                 </div>
                 <div>
-                    <SearchInput id="test-search-input">Lalala</SearchInput>
+                    <SearchInput id="test-search-input">Search Input Lalala</SearchInput>
+                </div>
+                <div>
+                    <TextInput id="test-text-input">Text Input Lalala</TextInput>
+                </div>
+                <div>
+                    <NumericInput id="test-numeric-input" min="12" max="28">
+                        Numeric Input Lalala
+                    </NumericInput>
                 </div>
                 <div>
                     <Checkbox id="test-checkbox1">Foobar</Checkbox>
@@ -83,7 +93,13 @@ import WritingSection from "@sqky-one/writing/layouts/WritingSection.astro";
                 </p>
 
                 <WritingSection data-section-depth="2">
-                    <h2>The Good Shit™</h2>
+                    <h2>The Good Shit™ H2</h2>
+                    <WritingSection data-section-depth="3">
+                        <h3>The Good Shit™ H3</h3>
+                        <WritingSection data-section-depth="4">
+                            <h4>The Good Shit™ H4</h4>
+                        </WritingSection>
+                    </WritingSection>
                 </WritingSection>
                 <WritingSection data-section-depth="2">
                     <h2>The Bad Shit</h2>
