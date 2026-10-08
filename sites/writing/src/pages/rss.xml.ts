@@ -1,5 +1,5 @@
 import mdx from "@astrojs/mdx/server.js";
-import rss from "@astrojs/rss";
+import rss, { type RSSFeedItem } from "@astrojs/rss";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
@@ -78,7 +78,7 @@ export async function GET(context: AstroGlobal) {
                         ...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`),
                         `<dc:modified>${entry.data.mdate || entry.data.date}</dc:modified>`,
                     ].join(""),
-                };
+                } satisfies RSSFeedItem;
             }),
         ),
     });
