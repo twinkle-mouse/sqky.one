@@ -15,6 +15,7 @@ const writings = defineCollection({
                 thumbnail: image().nullable().default(null),
                 description: z.string().nullable().default(null),
                 date: z.coerce.date().default(new Date(0)),
+                mdate: z.coerce.date().optional(),
                 authors: z.array(z.string()).default(["Stella Sparkles"]),
                 tags: z.array(z.string()).default([]),
                 cw: z.string().nullable().default(null),

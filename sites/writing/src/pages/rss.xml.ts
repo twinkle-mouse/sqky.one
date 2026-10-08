@@ -74,7 +74,10 @@ export async function GET(context: AstroGlobal) {
                     )
                         .removeWhitespace()
                         .toString(),
-                    customData: [...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`)].join(""),
+                    customData: [
+                        ...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`),
+                        `<dc:modified>${entry.data.mdate || entry.data.date}</dc:modified>`,
+                    ].join(""),
                 };
             }),
         ),

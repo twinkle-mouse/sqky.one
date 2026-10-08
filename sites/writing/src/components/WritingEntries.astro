@@ -31,14 +31,23 @@ const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
                         <a href={encodeURI(`/${entry.collection}/${entry.id}`)}>{entry.data.title}</a>
                     </h3>
 
-                    <time
-                        class="entry-date mono"
-                        datetime={entry.data.date.toISOString()}
-                        title={readableDateFmt.format(entry.data.date)}
-                        id={`${entry.id}-release-date`}
-                    >
-                        {displayDateFmt.format(entry.data.date)}
-                    </time>
+                    <div class="entry-date mono">
+                        <time datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)} id={`${entry.id}-release-date`}>
+                            {displayDateFmt.format(entry.data.date)}
+                        </time>
+                        {entry.data.mdate && (
+                            <div>
+                                Last Modified:{" "}
+                                <time
+                                    datetime={entry.data.mdate.toISOString()}
+                                    title={readableDateFmt.format(entry.data.mdate)}
+                                    id={`${entry.id}-release-date`}
+                                >
+                                    {displayDateFmt.format(entry.data.mdate)}
+                                </time>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div class="entry-desc-container">
@@ -144,7 +153,7 @@ const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" })
         .entry-header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: top;
             margin-bottom: 1rem;
         }
 
