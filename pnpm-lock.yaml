@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@astrojs/node':
-        specifier: ^11.1.6
+        specifier: ^11.1.8
         version: 11.1.13(astro@7.4.12(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.108.2)(yaml@2.9.1))
       astro-icon:
         specifier: 1.2.0
@@ -64,7 +64,7 @@ importers:
         specifier: 4.56.0
         version: 4.56.0
       astro:
-        specifier: ^7.3.5
+        specifier: ^7.4.0
         version: 7.4.12(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.108.2)(yaml@2.9.1)
       astro-compressor:
         specifier: ^2.0.1
