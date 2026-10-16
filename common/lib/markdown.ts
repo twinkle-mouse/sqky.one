@@ -5,6 +5,7 @@ import hardBreaks from "./mdast-hard-breaks";
 import plainDirectives from "./mdast-plain-directives";
 import preserveBlankSpace from "./mdast-preserve-blank-space";
 import sectionize, { type Options as SectionizeOptions } from "./mdast-sectionize";
+import textDirectivesAsPlaintext from "./mdast-text-directives-as-plaintext";
 
 export type Options = {
     sectionize: SectionizeOptions;
@@ -12,7 +13,7 @@ export type Options = {
 
 export function createMarkdownConfig(options: Options = { sectionize: { maxDepth: 6 } }): SatteriProcessorOptions {
     return {
-        mdastPlugins: [hardBreaks, preserveBlankSpace, plainDirectives, () => sectionize(options.sectionize)],
+        mdastPlugins: [hardBreaks, preserveBlankSpace, plainDirectives, () => sectionize(options.sectionize), textDirectivesAsPlaintext],
         hastPlugins: [hastCleanBreaks],
         features: {
             subscript: true,
