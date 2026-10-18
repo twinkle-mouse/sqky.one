@@ -8,7 +8,7 @@ import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
 import WritingControls from "@sqky-one/writing/layouts/WritingControls.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
-import { coverArtAlt, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
+import { coverArtAlt, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
 import * as mime from "mrmime";
 
@@ -30,24 +30,24 @@ renderWritingFrontmatterMd(entry);
 
 const renderResult = await render(entry);
 const { headings } = renderResult;
-const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " — ").replaceAll("\n", " ");
 ---
 
-<WritingPage pageName={`'${entry.data.title}'`} desc={desc}>
-    <Fragment slot="head-tags">
-        {entry.data.thumbnail && (
-            <Fragment>
-                <meta property="og:image" content={new URL(entry.data.thumbnail.src, import.meta.env.SITE)} />
-                <meta property="og:image:type" content={mime.lookup(entry.data.thumbnail.format ?? entry.data.thumbnail.src)} />
-                <meta property="og:image:width" content={entry.data.thumbnail.width.toString()} />
-                <meta property="og:image:height" content={entry.data.thumbnail.height.toString()} />
-                <meta property="og:image:alt" content={coverArtAlt(entry)} />
-
-                <meta name="twitter:card" content="summary_large_image" />
-            </Fragment>
-        )}
-    </Fragment>
-
+<WritingPage
+    pageName={entry.data.title}
+    desc={htmlToOneLinerText(entry.data.description)}
+    thumbnail={
+        entry.data.thumbnail
+            ? {
+                  src: new URL(entry.data.thumbnail.src, import.meta.env.SITE).href,
+                  alt: coverArtAlt(entry),
+                  width: entry.data.thumbnail.width,
+                  height: entry.data.thumbnail.height,
+                  type: mime.lookup(entry.data.thumbnail.format ?? entry.data.thumbnail.src),
+              }
+            : undefined
+    }
+    twitterCardType="summary_large_image"
+>
     <Fragment slot="nav:page-links">
         {headings.map((v) => (
             <li>

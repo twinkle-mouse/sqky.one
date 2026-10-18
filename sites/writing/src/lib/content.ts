@@ -16,8 +16,6 @@ const renderers = await loadRenderers([getContainerRenderer()]);
 const container = await experimental_AstroContainer.create({ renderers });
 const mdRenderer = await markdownProcessor.createRenderer({});
 
-const defaultDescription = "(no description)";
-
 function flattenTreeDepthFirst(rootNode: Node) {
     const nodes = [];
     const queue: Node[][] = [];
@@ -125,9 +123,16 @@ export function cmpEntry<T extends { data: { date: Date } }>(a: T, b: T) {
     return b.data.date.valueOf() - a.data.date.valueOf();
 }
 
-export async function renderWritingFrontmatterMd(entry: CollectionEntry<"writings">) {
-    entry.data.description = await renderMd(entry.data.description || defaultDescription);
-    entry.data.cw = entry.data.cw ? await renderMd(entry.data.cw) : null;
+export function htmlToOneLinerText(content: string) {
+    return htmlToTextContent(content).replaceAll("\n\n", " — ").replaceAll("\n", " ");
+}
+
+export async function renderWritingFrontmatterMd(entry: CollectionEntry<"writings" | "notes" | "people">) {
+    entry.data.description = await renderMd(entry.data.description);
+
+    if ("cw" in entry.data) {
+        entry.data.cw = entry.data.cw ? await renderMd(entry.data.cw) : null;
+    }
 }
 
 export async function getWritingEntries() {

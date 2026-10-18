@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { cwd } from "node:process";
 
 import mdx from "@astrojs/mdx/server.js";
-import { contentStyles, getWritingEntries, htmlToTextContent, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
+import { contentStyles, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { normalizeHtml } from "@sqky-one/writing/lib/content";
 import { siteName } from "@sqky-one/writing/lib/page";
 import { components } from "@sqky-one/writing/lib/render";
@@ -47,8 +47,6 @@ export async function GET(context: AstroGlobal) {
             props: { components },
         }),
     );
-
-    const desc = htmlToTextContent(entry.data.description).replaceAll("\n\n", " — ").replaceAll("\n", " ");
 
     const writingsOutDir = join(cwd(), "sites/writing/dist");
 
@@ -100,7 +98,7 @@ export async function GET(context: AstroGlobal) {
             title: entry.data.title,
             author: entry.data.authors.join(", "),
             publisher: siteName,
-            description: desc,
+            description: htmlToOneLinerText(entry.data.description),
             cover,
             date: entry.data.date.toISOString(),
             prependChapterTitles: false,

@@ -2,8 +2,7 @@
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
-import { renderMd } from "@sqky-one/writing/lib/content";
-import { siteDesc } from "@sqky-one/writing/lib/page";
+import { htmlToOneLinerText, renderMd, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getCollection, getEntry } from "astro:content";
 import { fetchProfileCard, renderProfileCard } from "bluesky-profile-card-embed/core";
 
@@ -18,6 +17,7 @@ const entry = await getEntry("people", id);
 if (entry === undefined) {
     return Astro.redirect("/404");
 }
+renderWritingFrontmatterMd(entry);
 
 let blueskyEmbed = null;
 if (entry.data.bluesky) {
@@ -35,7 +35,7 @@ if (entry.data.bluesky) {
 let descHtml = renderMd(entry.body);
 ---
 
-<WritingPage pageName={entry.data.name} desc={siteDesc}>
+<WritingPage pageName={entry.data.name} desc={htmlToOneLinerText(entry.data.description)}>
     <Fragment slot="page-title">Profile — {entry.data.name}</Fragment>
 
     <LargeSection>

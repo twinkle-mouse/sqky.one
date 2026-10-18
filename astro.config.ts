@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import type { AstroUserConfig } from "astro";
 import { defineConfig, fontProviders } from "astro/config";
 import type { MarkdownProcessor } from "astro/markdown";
@@ -141,6 +142,7 @@ export default defineConfig({
         icon({
             iconDir: path.join(dir, "common/icons"),
         }),
+        sitemap(),
         compressor(),
     ],
 

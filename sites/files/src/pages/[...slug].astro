@@ -87,7 +87,7 @@ function getUrl(path: string, index: number) {
 const fullUrl = `/${urlPaths.map(decodeURI).join("/")}/`.replaceAll("//", "/");
 ---
 
-<FilesArchivePage pageName=`${fullUrl}`>
+<FilesArchivePage pageName=`${fullUrl}` desc="An index of my publicly archived files.">
     <Fragment slot="page-title">Files Archive</Fragment>
 
     <Fragment slot="nav:page-links">

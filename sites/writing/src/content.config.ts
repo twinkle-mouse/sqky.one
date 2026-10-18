@@ -5,6 +5,8 @@ import { defineCollection } from "astro:content";
 
 const ROOT = "writing-entries";
 
+const defaultDescription = "(no description)";
+
 const writings = defineCollection({
     loader: glob({ pattern: "*.mdx", base: `${ROOT}/writings` }),
     schema: ({ image }) =>
@@ -13,7 +15,7 @@ const writings = defineCollection({
                 title: z.string(),
                 cover: image().nullable().default(null),
                 thumbnail: image().nullable().default(null),
-                description: z.string().nullable().default(null),
+                description: z.string().default(defaultDescription),
                 date: z.coerce.date().default(new Date(0)),
                 mdate: z.coerce.date().optional(),
                 authors: z.array(z.string()).default(["Stella Sparkles"]),
@@ -40,6 +42,7 @@ const notes = defineCollection({
     schema: z.object({
         title: z.string(),
         relations: z.record(z.string(), z.string()).default({}),
+        description: z.string().default(defaultDescription),
     }),
 });
 
@@ -48,6 +51,7 @@ const people = defineCollection({
     schema: z.object({
         name: z.string(),
         bluesky: z.string().nullable().default(null),
+        description: z.string().default(defaultDescription),
     }),
 });
 
