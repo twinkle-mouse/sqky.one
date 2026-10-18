@@ -9,24 +9,44 @@ import StarryBackground from "@sqky-one/common/components/StarryBackground.astro
 import { colorsCss } from "@sqky-one/common/lib/colors";
 import type { HTMLAttributes } from "astro/types";
 import { Font } from "astro:assets";
+import { SEO, type TwitterCardType } from "astro-seo";
+import * as mime from "mrmime";
 
 export type Props = HTMLAttributes<"main"> & {
     siteName: string;
     desc: string;
-    pageName?: string;
+    pageName: string;
+    thumbnail?: {
+        src: string;
+        alt?: string;
+        width: number;
+        height: number;
+        type?: string;
+    };
+    twitterCardType?: TwitterCardType;
 };
 
-const { siteName, pageName, desc, ...props } = Astro.props;
+const { siteName, pageName, desc: description, ...props } = Astro.props;
 
-function getTitle() {
-    if (!pageName) {
-        return `!!! ${siteName} !!!`;
-    }
+const title = `${pageName} — ${siteName}`;
 
-    return `${pageName} — ${siteName}`;
+let thumbnail;
+if (props.thumbnail) {
+    thumbnail = props.thumbnail;
+} else {
+    thumbnail = {
+        src: "/favicon_512.png",
+        width: 512,
+        height: 512,
+        alt: "A minimalist mouse icon with pink body, purple eye, and round ears, looking to the left.",
+    };
 }
 
-const title = getTitle();
+if (!thumbnail.type) {
+    thumbnail.type = mime.lookup(thumbnail.src);
+}
+
+const canonicalUrl = new URL(Astro.url.pathname + Astro.url.search, Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
@@ -34,8 +54,9 @@ const title = getTitle();
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
         <meta name="theme-color" content="#ffc2fe" />
+
+        <link rel="sitemap" href="/sitemap-index.xml" />
 
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
@@ -46,13 +67,35 @@ const title = getTitle();
         <link rel="icon" type="image/png" sizes="512x512" href="/favicon_512.png" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-        <title>{title}</title>
-        <meta name="description" content={desc} />
-
-        <meta property="og:title" content={title} />
-        <meta property="og:url" content="https://sqky.one" />
-        <meta property="og:type" content="website" />
-        <meta property="og:description" content={desc} />
+        <SEO
+            title={title}
+            description={description}
+            canonical={canonicalUrl}
+            openGraph={{
+                basic: {
+                    title: pageName,
+                    type: "website",
+                    image: thumbnail.src,
+                    url: canonicalUrl,
+                },
+                image: {
+                    alt: thumbnail.alt,
+                    width: thumbnail.width,
+                    height: thumbnail.height,
+                    type: thumbnail.type,
+                },
+                optional: {
+                    siteName,
+                },
+            }}
+            twitter={{
+                title: pageName,
+                description,
+                card: props.twitterCardType || "summary",
+                image: thumbnail.src,
+                imageAlt: thumbnail.alt,
+            }}
+        />
 
         <slot name="head-tags" />
 

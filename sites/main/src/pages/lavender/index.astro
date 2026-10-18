@@ -7,7 +7,10 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
 const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDarkLavenderOverride));
 ---
 
-<MainPage pageName="Lavender Sparkles">
+<MainPage
+    pageName="Lavender Sparkles"
+    desc="My little corner of a page on Stella’s website. I may not talk much, but I appreciate your awareness of my existence."
+>
     <Fragment slot="style-overrides">
         <style
             is:raw

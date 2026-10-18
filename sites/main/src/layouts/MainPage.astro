@@ -2,10 +2,10 @@
 import Navigation from "@sqky-one/common/components/Navigation.astro";
 import Page, { type Props as PageProps } from "@sqky-one/common/layouts/CommonPage.astro";
 
-type Props = Omit<PageProps, "siteName" | "desc">;
+type Props = Omit<PageProps, "siteName">;
 ---
 
-<Page {...Astro.props} siteName="squeaky one" desc="the mouse is squeaking at you, would you accept its request?,">
+<Page {...Astro.props} siteName="squeaky one">
     <slot slot="head-tags" name="head-tags" />
     <slot slot="style-overrides" name="style-overrides" />
 

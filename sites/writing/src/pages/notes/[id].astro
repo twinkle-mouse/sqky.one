@@ -2,7 +2,7 @@
 import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
 import WritingControls from "@sqky-one/writing/layouts/WritingControls.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
-import { getNotesEntries } from "@sqky-one/writing/lib/content";
+import { getNotesEntries, htmlToOneLinerText, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -16,12 +16,13 @@ const entry = await getEntry("notes", id);
 if (entry === undefined) {
     return Astro.redirect("/404");
 }
+renderWritingFrontmatterMd(entry);
 
 const renderResult = await render(entry);
 const { headings } = renderResult;
 ---
 
-<WritingPage pageName={`'${entry.data.title}'`} desc="">
+<WritingPage pageName={entry.data.title} desc={htmlToOneLinerText(entry.data.description)}>
     <Fragment slot="nav:page-links">
         {headings.map((v) => (
             <li>
