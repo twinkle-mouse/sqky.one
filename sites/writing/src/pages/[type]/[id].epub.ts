@@ -16,7 +16,12 @@ import sanitizeHtml from "sanitize-html";
 
 export async function getStaticPaths() {
     return (await getWritingEntries()).map((entry) => {
-        return { params: { id: entry.id } };
+        let type = "writings";
+        if (entry.data.wip) {
+            type = "wip";
+        }
+
+        return { params: { id: entry.id, type } };
     });
 }
 
