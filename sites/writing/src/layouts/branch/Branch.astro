@@ -27,7 +27,7 @@ const { element, index } = Astro.props;
                                             type="radio"
                                             name={element.name}
                                             value={`${idx + 1}`}
-                                            data-flag={choice.flag}
+                                            data-flag={choice.flags.join(" ")}
                                         />
                                     </label>
                                 </li>

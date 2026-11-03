@@ -65,7 +65,7 @@ for (const element of parsedContent.children) {
                 const choice = {
                     text,
                     content: "",
-                    flag: child.getAttribute("flag"),
+                    flags: child.getAttribute("flag")?.split(" ") ?? [],
                     attributes: (() => {
                         child.removeAttribute("flag");
                         child.removeAttribute("text");
@@ -85,8 +85,8 @@ for (const element of parsedContent.children) {
                     }
                 }
 
-                if (choice.flag) {
-                    flags.add(choice.flag);
+                for (const flag of choice.flags) {
+                    flags.add(flag);
                 }
 
                 choices.push(choice);
@@ -146,11 +146,13 @@ for (const element of parsedContent.children) {
     }
 }
 
-const flagsCss = flags.values().map((flag) => {
-    return `
-#content:not(:has(input[data-flag~="${flag}"]:checked)) .show-with-flag[data-flag~="${flag}"] { display: none; }
+const flagsCss =
+    "#content .show-with-flag { display: none; }" +
+    flags.values().map((flag) => {
+        return `
+#content:has(input[data-flag~="${flag}"]:checked) .show-with-flag[data-flag~="${flag}"] { display: unset; }
 #content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] { display: none; }`;
-});
+    });
 ---
 
 <div class="writings-branches">

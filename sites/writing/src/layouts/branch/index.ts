@@ -10,7 +10,7 @@ export type Branch = {
         choices: {
             text: string;
             content: string;
-            flag: string | undefined;
+            flags: string[];
             attributes: Record<string, string>;
         }[];
     };
