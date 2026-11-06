@@ -3,10 +3,9 @@ import { type Element } from ".";
 
 export type Props = {
     element: Element;
-    index: number;
 };
 
-const { element, index } = Astro.props;
+const { element } = Astro.props;
 ---
 
 <>
@@ -15,15 +14,15 @@ const { element, index } = Astro.props;
             return <slot />;
         } else if (element.type == "branch") {
             return (
-                <div class="writings-branch">
-                    <ol class="choices" {...element.attributes}>
+                <div class:list={["writings-branch", element.class]} {...element.attributes}>
+                    <ol class="choices">
                         {element.data.choices.map((choice, idx) => {
                             return (
                                 <li>
-                                    <label {...choice.attributes} for={`${element.name}-${index}-${idx}`}>
+                                    <label {...choice.attributes} for={`${element.name}-${idx + 1}`}>
                                         <Fragment set:html={choice.text} />
                                         <input
-                                            id={`${element.name}-${index}-${idx}`}
+                                            id={`${element.name}-${idx + 1}`}
                                             type="radio"
                                             name={element.name}
                                             value={`${idx + 1}`}
@@ -34,7 +33,7 @@ const { element, index } = Astro.props;
                             );
                         })}
                     </ol>
-                    <div class="branches" {...element.attributes}>
+                    <div class="branches">
                         {element.data.choices.map((choice) => {
                             return <div set:html={choice.content} hidden={choice.content == ""} />;
                         })}
@@ -47,36 +46,34 @@ const { element, index } = Astro.props;
             );
         } else if (element.type == "continue") {
             return (
-                <>
-                    <div class="check continue">
-                        <label for={`${element.name}-${index}`}>
-                            {element.data.text}
-                            <input id={`${element.name}-${index}`} type="checkbox" name={element.name} />
-                        </label>
-                    </div>
+                <div class:list={["check continue", element.class]} data-required="true">
+                    <label for={element.name}>
+                        {element.data.text}
+                        <input id={element.name} type="checkbox" name={element.name} />
+                    </label>
 
                     <div>
                         <slot />
                     </div>
-                </>
+                </div>
             );
         } else if (element.type == "tangent") {
             return (
                 <>
-                    <div {...element.data.attributes}>
-                        <div class="check tangent">
-                            <label for={`${element.name}-${index}`}>
-                                {element.data.text}
-                                <input id={`${element.name}-${index}`} type="checkbox" name={element.name} />
-                            </label>
-                        </div>
+                    <div class:list={["check tangent", element.class]} data-required={element.required ? "true" : undefined} {...element.data.attributes}>
+                        <label for={element.name}>
+                            {!element.required && <span class="sr-only">Optional text: </span>}
+                            {element.data.text}
+                            <input id={element.name} type="checkbox" name={element.name} data-flag={element.data.flags.join(" ")} />
+                        </label>
 
                         <div set:html={element.data.content} />
                     </div>
+
                     <slot />
                 </>
             );
-        } else if (element.type == "text") {
+        } else if (element.type == "raw") {
             return (
                 <>
                     <Fragment set:html={element.data.html} />

@@ -4,8 +4,8 @@ import { experimental_AstroContainer } from "astro/container";
 import parse, { HTMLElement } from "node-html-parser";
 
 import { type Element, type Tangent } from "./branch";
-import Branch from "./branch/Branch.astro";
-import Branches from "./branch/Branches.astro";
+import BranchElement from "./branch/Branch.astro";
+import BranchesElement from "./branch/Branches.astro";
 
 const container = await experimental_AstroContainer.create();
 
@@ -19,27 +19,33 @@ async function renderMdText(text: string | undefined) {
     return parsed.firstChild.childNodes.join("");
 }
 
-async function parseTangent(element: HTMLElement, name: string, idx: number) {
+async function parseTangent(element: HTMLElement, branchName: string, index: number): Promise<Tangent> {
     return {
         type: "tangent",
-        name: `${name}-tangent-${idx + 1}`,
+        name: `${branchName}-tangent-${index}`,
+        class: element.getAttribute("class") ?? "",
+        required: !(element.getAttribute("optional") != undefined),
         data: {
             text: await renderMdText(element.getAttribute("text")),
+            content: element.children.join(""),
+            flags: element.getAttribute("flag")?.split(" ") ?? [],
             attributes: (() => {
+                element.removeAttribute("class");
+                element.removeAttribute("flag");
                 element.removeAttribute("text");
-
+                element.removeAttribute("optional");
                 return element.attributes;
             })(),
-            content: element.children.join(""),
         },
-    } as Tangent;
+    };
 }
 
 const flags = new Set();
 const elements: Element[] = [{ type: "root", name: "root" }];
 
-let consecutiveCount = 1;
-let currentType = "root";
+const defaultCounts = { tangent: 1 };
+let currentParentName = elements[0].name;
+let counts = { ...defaultCounts };
 for (const element of parsedContent.children) {
     Object.keys(element.attributes)
         .filter((k) => k.startsWith("data-astro"))
@@ -54,6 +60,8 @@ for (const element of parsedContent.children) {
         }
         const name = `branch-${element.getAttribute("name")}`;
         element.removeAttribute("name");
+        const clazz = element.getAttribute("class") ?? "";
+        element.removeAttribute("class");
 
         for (const child of element.children) {
             if (child.rawTagName == "choice") {
@@ -72,14 +80,16 @@ for (const element of parsedContent.children) {
                         return child.attributes;
                     })(),
                 };
+                currentParentName = `${name}-${choices.length + 1}`;
+                counts = { ...defaultCounts };
 
                 for (const inner of child.children) {
                     if (inner.rawTagName == "tangent") {
-                        const index = tangents.length;
-                        const tangent = await parseTangent(inner, name, index);
+                        const tangent = await parseTangent(inner, currentParentName, counts.tangent);
                         tangents.push(tangent.name);
+                        counts.tangent += 1;
 
-                        choice.content += await container.renderToString(Branch, { props: { element: tangent, index } });
+                        choice.content += await container.renderToString(BranchElement, { props: { element: tangent } });
                     } else {
                         choice.content += inner.toString();
                     }
@@ -96,67 +106,59 @@ for (const element of parsedContent.children) {
         elements.push({
             type,
             name,
+            class: clazz,
             data: {
                 choices,
             },
             attributes: element.attributes,
         });
+        currentParentName = name;
+        counts = { ...defaultCounts };
     } else if (type == "continue") {
+        const name = `${currentParentName}-continue`;
+        const clazz = element.getAttribute("class") ?? "";
+        element.removeAttribute("class");
         const text = element.innerText;
         elements.push({
             type,
-            name: `${elements.at(-1)!.name}-continue-${consecutiveCount}`,
+            name,
+            class: clazz,
             data: {
                 text: (text === "true" ? undefined : await renderMdText(text)) || "Continue",
             },
         });
-
-        if (currentType != type) {
-            consecutiveCount = 1;
-            currentType = elements.at(-1)!.type;
-        } else {
-            consecutiveCount += 1;
-        }
+        currentParentName = name;
+        counts = { ...defaultCounts };
     } else if (type == "tangent") {
-        elements.push(await parseTangent(element, elements.at(-1)!.name, consecutiveCount));
-
-        if (currentType != type) {
-            consecutiveCount = 1;
-            currentType = elements.at(-1)!.type;
-        } else {
-            consecutiveCount += 1;
+        // set optional by default for freestanding tangents
+        if (element.getAttribute("optional") == undefined) {
+            element.setAttribute("optional", "");
         }
+        elements.push(await parseTangent(element, currentParentName, counts.tangent));
+        counts.tangent += 1;
     } else {
-        const type = "text";
-
         elements.push({
-            type,
-            name: `${elements.at(-1)!.name}-content-${consecutiveCount}`,
+            type: "raw",
+            name: `${currentParentName}-content`,
             data: {
                 html: element.toString(),
             },
         });
-
-        if (currentType != type) {
-            consecutiveCount = 1;
-            currentType = elements.at(-1)!.type;
-        } else {
-            consecutiveCount += 1;
-        }
     }
 }
 
-const flagsCss =
-    "#content .show-with-flag { display: none; }" +
-    flags.values().map((flag) => {
+const flagsCss = [
+    "#content .show-with-flag { display: none; }",
+    ...flags.values().map((flag) => {
         return `
 #content:has(input[data-flag~="${flag}"]:checked) .show-with-flag[data-flag~="${flag}"] { display: unset; }
 #content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] { display: none; }`;
-    });
+    }),
+];
 ---
 
 <div class="writings-branches">
-    <Branches elements={elements} />
+    <BranchesElement elements={elements} />
 </div>
 
 <style is:global lang="scss">
@@ -242,7 +244,7 @@ const flagsCss =
                 > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
                 ~ .branches:not(:has(
                     > :nth-child(#{$i}) /* go to the corresponding branch */
-                        .tangent input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                        .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
                 ))
                 + * /* unhide if either there's no tangents, or all tangents are checked */ {
                 display: block;
@@ -254,13 +256,21 @@ const flagsCss =
             margin-block: 1.1em;
         }
 
+        .check[data-required="true"]::before {
+            content: "↳" / "" !important;
+            color: var(--focusColor);
+        }
+
+        .check:not([data-required="true"])::before {
+            content: "⋯" / "" !important;
+            color: var(--linkColor);
+        }
+
         .check::before {
-            content: "→" / "" !important;
             display: inline-block;
 
             font-size: 1.2em;
             font-family: var(--sans);
-            color: var(--focusColor);
 
             margin-left: 0.25em;
             margin-right: 0.5em;
@@ -276,12 +286,16 @@ const flagsCss =
             text-wrap: wrap;
         }
 
-        .check + * {
+        .check > label:has(> input:not(:checked)) + * {
             display: none;
         }
 
-        .check:has(input:checked) + * {
-            display: block;
+        .check[data-required="true"]:has(> label > input:not(:checked)) ~ * {
+            display: none;
+        }
+
+        .check > label:has(> input:checked) + *,
+        .check:has(> label > input:checked) ~ * {
             animation: fade-in 0.15s ease-in;
         }
 

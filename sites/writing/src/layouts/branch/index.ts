@@ -6,6 +6,7 @@ export type Root = {
 export type Branch = {
     type: "branch";
     name: string;
+    class: string;
     data: {
         choices: {
             text: string;
@@ -20,6 +21,7 @@ export type Branch = {
 export type Continue = {
     type: "continue";
     name: string;
+    class: string;
     data: {
         text: string;
     };
@@ -28,19 +30,22 @@ export type Continue = {
 export type Tangent = {
     type: "tangent";
     name: string;
+    class: string;
+    required: boolean;
     data: {
         text: string;
-        attributes: Record<string, string>;
         content: string;
+        flags: string[];
+        attributes: Record<string, string>;
     };
 };
 
-export type Text = {
-    type: "text";
+export type Raw = {
+    type: "raw";
     name: string;
     data: {
         html: string;
     };
 };
 
-export type Element = Root | Branch | Continue | Tangent | Text;
+export type Element = Root | Branch | Continue | Tangent | Raw;
