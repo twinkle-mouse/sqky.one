@@ -70,6 +70,7 @@
                 }
 
                 open() {
+                    clearInterval(this.intervalId);
                     this.intervalId = setInterval(() => {
                         if (this.ws?.readyState === WebSocket.OPEN) {
                             this.update(this.ws, this.data);
