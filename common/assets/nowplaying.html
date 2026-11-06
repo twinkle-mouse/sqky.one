@@ -8,6 +8,8 @@
             const ADDRESS = "wss://home.sqky.one/mpris-nowplaying/";
 
             function connect(wrapper) {
+                if (wrapper.ws) return;
+
                 const ws = new WebSocket(ADDRESS);
 
                 ws.onopen = (e) => {
