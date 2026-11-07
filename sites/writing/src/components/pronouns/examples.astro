@@ -8,36 +8,32 @@ import PronomialP from "./cases/pronomial-p.astro";
 import Reflexive from "./cases/reflexive.astro";
 ---
 
-<Details summary="Pronouns example">
+<Details summary="Pronouns example" data-word-count-ignore="true">
     <div>
         <p>
-            I think
+            I think{" "}
             <em>
-                {" "}
                 <Nominative />
             </em>{" "}
             lived here.
         </p>
         <p>
-            I told
+            I told{" "}
             <em>
-                {" "}
                 <Accusative />
             </em>{" "}
             about this.
         </p>
         <p>
-            I like
+            I like{" "}
             <em>
-                {" "}
                 <PronomialP />
             </em>{" "}
             art.
         </p>
         <p>
-            I enjoy this passion of
+            I enjoy this passion of{" "}
             <em>
-                {" "}
                 <PredicativeP />
             </em>
             .
@@ -52,7 +48,7 @@ import Reflexive from "./cases/reflexive.astro";
     </div>
 </Details>
 
-<p>
+<p data-word-count-ignore="true">
     <em>
         (Note: the pronouns system cannot automatically change conjugations (<u>she likes this</u> versus <u>they like this</u>). Please excuse any grammatical
         errors.)
