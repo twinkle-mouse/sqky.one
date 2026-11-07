@@ -28,10 +28,8 @@ async function parseTangent(element: HTMLElement, branchName: string, index: num
         data: {
             text: await renderMdText(element.getAttribute("text")),
             content: element.children.join(""),
-            flags: element.getAttribute("flag")?.split(" ") ?? [],
             attributes: (() => {
                 element.removeAttribute("class");
-                element.removeAttribute("flag");
                 element.removeAttribute("text");
                 element.removeAttribute("optional");
                 return element.attributes;
@@ -295,7 +293,7 @@ const flagsCss = [
         }
 
         .check > label:has(> input:checked) + *,
-        .check:has(> label > input:checked) ~ * {
+        .check[data-required="true"]:has(> label > input:checked) ~ * {
             animation: fade-in 0.15s ease-in;
         }
 

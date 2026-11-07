@@ -64,7 +64,7 @@ const { element } = Astro.props;
                         <label for={element.name}>
                             {!element.required && <span class="sr-only">Optional text: </span>}
                             {element.data.text}
-                            <input id={element.name} type="checkbox" name={element.name} data-flag={element.data.flags.join(" ")} />
+                            <input id={element.name} type="checkbox" name={element.name} />
                         </label>
 
                         <div set:html={element.data.content} />

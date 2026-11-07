@@ -35,7 +35,6 @@ export type Tangent = {
     data: {
         text: string;
         content: string;
-        flags: string[];
         attributes: Record<string, string>;
     };
 };
