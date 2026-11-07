@@ -14,7 +14,7 @@ const { element } = Astro.props;
             return <slot />;
         } else if (element.type == "branch") {
             return (
-                <div class:list={["writings-branch", element.class]} {...element.attributes}>
+                <div class:list={["writing-branch", element.class]} {...element.attributes}>
                     <ol class="choices">
                         {element.data.choices.map((choice, idx) => {
                             return (
@@ -39,9 +39,7 @@ const { element } = Astro.props;
                         })}
                     </div>
 
-                    <div>
-                        <slot />
-                    </div>
+                    <slot />
                 </div>
             );
         } else if (element.type == "continue") {
@@ -84,9 +82,3 @@ const { element } = Astro.props;
         }
     })()}
 </>
-
-<style>
-    li {
-        display: contents;
-    }
-</style>

@@ -146,160 +146,174 @@ for (const element of parsedContent.children) {
 }
 
 const flagsCss = [
-    "#content .show-with-flag { display: none; }",
+    "#content .show-with-flag { display: none; --display-override: none; }",
     ...flags.values().map((flag) => {
         return `
-#content:has(input[data-flag~="${flag}"]:checked) .show-with-flag[data-flag~="${flag}"] { display: unset; }
-#content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] { display: none; }`;
+#content:has(input[data-flag~="${flag}"]:checked) .show-with-flag[data-flag~="${flag}"] { display: unset; --display-override: unset; }
+#content:has(input[data-flag~="${flag}"]:checked) .hide-with-flag[data-flag~="${flag}"] { display: none; --display-override: none; }
+#content:not(:has(input[data-flag~="${flag}"]:checked)) .writing-branch:has(> .choices .show-with-flag[data-flag~="${flag}"] > input:checked) { --display-override: none; }
+#content:has(input[data-flag~="${flag}"]:checked) .writing-branch:has(> .choices .hide-with-flag[data-flag~="${flag}"] > input:checked) { --display-override: none; }
+`;
     }),
 ];
 ---
 
-<div class="writings-branches">
+<div class="writing-branches">
     <BranchesElement elements={elements} />
 </div>
 
 <style is:global lang="scss">
-    .writings-branches {
-        .choices,
-        .check {
-            input:focus-visible {
-                all: unset;
+    @property --display-override {
+        syntax: "*";
+        inherits: true;
+    }
+
+    #content {
+        .writing-branches {
+            .choices > li >,
+            .check > {
+                label {
+                    display: inline-block;
+                    font-family: var(--mono);
+                    text-decoration: none;
+                    color: var(--buttonTextColor);
+
+                    user-select: none;
+                    cursor: pointer;
+
+                    padding-block: 0.25em;
+                    padding-inline: 0.2em;
+                    border-radius: 0.3em;
+
+                    background-color: var(--buttonBgColor);
+                    border: 2px solid var(--buttonBorderColor);
+                }
+
+                label > input:focus-visible {
+                    all: unset;
+                }
+
+                label:hover,
+                label:has(> input:focus-visible) {
+                    color: var(--buttonHoverTextColor);
+                    background-color: var(--buttonHoverBgColor);
+                    border-color: var(--buttonHoverBorderColor);
+                }
+
+                label:has(> input:focus-visible) {
+                    outline: 2px solid var(--focusColor);
+                }
+
+                label:has(> input:checked) {
+                    color: var(--buttonActiveTextColor);
+                    background-color: var(--buttonActiveBgColor);
+                    border-color: var(--buttonActiveBorderColor);
+
+                    text-decoration: underline;
+                    text-underline-offset: 15%;
+                }
             }
 
-            label {
+            .choices {
+                display: flex;
+                border: 1px solid var(--separatorColor);
+
+                font-size: 0.8em;
+                margin-bottom: 0.2em;
+                padding-inline: 0.75em;
+                padding-block: 1em;
+
+                gap: 0.6em;
+                flex-wrap: wrap;
+            }
+
+            .choices > li {
+                display: contents;
+            }
+
+            .choices > * {
+                flex: none;
+                max-width: 40%;
+                height: fit-content;
+            }
+
+            .branches > *,
+            .branches ~ * {
+                display: none;
+            }
+
+            @for $i from 1 through 32 {
+                .writing-branch
+                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                        ~ .branches /* go to branches */
+                            > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
+                    display: var(--display-override, block);
+                    animation: fade-in 0.15s ease-in;
+                }
+
+                .writing-branch
+                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                        ~ .branches:not(:has(
+                            > :nth-child(#{$i}) /* go to the corresponding branch */
+                                .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                        ))
+                        ~ * /* unhide if either there's no tangents, or all tangents are checked */ {
+                    display: var(--display-override, block);
+                    animation: fade-in 0.15s ease-in;
+                }
+            }
+
+            .check {
+                margin-block: 1.1em;
+            }
+
+            .check[data-required="true"]::before {
+                content: "↳" / "" !important;
+                color: var(--focusColor);
+            }
+
+            .check:not([data-required="true"])::before {
+                content: "⋯" / "" !important;
+                color: var(--linkColor);
+            }
+
+            .check::before {
                 display: inline-block;
-                font-family: var(--mono);
-                text-decoration: none;
-                color: var(--buttonTextColor);
 
-                user-select: none;
-                cursor: pointer;
+                font-size: 1.2em;
+                font-family: var(--sans);
 
-                padding-block: 0.25em;
-                padding-inline: 0.2em;
-                border-radius: 0.3em;
-
-                background-color: var(--buttonBgColor);
-                border: 2px solid var(--buttonBorderColor);
+                margin-left: 0.25em;
+                margin-right: 0.5em;
+                padding-top: 0.2rlh;
+                vertical-align: top;
             }
 
-            label:hover,
-            label:has(> input:focus-visible) {
-                color: var(--buttonHoverTextColor);
-                background-color: var(--buttonHoverBgColor);
-                border-color: var(--buttonHoverBorderColor);
+            .check {
+                text-wrap: nowrap;
             }
 
-            label:has(> input:focus-visible) {
-                outline: 2px solid var(--focusColor);
+            .check > label {
+                text-wrap: wrap;
             }
 
-            label:has(> input:checked) {
-                color: var(--buttonActiveTextColor);
-                background-color: var(--buttonActiveBgColor);
-                border-color: var(--buttonActiveBorderColor);
-
-                text-decoration: underline;
-                text-underline-offset: 15%;
+            .check > label:has(> input:not(:checked)) + * {
+                display: none;
             }
-        }
 
-        .choices {
-            display: flex;
-            border: 1px solid var(--separatorColor);
+            .check[data-required="true"]:has(> label > input:not(:checked)) ~ * {
+                display: none;
+            }
 
-            font-size: 0.8em;
-            margin-bottom: 0.2em;
-            padding-inline: 0.75em;
-            padding-block: 1em;
-
-            gap: 0.6em;
-            flex-wrap: wrap;
-        }
-
-        .choices > * {
-            flex: none;
-            max-width: 40%;
-            height: fit-content;
-        }
-
-        .branches > *,
-        .branches + * {
-            display: none;
-        }
-
-        @for $i from 1 through 32 {
-            .writings-branch
-                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                ~ .branches /* go to branches */
-                    > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
-                display: block;
+            .check > label:has(> input:checked) + *,
+            .check[data-required="true"]:has(> label > input:checked) ~ * {
                 animation: fade-in 0.15s ease-in;
             }
 
-            .writings-branch
-                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                ~ .branches:not(:has(
-                    > :nth-child(#{$i}) /* go to the corresponding branch */
-                        .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
-                ))
-                + * /* unhide if either there's no tangents, or all tangents are checked */ {
-                display: block;
-                animation: fade-in 0.15s ease-in;
-            }
-        }
-
-        .check {
-            margin-block: 1.1em;
-        }
-
-        .check[data-required="true"]::before {
-            content: "↳" / "" !important;
-            color: var(--focusColor);
-        }
-
-        .check:not([data-required="true"])::before {
-            content: "⋯" / "" !important;
-            color: var(--linkColor);
-        }
-
-        .check::before {
-            display: inline-block;
-
-            font-size: 1.2em;
-            font-family: var(--sans);
-
-            margin-left: 0.25em;
-            margin-right: 0.5em;
-            padding-top: 0.2rlh;
-            vertical-align: top;
-        }
-
-        .check {
-            text-wrap: nowrap;
-        }
-
-        .check > label {
-            text-wrap: wrap;
-        }
-
-        .check > label:has(> input:not(:checked)) + * {
-            display: none;
-        }
-
-        .check[data-required="true"]:has(> label > input:not(:checked)) ~ * {
-            display: none;
-        }
-
-        .check > label:has(> input:checked) + *,
-        .check[data-required="true"]:has(> label > input:checked) ~ * {
-            animation: fade-in 0.15s ease-in;
-        }
-
-        @media (prefers-reduced-motion) {
-            * {
-                animation: none !important;
+            @media (prefers-reduced-motion) {
+                * {
+                    animation: none !important;
+                }
             }
         }
     }
