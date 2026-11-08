@@ -216,9 +216,7 @@ export const semanticColorsDark = {
 };
 
 export const semanticUtilsDark = {
-    cardBoxShadow: `
-        0px 0px 6px 4px rgba(0, 0, 0, 0.5),
-        inset 0px 0px 4px 3px rgba(60, 60, 90, 0.3)`,
+    cardBoxShadow: "0px 0px 6px 4px rgba(0, 0, 0, 0.5), inset 0px 0px 4px 3px rgba(60, 60, 90, 0.3)",
 };
 
 export const semanticColorsDarkLavenderOverride = {
@@ -230,11 +228,11 @@ export const semanticColorsDarkLavenderOverride = {
 };
 
 export function colorsToCssStyle(colors: [string, string][]) {
-    return colors.map(([key, value]) => `--${key}:${new Color(value).toString()};`).join("\n");
+    return colors.map(([key, value]) => `\t--${key}: ${new Color(value).toString()};`).join("\n");
 }
 
 export function stylesToCssStyle(colors: [string, string][]) {
-    return colors.map(([key, value]) => `--${key}:${value};`).join("\n");
+    return colors.map(([key, value]) => `\t--${key}: ${value};`).join("\n");
 }
 
 export const colorsCss = (() => {
@@ -244,6 +242,5 @@ export const colorsCss = (() => {
 
     return `${colorsStyle}
 ${semanticColorsDarkStyle}
-${semanticUtilsDarkStyle}
-`;
+${semanticUtilsDarkStyle}`;
 })();
