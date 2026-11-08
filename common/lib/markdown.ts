@@ -20,7 +20,7 @@ export function createMarkdownConfig(options: Options = { sectionize: { maxDepth
             hardBreaks,
             preserveBlankSpace,
             plainDirectives,
-            () => sectionize(options.sectionize),
+            sectionize(options.sectionize),
             pronouns,
             textDirectivesAsPlaintext,
         ],

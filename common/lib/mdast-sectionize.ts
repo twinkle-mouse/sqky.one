@@ -1,14 +1,14 @@
 /// https://github.com/baka-gourd/satteri-plugins/blob/main/packages/satteri-sectionize/src/index.ts
 
-import { defineMdastPlugin, type MdastNode } from "satteri";
+import type { Heading } from "mdast";
+import { type Custom, defineMdastPlugin, type MdastNode } from "satteri";
 
 export interface Options {
     /** Deepest heading level that starts a section. @default 6 */
     maxDepth?: number;
 }
 
-type HeadingNode = Extract<MdastNode, { type: "heading" }>;
-type ContainerDirectiveNode = Extract<MdastNode, { type: "containerDirective" }>;
+type SectionContent = MdastNode | Custom;
 
 export interface SectionData {
     hName: "section";
@@ -18,39 +18,39 @@ export interface SectionData {
     depth: number;
 }
 
-export type SectionNode = ContainerDirectiveNode & {
-    name: "section";
+export type SectionNode = Custom & {
+    type: "section";
     data: SectionData;
+    children: SectionContent[];
 };
 
 interface OpenSection {
     depth: number;
-    children: MdastNode[];
+    children: SectionContent[];
 }
 
 const defaultMaxDepth = 6;
 
-function isSectionHeading(node: Readonly<MdastNode>, maxDepth: number): node is Readonly<HeadingNode> {
+function isSectionHeading(node: Readonly<MdastNode>, maxDepth: number): node is Readonly<Heading> {
     return node.type === "heading" && node.depth <= maxDepth;
 }
 
-function createSection(depth: number, children: MdastNode[]): SectionNode {
+function createSection(depth: number, children: SectionContent[]): SectionNode {
     return {
-        type: "containerDirective",
-        name: "section",
+        type: "section",
         data: { hName: "section", hProperties: { "data-section-depth": depth }, depth },
-        children: children as SectionNode["children"],
+        children: children,
     };
 }
 
-export function isSectionNode(node: Readonly<MdastNode>): node is Readonly<SectionNode> {
+export function isSectionNode(node: Readonly<MdastNode | Custom>): node is Readonly<SectionNode> {
     const data = node.data as Record<string, unknown> | undefined;
 
-    return node.type === "containerDirective" && node.name === "section" && data?.hName === "section" && typeof data.depth === "number";
+    return node.type === "section" && data?.hName === "section" && typeof data.depth === "number";
 }
 
-function sectionizeChildren(children: readonly MdastNode[], maxDepth: number): MdastNode[] {
-    const result: MdastNode[] = [];
+function sectionizeChildren(children: readonly MdastNode[], maxDepth: number): SectionContent[] {
+    const result: SectionContent[] = [];
     const sections: OpenSection[] = [];
 
     for (const child of children) {
@@ -69,7 +69,7 @@ function sectionizeChildren(children: readonly MdastNode[], maxDepth: number): M
             sections.pop();
         }
 
-        const sectionChildren: MdastNode[] = [child];
+        const sectionChildren: SectionContent[] = [child];
         (sections.at(-1)?.children ?? result).push(createSection(child.depth, sectionChildren));
         sections.push({ depth: child.depth, children: sectionChildren });
     }

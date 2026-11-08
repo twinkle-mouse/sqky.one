@@ -41,43 +41,16 @@ export default function plugin() {
 
     return defineMdastPlugin({
         name: "preserve-blank-space",
-
-        paragraph: visitNode,
-        heading: visitNode,
-        thematicBreak: visitNode,
-        blockquote: visitNode,
-        list: visitNode,
-        listItem: visitNode,
-        html: visitNode,
-        code: visitNode,
-        definition: visitNode,
-        emphasis: visitNode,
-        strong: visitNode,
-        inlineCode: visitNode,
-        break: visitNode,
-        link: visitNode,
-        image: visitNode,
-        linkReference: visitNode,
-        imageReference: visitNode,
-        footnoteDefinition: visitNode,
-        footnoteReference: visitNode,
-        table: visitNode,
-        tableRow: visitNode,
-        tableCell: visitNode,
-        delete: visitNode,
-        yaml: visitNode,
-        toml: visitNode,
-        math: visitNode,
-        inlineMath: visitNode,
-        containerDirective: visitNode,
-        leafDirective: visitNode,
-        textDirective: visitNode,
-        superscript: visitNode,
-        subscript: visitNode,
-        mdxJsxFlowElement: visitNode,
-        mdxJsxTextElement: visitNode,
-        mdxFlowExpression: visitNode,
-        mdxTextExpression: visitNode,
-        mdxjsEsm: visitNode,
+        options: { position: true },
+        after(root, ctx) {
+            const children = [];
+            children.push(...root.children);
+            for (const child of children) {
+                visitNode(child, ctx);
+                if ("children" in child) {
+                    children.push(...child.children);
+                }
+            }
+        },
     });
 }

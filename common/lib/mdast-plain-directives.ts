@@ -1,21 +1,25 @@
-import { defineMdastPlugin, type MdastNode, type MdastVisitorContext } from "satteri";
+import { type ContainerDirective, type Custom, defineMdastPlugin, type LeafDirective, type MdastVisitorContext } from "satteri";
 
-type ContainerDirective = Extract<MdastNode, { type: "containerDirective" }>;
-type LeafDirective = Extract<MdastNode, { type: "leafDirective" }>;
+function createNode(node: Readonly<ContainerDirective | LeafDirective>): Custom {
+    return {
+        type: node.name,
+        children: node.children,
+        data: {
+            hName: node.name,
+            hProperties: { ...node.attributes, className: node.attributes?.["class"]?.split(" ") },
+        },
+        position: node.position,
+    };
+}
 
 export default function plugin() {
     const visitNode = (node: Readonly<ContainerDirective | LeafDirective>, ctx: MdastVisitorContext) => {
-        ctx.replaceNode(node, {
-            ...node,
-            data: {
-                hName: node.data?.hName ?? node.name,
-                hProperties: { ...node.data?.hProperties, ...node.attributes, className: node.attributes?.["class"]?.split(" ") },
-            },
-        });
+        ctx.replaceNode(node, createNode(node));
     };
 
     return defineMdastPlugin({
         name: "plain-directives",
+        options: { position: true },
         containerDirective: visitNode,
         leafDirective: visitNode,
         // don't consume textDirective because they're incredibly bad at parsing *actual* colons (like :D)
