@@ -1,6 +1,7 @@
 import type { SatteriProcessorOptions } from "@astrojs/markdown-satteri";
 
 import hastCleanBreaks from "./hast-clean-breaks";
+import fileImportDirective from "./mdast-file-import-directive";
 import hardBreaks from "./mdast-hard-breaks";
 import plainDirectives from "./mdast-plain-directives";
 import preserveBlankSpace from "./mdast-preserve-blank-space";
@@ -13,7 +14,7 @@ export type Options = {
 
 export function createMarkdownConfig(options: Options = { sectionize: { maxDepth: 6 } }): SatteriProcessorOptions {
     return {
-        mdastPlugins: [hardBreaks, preserveBlankSpace, plainDirectives, () => sectionize(options.sectionize), textDirectivesAsPlaintext],
+        mdastPlugins: [fileImportDirective, hardBreaks, preserveBlankSpace, plainDirectives, () => sectionize(options.sectionize), textDirectivesAsPlaintext],
         hastPlugins: [hastCleanBreaks],
         features: {
             subscript: true,
