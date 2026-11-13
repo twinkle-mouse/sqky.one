@@ -2,13 +2,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cwd } from "node:process";
 
-import mdx from "@astrojs/mdx/server.js";
-import { contentStyles, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
+import { container, contentStyles, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { normalizeHtml } from "@sqky-one/writing/lib/content";
 import { siteName } from "@sqky-one/writing/lib/page";
 import { components } from "@sqky-one/writing/lib/render";
 import type { AstroGlobal } from "astro";
-import { experimental_AstroContainer } from "astro/container";
 import { getEntry, render } from "astro:content";
 import { type Chapter, EPub } from "epub-gen-memory";
 import parse from "node-html-parser";
@@ -24,9 +22,6 @@ export async function getStaticPaths() {
         return { params: { id: entry.id, type } };
     });
 }
-
-const container = await experimental_AstroContainer.create();
-container.addServerRenderer({ renderer: mdx });
 
 export async function GET(context: AstroGlobal) {
     const { id } = context.params;

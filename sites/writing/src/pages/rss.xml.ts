@@ -1,18 +1,13 @@
-import mdx from "@astrojs/mdx/server.js";
 import rss, { type RSSFeedItem } from "@astrojs/rss";
 import Picture from "@sqky-one/common/components/Picture.astro";
 import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
-import { coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
+import { container, coverArtAlt, getValidWritingEntires, htmlToTextContent, normalizeHtml, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
 import { siteDesc, siteName } from "@sqky-one/writing/lib/page";
 import { components } from "@sqky-one/writing/lib/render";
 import type { AstroGlobal } from "astro";
-import { experimental_AstroContainer } from "astro/container";
 import { render } from "astro:content";
 import parse from "node-html-parser";
 import sanitizeHtml from "sanitize-html";
-
-const container = await experimental_AstroContainer.create();
-container.addServerRenderer({ renderer: mdx });
 
 export async function GET(context: AstroGlobal) {
     const writings = await getValidWritingEntires();

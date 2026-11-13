@@ -1,19 +1,18 @@
 import { readFile } from "node:fs/promises";
 
 import { getContainerRenderer } from "@astrojs/mdx/container-renderer";
+import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
 import { count } from "@wordpress/wordcount";
 import { experimental_AstroContainer } from "astro/container";
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { loadRenderers } from "astro:container";
-import { type CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, type RenderResult } from "astro:content";
 import { Node, NodeType, parse } from "node-html-parser";
 import sanitizeHtml, { type Attributes, type IOptions as SanitizeHtmlConfig, type Tag } from "sanitize-html";
 
 import { markdownProcessor } from "../../astro.config";
-import { components } from "./render";
 
 const renderers = await loadRenderers([getContainerRenderer()]);
-const container = await experimental_AstroContainer.create({ renderers });
+export const container = await experimental_AstroContainer.create({ renderers });
 const mdRenderer = await markdownProcessor.createRenderer({});
 
 function flattenTreeDepthFirst(rootNode: Node) {
@@ -69,6 +68,7 @@ export function htmlToTextContent(content: string | undefined | null) {
         "li",
         "aside",
         "blockquote",
+        "article",
         "section",
         "figure",
         "figcaption",
@@ -113,8 +113,8 @@ export function htmlToTextContent(content: string | undefined | null) {
     return text.trim();
 }
 
-export async function countWords(Content: AstroComponentFactory) {
-    const body = htmlToTextContent(await container.renderToString(Content, { props: { components } }));
+export async function countWords(renderResult: RenderResult) {
+    const body = htmlToTextContent(await container.renderToString(WritingContent, { props: { renderResult } }));
 
     return count(body, "words", {});
 }

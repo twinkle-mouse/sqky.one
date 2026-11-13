@@ -11,9 +11,9 @@ type Props = {
 const { entry, class: cls, ...props } = Astro.props;
 
 const entries = Object.entries(entry.data.relations);
-const { Content } = await render(entry);
+const renderResult = await render(entry);
 
-const wordCount = countWords(Content);
+const wordCount = countWords(renderResult);
 ---
 
 <table {...props} class:list={[cls, "entry-details"]}>
