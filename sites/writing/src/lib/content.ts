@@ -83,6 +83,7 @@ export function htmlToTextContent(content: string | undefined | null) {
         "style",
         "script",
         "svg",
+        "template",
         "details", // don't include details because it's most likely stuff that's not supposed to be "source text"
     ];
 
