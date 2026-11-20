@@ -63,7 +63,7 @@ export async function GET(context: AstroGlobal) {
                     categories: entry.data.tags,
                     link: `/writings/${entry.id}/`,
                     content: parse(
-                        sanitizeHtml(warningPretext + details + coverArt + content, {
+                        sanitizeHtml(coverArt + warningPretext + details + content, {
                             ...sanitizeHtmlConfig({ site: context.site }),
                         }),
                     )
