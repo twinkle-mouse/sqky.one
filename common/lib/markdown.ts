@@ -6,6 +6,7 @@ import hardBreaks from "./mdast-hard-breaks";
 import plainDirectives from "./mdast-plain-directives";
 import preserveBlankSpace from "./mdast-preserve-blank-space";
 import pronouns from "./mdast-pronouns";
+import sampDirective from "./mdast-samp-directive";
 import sectionize, { type Options as SectionizeOptions } from "./mdast-sectionize";
 import textDirectivesAsPlaintext from "./mdast-text-directives-as-plaintext";
 
@@ -19,6 +20,7 @@ export function createMarkdownConfig(options: Options = { sectionize: { maxDepth
             fileImportDirective,
             hardBreaks,
             preserveBlankSpace,
+            sampDirective,
             plainDirectives,
             sectionize(options.sectionize),
             pronouns,
