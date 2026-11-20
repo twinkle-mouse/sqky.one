@@ -19,6 +19,7 @@ export async function GET(context: AstroGlobal) {
         xmlns: {
             atom: "http://www.w3.org/2005/Atom",
             dc: "http://purl.org/dc/elements/1.1/",
+            dcterms: "http://purl.org/dc/terms/",
         },
         customData: [
             `<atom:link href="${new URL("rss.xml", context.site)}" rel="self" type="application/rss+xml" />`,
@@ -71,7 +72,7 @@ export async function GET(context: AstroGlobal) {
                         .toString(),
                     customData: [
                         ...entry.data.authors.map((author) => `<dc:creator>${author}</dc:creator>`),
-                        `<dc:modified>${entry.data.mdate || entry.data.date}</dc:modified>`,
+                        `<dcterms:modified>${(entry.data.mdate || entry.data.date).toISOString()}</dcterms:modified>`,
                     ].join(""),
                 } satisfies RSSFeedItem;
             }),
