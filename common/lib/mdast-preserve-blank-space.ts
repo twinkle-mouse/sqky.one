@@ -1,5 +1,5 @@
-import type { Node, Nodes, Parents } from "mdast";
-import { defineMdastPlugin, type MdastContent, type MdastVisitorContext } from "satteri";
+import type { Node, Nodes, Paragraph, Parents } from "mdast";
+import { defineMdastPlugin, type MdastVisitorContext } from "satteri";
 
 function preserve(ctx: MdastVisitorContext, node: Readonly<Node>, parent: Readonly<Parents> | undefined, index: number | undefined) {
     if (index === undefined || parent === undefined) return;
@@ -19,7 +19,7 @@ function preserve(ctx: MdastVisitorContext, node: Readonly<Node>, parent: Readon
         const toAdd = [];
 
         for (let i = 0; i < diff; i++) {
-            const p: MdastContent = {
+            const p: Paragraph = {
                 type: "paragraph",
                 children: [{ type: "break" }],
             };
