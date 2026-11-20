@@ -2,9 +2,7 @@ import { readFile } from "node:fs/promises";
 import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { defineMdastPlugin, type MdastNode, type MdastVisitorContext } from "satteri";
-
-type LeafDirective = Extract<MdastNode, { type: "leafDirective" }>;
+import { defineMdastPlugin, type LeafDirective, type MdastVisitorContext } from "satteri";
 
 export default function plugin() {
     const visitNode = async (node: Readonly<LeafDirective>, ctx: MdastVisitorContext) => {

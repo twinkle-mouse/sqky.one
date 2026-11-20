@@ -1,6 +1,4 @@
-import { defineMdastPlugin, type MdastNode, type MdastVisitorContext } from "satteri";
-
-type TextDirective = Extract<MdastNode, { type: "textDirective" }>;
+import { defineMdastPlugin, type MdastVisitorContext, type TextDirective } from "satteri";
 
 export default function plugin() {
     return defineMdastPlugin({
