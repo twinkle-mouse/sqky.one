@@ -24,6 +24,14 @@ export async function GET(context: AstroGlobal) {
         customData: [
             `<atom:link href="${new URL("rss.xml", context.site)}" rel="self" type="application/rss+xml" />`,
             "<webMaster>twinkle@sqky.one (Stella Sparkles)</webMaster>",
+            `<pubDate>${writings
+                .map((entry) => entry.data.date)
+                .reduce((a, b) => (a > b ? a : b))
+                .toUTCString()}</pubDate>`,
+            `<lastBuildDate>${writings
+                .map((entry) => entry.data.mdate || entry.data.date)
+                .reduce((a, b) => (a > b ? a : b))
+                .toUTCString()}</lastBuildDate>`,
         ].join(""),
         items: await Promise.all(
             writings.map(async (entry) => {
