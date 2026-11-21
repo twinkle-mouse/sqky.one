@@ -101,7 +101,7 @@ const { headings } = renderResult;
                 <i>Information</i>
             </h2>
 
-            <WritingDetails entry={entry} />
+            <WritingDetails entry={entry} isInList={false} />
         </Section>
 
         {entry.data.cover && <Picture class="cover-art-img" src={entry.data.cover} alt={coverArtAlt(entry)} pictureAttributes={{ class: "cover-art" }} />}

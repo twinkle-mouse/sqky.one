@@ -1,14 +1,15 @@
 ---
 import Details from "@sqky-one/common/components/Details.astro";
-import { countWords } from "@sqky-one/writing/lib/content";
+import { countWords, displayDateFmt, readableDateFmt } from "@sqky-one/writing/lib/content";
 import type { HTMLAttributes } from "astro/types";
 import { type CollectionEntry, render } from "astro:content";
 
 type Props = {
     entry: CollectionEntry<"writings">;
+    isInList: boolean;
 } & HTMLAttributes<"table">;
 
-const { entry, class: cls, ...props } = Astro.props;
+const { entry, class: cls, isInList, ...props } = Astro.props;
 
 const entries = Object.entries(entry.data.relations);
 const renderResult = await render(entry);
@@ -18,6 +19,30 @@ const wordCount = countWords(renderResult);
 
 <table {...props} class:list={[cls, "entry-details"]}>
     <tbody>
+        {!isInList && (
+            <>
+                <tr>
+                    <th scope="row">Published Date</th>
+                    <td>
+                        <time datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)}>
+                            {displayDateFmt.format(entry.data.date)}
+                        </time>
+                    </td>
+                </tr>
+
+                {entry.data.mdate && (
+                    <tr>
+                        <th scope="row">Modified Date</th>
+                        <td>
+                            <time datetime={entry.data.mdate.toISOString()} title={readableDateFmt.format(entry.data.mdate)}>
+                                {displayDateFmt.format(entry.data.mdate)}
+                            </time>
+                        </td>
+                    </tr>
+                )}
+            </>
+        )}
+
         <tr>
             <th scope="row">Authors</th>
             <td>{entry.data.authors.join(", ")}</td>
