@@ -27,7 +27,7 @@ function preserve(ctx: MdastVisitorContext, node: Readonly<Node>, parent: Readon
             toAdd.push(p);
         }
 
-        ctx.insertChildAt(parent, prevIndex + 1, toAdd);
+        ctx.insertChildAt(parent, index, toAdd);
     }
 }
 
