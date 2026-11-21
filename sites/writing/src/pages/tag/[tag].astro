@@ -16,7 +16,7 @@ const { tag } = Astro.params;
 const entries = (await getWritingEntries()).filter((entry) => entry.data.tags.includes(tag));
 ---
 
-<WritingPage pageName=`Tag View - '${tag}'` desc="">
+<WritingPage pageName={`Tag View - '${tag}'`} desc="">
     <Fragment slot="page-title">
         Entires tagged '<i>{tag}</i>'
     </Fragment>
