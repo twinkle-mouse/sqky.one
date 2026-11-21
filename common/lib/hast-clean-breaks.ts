@@ -29,6 +29,11 @@ export default function plugin() {
             {
                 filter: [],
                 visit(node, ctx) {
+                    // if frontmatter specifies hard-breaks: true, then skip processing entirely.
+                    if (ctx.data.astro?.frontmatter["hard-breaks"] === true) {
+                        return;
+                    }
+
                     // check validity
                     {
                         let parent: Readonly<Parents> | undefined = ctx.parent(node);
