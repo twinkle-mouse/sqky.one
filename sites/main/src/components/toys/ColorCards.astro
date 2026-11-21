@@ -403,8 +403,8 @@ import ColorCard from "./ColorCard.astro";
 
                     if (state.lastTime > 0) {
                         const dT = (time - state.lastTime) / 1000.0;
-                        const mass = 0.9;
-                        const stiffness = 90;
+                        const mass = 1.2;
+                        const stiffness = 70;
                         const damping = 8;
 
                         const x = springStep(state.currentPos.x, state.currentVel.x, targetPos.x, mass, stiffness, damping, dT);
@@ -426,7 +426,7 @@ import ColorCard from "./ColorCard.astro";
                     if (state.stopping) {
                         const diff = targetPos.sub(state.currentPos);
 
-                        if (Math.abs(diff.x) < 0.25 && Math.abs(diff.y) < 0.25) {
+                        if (Math.abs(diff.x) < 1.0 && Math.abs(diff.y) < 1.0) {
                             state.draggingElement?.remove();
                             if (state.draggedElement) {
                                 delete state.draggedElement.dataset.dragging;
