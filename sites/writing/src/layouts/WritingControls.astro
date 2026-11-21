@@ -5,6 +5,13 @@ import NumericInput from "@sqky-one/common/components/NumericInput.astro";
 import RadioInput from "@sqky-one/common/components/RadioInput.astro";
 import TextInput from "@sqky-one/common/components/TextInput.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
+import ExampleWriting from "@sqky-one/writing/components/ExampleWriting.mdx";
+
+export type Props = {
+    showExample?: boolean;
+};
+
+const { showExample = false } = Astro.props;
 ---
 
 <Section class="js-necessary">
@@ -146,6 +153,28 @@ import Section from "@sqky-one/common/layouts/Section.astro";
             </div>
         </div>
     </Details>
+
+    {showExample && (
+        <>
+            <hr />
+            <p>
+                <i>Below is a preview for the control settings.</i>
+                <br />
+                <i>Note that the settings are saved as you are editing, this is simply for convenience.</i>
+            </p>
+            <Details summary="Example Writing">
+                <div>
+                    <div class="example-writing">
+                        <div id="content">
+                            <Section>
+                                <ExampleWriting />
+                            </Section>
+                        </div>
+                    </div>
+                </div>
+            </Details>
+        </>
+    )}
 </Section>
 
 <style>
@@ -187,6 +216,14 @@ import Section from "@sqky-one/common/layouts/Section.astro";
             flex: none;
             width: 100%;
         }
+    }
+
+    .example-writing {
+        overflow: auto;
+        max-width: 540px;
+        max-height: 350px;
+        margin-block: 0.4rem;
+        margin-inline: auto;
     }
 </style>
 
