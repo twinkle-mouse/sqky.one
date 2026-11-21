@@ -15,6 +15,13 @@ export type SampNode = Custom & {
 
 function wrapInSamp(paragraph: Paragraph, ctx: MdastVisitorContext) {
     for (const content of paragraph.children) {
+        // replace breaks as hard breaks without wrapping them in <samp>
+        // replace it with a "mdxJsxTextElement" instead of a normal break to prevent further processing by other plugins
+        if (content.type == "break" || (content.type == "text" && (content.value == "\n" || content.value == "\r" || content.value == "\r\n"))) {
+            ctx.replaceNode(content, { type: "mdxJsxTextElement", name: "br", attributes: [], children: [] });
+            continue;
+        }
+
         const sampNode: SampNode = {
             type: "samp",
             data: { hName: "samp" },
