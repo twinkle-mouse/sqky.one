@@ -43,12 +43,12 @@ export default function plugin() {
         name: "preserve-blank-space",
         options: { position: true },
         after(root, ctx) {
-            const children = [];
-            children.push(...root.children);
-            for (const child of children) {
-                visitNode(child, ctx);
-                if ("children" in child) {
-                    children.push(...child.children);
+            const nodes = [];
+            nodes.push(...root.children);
+            for (const node of nodes) {
+                visitNode(node, ctx);
+                if ("children" in node) {
+                    nodes.push(...node.children);
                 }
             }
         },
