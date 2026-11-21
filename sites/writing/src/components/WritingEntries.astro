@@ -30,7 +30,7 @@ type Props = {
                         <a href={encodeURI(`/${entry.collection}/${entry.id}`)}>{entry.data.title}</a>
                     </h3>
 
-                    <div class="entry-date mono">
+                    <div class="entry-date">
                         {
                             <div id={`${entry.id}-release-date`}>
                                 Published{" "}
@@ -181,12 +181,20 @@ type Props = {
         .entry-date {
             width: max-content;
             margin-left: 0.7rem;
+            margin-top: 0.2rem;
 
             text-align: right;
             text-wrap: nowrap;
 
             font-size: 0.8rem;
-            color: var(--slate200);
+            color: var(--babypink100);
+            font-family: var(--mono);
+        }
+
+        .entry-date time {
+            vertical-align: top;
+            font-size: 0.7rem;
+            color: var(--lavender200);
         }
 
         .entry-details {
