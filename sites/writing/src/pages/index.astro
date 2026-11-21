@@ -5,7 +5,9 @@ import SearchInput from "@sqky-one/common/components/SearchInput.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
+import Welcome from "@sqky-one/writing/components/Welcome.mdx";
 import WritingEntries from "@sqky-one/writing/components/WritingEntries.astro";
+import WritingControls from "@sqky-one/writing/layouts/WritingControls.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
 import { getAllTags, getValidWritingEntires } from "@sqky-one/writing/lib/content";
 import { siteDesc } from "@sqky-one/writing/lib/page";
@@ -35,58 +37,48 @@ const tags = await getAllTags();
             }
         </style>
 
-        <EmojiWrapper>
-            <Section>
-                <h2>Welcome!</h2>
+        <Section>
+            <EmojiWrapper>
+                <Welcome />
+            </EmojiWrapper>
+        </Section>
 
-                <p>
-                    In this glimmering library, we tell the stories of the stars in your heart,
-                    <br />
-                    we sing the lyrics of the twinkles in your eyes,
-                    <br />
-                    and we hurt, we cry, we live, we love—and we hope to make you feel a little less lonely.
-                </p>
+        <Section>
+            <h2>
+                <i>Entry Filters</i>
+            </h2>
 
-                <p>
-                    Most works here are created by <em>Stella Sparkles</em>, though you may occasionally see others on here.
-                    <br />
-                    If you have any thoughts, please <a href="https://sqky.one/#contacts">reach out</a>!
-                    <br />
-                    We're always <em>ecstatic</em> to hear your thoughts.
-                    <br />
-                    <small>
-                        (P.S. If you have any suggestions for the content warnings, please <i>please</i> reach out.)
-                    </small>
-                </p>
+            <p>
+                <i>Entries are tagged to the best of my organisation. You can filter the entries by their tags in the menu below.</i>
+                <br />
+                <i>If you have any suggestions for tags, please let me know!</i>
+            </p>
 
-                <section>
-                    <h3>Entry Filters</h3>
+            <Details summary="List of all tags">
+                <div>
+                    <div class="js-necessary">
+                        <SearchInput
+                            id="writings-tags-search-input"
+                            class="search-input"
+                            data-search-target="writings-tags"
+                            data-search-values={JSON.stringify(tags.map(([key]) => key))}
+                        >
+                            Search tags by name:
+                        </SearchInput>
+                    </div>
 
-                    <Details summary="List of all tags">
-                        <div>
-                            <div class="js-necessary">
-                                <SearchInput
-                                    id="writings-tags-search-input"
-                                    class="search-input"
-                                    data-search-target="writings-tags"
-                                    data-search-values={JSON.stringify(tags.map(([key]) => key))}
-                                >
-                                    Search tags by name:
-                                </SearchInput>
-                            </div>
+                    <ul id="writings-tags">
+                        {tags.map(([tag, count]) => (
+                            <li data-search-value={tag}>
+                                <a href={encodeURI(`/tag/${tag}`)}>{tag}</a> ({count})
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </Details>
+        </Section>
 
-                            <ul id="writings-tags">
-                                {tags.map(([tag, count]) => (
-                                    <li data-search-value={tag}>
-                                        <a href={encodeURI(`/tag/${tag}`)}>{tag}</a> ({count})
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </Details>
-                </section>
-            </Section>
-        </EmojiWrapper>
+        <WritingControls />
     </LargeSection>
 
     <LargeSection>
