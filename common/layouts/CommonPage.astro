@@ -47,6 +47,8 @@ if (!thumbnail.type) {
 }
 
 const canonicalUrl = new URL(Astro.url.pathname + Astro.url.search, Astro.site ?? Astro.url);
+
+const footer = await Astro.slots.render("page-footer");
 ---
 
 <!doctype html>
@@ -145,39 +147,47 @@ ${colorsCss}
             </main>
         </div>
 
+        {footer && (
+            <footer>
+                <Fragment set:html={footer} />
+            </footer>
+        )}
+
         <div id="popout-fakeroot"></div>
     </body>
 </html>
 
 <style is:global>
-    #site {
-        width: 100%;
+    body {
+        #site {
+            width: 100%;
 
-        display: flex;
+            display: flex;
 
-        padding-inline: calc(max(100dvw - 800px, 1rem) / 5);
-    }
+            padding-inline: calc(max(100dvw - 800px, 1rem) / 5);
+        }
 
-    main {
-        padding-block: 1rem;
+        #maincontent {
+            /* navbar sidebar size */
+            width: calc(100% - (320px + 1.75rem));
 
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-    }
+            padding-top: 1rem;
 
-    main {
-        /* navbar sidebar size */
-        width: calc(100% - (320px + 1.75rem));
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+        }
     }
 
     @media (max-width: 1300px) {
-        #site {
-            flex-direction: column;
-        }
+        body {
+            #site {
+                flex-direction: column;
+            }
 
-        main {
-            width: 100%;
+            #maincontent {
+                width: 100%;
+            }
         }
     }
 
@@ -186,7 +196,7 @@ ${colorsCss}
             flex-direction: column;
         }
 
-        main {
+        #maincontent {
             width: 100%;
         }
     }
@@ -198,22 +208,70 @@ ${colorsCss}
             padding-inline: 3px;
         }
 
-        main {
+        #maincontent {
             width: 100%;
         }
+    }
+
+    /* apply either to */
+    #site:not(:has(~ footer)) #maincontent,
+    footer {
+        padding-bottom: 1rem;
+    }
+
+    #page-title {
+        text-align: center;
+
+        margin-top: 0.2em;
+        padding-bottom: 0.6em;
+        margin-bottom: 0.4em;
+
+        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.4);
+    }
+
+    #page-title::before {
+        content: "“" / "";
+        margin-left: 0.2em;
+    }
+
+    #page-title::after {
+        content: "”" / "";
+        margin-right: 0.2em;
+    }
+
+    #popout-fakeroot {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: 0;
+        margin: 0;
+
+        width: 100%;
+        height: 100%;
+
+        overflow: clip;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    #popout-fakeroot > * {
+        text-rendering: optimizeLegibility;
+        will-change: transform;
+
+        pointer-events: auto;
+        user-select: none;
+    }
+
+    #popout-fakeroot::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        display: block;
     }
 </style>
 
 <style is:global>
-    .sr-only {
-        position: absolute;
-        left: -10000px;
-        top: auto;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-    }
-
     :focus-visible {
         outline: 3px groove var(--focusColor);
     }
@@ -240,22 +298,6 @@ ${colorsCss}
 
     body {
         position: relative;
-    }
-
-    .sans {
-        font-family: var(--sans);
-    }
-
-    .serif {
-        font-family: var(--serif);
-    }
-
-    .mono {
-        font-family: var(--mono);
-    }
-
-    .text-center {
-        text-align: center;
     }
 
     h1,
@@ -689,25 +731,28 @@ ${colorsCss}
         margin-bottom: 0;
         padding-bottom: 0;
     }
+</style>
 
-    #page-title {
-        text-align: center;
-
-        margin-top: 0.2em;
-        padding-bottom: 0.6em;
-        margin-bottom: 0.4em;
-
-        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.4);
+<style is:global>
+    .sr-only {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
     }
 
-    #page-title::before {
-        content: "“" / "";
-        margin-left: 0.2em;
+    .sans {
+        font-family: var(--sans);
     }
 
-    #page-title::after {
-        content: "”" / "";
-        margin-right: 0.2em;
+    .serif {
+        font-family: var(--serif);
+    }
+
+    .mono {
+        font-family: var(--mono);
     }
 
     .animation-rotate {
@@ -721,47 +766,8 @@ ${colorsCss}
         }
     }
 
-    #popout-fakeroot {
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        padding: 0;
-        margin: 0;
-
-        width: 100%;
-        height: 100%;
-
-        overflow: clip;
-        pointer-events: none;
-        user-select: none;
-    }
-
-    #popout-fakeroot > * {
-        text-rendering: optimizeLegibility;
-        will-change: transform;
-
-        pointer-events: auto;
-        user-select: none;
-    }
-
-    #popout-fakeroot::before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-
-    .cursor-grab,
-    #popout-fakeroot:has(> .cursor-grab)::before {
-        cursor: grab !important;
-        pointer-events: auto;
-    }
-
-    .cursor-grabbing,
-    #popout-fakeroot:has(> .cursor-grabbing)::before {
-        cursor: grabbing !important;
-        pointer-events: auto;
+    .text-center {
+        text-align: center;
     }
 
     .text-trans,
@@ -810,5 +816,17 @@ ${colorsCss}
 
     .text-agere {
         background-image: linear-gradient(-45deg, #fff, #fff 25%, #fdc1c8 25%, #fdc1c8 50%, #afe1fd 50%, #afe1fd 75%, #fcf77c 75%, #fcf77c);
+    }
+
+    .cursor-grab,
+    #popout-fakeroot:has(> .cursor-grab)::before {
+        cursor: grab !important;
+        pointer-events: auto;
+    }
+
+    .cursor-grabbing,
+    #popout-fakeroot:has(> .cursor-grabbing)::before {
+        cursor: grabbing !important;
+        pointer-events: auto;
     }
 </style>

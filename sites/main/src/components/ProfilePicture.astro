@@ -45,16 +45,20 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         height: min-content;
 
         margin: 0.5rem;
-        padding: 0.75rem;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+        padding-inline: 0.8rem;
         border: 1px solid var(--headingColor);
 
         text-align: center;
     }
 
     .pfp {
-        width: 250px;
-        padding: 0.5rem;
-        padding-top: 1.25rem;
+        width: max-content;
+
+        padding-top: 1rem;
+        padding-bottom: 1.8rem;
+        padding-inline: 0.6rem;
 
         margin-inline: auto;
 
@@ -64,37 +68,58 @@ import Picture from "@sqky-one/common/components/Picture.astro";
     .pfp-image-container {
         position: relative;
 
-        width: 150px;
+        max-width: 160px;
         height: auto;
 
         margin-inline: auto;
 
-        animation: wobble 0.45s infinite alternate cubic-bezier(0.65, 0, 0.35, 1);
+        image-rendering: smooth;
+
+        animation: wobble 0.4s infinite alternate cubic-bezier(0.65, 0, 0.35, 1);
+        transition: filter 0.07s cubic-bezier(0.32, 0.24, 0.11, 0.78);
+    }
+
+    .pfp-image-container[data-clicked="true"] {
+        filter: brightness(110%) saturate(145%);
+    }
+
+    .pfp-image {
+        filter: /*
+    */ brightness(calc(100% * var(--brighten, 1))) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, var(--glow-alpha, 0)) -1px -1px) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, var(--glow-alpha, 0)) 1px -1px) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, var(--glow-alpha, 0)) -1px 1px) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, var(--glow-alpha, 0)) 1px 1px) /*
+
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, calc(var(--glow-alpha, 0) * 0.85)) 0px 0px calc(1.5px * var(--glow-size, 1))) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, calc(var(--glow-alpha, 0) * 0.6)) 0px 0px calc(2px * var(--glow-size, 1))) /*
+    */ drop-shadow(hsla(60, calc(100% * var(--glow-sat, 0)), 85%, calc(var(--glow-alpha, 0) * 0.6)) 0px 0px calc(3.5px * var(--glow-size, 1))) /*
+    */ blur(calc(1px * var(--blur, 0)));
     }
 
     @media (prefers-reduced-motion) {
-        .pfp-image-container {
-            animation: none;
+        .pfp-image-container,
+        .pfp-image {
+            transition: none !important;
+            filter: none !important;
+            animation: none !important;
         }
     }
 
     .pfp-caption {
         display: block;
         width: 100%;
-        text-wrap: wrap;
 
-        padding-top: 0.8rem;
         margin-inline: auto;
     }
 
     @media (max-width: 440px) {
         .pfp {
-            scale: 0.8;
-            padding: 0;
+            padding-block: 1rem;
         }
 
-        .pfp-caption {
-            padding-top: 0;
+        .pfp-image-container {
+            max-width: 128px;
         }
     }
 
@@ -103,7 +128,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         user-select: none;
         touch-action: none;
 
-        background-color: var(--sectionBgColor);
+        background-color: transparent;
         color: transparent;
 
         width: 100%;
@@ -160,32 +185,66 @@ import Picture from "@sqky-one/common/components/Picture.astro";
 </style>
 
 <script>
-    const url = "/assets/squeak.ogg";
+    const brightenVar = "--brighten";
+    const glowSaturationVar = "--glow-sat";
+    const glowAlphaVar = "--glow-alpha";
+    const glowSizeVar = "--glow-size";
+    const blurVar = "--blur";
 
-    const context = new AudioContext({ latencyHint: "interactive" });
-    const audioBuffer = await fetch(url)
-        .then((res) => res.arrayBuffer())
-        .then((buffer) => context.decodeAudioData(buffer));
+    let count = 0;
+    let resting = true;
+    const FALLOFF_TIME = 350;
+    const EXP_FALLOFF_TIME = 1400;
+    const CLICKING_TIME = 110;
 
-    const play = () => {
+    let lastTime = 0;
+    let lastClickTime = 0;
+
+    let audio: { context: AudioContext; squeakSfx: AudioBuffer } | undefined = undefined;
+    async function init() {
+        const squeakSfxUrl = "/assets/squeak.ogg";
+
+        const context = new AudioContext({ latencyHint: "interactive" });
+        const squeakSfx = await fetch(squeakSfxUrl)
+            .then((res) => res.arrayBuffer())
+            .then((buffer) => context.decodeAudioData(buffer));
+
+        return { context, squeakSfx };
+    }
+    async function getAudio() {
+        if (audio) {
+            return audio;
+        } else {
+            audio = await init();
+            return audio;
+        }
+    }
+
+    const play = async () => {
+        const { context, squeakSfx } = await getAudio();
+
         const source = context.createBufferSource();
-        source.buffer = audioBuffer;
+        source.buffer = squeakSfx;
         source.onended = () => {
             source.disconnect();
         };
 
         source.connect(context.destination);
         source.start();
+
+        count++;
+        lastClickTime = lastTime;
+        resting = false;
     };
 
-    document.querySelectorAll<HTMLElement>(".pfp-image, .ear-left, .ear-right").forEach((element) => {
+    document.querySelectorAll<HTMLElement>(".pfp").forEach((element) => {
         element.style.cursor = "pointer";
         element.role = "button";
 
         element.addEventListener("click", play);
     });
 
-    document.querySelectorAll<HTMLElement>(".pfp-image").forEach((element) => {
+    document.querySelectorAll<HTMLElement>(".pfp-image-container").forEach((element) => {
         element.tabIndex = 0;
 
         const disallowedKeys = ["Tab", "Arrow", "Escape"];
@@ -196,5 +255,88 @@ import Picture from "@sqky-one/common/components/Picture.astro";
                 event.preventDefault();
             }
         });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const images = document.querySelectorAll<HTMLElement>(".pfp-image-container");
+        let dT = 0;
+        let dTClick = 0;
+
+        const animate = (time: DOMHighResTimeStamp) => {
+            if (lastTime) {
+                dT = time - lastTime;
+            }
+            if (lastClickTime) {
+                dTClick = time - lastClickTime;
+            }
+
+            if (lastClickTime) {
+                for (const image of images) {
+                    image.dataset.clicked = (dTClick < CLICKING_TIME).toString();
+                }
+            }
+
+            if (!resting) {
+                if (lastClickTime && dTClick > EXP_FALLOFF_TIME && count > 20) {
+                    count -= count * 0.0065 * (dT / 16.66);
+                }
+
+                if (lastTime) {
+                    count = Math.max(0, count - dT / FALLOFF_TIME);
+                }
+            }
+
+            if (count < 0.01) {
+                count = 0.0;
+                if (!resting) {
+                    resting = true;
+                    for (const image of images) {
+                        try {
+                            image.getAnimations()[0].updatePlaybackRate(1);
+                        } catch {
+                            /* empty */
+                        }
+                        image.style.removeProperty(brightenVar);
+                        image.style.removeProperty(glowSaturationVar);
+                        image.style.removeProperty(glowAlphaVar);
+                        image.style.removeProperty(glowSizeVar);
+                        image.style.removeProperty(blurVar);
+                    }
+                }
+            }
+
+            if (!resting) {
+                const v = 1.9;
+                const r = 4.7;
+                const a = 9.5;
+                const x = count / 80;
+                const p = Math.pow(r * x, v);
+                const speed = Math.max(1, 2 + (p - a) / (p + a));
+
+                const brighten = Math.max(1, Math.min(Math.pow(speed, 0.2), 1.25));
+                const glowSaturation = Math.max(0, Math.min(Math.pow(speed, 0.75) - 1.0, 1.0));
+                const glowAlpha = Math.max(0, Math.min(Math.pow(speed, 1.15) - 1.0, 0.6));
+                const glowSize = Math.max(1, Math.min(Math.pow(speed, 2.4) - 2.5, 8));
+                const blur = Math.max(0, Math.min(Math.pow(speed, 1.15) - 2.3, 1.4));
+
+                for (const image of images) {
+                    try {
+                        image.getAnimations()[0].updatePlaybackRate(speed);
+                    } catch {
+                        /* empty */
+                    }
+                    image.style.setProperty(brightenVar, brighten.toString());
+                    image.style.setProperty(glowSaturationVar, glowSaturation.toString());
+                    image.style.setProperty(glowAlphaVar, glowAlpha.toString());
+                    image.style.setProperty(glowSizeVar, glowSize.toString());
+                    image.style.setProperty(blurVar, blur.toString());
+                }
+            }
+
+            lastTime = time;
+            window.requestAnimationFrame(animate);
+        };
+
+        window.requestAnimationFrame(animate);
     });
 </script>

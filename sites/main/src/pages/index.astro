@@ -62,8 +62,10 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
                 </Section>
             </div>
         </LargeSection>
+    </EmojiWrapper>
 
-        <footer>
+    <Fragment slot="page-footer">
+        <EmojiWrapper>
             <div class="motto-container">
                 <p class="motto">forgive don't forget</p>
             </div>
@@ -78,13 +80,12 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
 
             <style>
                 .motto-container {
-                    padding-inline: 1rem;
                     overflow: auto;
                 }
 
                 .motto {
-                    --stroke-color: var(--slate600);
-                    --glow-color: #ffffffaa;
+                    --stroke-color: #3d377c;
+                    --glow-color: #dfcaff88;
 
                     text-shadow:
                         var(--stroke-color) 4px 0px 0px,
@@ -113,16 +114,17 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
                         var(--stroke-color) 3.44477px -2.03312px 0px,
                         var(--stroke-color) 3.84068px -1.11766px 0px,
                         var(--stroke-color) 3.9978px -0.132717px 0px,
-                        var(--glow-color) 0px 0px 10px,
-                        var(--glow-color) 0px 0px 20px;
+                        var(--glow-color) 0px 0px 12px,
+                        var(--glow-color) 0px 0px 28px;
                     text-wrap: nowrap;
 
                     display: block;
                     width: fit-content;
-                    margin-inline: auto;
 
                     font-size: 2.7rem;
                     font-weight: bold;
+                    margin-block: 0.75em;
+                    margin-inline: auto;
 
                     animation: motto-colors 5s linear infinite;
                 }
@@ -135,12 +137,14 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
 
                 .motto::before {
                     content: "«" / "";
-                    margin-inline: 0.4em;
+                    margin-left: 0.1em;
+                    margin-right: 0.4em;
                 }
 
                 .motto::after {
                     content: "»" / "";
-                    margin-inline: 0.4em;
+                    margin-left: 0.4em;
+                    margin-right: 0.1em;
                 }
 
                 @media (max-width: 620px) {
@@ -190,6 +194,6 @@ import MainPage from "@sqky-one/main/layouts/MainPage.astro";
                     color: var(--smallColor);
                 }
             </style>
-        </footer>
-    </EmojiWrapper>
+        </EmojiWrapper>
+    </Fragment>
 </MainPage>

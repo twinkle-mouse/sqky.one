@@ -28,27 +28,27 @@
 
 @keyframes wobble {
     0% {
-        transform: rotate(-4deg) translateY(0) translateX(-3%);
+        transform: translateY(-2.5%) rotate(-5deg) translateY(0) translateX(-4%);
         animation-timing-function: ease-in;
     }
 
     25% {
-        transform: rotate(0) translateY(8%) translateX(0);
+        transform: translateY(-2.5%) rotate(0) translateY(10%) translateX(0);
         animation-timing-function: ease-out;
     }
 
     50% {
-        transform: rotate(4deg) translateY(0) translateX(3%);
+        transform: translateY(-2.5%) rotate(5deg) translateY(0) translateX(4%);
         animation-timing-function: ease-in;
     }
 
     75% {
-        transform: rotate(0) translateY(8%) translateX(0);
+        transform: translateY(-2.5%) rotate(0) translateY(10%) translateX(0);
         animation-timing-function: ease-out;
     }
 
     100% {
-        transform: rotate(-4deg) translateY(0) translateX(-3%);
+        transform: translateY(-2.5%) rotate(-5deg) translateY(0) translateX(-4%);
         animation-timing-function: ease-in;
     }
 }
