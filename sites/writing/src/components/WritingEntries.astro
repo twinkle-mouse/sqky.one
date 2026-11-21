@@ -1,7 +1,7 @@
 ---
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
 import Picture from "@sqky-one/common/components/Picture.astro";
-import { coverArtAlt } from "@sqky-one/writing/lib/content";
+import { coverArtAlt, displayDateFmt, readableDateFmt } from "@sqky-one/writing/lib/content";
 import type { CollectionEntry } from "astro:content";
 
 import WritingDescription from "./WritingDescription.astro";
@@ -10,9 +10,6 @@ import WritingDetails from "./WritingDetails.astro";
 type Props = {
     entries: CollectionEntry<"writings">[];
 };
-
-const readableDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
-const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 ---
 
 <div class="entries" role="feed">

@@ -11,6 +11,9 @@ import sanitizeHtml, { type Attributes, type IOptions as SanitizeHtmlConfig, typ
 
 import { markdownProcessor } from "../../astro.config";
 
+export const readableDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
+export const displayDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
+
 const renderers = await loadRenderers([getContainerRenderer()]);
 export const container = await experimental_AstroContainer.create({ renderers });
 const mdRenderer = await markdownProcessor.createRenderer({});
