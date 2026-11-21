@@ -23,12 +23,12 @@ import ColorCard from "./ColorCard.astro";
         <p class="text-center js-necessary">play around, drag them all over!! they’re fun</p>
         <p class="text-center">all the colours are personally picked by me :3</p>
 
-        <div id="toggle-card-names" class="text-center">
-            <Checkbox id="toggle-card-names-visibility">Toggle card names</Checkbox>
+        <div class="text-center">
+            <Checkbox id="toggle-card-names">Toggle card names</Checkbox>
         </div>
 
-        <div class="color-cards-container">
-            <div class="color-cards">
+        <div id="color-cards-container">
+            <div id="color-cards">
                 {Object.entries(colors).map(([name, variants]) => (
                     <div class="color-section">
                         <label class="color-set-name">{name}</label>
@@ -128,11 +128,11 @@ import ColorCard from "./ColorCard.astro";
         }
     }
 
-    .color-cards-container {
+    #color-cards-container {
         overflow: auto;
     }
 
-    .color-cards {
+    #color-cards {
         display: flex;
         position: relative;
 
@@ -188,23 +188,12 @@ import ColorCard from "./ColorCard.astro";
     }
 </style>
 
-<script>
-    const toggler = document.querySelector<HTMLInputElement>("#toggle-card-names-visibility")!;
-    const cards = document.querySelectorAll<HTMLElement>(".color-set-item .color-card");
-
-    const update = () => {
-        if (toggler.checked === false) {
-            cards.forEach((e) => e.style.setProperty("--color-override", "transparent"));
-        } else {
-            cards.forEach((e) => e.style.removeProperty("--color-override"));
-        }
-    };
-
-    toggler.addEventListener("input", update);
-    document.addEventListener("DOMContentLoaded", update);
-</script>
-
-<!-- ^ we can do this with CSS if JS is disabled, but doing it with JS is better for script shenanigans (see below) -->
+<style is:global>
+    #site:has(#toggle-card-names:not(:checked)) #color-cards .color-card,
+    #site:has(#toggle-card-names:not(:checked)) ~ #popout-fakeroot .color-card {
+        --color-override: transparent;
+    }
+</style>
 
 <script>
     import { springStep } from "@sqky-one/common/lib/spring";
@@ -268,6 +257,7 @@ import ColorCard from "./ColorCard.astro";
     };
 
     const fakeroot = document.getElementById("popout-fakeroot")!;
+    const container = document.getElementById("color-cards-container")!;
 
     const stateMap: Map<number, (typeof defaultState)[]> = new Map();
 
@@ -340,48 +330,46 @@ import ColorCard from "./ColorCard.astro";
         }
     });
 
-    document.querySelectorAll<HTMLElement>(".color-cards-container").forEach((container) => {
-        container.addEventListener("scroll", () => {
-            for (const pointerId of stateMap.keys()) {
-                updateDraggedElementPos(pointerId);
+    container.addEventListener("scroll", () => {
+        for (const pointerId of stateMap.keys()) {
+            updateDraggedElementPos(pointerId);
+        }
+    });
+
+    container.querySelectorAll<HTMLElement>(".color-card").forEach((element) => {
+        element.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0) return;
+
+            let states = stateMap.get(event.pointerId);
+            if (states === undefined) {
+                stateMap.set(event.pointerId, []);
+                states = stateMap.get(event.pointerId)!;
             }
-        });
 
-        container.querySelectorAll<HTMLElement>(".color-set-item .color-card").forEach((element) => {
-            element.addEventListener("pointerdown", (event) => {
-                if (event.button !== 0) return;
+            const state = structuredClone(defaultState);
+            {
+                state.containerElement = container;
+                state.draggedElement = element;
+                state.draggedElement.dataset.dragging = "true";
 
-                let states = stateMap.get(event.pointerId);
-                if (states === undefined) {
-                    stateMap.set(event.pointerId, []);
-                    states = stateMap.get(event.pointerId)!;
-                }
+                state.cursorPos = Vec.new(event.clientX, event.clientY);
+                state.initialPos = state.cursorPos.copy();
+                state.currentPos = state.initialPos.copy();
+                state.initialScroll = Vec.new(window.scrollX + state.containerElement.scrollLeft, window.scrollY + state.containerElement.scrollTop);
 
-                const state = structuredClone(defaultState);
-                {
-                    state.containerElement = container;
-                    state.draggedElement = element;
-                    state.draggedElement.dataset.dragging = "true";
+                const e = state.draggedElement.cloneNode(true) as HTMLElement;
+                e.style.position = "absolute";
+                e.classList.add("cursor-grabbing");
+                fakeroot.appendChild(e);
 
-                    state.cursorPos = Vec.new(event.clientX, event.clientY);
-                    state.initialPos = state.cursorPos.copy();
-                    state.currentPos = state.initialPos.copy();
-                    state.initialScroll = Vec.new(window.scrollX + state.containerElement.scrollLeft, window.scrollY + state.containerElement.scrollTop);
+                state.draggingElement = e;
+                state.draggedElement.style.visibility = "hidden";
+            }
 
-                    const e = state.draggedElement.cloneNode(true) as HTMLElement;
-                    e.style.position = "absolute";
-                    e.classList.add("cursor-grabbing");
-                    fakeroot.appendChild(e);
+            states.push(state);
 
-                    state.draggingElement = e;
-                    state.draggedElement.style.visibility = "hidden";
-                }
-
-                states.push(state);
-
-                updateDraggedElementPos(event.pointerId);
-                updateDraggingElementPos(event.pointerId);
-            });
+            updateDraggedElementPos(event.pointerId);
+            updateDraggingElementPos(event.pointerId);
         });
     });
 
