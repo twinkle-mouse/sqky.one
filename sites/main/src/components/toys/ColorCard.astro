@@ -53,11 +53,11 @@ const contrastColor = ((color: Color) => {
             translate 0.2s ease;
     }
 
-    .color-card:hover {
+    .color-card:not([data-dragging="true"]):hover {
         scale: 1.05;
     }
 
-    .color-card:active {
+    .color-card:not([data-dragging="true"]):active {
         scale: 0.95;
         cursor: grabbing;
     }

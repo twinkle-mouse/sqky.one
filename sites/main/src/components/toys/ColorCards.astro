@@ -278,6 +278,7 @@ import ColorCard from "./ColorCard.astro";
         for (const state of states) {
             if (!state.containerElement) continue;
             if (!state.draggedElement) continue;
+            if (state.stopping || state.stopped) continue;
 
             let rect: DOMRect;
             {
@@ -351,15 +352,16 @@ import ColorCard from "./ColorCard.astro";
                 if (event.button !== 0) return;
 
                 let states = stateMap.get(event.pointerId);
-                if (!states) {
+                if (states === undefined) {
                     stateMap.set(event.pointerId, []);
-                    states = stateMap.get(event.pointerId);
+                    states = stateMap.get(event.pointerId)!;
                 }
 
                 const state = structuredClone(defaultState);
                 {
                     state.containerElement = container;
                     state.draggedElement = element;
+                    state.draggedElement.dataset.dragging = "true";
 
                     state.cursorPos = Vec.new(event.clientX, event.clientY);
                     state.initialPos = state.cursorPos.copy();
@@ -375,7 +377,7 @@ import ColorCard from "./ColorCard.astro";
                     state.draggedElement.style.visibility = "hidden";
                 }
 
-                states!.push(state);
+                states.push(state);
 
                 updateDraggedElementPos(event.pointerId);
                 updateDraggingElementPos(event.pointerId);
@@ -426,7 +428,10 @@ import ColorCard from "./ColorCard.astro";
 
                         if (Math.abs(diff.x) < 0.25 && Math.abs(diff.y) < 0.25) {
                             state.draggingElement?.remove();
-                            if (state.draggedElement) state.draggedElement.style.visibility = "";
+                            if (state.draggedElement) {
+                                delete state.draggedElement.dataset.dragging;
+                                state.draggedElement.style.visibility = "";
+                            }
 
                             state.stopped = true;
                         }
