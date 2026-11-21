@@ -21,7 +21,9 @@ type Props = {
                 aria-posinset={index + 1}
                 aria-setsize={Astro.props.entries.length}
                 aria-labelledby={`${entry.id}-title`}
-                aria-describedby={`${entry.id}-release-date ${entry.id}-description`}
+                aria-describedby={[`${entry.id}-release-date`, entry.data.mdate && `${entry.id}-modified-date`, `${entry.id}-description`]
+                    .filter((v) => !!v)
+                    .join(" ")}
             >
                 <div class="entry-header">
                     <h3 class="entry-title" id={`${entry.id}-title`}>
@@ -29,17 +31,18 @@ type Props = {
                     </h3>
 
                     <div class="entry-date mono">
-                        <time datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)} id={`${entry.id}-release-date`}>
-                            {displayDateFmt.format(entry.data.date)}
-                        </time>
+                        {
+                            <div id={`${entry.id}-release-date`}>
+                                Published{" "}
+                                <time datetime={entry.data.date.toISOString()} title={readableDateFmt.format(entry.data.date)}>
+                                    {displayDateFmt.format(entry.data.date)}
+                                </time>
+                            </div>
+                        }
                         {entry.data.mdate && (
-                            <div>
-                                Last Modified:{" "}
-                                <time
-                                    datetime={entry.data.mdate.toISOString()}
-                                    title={readableDateFmt.format(entry.data.mdate)}
-                                    id={`${entry.id}-release-date`}
-                                >
+                            <div id={`${entry.id}-modified-date`}>
+                                Modified{" "}
+                                <time datetime={entry.data.mdate.toISOString()} title={readableDateFmt.format(entry.data.mdate)}>
                                     {displayDateFmt.format(entry.data.mdate)}
                                 </time>
                             </div>
