@@ -136,6 +136,14 @@ export async function renderWritingFrontmatterMd(entry: CollectionEntry<"writing
     }
 }
 
+export function getWritingType(entry: CollectionEntry<"writings">) {
+    let type = "writings";
+    if (entry.data.wip) {
+        type = "wip";
+    }
+    return type;
+}
+
 export async function getWritingEntries() {
     const entries = (await getCollection("writings")).sort(cmpEntry);
 
@@ -227,3 +235,5 @@ export function sanitizeHtmlConfig(config: { site: URL | string | undefined; all
 }
 
 export const contentStyles = (await readFile("./common/assets/content.css")).toString();
+
+export const CHAPTER_HEADING = 2;

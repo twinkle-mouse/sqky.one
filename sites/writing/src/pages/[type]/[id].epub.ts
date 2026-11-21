@@ -2,7 +2,15 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cwd } from "node:process";
 
-import { container, contentStyles, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd, sanitizeHtmlConfig } from "@sqky-one/writing/lib/content";
+import {
+    container,
+    contentStyles,
+    getWritingEntries,
+    getWritingType,
+    htmlToOneLinerText,
+    renderWritingFrontmatterMd,
+    sanitizeHtmlConfig,
+} from "@sqky-one/writing/lib/content";
 import { normalizeHtml } from "@sqky-one/writing/lib/content";
 import { siteName } from "@sqky-one/writing/lib/page";
 import { components } from "@sqky-one/writing/lib/render";
@@ -14,12 +22,7 @@ import sanitizeHtml from "sanitize-html";
 
 export async function getStaticPaths() {
     return (await getWritingEntries()).map((entry) => {
-        let type = "writings";
-        if (entry.data.wip) {
-            type = "wip";
-        }
-
-        return { params: { id: entry.id, type } };
+        return { params: { id: entry.id, type: getWritingType(entry) } };
     });
 }
 

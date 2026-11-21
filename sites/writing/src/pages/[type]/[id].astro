@@ -8,18 +8,13 @@ import WritingDetails from "@sqky-one/writing/components/WritingDetails.astro";
 import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
 import WritingControls from "@sqky-one/writing/layouts/WritingControls.astro";
 import WritingPage from "@sqky-one/writing/layouts/WritingPage.astro";
-import { coverArtAlt, getWritingEntries, htmlToOneLinerText, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
+import { coverArtAlt, getWritingEntries, getWritingType, htmlToOneLinerText, renderWritingFrontmatterMd } from "@sqky-one/writing/lib/content";
 import { getEntry, render } from "astro:content";
 import * as mime from "mrmime";
 
 export async function getStaticPaths() {
     return (await getWritingEntries()).map((entry) => {
-        let type = "writings";
-        if (entry.data.wip) {
-            type = "wip";
-        }
-
-        return { params: { id: entry.id, type } };
+        return { params: { id: entry.id, type: getWritingType(entry) } };
     });
 }
 
