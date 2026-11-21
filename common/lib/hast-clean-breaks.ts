@@ -41,7 +41,10 @@ export default function plugin() {
                                 if (!parent) break;
 
                                 traversedParents.push(parent);
-                                if (parent.type == "element" && ignoredElements.has(parent.tagName)) {
+                                if (
+                                    (parent.type == "element" && ignoredElements.has(parent.tagName)) ||
+                                    (parent.type == "mdxJsxFlowElement" && parent.name && ignoredElements.has(parent.name))
+                                ) {
                                     for (const traversedParent of traversedParents) {
                                         ignoredParents.add(traversedParent);
                                     }
