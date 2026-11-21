@@ -2,13 +2,6 @@
     white-space: pre-line;
 }
 
-#content blockquote,
-#content aside,
-#content figcaption,
-#content samp {
-    white-space: pre-line;
-}
-
 #content aside {
     float: right;
     clear: both;

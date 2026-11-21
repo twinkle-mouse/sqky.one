@@ -18,13 +18,14 @@ export function createMarkdownConfig(options: Options = { sectionize: { maxDepth
     return {
         mdastPlugins: [
             fileImportDirective,
-            hardBreaks,
             preserveBlankSpace,
             sampDirective,
             plainDirectives,
             sectionize(options.sectionize),
             pronouns,
             textDirectivesAsPlaintext,
+            // do it last
+            hardBreaks,
         ],
         hastPlugins: [hastCleanBreaks],
         features: {
