@@ -26,7 +26,7 @@ const speedMod = 2;
     </div>
 </div>
 
-<style define:vars={{ radius: `${radius}px` }}>
+<style>
     .hearts {
         display: block;
         position: relative;
@@ -47,8 +47,9 @@ const speedMod = 2;
     }
 
     .system-heart {
-        width: var(--radius);
-        height: var(--radius);
+        /* remember to match above :) */
+        width: 80px;
+        height: 80px;
     }
 
     .headmate-hearts {
