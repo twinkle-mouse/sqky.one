@@ -1,6 +1,5 @@
 import { fileURLToPath } from "node:url";
 
-import css from "@eslint/css";
 import js from "@eslint/js";
 import { defineConfig, includeIgnoreFile } from "eslint/config";
 import astro from "eslint-plugin-astro";
@@ -27,12 +26,6 @@ export default defineConfig([
         files: ["**/*.astro"],
         plugins: { astro },
         extends: ["astro/recommended"],
-    },
-    {
-        files: ["**/*.css"],
-        plugins: { css },
-        language: "css/css",
-        extends: ["css/recommended"],
     },
     {
         plugins: {
