@@ -222,8 +222,9 @@ import Picture from "@sqky-one/common/components/Picture.astro";
     const play = async () => {
         const { context, squeakSfx } = await getAudio();
 
-        const source = context.createBufferSource();
-        source.buffer = squeakSfx;
+        const source = new AudioBufferSourceNode(context, {
+            buffer: squeakSfx,
+        });
         source.onended = () => {
             source.disconnect();
         };
