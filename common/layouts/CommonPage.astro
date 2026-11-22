@@ -25,13 +25,13 @@ export type Props = HTMLAttributes<"main"> & {
     twitterCardType?: TwitterCardType;
 };
 
-const { siteName, pageName, desc: description, ...props } = Astro.props;
+const { siteName, pageName, desc: description, thumbnail: srcThumbnail, twitterCardType, ...props } = Astro.props;
 
 const title = `${pageName} — ${siteName}`;
 
 let thumbnail;
-if (props.thumbnail) {
-    thumbnail = props.thumbnail;
+if (srcThumbnail) {
+    thumbnail = srcThumbnail;
 } else {
     thumbnail = {
         src: "/favicon_512.png",
@@ -93,7 +93,7 @@ const footer = await Astro.slots.render("page-footer");
             twitter={{
                 title: pageName,
                 description,
-                card: props.twitterCardType || "summary",
+                card: twitterCardType || "summary",
                 image: thumbnail.src,
                 imageAlt: thumbnail.alt,
             }}
