@@ -8,10 +8,10 @@ import {
     getWritingEntries,
     getWritingType,
     htmlToOneLinerText,
+    normalizeHtml,
     renderWritingFrontmatterMd,
     sanitizeHtmlConfig,
 } from "@sqky-one/writing/lib/content";
-import { normalizeHtml } from "@sqky-one/writing/lib/content";
 import { siteName } from "@sqky-one/writing/lib/page";
 import { components } from "@sqky-one/writing/lib/render";
 import type { AstroGlobal } from "astro";
