@@ -14,14 +14,14 @@ const defaultWritingDescription = "(no description)";
 
 const emojis = defineCollection({
     loader: async () => {
-        const emojis: Record<string, { src: string }> = {};
+        const emojis: Record<string, object> = {};
 
         for await (const p of fs.glob(`${NOTO_EMOJI}/**/emoji_*.svg`)) {
             try {
-                const data = await fs.readFile(p, { encoding: "utf8" });
-                const str = data.trim().replaceAll("\n", "");
+                const id = path.basename(p, ".svg");
+                const src = await fs.readFile(p, { encoding: "utf8" });
 
-                emojis[path.basename(p, ".svg")] = { src: str };
+                emojis[id] = { src, optimized: false };
             } catch (err) {
                 console.error(err);
             }
@@ -29,6 +29,11 @@ const emojis = defineCollection({
 
         return emojis;
     },
+    schema: () =>
+        z.object({
+            src: z.string(),
+            optimized: z.boolean(),
+        }),
 });
 
 const writings = defineCollection({

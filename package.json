@@ -75,6 +75,7 @@
         "pure-rand": "^8.4.2",
         "sanitize-html": "^2.18.2",
         "satteri": "^0.11.7",
+        "svgo": "^4.1.0",
         "typescript": "^6.0.3",
         "vite": "^8.3.8",
         "voronoi": "^1.0.0"

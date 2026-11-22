@@ -3,6 +3,7 @@ import { getEmojiName } from "@sqky-one/common/lib/emoji";
 import { renderSvg } from "@sqky-one/common/lib/render-svg";
 import type { HTMLAttributes } from "astro/types";
 import { getEntry } from "astro:content";
+import { optimize } from "svgo";
 
 export type Props = HTMLAttributes<"span"> & {
     e: string;
@@ -16,7 +17,18 @@ const { e, width, height, spaceBefore = "", spaceAfter = "", "aria-hidden": aria
 
 const name = getEmojiName(e);
 const emojiEntry = await getEntry("emojis", name);
-const emoji = renderSvg(emojiEntry?.data.src, {
+if (!emojiEntry) {
+    throw new Error(`could not find emoji ${e} (${name})`);
+}
+
+if (!emojiEntry.data.optimized) {
+    emojiEntry.data.src = optimize(emojiEntry.data.src, {
+        multipass: true,
+        plugins: ["preset-default", "removeTitle", "removeXMLNS", "removeXlink"],
+    }).data;
+}
+
+const emoji = renderSvg(emojiEntry.data.src, {
     "aria-hidden": "true",
     id: undefined,
     width: width ?? "1.2em",
