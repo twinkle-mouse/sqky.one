@@ -185,6 +185,9 @@ import Picture from "@sqky-one/common/components/Picture.astro";
 </style>
 
 <script>
+    const squeakSfxUrl = "/assets/squeak.ogg";
+    const squeakSfxData = await fetch(squeakSfxUrl).then((res) => res.arrayBuffer());
+
     const brightenVar = "--brighten";
     const glowSaturationVar = "--glow-sat";
     const glowAlphaVar = "--glow-alpha";
@@ -202,12 +205,8 @@ import Picture from "@sqky-one/common/components/Picture.astro";
 
     let audio: { context: AudioContext; squeakSfx: AudioBuffer } | undefined = undefined;
     async function init() {
-        const squeakSfxUrl = "/assets/squeak.ogg";
-
         const context = new AudioContext({ latencyHint: "interactive" });
-        const squeakSfx = await fetch(squeakSfxUrl)
-            .then((res) => res.arrayBuffer())
-            .then((buffer) => context.decodeAudioData(buffer));
+        const squeakSfx = await context.decodeAudioData(squeakSfxData);
 
         return { context, squeakSfx };
     }
