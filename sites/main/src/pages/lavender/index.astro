@@ -13,8 +13,7 @@ const semanticColorsDarkStyle = colorsToCssStyle(Object.entries(semanticColorsDa
 >
     <Fragment slot="style-overrides">
         <style
-            is:raw
-            set:text={`:root {
+            set:html={`:root {
 ${semanticColorsDarkStyle}
 }`}
         ></style>

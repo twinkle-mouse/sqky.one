@@ -204,7 +204,7 @@ for (const child of childNodes) {
 }
 ---
 
-{flags.size > 0 && <style is:inline set:html={flagsCss()}></style>}
+{flags.size > 0 && <style set:html={flagsCss()}></style>}
 
 <Fragment set:html={content.toString()} />
 

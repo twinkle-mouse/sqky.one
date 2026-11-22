@@ -104,8 +104,7 @@ const footer = await Astro.slots.render("page-footer");
         <meta name="generator" content={Astro.generator} />
 
         <style
-            is:raw
-            set:text={`:root {
+            set:html={`:root {
 ${colorsCss}
 }`}
         ></style>
