@@ -110,6 +110,9 @@ export default defineConfig({
         mdx({}),
         icon({
             iconDir: path.join(projectRoot, "common", "icons"),
+            svgoOptions: {
+                plugins: ["preset-default", "removeTitle", "removeXMLNS", "removeXlink"],
+            },
         }),
         compressor(),
     ],
