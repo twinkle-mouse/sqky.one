@@ -24,10 +24,12 @@
         "filesServer": "node ./sites/files/dist/server/entry.mjs",
         "filesProxyServer": "node ./sites/files-proxy/dist/server/entry.mjs",
         "lint:prettier": "prettier --list-different --cache --write common sites",
+        "lint:astro": "astro check",
         "lint:eslint": "eslint --fix",
         "lint": "pnpm run --sequential /^lint:/"
     },
     "devDependencies": {
+        "@astrojs/check": "^0.9.12",
         "@eslint/css": "^2.0.1",
         "@eslint/js": "^10.0.1",
         "@types/hast": "^3.0.5",
