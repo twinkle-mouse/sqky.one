@@ -1,7 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-export type Props = Omit<HTMLAttributes<"input">, "type">;
+export type Props = Omit<HTMLAttributes<"input">, "type"> & {
+    id: string;
+};
 
 const { id, ...props } = Astro.props;
 ---
