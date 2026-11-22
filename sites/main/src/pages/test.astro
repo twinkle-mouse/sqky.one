@@ -1,12 +1,12 @@
 ---
-import Checkbox from "@sqky-one/common/components/Checkbox.astro";
 import Details from "@sqky-one/common/components/Details.astro";
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
-import NumericInput from "@sqky-one/common/components/NumericInput.astro";
+import InputCheckbox from "@sqky-one/common/components/InputCheckbox.astro";
+import InputNumeric from "@sqky-one/common/components/InputNumeric.astro";
+import InputRadio from "@sqky-one/common/components/InputRadio.astro";
+import InputSearch from "@sqky-one/common/components/InputSearch.astro";
+import InputText from "@sqky-one/common/components/InputText.astro";
 import PublicTextFile from "@sqky-one/common/components/PublicTextFile.astro";
-import RadioInput from "@sqky-one/common/components/RadioInput.astro";
-import SearchInput from "@sqky-one/common/components/SearchInput.astro";
-import TextInput from "@sqky-one/common/components/TextInput.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import MainPage from "@sqky-one/main/layouts/MainPage.astro";
@@ -30,40 +30,40 @@ import WritingSection from "@sqky-one/writing/layouts/WritingSection.astro";
                     <button id="test-button">Submit</button>
                 </div>
                 <div>
-                    <SearchInput id="test-search-input">Search Input Lalala</SearchInput>
+                    <InputSearch id="test-search-input">Search Input Lalala</InputSearch>
                 </div>
                 <div>
-                    <TextInput id="test-text-input">Text Input Lalala</TextInput>
+                    <InputText id="test-text-input">Text Input Lalala</InputText>
                 </div>
                 <div>
-                    <NumericInput id="test-numeric-input" min="12" max="28">
+                    <InputNumeric id="test-numeric-input" min="12" max="28">
                         Numeric Input Lalala
-                    </NumericInput>
+                    </InputNumeric>
                 </div>
                 <div>
-                    <Checkbox id="test-checkbox1">Foobar</Checkbox>
-                    <Checkbox id="test-checkbox2" checked>
+                    <InputCheckbox id="test-checkbox1">Foobar</InputCheckbox>
+                    <InputCheckbox id="test-checkbox2" checked>
                         Barfoo
-                    </Checkbox>
+                    </InputCheckbox>
                 </div>
 
                 <div>
                     <label>Presets:</label>
-                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
+                    <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
                         Site Default
-                    </RadioInput>
-                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
+                    </InputRadio>
+                    <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
                         IBM Plex Sans
-                    </RadioInput>
-                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
+                    </InputRadio>
+                    <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
                         Inter
-                    </RadioInput>
-                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
+                    </InputRadio>
+                    <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
                         Noto Sans
-                    </RadioInput>
-                    <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
+                    </InputRadio>
+                    <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
                         Roboto
-                    </RadioInput>
+                    </InputRadio>
                 </div>
 
                 <PublicTextFile src="pubkey.asc" summary="my PGP public key" />

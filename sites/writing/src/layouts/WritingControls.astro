@@ -1,9 +1,9 @@
 ---
-import Checkbox from "@sqky-one/common/components/Checkbox.astro";
 import Details from "@sqky-one/common/components/Details.astro";
-import NumericInput from "@sqky-one/common/components/NumericInput.astro";
-import RadioInput from "@sqky-one/common/components/RadioInput.astro";
-import TextInput from "@sqky-one/common/components/TextInput.astro";
+import InputCheckbox from "@sqky-one/common/components/InputCheckbox.astro";
+import InputNumeric from "@sqky-one/common/components/InputNumeric.astro";
+import InputRadio from "@sqky-one/common/components/InputRadio.astro";
+import InputText from "@sqky-one/common/components/InputText.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import ExampleWriting from "@sqky-one/writing/components/ExampleWriting.mdx";
 
@@ -33,24 +33,24 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <label>Presets:</label>
-                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
+                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
                             Site Default
-                        </RadioInput>
-                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
+                        </InputRadio>
+                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
                             IBM Plex Sans
-                        </RadioInput>
-                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
+                        </InputRadio>
+                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
                             Inter
-                        </RadioInput>
-                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
+                        </InputRadio>
+                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
                             Noto Sans
-                        </RadioInput>
-                        <RadioInput name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
+                        </InputRadio>
+                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
                             Roboto
-                        </RadioInput>
+                        </InputRadio>
                     </div>
 
-                    <TextInput id="controls-font-family-custom">Custom font:</TextInput>
+                    <InputText id="controls-font-family-custom">Custom font:</InputText>
                 </fieldset>
 
                 <fieldset>
@@ -58,29 +58,29 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <label>Presets:</label>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">
                             Site Default
-                        </RadioInput>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">
+                        </InputRadio>
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">
                             Extra Small
-                        </RadioInput>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">
+                        </InputRadio>
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">
                             Small
-                        </RadioInput>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">
+                        </InputRadio>
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">
                             Normal
-                        </RadioInput>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">
+                        </InputRadio>
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">
                             Large
-                        </RadioInput>
-                        <RadioInput name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">
+                        </InputRadio>
+                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">
                             Extra Large
-                        </RadioInput>
+                        </InputRadio>
                     </div>
 
-                    <NumericInput id="controls-font-size-pixels" min="12" max="28">
+                    <InputNumeric id="controls-font-size-pixels" min="12" max="28">
                         Pixel value:
-                    </NumericInput>
+                    </InputNumeric>
                 </fieldset>
 
                 <fieldset>
@@ -88,29 +88,29 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <label>Presets:</label>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">
                             Site Default
-                        </RadioInput>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">
+                        </InputRadio>
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">
                             Extra Small
-                        </RadioInput>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">
+                        </InputRadio>
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">
                             Small
-                        </RadioInput>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">
+                        </InputRadio>
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">
                             Normal
-                        </RadioInput>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">
+                        </InputRadio>
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">
                             Large
-                        </RadioInput>
-                        <RadioInput name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">
+                        </InputRadio>
+                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">
                             Extra Large
-                        </RadioInput>
+                        </InputRadio>
                     </div>
 
-                    <NumericInput id="controls-line-height-em" min="1.0" max="2.0" step="0.1">
+                    <InputNumeric id="controls-line-height-em" min="1.0" max="2.0" step="0.1">
                         By font size (em):
-                    </NumericInput>
+                    </InputNumeric>
                 </fieldset>
             </div>
 
@@ -123,7 +123,7 @@ const { showExample = false } = Astro.props;
                         <br />
                         You might not want this behaviour, and you can disable it below.
                         <br />
-                        <Checkbox id="controls-layout-force-mobile">Force mobile layout?</Checkbox>
+                        <InputCheckbox id="controls-layout-force-mobile">Force mobile layout?</InputCheckbox>
                     </p>
 
                     <p>
@@ -131,7 +131,7 @@ const { showExample = false } = Astro.props;
                         <br />
                         If you would prefer not having any paddings and instead letting the content fill the entire width, you can do so below.
                         <br />
-                        <Checkbox id="controls-layout-remove-page-padding">Remove page padding?</Checkbox>
+                        <InputCheckbox id="controls-layout-remove-page-padding">Remove page padding?</InputCheckbox>
                     </p>
 
                     <p>
@@ -139,7 +139,7 @@ const { showExample = false } = Astro.props;
                         <br />
                         However, this might not be ideal if you are, for example, reading on mobile. You can collapse all manual linebreaks below.
                         <br />
-                        <Checkbox id="controls-layout-collapse-manual-linebreaks">Collapse manual linebreaks?</Checkbox>
+                        <InputCheckbox id="controls-layout-collapse-manual-linebreaks">Collapse manual linebreaks?</InputCheckbox>
                     </p>
 
                     <p>
@@ -147,7 +147,7 @@ const { showExample = false } = Astro.props;
                         <br />
                         However, if that isn’t enough for you, you can collapse all margins below. This also disables any borders or shadows on the sections.
                         <br />
-                        <Checkbox id="controls-layout-collapse-margins">Collapse margins?</Checkbox>
+                        <InputCheckbox id="controls-layout-collapse-margins">Collapse margins?</InputCheckbox>
                     </p>
                 </fieldset>
             </div>

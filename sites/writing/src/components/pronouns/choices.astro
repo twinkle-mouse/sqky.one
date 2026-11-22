@@ -1,5 +1,5 @@
 ---
-import TextInput from "@sqky-one/common/components/TextInput.astro";
+import InputText from "@sqky-one/common/components/InputText.astro";
 
 import { customPronounFlag, pronouns } from "./cases/util";
 ---
@@ -11,29 +11,29 @@ import { customPronounFlag, pronouns } from "./cases/util";
     <choice data-word-count-ignore="true" text="Custom" flag={customPronounFlag}>
         <div data-word-count-ignore="true" class="custom-pronouns-inputs">
             <p>
-                <TextInput id="__pronouns-input-nominative" data-target="__p-custom-n">
+                <InputText id="__pronouns-input-nominative" data-target="__p-custom-n">
                     The nominative case (“‘they’ lived.”):{" "}
-                </TextInput>
+                </InputText>
             </p>
             <p>
-                <TextInput id="__pronouns-input-accusative" data-target="__p-custom-a">
+                <InputText id="__pronouns-input-accusative" data-target="__p-custom-a">
                     The accusative case (told ‘them’.”):{" "}
-                </TextInput>
+                </InputText>
             </p>
             <p>
-                <TextInput id="__pronouns-input-pronomial-possessive" data-target="__p-custom-pnp">
+                <InputText id="__pronouns-input-pronomial-possessive" data-target="__p-custom-pnp">
                     The pronomial possessive case (“‘their’ art.”):{" "}
-                </TextInput>
+                </InputText>
             </p>
             <p>
-                <TextInput id="__pronouns-input-predicative-possessive" data-target="__p-custom-pdp">
+                <InputText id="__pronouns-input-predicative-possessive" data-target="__p-custom-pdp">
                     The predicative possessive case (“passion of ‘theirs’.”):{" "}
-                </TextInput>
+                </InputText>
             </p>
             <p>
-                <TextInput id="__pronouns-input-reflexive" data-target="__p-custom-r">
+                <InputText id="__pronouns-input-reflexive" data-target="__p-custom-r">
                     The reflexive case (draw ‘themselves’.”):{" "}
-                </TextInput>
+                </InputText>
             </p>
         </div>
     </choice>

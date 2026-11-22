@@ -1,7 +1,7 @@
 ---
 import Details from "@sqky-one/common/components/Details.astro";
 import EmojiWrapper from "@sqky-one/common/components/EmojiWrapper.astro";
-import SearchInput from "@sqky-one/common/components/SearchInput.astro";
+import InputSearch from "@sqky-one/common/components/InputSearch.astro";
 import LargeSection from "@sqky-one/common/layouts/LargeSection.astro";
 import Section from "@sqky-one/common/layouts/Section.astro";
 import RssIcon from "@sqky-one/writing/components/RssIcon.astro";
@@ -57,14 +57,14 @@ const tags = await getAllTags();
             <Details summary="List of all tags">
                 <div>
                     <div class="js-necessary">
-                        <SearchInput
+                        <InputSearch
                             id="writings-tags-search-input"
                             class="search-input"
                             data-search-target="writings-tags"
                             data-search-values={JSON.stringify(tags.map(([key]) => key))}
                         >
                             Search tags by name:
-                        </SearchInput>
+                        </InputSearch>
                     </div>
 
                     <ul id="writings-tags">
