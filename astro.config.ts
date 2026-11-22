@@ -71,10 +71,6 @@ export default defineConfig({
 
     i18n: undefined,
 
-    build: {
-        inlineStylesheets: "always",
-    },
-
     image: {
         service: {
             entrypoint: "astro/assets/services/sharp",
