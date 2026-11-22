@@ -3,14 +3,23 @@ import type { HTMLAttributes } from "astro/types";
 
 export type Props = Omit<HTMLAttributes<"input">, "type"> & {
     id: string;
+    target: string;
+    values: string[];
 };
 
-const { id, ...props } = Astro.props;
+const { id, target, values, ...props } = Astro.props;
 ---
 
 <label for={id}>
     <slot />
-    <input id={id} type="search" {...props} />
+    <input
+        id={id}
+        type="search"
+        {...props}
+        class:list={["search-input", props.class]}
+        data-search-target={target}
+        data-search-values={JSON.stringify(values)}
+    />
 </label>
 
 <style>
