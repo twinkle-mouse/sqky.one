@@ -1,5 +1,3 @@
-import { readFile } from "node:fs/promises";
-
 import { getContainerRenderer } from "@astrojs/mdx/container-renderer";
 import WritingContent from "@sqky-one/writing/layouts/WritingContent.astro";
 import { count } from "@wordpress/wordcount";
@@ -236,7 +234,5 @@ export function sanitizeHtmlConfig(config: { site: URL | string | undefined; all
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "details", "summary"]).concat(config.allowedTags ?? []),
     };
 }
-
-export const contentStyles = (await readFile("./common/assets/content.css")).toString();
 
 export const CHAPTER_HEADING = 2;

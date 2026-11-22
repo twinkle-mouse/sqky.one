@@ -2,9 +2,9 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cwd } from "node:process";
 
+import contentStyles from "@sqky-one/common/assets/content.css?raw";
 import {
     container,
-    contentStyles,
     getWritingEntries,
     getWritingType,
     htmlToOneLinerText,
