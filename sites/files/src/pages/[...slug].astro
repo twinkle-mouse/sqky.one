@@ -7,13 +7,13 @@ import Section from "@sqky-one/common/layouts/Section.astro";
 import FileTableEntry from "@sqky-one/files/components/FileTableEntry.astro";
 import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
 import { compare, type FileStats, getFileStat, SortMethod } from "@sqky-one/files/lib/files";
-import { ROOT_DIR } from "astro:env/server";
+import { FILES_ROOT_DIR } from "astro:env/server";
 
 const params = Astro.params;
 const url = new URL(Astro.request.url);
 
 const dirPath = params.slug ? path.normalize(params.slug) : "";
-const filePath = path.normalize(path.join(ROOT_DIR, dirPath));
+const filePath = path.normalize(path.join(FILES_ROOT_DIR, dirPath));
 
 const ascending = url.searchParams.get("asc") === "true";
 
@@ -35,7 +35,7 @@ const fileStats: FileStats[] = [];
 
 try {
     for (const fileName of fileNames) {
-        const stats = await getFileStat(ROOT_DIR, filePath, fileName);
+        const stats = await getFileStat(FILES_ROOT_DIR, filePath, fileName);
         if (stats) {
             fileStats.push(stats);
         }

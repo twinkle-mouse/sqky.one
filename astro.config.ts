@@ -2,94 +2,68 @@ import path from "node:path";
 
 import mdx from "@astrojs/mdx";
 import type { AstroUserConfig } from "astro";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import type { MarkdownProcessor } from "astro/markdown";
 import compressor from "astro-compressor";
 import icon from "astro-icon";
 
-import SiteConfigs from "./site-configs.json";
+import fonts from "./fonts";
 
-function processSitePath(path: string) {
-    return path.replace("./", "").split("/")[0];
-}
+const SITE_CONFIGS = new Map(Object.entries((await import("./site-configs.json")).default));
+const SITE_CONFIG = process.env["SITE_CONFIG"] || "Main_SqkyOne";
 
-const dir = process.cwd();
-const fontsDir = path.join(dir, "fonts");
-const sitesDir = path.join(dir, "sites");
+const projectRoot = process.cwd();
+const fontsDir = path.join(projectRoot, "fonts");
+const sitesDir = path.join(projectRoot, "sites");
 
-const globbedSites = import.meta.glob<{ config: AstroUserConfig; markdownProcessor: MarkdownProcessor }>(`./*/astro.config.ts`, { base: "./sites" });
-const sites = new Map(Object.entries(globbedSites).map(([key, value]) => [processSitePath(key), value]));
+const sites = new Map(
+    Object.entries(
+        import.meta.glob<{
+            config: AstroUserConfig;
+            markdownProcessor: MarkdownProcessor;
+        }>(`./*/astro.config.ts`, {
+            base: "./sites",
+        }),
+    ).map(([path, value]) => [path.replace("./", "").split("/")[0], value]),
+);
 
-const siteConfigs = new Map(Object.entries(SiteConfigs));
-const siteConfig = process.env["SITE_CONFIG"] || "Main_SqkyOne";
-
-const sitePath = siteConfigs.get(siteConfig);
+const sitePath = SITE_CONFIGS.get(SITE_CONFIG);
 if (sitePath == undefined) {
-    throw new Error(`Invalid site selection (couldn't get site path): ${siteConfig}`);
+    throw new Error(`Invalid site selection (couldn't get site path): ${SITE_CONFIG}`);
 }
 
 const resolvedSite = await sites.get(sitePath)?.();
 if (resolvedSite == undefined) {
-    throw new Error(`Invalid site selection (couldn't resolve config): ${siteConfig}`);
+    throw new Error(`Invalid site selection (couldn't resolve config): ${SITE_CONFIG}`);
 }
 
 const { config, markdownProcessor } = resolvedSite;
-config.srcDir = path.join(sitesDir, sitePath, "src");
-config.outDir = path.join(sitesDir, sitePath, "dist");
-
 if (config == undefined || markdownProcessor == undefined) {
-    throw new Error(`Invalid site selection (config incomplete): ${siteConfig}`);
+    throw new Error(`Invalid site selection (config incomplete): ${SITE_CONFIG}`);
 }
 
 if (import.meta.env.DEV) {
     config.site = "https://testing.the.sqky.one";
 }
 
-const IosevkaWeights = {
-    100: "Thin",
-    200: "ExtraLight",
-    300: "Light",
-    400: "Regular",
-    500: "Medium",
-    600: "SemiBold",
-    700: "Bold",
-    800: "ExtraBold",
-    900: "Heavy",
-};
-
-const IosevkaStyles = {
-    normal: "",
-    italic: "Italic",
-};
-
-type Source =
-    | string
-    | URL
-    | {
-          url: string | URL;
-          tech?: string | undefined;
-      };
-
-type Variant = {
-    src: [Source, ...Source[]];
-    style: "normal" | "italic" | "oblique" | undefined;
-    weight: string;
-};
-
-function IosevkaFixedCurlyVariants(): [Variant, ...Variant[]] {
-    return Object.entries(IosevkaWeights).flatMap(([weight, weightName]) => {
-        return Object.entries(IosevkaStyles).map(([style, styleName]) => {
-            return {
-                src: [fontsDir + `/IosevkaFixedCurly/IosevkaFixedCurly-${weightName}${styleName}.woff2`] as [Source, ...Source[]],
-                style,
-                weight,
-            };
-        });
-    }) as [Variant, ...Variant[]];
-}
-
 export default defineConfig({
     ...config,
+
+    srcDir: path.join(sitesDir, sitePath, "src"),
+    publicDir: path.join(projectRoot, "public"),
+    outDir: path.join(sitesDir, sitePath, "dist"),
+    cacheDir: path.join(projectRoot, "node_modules", ".astro", sitePath),
+
+    env: {
+        schema: {
+            FILES_ROOT_DIR: envField.string({ context: "server", access: "public", optional: true, default: "/mnt/shared/public/" }),
+        },
+    },
+
+    experimental: {
+        contentIntellisense: true,
+        parallelPrerender: true,
+    },
 
     devToolbar: {
         enabled: false,
@@ -127,7 +101,7 @@ export default defineConfig({
         css: {
             transformer: "postcss",
         },
-        cacheDir: path.join(dir, "node_modules", ".vite"),
+        cacheDir: path.join(projectRoot, "node_modules", ".vite"),
     },
 
     markdown: {
@@ -139,144 +113,10 @@ export default defineConfig({
         ...(config.integrations || []),
         mdx({}),
         icon({
-            iconDir: path.join(dir, "common/icons"),
+            iconDir: path.join(projectRoot, "common", "icons"),
         }),
         compressor(),
     ],
 
-    fonts: [
-        {
-            fallbacks: ["sans-serif"],
-            optimizedFallbacks: false,
-            provider: fontProviders.local(),
-            name: "noseyrodent",
-            cssVariable: "--font-noseyrodent",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/noseyrodent/noseyrodent-Regular.woff2"],
-                        weight: 400,
-                    },
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/noseyrodent/noseyrodent-Bold.woff2"],
-                        weight: 700,
-                    },
-                ],
-            },
-        },
-        {
-            fallbacks: ["serif"],
-            optimizedFallbacks: false,
-            provider: fontProviders.local(),
-            name: "Besley",
-            cssVariable: "--font-besley",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/Besley/Besley-VariableFont_wght.woff2"],
-                        weight: "100 900",
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/Besley/Besley-Italic-VariableFont_wght.woff2"],
-                        weight: "100 900",
-                    },
-                ],
-            },
-        },
-        {
-            fallbacks: ["monospace"],
-            optimizedFallbacks: false,
-            provider: fontProviders.local(),
-            name: "Iosevka Fixed Curly",
-            cssVariable: "--font-iosevka-curly",
-            options: {
-                variants: IosevkaFixedCurlyVariants(),
-            },
-        },
-
-        {
-            fallbacks: [],
-            provider: fontProviders.local(),
-            name: "IBM Plex Sans",
-            cssVariable: "--font-ibm-plex-sans",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/IBM_Plex_Sans/IBMPlexSans-Italic-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                ],
-            },
-        },
-        {
-            fallbacks: [],
-            provider: fontProviders.local(),
-            name: "Inter",
-            cssVariable: "--font-inter",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/Inter/Inter-VariableFont_opsz,wght.woff2"],
-                        weight: "100 900",
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/Inter/Inter-Italic-VariableFont_opsz,wght.woff2"],
-                        weight: "100 900",
-                    },
-                ],
-            },
-        },
-        {
-            fallbacks: [],
-            provider: fontProviders.local(),
-            name: "Noto Sans",
-            cssVariable: "--font-noto-sans",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/Noto_Sans/NotoSans-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/Noto_Sans/NotoSans-Italic-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                ],
-            },
-        },
-        {
-            fallbacks: [],
-            provider: fontProviders.local(),
-            name: "Roboto",
-            cssVariable: "--font-roboto",
-            options: {
-                variants: [
-                    {
-                        style: "normal",
-                        src: [fontsDir + "/Roboto/Roboto-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                    {
-                        style: "italic",
-                        src: [fontsDir + "/Roboto/Roboto-Italic-VariableFont_wdth,wght.woff2"],
-                        weight: "100 900",
-                    },
-                ],
-            },
-        },
-    ],
+    fonts: fonts(fontsDir),
 });

@@ -1,3 +1,3 @@
-import { collections as parent } from "@sqky-one/common/content.config";
+import parent from "../../../content.config";
 
-export const collections = { ...parent };
+export const collections = parent;

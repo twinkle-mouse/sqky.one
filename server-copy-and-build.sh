@@ -5,7 +5,7 @@ set -euo pipefail
 export DST="/usr/local/etc/nginx-indexing"
 export REMOTE="madeline@v2202508295396374808.supersrv.de"
 
-FILES_TO_COPY=$(echo ./{"common","fonts","noto-emoji","public","sites","site-configs.json","astro.config.ts","tsconfig.json","typings","package.json","pnpm-lock.yaml","pnpm-workspace.yaml","server-build.sh"})
+FILES_TO_COPY=$(echo ./{"common","fonts","fonts.ts","noto-emoji","public","sites","site-configs.json","astro.config.ts","content.config.ts","tsconfig.json","typings","package.json","pnpm-lock.yaml","pnpm-workspace.yaml","server-build.sh"})
 
 echo "Deleting dist folders..."
 rm -rf ./sites/*/dist
