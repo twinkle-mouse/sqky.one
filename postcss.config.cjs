@@ -1,3 +1,3 @@
 module.exports = {
-    plugins: [require("postcss-reporter"), require("autoprefixer")],
+    plugins: [require("postcss-reporter"), require("autoprefixer"), require("cssnano")],
 };
