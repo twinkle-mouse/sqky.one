@@ -207,6 +207,15 @@ for (const child of childNodes) {
 <Fragment set:html={content.toString()} />
 
 <style is:global lang="scss">
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
     #content {
         .writing-branch > .choices > li >,
         .writing-check > {
@@ -282,20 +291,20 @@ for (const child of childNodes) {
 
         @for $i from 1 through 32 {
             .writing-branch
-                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                        ~ .branches /* go to branches */
-                            > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
+                            > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                            ~ .branches /* go to branches */
+                                > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
                 display: var(--display-override, block);
                 animation: fade-in 0.15s ease-in;
             }
 
             .writing-branch
-                        > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                        ~ .branches:not(:has(
-                            > :nth-child(#{$i}) /* go to the corresponding branch */
-                                .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
-                        ))
-                        + .slot /* unhide if either there's no tangents, or all tangents are checked */ {
+                            > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                            ~ .branches:not(:has(
+                                > :nth-child(#{$i}) /* go to the corresponding branch */
+                                    .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                            ))
+                            + .slot /* unhide if either there's no tangents, or all tangents are checked */ {
                 display: var(--display-override, block);
                 animation: fade-in 0.15s ease-in;
             }

@@ -1,6 +1,5 @@
 ---
 import "@sqky-one/common/assets/reset.css";
-import "@sqky-one/common/assets/anims.css";
 import "bluesky-profile-card-embed/style.css";
 import "bluesky-profile-card-embed/themes/dark.css"; // we don't currently have a light mode colour scheme :(
 
@@ -749,17 +748,6 @@ ${colorsCss}
         font-family: var(--mono);
     }
 
-    .animation-rotate {
-        display: inline-block;
-        animation: rotate 2s linear infinite;
-    }
-
-    @media (prefers-reduced-motion) {
-        .animation-rotate {
-            animation: none;
-        }
-    }
-
     .text-center {
         text-align: center;
     }
@@ -822,5 +810,22 @@ ${colorsCss}
     #popout-fakeroot:has(> .cursor-grabbing)::before {
         cursor: grabbing !important;
         pointer-events: auto;
+    }
+
+    @keyframes rotate {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .animation-rotate {
+        display: inline-block;
+        animation: rotate 2s linear infinite;
+    }
+
+    @media (prefers-reduced-motion) {
+        .animation-rotate {
+            animation: none;
+        }
     }
 </style>

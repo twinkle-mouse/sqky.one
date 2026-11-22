@@ -23,6 +23,21 @@ const { e, radius, delay, length } = Astro.props;
 </div>
 
 <style>
+    @property --angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+    }
+
+    @keyframes hearts-rotate {
+        from {
+            --angle: 0deg;
+        }
+        to {
+            --angle: 360deg;
+        }
+    }
+
     .headmate-heart {
         display: block;
         position: absolute;
