@@ -1,19 +1,16 @@
 ---
-import { Icon as AstroIcon } from "astro-icon/components";
+import Icon, { type Props as P } from "./Icon.astro";
 
-export type Props = {
-    icon: string;
-};
+export type Props = Omit<P, "size">;
+
+const { class: clazz, name, ...props } = Astro.props;
 ---
 
-<AstroIcon aria-hidden="true" class="file-icon" name={`material-file/${Astro.props.icon}`} width="1.5em" height="1.5em" />
+<Icon size="icon" class:list={["file-icon", clazz]} name={`material-file/${name}`} {...props} />
 
 <style>
     .file-icon {
         color: var(--slate300);
-        display: inline-block;
-        vertical-align: -0.4em;
         margin-right: 0.4em;
-        line-height: 0;
     }
 </style>

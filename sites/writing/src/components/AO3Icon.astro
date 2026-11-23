@@ -1,23 +1,15 @@
 ---
-import Svg from "@sqky-one/common/assets/icons/ao3.svg";
-import type { HTMLAttributes } from "astro/types";
+import Icon, { type Props as P } from "@sqky-one/common/components/Icon.astro";
 
-export type Props = HTMLAttributes<"svg">;
-const props = Astro.props;
+export type Props = Omit<P, "name">;
+const { class: clazz, ...props } = Astro.props;
 ---
 
-<span class="icon">
-    <template shadowrootmode="open">
-        <Svg width="1.5em" height="1.5em" {...props} aria-hidden="true" />
-    </template>
-</span>
+<Icon {...props} class:list={[clazz, "ao3-icon"]} name="logo/ao3" />
 
 <style>
-    .icon {
+    .ao3-icon {
         color: #ff0000;
-        display: inline-block;
-        vertical-align: -0.4em;
         margin-right: 0.4em;
-        line-height: 0;
     }
 </style>

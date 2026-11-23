@@ -1,6 +1,7 @@
 ---
-import { CaretRight } from "@sqky-one/common/assets/Icons";
 import type { HTMLAttributes } from "astro/types";
+
+import Icon from "./Icon.astro";
 
 export type Props = HTMLAttributes<"details"> & {
     src?: string;
@@ -12,7 +13,7 @@ const { src, summary, ...props } = Astro.props;
 
 <details {...props}>
     <summary>
-        <CaretRight class="icon" aria-hidden="true" />
+        <Icon class="open-icon" name="symbol/caret-right" />
         <span>{summary}</span>
         {src && (
             <a class="mono" href={encodeURI(src)}>
@@ -25,11 +26,8 @@ const { src, summary, ...props } = Astro.props;
 </details>
 
 <style>
-    .icon {
+    .open-icon {
         flex: none;
-
-        width: 1.5em;
-        height: 1.5em;
 
         margin-top: -0.1em;
 
@@ -40,7 +38,7 @@ const { src, summary, ...props } = Astro.props;
     }
 
     @media (prefers-reduced-motion) {
-        .icon {
+        .open-icon {
             transition: none;
         }
     }
@@ -61,11 +59,11 @@ const { src, summary, ...props } = Astro.props;
         border-bottom-right-radius: 0;
     }
 
-    details[open] > summary > .icon {
+    details[open] > summary > .open-icon {
         transform: rotate(90deg);
     }
 
-    details:not([open]) > summary > .icon {
+    details:not([open]) > summary > .open-icon {
         transform: rotate(0deg);
     }
 </style>

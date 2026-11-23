@@ -1,20 +1,39 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
 
-export type Props = HTMLAttributes<"img">;
+export type Props = Parameters<typeof Icon>[0] & {
+    size?: "icon" | "emoji";
+};
 
-const { alt, ...props } = Astro.props;
+const { size = "icon", class: clazz, ...props } = Astro.props;
+
+let ariaHidden: "true" | undefined = undefined;
+if (!props.title) {
+    ariaHidden = "true";
+}
+
+let resolvedSize = "";
+if (size == "icon") {
+    resolvedSize = "1.5em";
+} else if (size == "emoji") {
+    resolvedSize = "1.2em";
+}
 ---
 
-<img {...props} alt={alt} loading="eager" />
+<Icon aria-hidden={ariaHidden} width={resolvedSize} height={resolvedSize} class:list={[size, clazz]} {...props} />
 
 <style>
-    img {
-        color: transparent;
+    .emoji,
+    .icon {
         display: inline-block;
-        width: 1.2em;
-        height: 1.2em;
-        vertical-align: text-bottom;
         line-height: 0;
+    }
+
+    .emoji {
+        vertical-align: text-bottom;
+    }
+
+    .icon {
+        vertical-align: -0.4em;
     }
 </style>

@@ -1,6 +1,7 @@
 ---
-import { Cross } from "@sqky-one/common/assets/Icons";
 import type { HTMLAttributes } from "astro/types";
+
+import Icon from "./Icon.astro";
 
 export type Props = Omit<HTMLAttributes<"input">, "type"> & {
     id: string;
@@ -12,7 +13,7 @@ const slot = await Astro.slots.render("default");
 ---
 
 <label for={id}>
-    <Cross class="icon" aria-hidden="true" />
+    <Icon class="input-icon" name="symbol/cross" />
     {slot.trim()}
     <input id={id} type="checkbox" {...props} />
 </label>
@@ -51,14 +52,11 @@ const slot = await Astro.slots.render("default");
         outline: 2px solid var(--focusColor);
     }
 
-    .icon {
+    .input-icon {
         padding: 0.125em;
         margin-right: 0.3em;
 
         vertical-align: middle;
-
-        width: 1.5em;
-        height: 1.5em;
 
         border-radius: 9999px;
         border: 0.3em solid;
@@ -68,19 +66,19 @@ const slot = await Astro.slots.render("default");
         color: transparent;
     }
 
-    label:has(> input:checked) > .icon {
+    label:has(> input:checked) > .input-icon {
         background-color: var(--inputActiveBgColor);
         border-color: var(--inputActiveBorderColor);
         color: #000;
     }
 
-    label:has(> input:hover) > .icon,
-    label:has(> input:focus-visible) > .icon {
+    label:has(> input:hover) > .input-icon,
+    label:has(> input:focus-visible) > .input-icon {
         background-color: var(--inputHoverBgColor);
         border-color: var(--inputHoverBorderColor);
     }
 
-    label:has(> input:active) > .icon {
+    label:has(> input:active) > .input-icon {
         background-color: var(--inputActiveBgColor);
         border-color: var(--inputActiveBorderColor);
     }

@@ -46,7 +46,7 @@ const readableDateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "long", ti
 
 <tr>
     <td>
-        <FileIcon icon={icon} />
+        <FileIcon name={icon} />
         <a href={URL.parse(`${entry.name}${suffix}`, url)?.pathname} {...anchorExtraProps}>{`${entry.name}${suffix}`}</a>
     </td>
     <td>
