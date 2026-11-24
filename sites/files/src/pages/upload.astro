@@ -12,28 +12,64 @@ import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
 
     <LargeSection>
         <Section>
-            <p>Direct file upload link to my computer. You need to be given a code to use this.</p>
-            <p>The code will be inside the url, like this:</p>
+            <h2>What is this?</h2>
+
             <p>
-                <code>https://the.sqky.one/upload/?code=XXXXXXXXXXXXXXXX</code>
+                This is a <em>file upload service</em>, directly to my personal computer!
+                <br />
+                You’ll need to be given a <em>code</em> to use this.
+            </p>
+            <p>
+                If you received a link from me, that means you already have a code!
+                <br />
+                The code is <em>inside</em> the link itself, like this: <code>https://the.sqky.one/upload?code=ABCDEFGH</code>
             </p>
 
-            <div id="uploader" hidden>
+            <hr />
+
+            <p>
+                <label class="need-valid-code" for="file-progress">
+                    Upload progress:
+                </label>{" "}
+                <progress id="file-progress" value="0"></progress>
+            </p>
+            <p>
+                Status: <samp id="message"></samp>
+            </p>
+
+            <div class="need-valid-code">
                 <div>
                     <input id="file-input" type="file" />
                     <button id="upload-button">Submit</button>
                 </div>
             </div>
-
-            <p id="message"></p>
         </Section>
     </LargeSection>
 </FilesArchivePage>
 
+<style>
+    #message {
+        font-size: 0.9em;
+        margin-inline: 0.2em;
+    }
+
+    .need-valid-code {
+        display: none;
+    }
+
+    .need-valid-code[data-has-code="true"] {
+        display: unset;
+    }
+</style>
+
 <script>
-    const uploader = document.querySelector<HTMLElement>("#uploader")!;
+    import { formatBytes } from "@sqky-one/common/lib/file";
+
+    const elementsToUnhide = document.querySelectorAll<HTMLElement>(".need-valid-code");
+
     const button = document.querySelector<HTMLButtonElement>("#upload-button")!;
-    const message = document.querySelector<HTMLParagraphElement>("#message")!;
+    const message = document.querySelector<HTMLElement>("#message")!;
+    const fileProgress = document.querySelector<HTMLProgressElement>("#file-progress")!;
     const fileInput = document.querySelector<HTMLInputElement>("#file-input")!;
 
     const queryString = window.location.search;
@@ -41,10 +77,13 @@ import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
     const code = params.get("code");
 
     document.addEventListener("DOMContentLoaded", () => {
-        if (!code) {
-            message.innerHTML = "Missing upload code!";
+        if (code) {
+            message.textContent = "Idle.";
+            for (const e of elementsToUnhide) {
+                e.dataset.hasCode = "true";
+            }
         } else {
-            uploader.hidden = false;
+            message.textContent = "Missing upload code!";
         }
     });
 
@@ -52,7 +91,7 @@ import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
         if (!code) return;
 
         if (fileInput.files == null || fileInput.files.length == 0) {
-            message.innerHTML = "No file selected!";
+            message.textContent = "No file selected!";
             return;
         }
 
@@ -61,29 +100,47 @@ import FilesArchivePage from "@sqky-one/files/layouts/FilesArchivePage.astro";
         fileInput.disabled = true;
         button.disabled = true;
 
-        try {
-            message.innerHTML = "Uploading…";
+        const xhr = new XMLHttpRequest();
 
-            const response = await fetch(`/upload/accept/${file.name}`, {
-                method: "PUT",
-                body: file,
-                headers: [
-                    ["Authorization", code],
-                    ["Content-Type", file.type],
-                ],
-            });
+        // todo abort button
 
-            if (response.status >= 200 && response.status < 300) {
-                message.innerHTML = "Successfully uploaded.";
-            } else {
-                message.innerHTML = `Upload failed!<br>Reason: ${response.status} ${response.statusText}`;
+        xhr.upload.addEventListener("loadstart", (event) => {
+            fileProgress.value = 0;
+            fileProgress.max = event.total;
+            message.textContent = "Uploading…";
+        });
+
+        xhr.upload.addEventListener("progress", (event) => {
+            fileProgress.value = event.loaded;
+            message.textContent = `Uploading (${((event.loaded / event.total) * 100).toFixed(2)}% / ${formatBytes(event.loaded)} out of ${formatBytes(event.total)})…`;
+        });
+
+        xhr.addEventListener("readystatechange", () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    message.textContent = "Successfully uploaded.";
+                } else {
+                    message.textContent = `Upload failed: Reason: ${xhr.status} ${xhr.statusText}`;
+                }
             }
-        } catch (e) {
-            console.error(e);
-        } finally {
+        });
+        function errorAction(event: ProgressEvent) {
+            fileProgress.value = 0;
+            message.textContent = `Upload failed: ${event.type}`;
+        }
+        xhr.upload.addEventListener("error", errorAction);
+        xhr.upload.addEventListener("abort", errorAction);
+        xhr.upload.addEventListener("timeout", errorAction);
+        xhr.upload.addEventListener("loadend", () => {
             fileInput.disabled = false;
             button.disabled = false;
-        }
+        });
+
+        xhr.open("PUT", `/upload/accept/${file.name}`, true);
+        xhr.setRequestHeader("Authorization", code);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.send(file);
     }
+
     button.addEventListener("click", handleClick);
 </script>
