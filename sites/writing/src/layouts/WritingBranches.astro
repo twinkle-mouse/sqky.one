@@ -7,6 +7,12 @@ import Branch from "./branch/Branch.astro";
 import baseStyle from "./branch/style.css?raw";
 import styleEach from "./branch/style-each.css?raw";
 
+export type Props = {
+    writingId: string;
+};
+
+const { writingId } = Astro.props;
+
 let content: Node = parse(await Astro.slots.render("default"));
 
 function removeAstroData(element: HTMLElement) {
@@ -68,7 +74,7 @@ async function processNode(root: Node) {
         async function renderBranchElement(element: Element) {
             reparse = true;
             const rendered = await container.renderToString(Branch, {
-                props: { element },
+                props: { element, writingId },
                 slots: { default: root.childNodes.splice(0).join("") },
             });
             return parse(rendered);
@@ -120,7 +126,7 @@ async function processNode(root: Node) {
                                     const tangent = await parseTangent(inner, currentParentName, counts.tangent);
                                     tangents.push(tangent.name);
 
-                                    choice.content += await container.renderToString(Branch, { props: { element: tangent } });
+                                    choice.content += await container.renderToString(Branch, { props: { element: tangent, writingId } });
                                 } else {
                                     choice.content += inner.toString();
                                 }
@@ -222,11 +228,6 @@ for (const child of childNodes) {
         .writing-branch > .choices > li >,
         .writing-check > {
             label {
-                display: inline-block;
-                font-family: var(--mono);
-                text-decoration: none;
-                color: var(--buttonTextColor);
-
                 user-select: none;
                 cursor: pointer;
 
@@ -236,6 +237,11 @@ for (const child of childNodes) {
 
                 background-color: var(--buttonBgColor);
                 border: 2px solid var(--buttonBorderColor);
+            }
+
+            label > span {
+                font-family: var(--mono);
+                text-decoration: none;
             }
 
             label > input:focus-visible {
@@ -257,9 +263,10 @@ for (const child of childNodes) {
                 color: var(--buttonActiveTextColor);
                 background-color: var(--buttonActiveBgColor);
                 border-color: var(--buttonActiveBorderColor);
+            }
 
-                text-decoration: underline;
-                text-underline-offset: 15%;
+            label:has(> input:checked) > span {
+                text-decoration: underline solid 1px;
             }
         }
 
@@ -287,7 +294,7 @@ for (const child of childNodes) {
         }
 
         .writing-branch > .branches > *,
-        .writing-branch > .branches + .slot {
+        .writing-branch > .branches ~ .slot {
             display: none;
         }
 
@@ -306,7 +313,7 @@ for (const child of childNodes) {
                                 > :nth-child(#{$i}) /* go to the corresponding branch */
                                     .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
                             ))
-                            + .slot /* unhide if either there's no tangents, or all tangents are checked */ {
+                            ~ .slot /* unhide if either there's no tangents, or all tangents are checked */ {
                 display: var(--display-override, block);
                 animation: fade-in 0.15s ease-in;
             }
@@ -346,16 +353,11 @@ for (const child of childNodes) {
             text-wrap: wrap;
         }
 
-        .writing-check > label:has(> input:not(:checked)) + * {
+        .writing-check > label:has(> input:not(:checked)) ~ .slot {
             display: none;
         }
 
-        .writing-check[data-required="true"]:has(> label > input:not(:checked)) ~ * {
-            display: none;
-        }
-
-        .writing-check > label:has(> input:checked) + *,
-        .writing-check[data-required="true"]:has(> label > input:checked) ~ * {
+        .writing-check > label:has(> input:checked) ~ .slot {
             animation: fade-in 0.15s ease-in;
         }
 

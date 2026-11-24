@@ -11,27 +11,27 @@ import { customPronounFlag, pronouns } from "./cases/util";
     <choice data-word-count-ignore="true" text="Custom" flag={customPronounFlag}>
         <div data-word-count-ignore="true" class="custom-pronouns-inputs">
             <p>
-                <InputText id="__pronouns-input-nominative" data-target="__p-custom-n">
+                <InputText name="custom-pronouns-n" shouldSaveValue id="__pronouns-input-nominative" data-target="__p-custom-n">
                     The nominative case (“‘they’ lived.”):{" "}
                 </InputText>
             </p>
             <p>
-                <InputText id="__pronouns-input-accusative" data-target="__p-custom-a">
+                <InputText name="custom-pronouns-a" shouldSaveValue id="__pronouns-input-accusative" data-target="__p-custom-a">
                     The accusative case (told ‘them’.”):{" "}
                 </InputText>
             </p>
             <p>
-                <InputText id="__pronouns-input-pronomial-possessive" data-target="__p-custom-pnp">
+                <InputText name="custom-pronouns-pnp" shouldSaveValue id="__pronouns-input-pronomial-possessive" data-target="__p-custom-pnp">
                     The pronomial possessive case (“‘their’ art.”):{" "}
                 </InputText>
             </p>
             <p>
-                <InputText id="__pronouns-input-predicative-possessive" data-target="__p-custom-pdp">
+                <InputText name="custom-pronouns-pdp" shouldSaveValue id="__pronouns-input-predicative-possessive" data-target="__p-custom-pdp">
                     The predicative possessive case (“passion of ‘theirs’.”):{" "}
                 </InputText>
             </p>
             <p>
-                <InputText id="__pronouns-input-reflexive" data-target="__p-custom-r">
+                <InputText name="custom-pronouns-r" shouldSaveValue id="__pronouns-input-reflexive" data-target="__p-custom-r">
                     The reflexive case (draw ‘themselves’.”):{" "}
                 </InputText>
             </p>

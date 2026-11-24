@@ -30,9 +30,15 @@ import WritingSection from "@sqky-one/writing/layouts/WritingSection.astro";
                     <button id="test-button">Submit</button>
                 </div>
                 <div>
-                    <InputSearch id="test-search-input" target="aaa" values={["bbb"]}>
+                    <InputSearch name="test-search-input" id="test-search-input" target="test-search-input-target" shouldSaveValue>
                         Search Input Lalala
                     </InputSearch>
+                    <ul id="test-search-input-target">
+                        <li data-search-value="meow">meow</li>
+                        <li data-search-value="woof">woof</li>
+                        <li data-search-value="bark">bark</li>
+                        <li data-search-value="squeak">squeak</li>
+                    </ul>
                 </div>
                 <div>
                     <InputText id="test-text-input">Text Input Lalala</InputText>

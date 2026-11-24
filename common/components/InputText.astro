@@ -1,37 +1,30 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import Input, { type Props as P } from "./Input.astro";
 
-export type Props = Omit<HTMLAttributes<"input">, "type"> & {
-    id: string;
-};
+export type Props = Omit<P, "type">;
 
-const { id, ...props } = Astro.props;
+const { ...props } = Astro.props;
 ---
 
-<label for={id}>
+<Input type="text" {...props}>
     <slot />
-    <input id={id} type="text" {...props} />
-</label>
+</Input>
 
-<style>
-    input {
+<style is:global>
+    input[type="text"] {
         color: var(--textColor);
         text-decoration: none;
+
+        background-color: var(--buttonBgColor);
+        outline: 1px solid var(--buttonBorderColor);
     }
 
-    label {
+    label:has(> input[type="text"]) {
         width: fit-content;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.5em;
         margin-block: 1em;
-    }
-
-    input {
-        background-color: var(--buttonBgColor);
-        outline: 1px solid var(--buttonBorderColor);
-        display: inline-block;
-        vertical-align: middle;
     }
 </style>

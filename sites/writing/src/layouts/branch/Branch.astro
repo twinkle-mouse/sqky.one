@@ -1,11 +1,19 @@
 ---
+import InputCheckbox from "@sqky-one/common/components/InputCheckbox.astro";
+import InputRadio from "@sqky-one/common/components/InputRadio.astro";
+
 import { type Element } from ".";
 
 export type Props = {
     element: Element;
+    writingId: string;
 };
 
-const { element } = Astro.props;
+const { element, writingId } = Astro.props;
+
+if (element === undefined || writingId === undefined) {
+    throw Error("Missing props in Branch!");
+}
 ---
 
 {element.type == "branch" && (
@@ -14,10 +22,17 @@ const { element } = Astro.props;
             {element.data.choices.map((choice, idx) => {
                 return (
                     <li>
-                        <label {...choice.attributes} for={`${element.name}-${idx + 1}`}>
+                        <InputRadio
+                            labelProps={choice.attributes}
+                            id={`${element.name}-${idx + 1}`}
+                            name={`${writingId}_${element.name}`}
+                            shouldSaveValue
+                            value={`${idx + 1}`}
+                            data-flag={choice.flags.join(" ")}
+                            iconName={undefined}
+                        >
                             <Fragment set:html={choice.text} />
-                            <input id={`${element.name}-${idx + 1}`} type="radio" name={element.name} value={`${idx + 1}`} data-flag={choice.flags.join(" ")} />
-                        </label>
+                        </InputRadio>
                     </li>
                 );
             })}
@@ -35,10 +50,9 @@ const { element } = Astro.props;
 )}
 {element.type == "continue" && (
     <div class:list={["writing-check continue", element.class]} data-required="true">
-        <label for={element.name}>
+        <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
             {element.data.text}
-            <input id={element.name} type="checkbox" name={element.name} />
-        </label>
+        </InputCheckbox>
 
         <div class="slot">
             <slot />
@@ -48,11 +62,12 @@ const { element } = Astro.props;
 {element.type == "tangent" && (
     <>
         <div class:list={["writing-check tangent", element.class]} data-required={element.required ? "true" : undefined} {...element.data.attributes}>
-            <label for={element.name}>
-                {!element.required && <span class="sr-only">Optional text: </span>}
-                {element.data.text}
-                <input id={element.name} type="checkbox" name={element.name} />
-            </label>
+            <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
+                <>
+                    {!element.required && <span class="sr-only">Optional text: </span>}
+                    {element.data.text}
+                </>
+            </InputCheckbox>
 
             <div class="slot" set:html={element.data.content} />
         </div>

@@ -1,45 +1,33 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import Input, { type Props as P } from "./Input.astro";
 
-export type Props = Omit<HTMLAttributes<"input">, "type"> & {
-    id: string;
+export type Props = Omit<P, "type"> & {
     target: string;
-    values: string[];
 };
 
-const { id, target, values, ...props } = Astro.props;
+const { target, ...props } = Astro.props;
 ---
 
-<label for={id}>
+<Input type="search" {...props} class:list={["search-input", props.class]} data-search-target={target}>
     <slot />
-    <input
-        id={id}
-        type="search"
-        {...props}
-        class:list={["search-input", props.class]}
-        data-search-target={target}
-        data-search-values={JSON.stringify(values)}
-    />
-</label>
+</Input>
 
-<style>
-    input {
+<style is:global>
+    input[type="search"] {
         color: var(--textColor);
         text-decoration: none;
+
+        background-color: var(--buttonBgColor);
+        outline: 1px solid var(--buttonBorderColor);
     }
 
-    label {
+    label:has(> input[type="search"]) {
         width: fit-content;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.5em;
         margin-block: 1em;
-    }
-
-    input {
-        background-color: var(--buttonBgColor);
-        border: 1px solid var(--buttonBorderColor);
     }
 </style>
 
@@ -50,7 +38,12 @@ const { id, target, values, ...props } = Astro.props;
     for (const searchInput of searchInputs) {
         const searchTarget = searchInput.dataset.searchTarget!;
         const searchItems = document.querySelectorAll<HTMLElement>(`#${searchTarget} > li`);
-        const searchValues = JSON.parse(searchInput.dataset.searchValues ?? "[]") as string[];
+        const searchValues: string[] = [];
+        searchItems.forEach((li) => {
+            if (li.dataset.searchValue) {
+                searchValues.push(li.dataset.searchValue);
+            }
+        });
 
         const fuse = new Fuse(searchValues, { includeScore: true, threshold: 0.4 });
 

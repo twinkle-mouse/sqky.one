@@ -1,0 +1,161 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Icon from "./Icon.astro";
+
+export type Props = HTMLAttributes<"input"> & {
+    labelProps?: HTMLAttributes<"label">;
+    id: string;
+    iconName?: string;
+    shouldSaveValue?: boolean;
+};
+
+const { id, iconName, shouldSaveValue = false, class: clazz, labelProps, ...props } = Astro.props;
+
+const slot = await Astro.slots.render("default");
+
+if (!slot) {
+    throw Error("Input must have text children!");
+}
+
+if (shouldSaveValue && !props.name) {
+    throw Error("Input must have `name` if `shouldSaveValue` is set");
+}
+---
+
+<label for={id} {...labelProps}>
+    {iconName && (
+        <>
+            <Icon class="input-icon" name={iconName} />{" "}
+        </>
+    )}
+    <span>{slot.trim()}</span>
+    <input id={id} {...props} class:list={[shouldSaveValue && "input-auto-save-value", clazz]} />
+</label>
+
+<style is:global>
+    .input-icon {
+        padding: 0.125em;
+
+        vertical-align: middle;
+
+        border-radius: 9999px;
+        border: 0.3em solid;
+
+        background-color: var(--inputBgColor);
+        border-color: var(--inputBorderColor);
+        color: transparent;
+    }
+
+    label:has(> input:checked) > .input-icon {
+        background-color: var(--inputActiveBgColor);
+        border-color: var(--inputActiveBorderColor);
+        color: #000;
+    }
+
+    label:has(> input:hover) > .input-icon,
+    label:has(> input:focus-visible) > .input-icon {
+        background-color: var(--inputHoverBgColor);
+        border-color: var(--inputHoverBorderColor);
+    }
+
+    label:has(> input:active) > .input-icon {
+        background-color: var(--inputActiveBgColor);
+        border-color: var(--inputActiveBorderColor);
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const radioInputCache = new Map<string, HTMLInputElement[]>();
+        const inputs = document.querySelectorAll<HTMLInputElement>("input.input-auto-save-value");
+        const restoredInputs: HTMLInputElement[] = [];
+
+        window.__inputAutoSaveCurrentlyRestoringInputs = false;
+
+        inputs.forEach((input) => {
+            const key = `input-${input.name}`;
+
+            const storedValue = window.localStorage.getItem(key);
+            if (storedValue) {
+                switch (input.type) {
+                    case "number":
+                    case "color":
+                    case "date":
+                    case "search":
+                    case "text":
+                    case "time":
+                        input.value = storedValue;
+                        break;
+                    case "checkbox":
+                        input.checked = storedValue === true.toString();
+                        break;
+                    case "radio":
+                        (document.getElementById(storedValue)! as HTMLInputElement).checked = true;
+                        break;
+                    default:
+                        throw Error(`Unhandled input type ${input.type}`);
+                }
+
+                restoredInputs.push(input);
+            }
+
+            input.addEventListener("change", () => {
+                if (window.__inputAutoSaveCurrentlyRestoringInputs) return;
+
+                switch (input.type) {
+                    case "number":
+                    case "color":
+                    case "date":
+                    case "search":
+                    case "text":
+                    case "time":
+                        if (input.value) {
+                            window.localStorage.setItem(key, input.value);
+                        } else {
+                            window.localStorage.removeItem(key);
+                        }
+                        break;
+                    case "checkbox":
+                        if (input.checked) {
+                            window.localStorage.setItem(key, "true");
+                        } else {
+                            window.localStorage.removeItem(key);
+                        }
+                        break;
+                    case "radio":
+                        if (input.checked) {
+                            window.localStorage.setItem(key, input.id);
+                        } else {
+                            if (radioInputCache.get(input.name) == undefined) {
+                                radioInputCache.set(input.name, [...document.querySelectorAll<HTMLInputElement>(`input[name="${input.name}"]`)]);
+                            }
+
+                            if (radioInputCache.get(input.name)!.every((e) => !e.checked)) {
+                                window.localStorage.removeItem(key);
+                            }
+                        }
+                        break;
+                    default:
+                        throw Error(`Unhandled input type ${input.type}`);
+                }
+            });
+        });
+
+        // only dispatch event after two frames so other listeners of DOMContentLoaded can register their own listeners,
+        // and also after those listeners have also dispatched their own events post-initialization
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                window.__inputAutoSaveCurrentlyRestoringInputs = true;
+                restoredInputs.forEach((input) => {
+                    input.dispatchEvent(new InputEvent("change"));
+                });
+
+                // wait another frame because listeners could dispatch events too when "change" is fired
+                window.requestAnimationFrame(() => {
+                    window.__inputAutoSaveCurrentlyRestoringInputs = false;
+                });
+            });
+        });
+    });
+</script>

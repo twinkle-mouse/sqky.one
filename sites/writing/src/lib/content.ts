@@ -115,8 +115,8 @@ export function htmlToTextContent(content: string | undefined | null) {
     return text.trim();
 }
 
-export async function countWords(renderResult: RenderResult) {
-    const body = htmlToTextContent(await container.renderToString(WritingContent, { props: { renderResult } }));
+export async function countWords(renderResult: RenderResult, writingId: string) {
+    const body = htmlToTextContent(await container.renderToString(WritingContent, { props: { renderResult, writingId } }));
 
     return count(body, "words", {});
 }

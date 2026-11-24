@@ -11,9 +11,11 @@ import WritingBranches from "./WritingBranches.astro";
 
 type Props = {
     renderResult: RenderResult;
+    writingId: string;
 };
 
-const { Content, headings } = Astro.props.renderResult;
+const { renderResult, writingId } = Astro.props;
+const { Content, headings } = renderResult;
 ---
 
 <LargeSection type="article" class="writing">
@@ -40,7 +42,7 @@ const { Content, headings } = Astro.props.renderResult;
         <slot />
 
         <EmojiWrapper isContentful={true}>
-            <WritingBranches>
+            <WritingBranches writingId={writingId}>
                 {headings.length == 0 ? (
                     <Section>
                         <Content components={components} />

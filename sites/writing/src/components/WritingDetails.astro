@@ -14,7 +14,7 @@ const { entry, class: cls, isInList, ...props } = Astro.props;
 const entries = Object.entries(entry.data.relations);
 const renderResult = await render(entry);
 
-const wordCount = countWords(renderResult);
+const wordCount = countWords(renderResult, entry.id);
 ---
 
 <table {...props} class:list={[cls, "entry-details"]}>

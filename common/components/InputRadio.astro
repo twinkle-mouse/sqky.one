@@ -1,85 +1,43 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import Input, { type Props as P } from "./Input.astro";
 
-import Icon from "./Icon.astro";
+export type Props = Omit<P, "type">;
 
-export type Props = Omit<HTMLAttributes<"input">, "type"> & {
-    id: string;
-};
-
-const { id, ...props } = Astro.props;
-
-const slot = await Astro.slots.render("default");
+const { ...props } = Astro.props;
 ---
 
-<label for={id}>
-    <Icon class="input-icon" name="symbol/dot" />
-    {slot.trim()}
-    <input id={id} type="radio" {...props} />
-</label>
+<Input type="radio" iconName="symbol/dot" {...props}>
+    <slot />
+</Input>
 
-<style>
-    input,
-    label {
-        user-select: none;
-        cursor: pointer;
-    }
-
-    input {
+<style is:global>
+    input[type="radio"] {
         width: 0px;
         height: 0px;
         opacity: 0;
     }
 
-    label {
-        padding-block: 0.125rem;
-        padding-inline: 0.25rem;
+    label:has(> input[type="radio"]) {
+        user-select: none;
+        cursor: pointer;
+
+        padding-block: 0.2rem;
+        margin-right: 0.35rem;
     }
 
-    input:hover,
-    label:has(> input:hover),
-    input:focus-visible,
-    label:has(> input:focus-visible) {
+    input[type="radio"]:hover,
+    input[type="radio"]:focus-visible,
+    label:has(> input[type="radio"]:hover) > span,
+    label:has(> input[type="radio"]:focus-visible) > span {
         color: var(--buttonHoverTextColor);
     }
 
-    input:active,
-    label:has(> input:active) {
+    input[type="radio"]:active,
+    label:has(> input[type="radio"]:active) > span {
         color: var(--buttonActiveTextColor);
     }
 
-    label:has(> input:focus-visible) {
+    label:has(> input[type="radio"]:focus-visible) {
         outline: 2px solid var(--focusColor);
-    }
-
-    .input-icon {
-        padding: 0.125em;
-        margin-right: 0.3em;
-
-        vertical-align: middle;
-
-        border-radius: 9999px;
-        border: 0.3em solid;
-
-        background-color: var(--inputBgColor);
-        border-color: var(--inputBorderColor);
-        color: transparent;
-    }
-
-    label:has(> input:checked) > .input-icon {
-        background-color: var(--inputActiveBgColor);
-        border-color: var(--inputActiveBorderColor);
-        color: #000;
-    }
-
-    label:has(> input:hover) > .input-icon,
-    label:has(> input:focus-visible) > .input-icon {
-        background-color: var(--inputHoverBgColor);
-        border-color: var(--inputHoverBorderColor);
-    }
-
-    label:has(> input:active) > .input-icon {
-        background-color: var(--inputActiveBgColor);
-        border-color: var(--inputActiveBorderColor);
     }
 </style>

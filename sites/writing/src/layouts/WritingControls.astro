@@ -33,24 +33,31 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <span>Presets: </span>
-                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-unset" value="">
+                        <InputRadio name="controls-font-family-preset" shouldSaveValue id="controls-font-family-preset-unset" value="" checked>
                             Site Default
                         </InputRadio>
-                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-ibm-plex-sans" value="var(--font-ibm-plex-sans)">
+                        <InputRadio
+                            name="controls-font-family-preset"
+                            shouldSaveValue
+                            id="controls-font-family-preset-ibm-plex-sans"
+                            value="var(--font-ibm-plex-sans)"
+                        >
                             IBM Plex Sans
                         </InputRadio>
-                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-inter" value="var(--font-inter)">
+                        <InputRadio name="controls-font-family-preset" shouldSaveValue id="controls-font-family-preset-inter" value="var(--font-inter)">
                             Inter
                         </InputRadio>
-                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
+                        <InputRadio name="controls-font-family-preset" shouldSaveValue id="controls-font-family-preset-noto-sans" value="var(--font-noto-sans)">
                             Noto Sans
                         </InputRadio>
-                        <InputRadio name="controls-font-family-preset" id="controls-font-family-preset-roboto" value="var(--font-roboto)">
+                        <InputRadio name="controls-font-family-preset" shouldSaveValue id="controls-font-family-preset-roboto" value="var(--font-roboto)">
                             Roboto
                         </InputRadio>
                     </div>
 
-                    <InputText id="controls-font-family-custom">Custom font:</InputText>
+                    <InputText name="controls-font-family-custom" shouldSaveValue id="controls-font-family-custom">
+                        Custom font:
+                    </InputText>
                 </fieldset>
 
                 <fieldset>
@@ -58,27 +65,27 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <span>Presets: </span>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-unset" value="">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-unset" value="" checked>
                             Site Default
                         </InputRadio>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-x-small" value="x-small">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-x-small" value="x-small">
                             Extra Small
                         </InputRadio>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-small" value="small">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-small" value="small">
                             Small
                         </InputRadio>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-medium" value="medium">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-medium" value="medium">
                             Normal
                         </InputRadio>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-large" value="large">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-large" value="large">
                             Large
                         </InputRadio>
-                        <InputRadio name="controls-font-size-preset" id="controls-font-size-preset-x-large" value="x-large">
+                        <InputRadio name="controls-font-size-preset" shouldSaveValue id="controls-font-size-preset-x-large" value="x-large">
                             Extra Large
                         </InputRadio>
                     </div>
 
-                    <InputNumeric id="controls-font-size-pixels" min="12" max="28">
+                    <InputNumeric name="controls-font-size-custom" shouldSaveValue id="controls-font-size-custom" min="12" max="28">
                         Pixel value:
                     </InputNumeric>
                 </fieldset>
@@ -88,27 +95,27 @@ const { showExample = false } = Astro.props;
 
                     <div class="presets">
                         <span>Presets: </span>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-unset" value="">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-unset" value="" checked>
                             Site Default
                         </InputRadio>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-x-small" value="1.0">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-x-small" value="1.0">
                             Extra Small
                         </InputRadio>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-small" value="1.1">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-small" value="1.1">
                             Small
                         </InputRadio>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-medium" value="1.2">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-medium" value="1.2">
                             Normal
                         </InputRadio>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-large" value="1.4">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-large" value="1.4">
                             Large
                         </InputRadio>
-                        <InputRadio name="controls-line-height-preset" id="controls-line-height-preset-x-large" value="1.6">
+                        <InputRadio name="controls-line-height-preset" shouldSaveValue id="controls-line-height-preset-x-large" value="1.6">
                             Extra Large
                         </InputRadio>
                     </div>
 
-                    <InputNumeric id="controls-line-height-em" min="1.0" max="2.0" step="0.1">
+                    <InputNumeric name="controls-line-height-custom" shouldSaveValue id="controls-line-height-custom" min="1.0" max="2.0" step="0.1">
                         By font size (em):
                     </InputNumeric>
                 </fieldset>
@@ -123,7 +130,9 @@ const { showExample = false } = Astro.props;
                         <br />
                         You might not want this behaviour, and you can disable it below.
                         <br />
-                        <InputCheckbox id="controls-layout-force-mobile">Force mobile layout?</InputCheckbox>
+                        <InputCheckbox name="controls-layout-force-mobile" shouldSaveValue id="controls-layout-force-mobile">
+                            Force mobile layout?
+                        </InputCheckbox>
                     </p>
 
                     <p>
@@ -131,7 +140,9 @@ const { showExample = false } = Astro.props;
                         <br />
                         If you would prefer not having any paddings and instead letting the content fill the entire width, you can do so below.
                         <br />
-                        <InputCheckbox id="controls-layout-remove-page-padding">Remove page padding?</InputCheckbox>
+                        <InputCheckbox name="controls-layout-remove-page-padding" shouldSaveValue id="controls-layout-remove-page-padding">
+                            Remove page padding?
+                        </InputCheckbox>
                     </p>
 
                     <p>
@@ -139,7 +150,9 @@ const { showExample = false } = Astro.props;
                         <br />
                         However, this might not be ideal if you are, for example, reading on mobile. You can collapse all manual linebreaks below.
                         <br />
-                        <InputCheckbox id="controls-layout-collapse-manual-linebreaks">Collapse manual linebreaks?</InputCheckbox>
+                        <InputCheckbox name="controls-layout-collapse-manual-linebreaks" shouldSaveValue id="controls-layout-collapse-manual-linebreaks">
+                            Collapse manual linebreaks?
+                        </InputCheckbox>
                     </p>
 
                     <p>
@@ -147,7 +160,9 @@ const { showExample = false } = Astro.props;
                         <br />
                         However, if that isn’t enough for you, you can collapse all margins below. This also disables any borders or shadows on the sections.
                         <br />
-                        <InputCheckbox id="controls-layout-collapse-margins">Collapse margins?</InputCheckbox>
+                        <InputCheckbox name="controls-layout-collapse-margins" shouldSaveValue id="controls-layout-collapse-margins">
+                            Collapse margins?
+                        </InputCheckbox>
                     </p>
                 </fieldset>
             </div>
@@ -227,574 +242,214 @@ const { showExample = false } = Astro.props;
     }
 </style>
 
-<!-- controls: font family -->
 <script>
+    const presetChanged = (preset: HTMLInputElement, custom: HTMLInputElement, modify: (value: string) => void) => {
+        if (preset.checked) {
+            if (custom.value) {
+                custom.value = "";
+                custom.dispatchEvent(new InputEvent("change"));
+            }
+            window.requestAnimationFrame(() => {
+                modify(preset.value);
+            });
+        }
+    };
+
+    const customChanged = (custom: HTMLInputElement, presets: HTMLInputElement[], defaultPreset: HTMLInputElement, modify: (value: string) => void) => {
+        if (custom.value) {
+            for (const preset of presets) {
+                if (preset.checked) {
+                    preset.checked = false;
+                    preset.dispatchEvent(new InputEvent("change"));
+                }
+            }
+            window.requestAnimationFrame(() => {
+                modify(custom.value);
+            });
+        } else if (presets.every((e) => !e.checked)) {
+            defaultPreset.checked = true;
+            defaultPreset.dispatchEvent(new InputEvent("change"));
+        }
+    };
+
+    const migrateOldKey = (key: string, then: (value: string) => void) => {
+        const value = window.localStorage.getItem(key);
+        if (value) {
+            window.localStorage.removeItem(key);
+            then(value);
+        }
+    };
+
+    /* font family */
     document.addEventListener("DOMContentLoaded", () => {
         const content = document.getElementById("content")!;
+        const presets = [...document.querySelectorAll<HTMLInputElement>(`input[name="controls-font-family-preset"]`)];
+        const defaultPreset = document.getElementById(`controls-font-family-preset-unset`)! as HTMLInputElement;
+        const custom = document.querySelector<HTMLInputElement>(`input[name="controls-font-family-custom"]`)!;
 
-        const fontFamilyCustom = {
-            key: "font-family-custom",
-            element: document.getElementById("controls-font-family-custom")! as HTMLInputElement,
-
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.fontFamily = "";
-                } else {
-                    content.style.fontFamily = value;
-                }
-
-                for (const e of fontSizePreset.elements) {
-                    e.checked = false;
-                }
-                fontSizePreset.clear();
-            },
+        const modify = (value: string) => {
+            content.style.fontFamily = value;
         };
 
-        const fontSizePreset = {
-            key: "font-family-preset",
-            elements: [
-                "controls-font-family-preset-unset",
-                "controls-font-family-preset-ibm-plex-sans",
-                "controls-font-family-preset-inter",
-                "controls-font-family-preset-noto-sans",
-                "controls-font-family-preset-roboto",
-            ].map((id) => document.getElementById(id)! as HTMLInputElement),
-
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.fontFamily = "";
-                } else {
-                    content.style.fontFamily = value;
-                }
-
-                fontFamilyCustom.clear();
-            },
-        };
-
-        {
-            const custom = fontFamilyCustom.get();
-            const preset = fontSizePreset.get();
-
-            if (custom) {
-                fontFamilyCustom.element.value = custom;
-                fontFamilyCustom.set(custom);
-            } else if (preset) {
-                fontSizePreset.set(preset);
-            } else {
-                fontSizePreset.set("");
-            }
+        for (const preset of presets) {
+            preset.addEventListener("change", () => presetChanged(preset, custom, modify));
         }
 
         {
-            fontFamilyCustom.element.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    fontFamilyCustom.set(target.value || target.defaultValue);
-                }
+            custom.addEventListener("change", () => {
+                customChanged(custom, presets, defaultPreset, modify);
             });
         }
 
-        for (const e of fontSizePreset.elements) {
-            const current = fontSizePreset.get();
-            if (current === e.value) {
-                e.checked = true;
-            } else {
-                e.checked = false;
+        migrateOldKey("font-family-preset", (value) => {
+            for (const preset of presets) {
+                if (preset.value == value) {
+                    preset.checked = true;
+                    window.requestAnimationFrame(() => preset.dispatchEvent(new InputEvent("change")));
+                } else {
+                    preset.checked = false;
+                }
             }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    fontSizePreset.set(target.value);
-                }
-            });
-        }
+        });
+        migrateOldKey("font-family-custom", (value) => {
+            custom.value = value;
+            window.requestAnimationFrame(() => custom.dispatchEvent(new InputEvent("change")));
+        });
     });
-</script>
 
-<!-- controls: font size -->
-<script>
+    /* font size */
     document.addEventListener("DOMContentLoaded", () => {
         const content = document.getElementById("content")!;
+        const presets = [...document.querySelectorAll<HTMLInputElement>(`input[name="controls-font-size-preset"]`)];
+        const defaultPreset = document.getElementById(`controls-font-size-preset-unset`)! as HTMLInputElement;
+        const custom = document.querySelector<HTMLInputElement>(`input[name="controls-font-size-custom"]`)!;
 
-        function presetFontSizeChanged() {
-            const fontSize = window.getComputedStyle(content).fontSize.replace("px", "");
+        for (const preset of presets) {
+            const modify = (value: string) => {
+                content.style.fontSize = value;
 
-            fontSizePixels.element.defaultValue = fontSize;
-            fontSizePixels.element.value = fontSize;
-        }
+                const fontSize = window.getComputedStyle(content).fontSize.replace("px", "");
+                custom.defaultValue = fontSize;
+                custom.value = fontSize;
+            };
 
-        const fontSizePixels = {
-            key: "font-size-pixels",
-            element: document.getElementById("controls-font-size-pixels")! as HTMLInputElement,
-
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.fontSize = "";
-                } else {
-                    content.style.fontSize = `${value}px`;
-                }
-
-                for (const e of fontSizePreset.elements) {
-                    e.checked = false;
-                }
-                fontSizePreset.clear();
-            },
-        };
-
-        const fontSizePreset = {
-            key: "font-size-preset",
-            elements: [
-                "controls-font-size-preset-unset",
-                "controls-font-size-preset-x-small",
-                "controls-font-size-preset-small",
-                "controls-font-size-preset-medium",
-                "controls-font-size-preset-large",
-                "controls-font-size-preset-x-large",
-            ].map((id) => document.getElementById(id)! as HTMLInputElement),
-
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.fontSize = "";
-                } else {
-                    content.style.fontSize = value;
-                }
-
-                fontSizePixels.clear();
-                presetFontSizeChanged();
-            },
-        };
-
-        {
-            const pixels = fontSizePixels.get();
-            const preset = fontSizePreset.get();
-
-            if (pixels) {
-                fontSizePixels.element.value = pixels;
-                fontSizePixels.set(pixels);
-            } else if (preset) {
-                fontSizePreset.set(preset);
-            } else {
-                fontSizePreset.set("");
-            }
+            preset.addEventListener("change", () => presetChanged(preset, custom, modify));
         }
 
         {
-            fontSizePixels.element.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    fontSizePixels.set(target.value || target.defaultValue);
-                }
+            const modify = (value: string) => {
+                content.style.fontSize = `${value}px`;
+            };
+            custom.addEventListener("change", () => {
+                customChanged(custom, presets, defaultPreset, modify);
             });
         }
 
-        for (const e of fontSizePreset.elements) {
-            const current = fontSizePreset.get();
-            if (current === e.value) {
-                e.checked = true;
-            } else {
-                e.checked = false;
+        migrateOldKey("font-size-preset", (value) => {
+            for (const preset of presets) {
+                if (preset.value == value) {
+                    preset.checked = true;
+                    window.requestAnimationFrame(() => preset.dispatchEvent(new InputEvent("change")));
+                } else {
+                    preset.checked = false;
+                }
             }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    fontSizePreset.set(target.value);
-                }
-            });
-        }
+        });
+        migrateOldKey("font-size-pixels", (value) => {
+            custom.value = value;
+            window.requestAnimationFrame(() => custom.dispatchEvent(new InputEvent("change")));
+        });
     });
-</script>
 
-<!-- controls: line height -->
-<script>
+    /* line height */
     document.addEventListener("DOMContentLoaded", () => {
         const content = document.getElementById("content")!;
+        const presets = [...document.querySelectorAll<HTMLInputElement>(`input[name="controls-line-height-preset"]`)];
+        const defaultPreset = document.getElementById(`controls-line-height-preset-unset`)! as HTMLInputElement;
+        const custom = document.querySelector<HTMLInputElement>(`input[name="controls-line-height-custom"]`)!;
 
-        function presetLineHeightChanged() {
-            const fontSize = Number.parseFloat(window.getComputedStyle(content).fontSize.replace("px", ""));
-            const lineHeight = (
-                Math.floor((100.0 * Number.parseFloat(window.getComputedStyle(content).lineHeight.replace("px", ""))) / fontSize) / 100.0
-            ).toString();
-            lineHeightEm.element.defaultValue = lineHeight;
-            lineHeightEm.element.value = lineHeight;
-        }
+        for (const preset of presets) {
+            const modify = (value: string) => {
+                content.style.lineHeight = value;
 
-        const lineHeightEm = {
-            key: "line-height-em",
-            element: document.getElementById("controls-line-height-em")! as HTMLInputElement,
+                const fontSize = Number.parseFloat(window.getComputedStyle(content).fontSize.replace("px", ""));
+                const lineHeight = (
+                    Math.floor((100.0 * Number.parseFloat(window.getComputedStyle(content).lineHeight.replace("px", ""))) / fontSize) / 100.0
+                ).toString();
+                custom.defaultValue = lineHeight;
+                custom.value = lineHeight;
+            };
 
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.lineHeight = "";
-                } else {
-                    content.style.lineHeight = value;
-                }
-
-                for (const e of lineHeightPreset.elements) {
-                    e.checked = false;
-                }
-                lineHeightPreset.clear();
-            },
-        };
-
-        const lineHeightPreset = {
-            key: "line-height-preset",
-            elements: [
-                "controls-line-height-preset-unset",
-                "controls-line-height-preset-x-small",
-                "controls-line-height-preset-small",
-                "controls-line-height-preset-medium",
-                "controls-line-height-preset-large",
-                "controls-line-height-preset-x-large",
-            ].map((id) => document.getElementById(id)! as HTMLInputElement),
-
-            get() {
-                try {
-                    return window.localStorage.getItem(this.key);
-                } catch {
-                    return null;
-                }
-            },
-
-            clear() {
-                try {
-                    window.localStorage.removeItem(this.key);
-                } catch {
-                    // ignore
-                }
-            },
-
-            set(value: string | null) {
-                // don't want to compare it as a number like "0"
-                const isNullish = value === null || value === "";
-
-                try {
-                    if (isNullish) {
-                        window.localStorage.setItem(this.key, "");
-                    } else {
-                        window.localStorage.setItem(this.key, value);
-                    }
-                } catch {
-                    // ignore
-                }
-
-                if (isNullish) {
-                    content.style.lineHeight = "";
-                } else {
-                    content.style.lineHeight = value;
-                }
-
-                lineHeightEm.clear();
-                presetLineHeightChanged();
-            },
-        };
-
-        {
-            const em = lineHeightEm.get();
-            const preset = lineHeightPreset.get();
-
-            if (em) {
-                lineHeightEm.element.value = em;
-                lineHeightEm.set(em);
-            } else if (preset) {
-                lineHeightPreset.set(preset);
-            } else {
-                lineHeightPreset.set("");
-            }
+            preset.addEventListener("change", () => presetChanged(preset, custom, modify));
         }
 
         {
-            lineHeightEm.element.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    lineHeightEm.set(target.value || target.defaultValue);
-                }
+            const modify = (value: string) => {
+                content.style.lineHeight = value;
+            };
+            custom.addEventListener("change", () => {
+                customChanged(custom, presets, defaultPreset, modify);
             });
         }
 
-        for (const e of lineHeightPreset.elements) {
-            const current = lineHeightPreset.get();
-            if (current === e.value) {
-                e.checked = true;
-            } else {
-                e.checked = false;
+        migrateOldKey("line-height-preset", (value) => {
+            for (const preset of presets) {
+                if (preset.value == value) {
+                    preset.checked = true;
+                    window.requestAnimationFrame(() => preset.dispatchEvent(new InputEvent("change")));
+                } else {
+                    preset.checked = false;
+                }
             }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    lineHeightPreset.set(target.value);
-                }
-            });
-        }
+        });
+        migrateOldKey("line-height-em", (value) => {
+            custom.value = value;
+            window.requestAnimationFrame(() => custom.dispatchEvent(new InputEvent("change")));
+        });
     });
-</script>
 
-<!-- controls: layout stuffs -->
-<script>
+    /* layout stuffs */
     document.addEventListener("DOMContentLoaded", () => {
         const content = document.getElementById("content")!;
 
         {
             const e = document.getElementById("controls-layout-collapse-manual-linebreaks")! as HTMLInputElement;
-
-            const key = "collapse-manual-linebreaks";
-
-            function set(checked: boolean) {
-                if (checked) {
-                    window.localStorage.setItem(key, "true");
-                } else {
-                    window.localStorage.removeItem(key);
-                }
-
-                content.dataset.collapseManualLinebreaks = checked.toString();
-            }
-
-            try {
-                e.checked = window.localStorage.getItem(key) == "true" || false;
-                set(e.checked);
-            } catch {
-                // ignore
-            }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    set(target.checked);
-                }
+            e.addEventListener("change", () => {
+                content.dataset.collapseManualLinebreaks = e.checked.toString();
+            });
+            migrateOldKey("collapse-manual-linebreaks", (value) => {
+                e.checked = value == "true";
+                window.requestAnimationFrame(() => e.dispatchEvent(new InputEvent("change")));
             });
         }
-
         {
             const e = document.getElementById("controls-layout-force-mobile")! as HTMLInputElement;
-            const key = "force-mobile";
-
-            function set(checked: boolean) {
-                if (checked) {
-                    window.localStorage.setItem(key, "true");
-                } else {
-                    window.localStorage.removeItem(key);
-                }
-
-                document.body.dataset.forceMobile = checked.toString();
-            }
-
-            try {
-                e.checked = window.localStorage.getItem(key) == "true" || false;
-                set(e.checked);
-            } catch {
-                // ignore
-            }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    set(target.checked);
-                }
+            e.addEventListener("change", () => {
+                document.body.dataset.forceMobile = e.checked.toString();
+            });
+            migrateOldKey("force-mobile", (value) => {
+                e.checked = value == "true";
+                window.requestAnimationFrame(() => e.dispatchEvent(new InputEvent("change")));
             });
         }
-
         {
             const e = document.getElementById("controls-layout-remove-page-padding")! as HTMLInputElement;
-            const key = "remove-page-padding";
-
-            function set(checked: boolean) {
-                if (checked) {
-                    window.localStorage.setItem(key, "true");
-                } else {
-                    window.localStorage.removeItem(key);
-                }
-
-                document.body.dataset.removePagePadding = checked.toString();
-            }
-
-            try {
-                e.checked = window.localStorage.getItem(key) == "true" || false;
-                set(e.checked);
-            } catch {
-                // ignore
-            }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    set(target.checked);
-                }
+            e.addEventListener("change", () => {
+                document.body.dataset.removePagePadding = e.checked.toString();
+            });
+            migrateOldKey("remove-page-padding", (value) => {
+                e.checked = value == "true";
+                window.requestAnimationFrame(() => e.dispatchEvent(new InputEvent("change")));
             });
         }
-
         {
             const e = document.getElementById("controls-layout-collapse-margins")! as HTMLInputElement;
-            const key = "collapse-margins";
-
-            function set(checked: boolean) {
-                if (checked) {
-                    window.localStorage.setItem(key, "true");
-                } else {
-                    window.localStorage.removeItem(key);
-                }
-
-                document.body.dataset.collapseMargins = checked.toString();
-            }
-
-            try {
-                e.checked = window.localStorage.getItem(key) == "true" || false;
-                set(e.checked);
-            } catch {
-                // ignore
-            }
-
-            e.addEventListener("input", (event) => {
-                const target = event.target;
-                if (target instanceof HTMLInputElement) {
-                    set(target.checked);
-                }
+            e.addEventListener("change", () => {
+                document.body.dataset.collapseMargins = e.checked.toString();
+            });
+            migrateOldKey("collapse-margins", (value) => {
+                e.checked = value == "true";
+                window.requestAnimationFrame(() => e.dispatchEvent(new InputEvent("change")));
             });
         }
     });
