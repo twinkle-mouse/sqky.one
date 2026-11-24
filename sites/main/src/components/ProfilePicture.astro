@@ -76,28 +76,56 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         text-align: center;
     }
 
+    .pfp,
+    .pfp-image-container,
+    .pfp-image {
+        display: block;
+        user-select: none;
+        touch-action: none;
+
+        width: 100%;
+        height: auto;
+
+        background-color: transparent;
+        color: transparent;
+    }
+
+    .pfp,
+    .pfp-image {
+        border-radius: 9999px;
+    }
+
     .pfp {
         width: max-content;
 
-        padding-top: 1rem;
-        padding-bottom: 1.8rem;
-        padding-inline: 0.6rem;
+        padding-block: 1rem;
+        padding-inline: 1rem;
 
         margin-inline: auto;
+        margin-top: 0.8rem;
+        margin-bottom: 1.6rem;
+    }
 
-        will-change: contents;
+    .pfp-image {
+        max-width: 160px;
+        margin-inline: auto;
+        image-rendering: smooth;
+
+        overflow: hidden;
+    }
+
+    @media (max-width: 440px) {
+        .pfp-image {
+            max-width: 128px;
+        }
+    }
+
+    .pfp-image-container,
+    .pfp-image {
+        will-change: contents, transform, animation-timing-function, filter;
     }
 
     .pfp-image-container {
-        position: relative;
-
-        max-width: 160px;
-        height: auto;
-
-        margin-inline: auto;
-
-        image-rendering: smooth;
-
         animation: wobble 0.4s infinite alternate cubic-bezier(0.65, 0, 0.35, 1);
         transition: filter 0.07s cubic-bezier(0.32, 0.24, 0.11, 0.78);
     }
@@ -126,6 +154,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
             transition: none !important;
             filter: none !important;
             animation: none !important;
+            will-change: unset !important;
         }
     }
 
@@ -134,31 +163,6 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         width: 100%;
 
         margin-inline: auto;
-    }
-
-    @media (max-width: 440px) {
-        .pfp {
-            padding-block: 1rem;
-        }
-
-        .pfp-image-container {
-            max-width: 128px;
-        }
-    }
-
-    .pfp-image {
-        display: inline-block;
-        user-select: none;
-        touch-action: none;
-
-        background-color: transparent;
-        color: transparent;
-
-        width: 100%;
-        height: auto;
-
-        overflow: hidden;
-        border-radius: 9999px;
     }
 </style>
 
@@ -223,7 +227,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         element.addEventListener("click", play);
     });
 
-    document.querySelectorAll<HTMLElement>(".pfp-image-container").forEach((element) => {
+    document.querySelectorAll<HTMLElement>(".pfp").forEach((element) => {
         element.tabIndex = 0;
 
         const disallowedKeys = ["Tab", "Arrow", "Escape"];
@@ -237,7 +241,8 @@ import Picture from "@sqky-one/common/components/Picture.astro";
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-        const images = document.querySelectorAll<HTMLElement>(".pfp-image-container");
+        const imageContainers = document.querySelectorAll<HTMLElement>(".pfp-image-container");
+        const images = document.querySelectorAll<HTMLElement>(".pfp-image");
         let dT = 0;
         let dTClick = 0;
 
@@ -249,9 +254,9 @@ import Picture from "@sqky-one/common/components/Picture.astro";
                 dTClick = time - lastClickTime;
             }
 
-            if (lastClickTime) {
-                for (const image of images) {
-                    image.dataset.clicked = (dTClick < CLICKING_TIME).toString();
+            if (!resting && lastClickTime) {
+                for (const container of imageContainers) {
+                    container.dataset.clicked = (dTClick < CLICKING_TIME).toString();
                 }
             }
 
@@ -269,12 +274,15 @@ import Picture from "@sqky-one/common/components/Picture.astro";
                 count = 0.0;
                 if (!resting) {
                     resting = true;
-                    for (const image of images) {
+                    for (const container of imageContainers) {
                         try {
-                            image.getAnimations()[0].updatePlaybackRate(1);
+                            container.getAnimations()[0].updatePlaybackRate(1);
                         } catch {
                             /* empty */
                         }
+                        delete container.dataset.clicked;
+                    }
+                    for (const image of images) {
                         image.style.removeProperty(brightenVar);
                         image.style.removeProperty(glowSaturationVar);
                         image.style.removeProperty(glowAlphaVar);
@@ -298,7 +306,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
                 const glowSize = Math.max(1, Math.min(Math.pow(speed, 2.4) - 2.5, 8));
                 const blur = Math.max(0, Math.min(Math.pow(speed, 1.15) - 2.3, 1.4));
 
-                for (const image of images) {
+                for (const image of imageContainers) {
                     try {
                         image.getAnimations()[0].updatePlaybackRate(speed);
                     } catch {
