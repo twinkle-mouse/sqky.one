@@ -46,7 +46,7 @@ const { headings } = renderResult;
               }
             : undefined
     }
-    twitterCardType="summary_large_image"
+    twitterCardType={entry.data.thumbnail ? "summary_large_image" : undefined}
 >
     <Fragment slot="nav:page-links">
         {headings.map((v) => (
