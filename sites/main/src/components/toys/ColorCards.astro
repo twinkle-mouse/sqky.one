@@ -14,11 +14,11 @@ import ColorCard from "./ColorCard.astro";
             </span>
         </h3>
 
-        <label class="sr-only">
+        <p class="sr-only">
             Below is a widget with colour swatches of the different sets of colours used on the site. Each one is a different hue with lightness option from 1
             to 9. Each set is laid out vertically from lightest at the top to darkest at the bottom, with the name of the set right above the list.
-        </label>
-        <label class="sr-only js-necessary">Users may use a mouse to drag around the swatches on the screen, bouncing back when released.</label>
+        </p>
+        <p class="sr-only js-necessary">Users may use a mouse to drag around the swatches on the screen, bouncing back when released.</p>
 
         <p class="text-center js-necessary">play around, drag them all over!! they’re fun</p>
         <p class="text-center">all the colours are personally picked by me :3</p>
@@ -31,7 +31,7 @@ import ColorCard from "./ColorCard.astro";
             <div id="color-cards">
                 {Object.entries(colors).map(([name, variants]) => (
                     <div class="color-section">
-                        <label class="color-set-name">{name}</label>
+                        <span class="color-set-name">{name}</span>
 
                         <ul aria-hidden="true" class="color-set">
                             {variants.entries().map(([variant, color]) => (
