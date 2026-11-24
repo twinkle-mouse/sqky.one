@@ -33,11 +33,11 @@
 }
 
 #content u {
-    text-decoration: underline solid;
+    text-decoration: underline solid 1px;
 }
 
 #content del {
-    text-decoration: line-through solid;
+    text-decoration: line-through solid 1px;
 }
 
 #content figcaption {
