@@ -1,5 +1,6 @@
 ---
 import FileIcon from "@sqky-one/common/components/FileIcon.astro";
+import { formatBytes } from "@sqky-one/common/lib/file";
 import { getMaterialFileIcon, getMaterialFolderIcon } from "@sqky-one/common/lib/material-icon";
 import type { FileStats } from "@sqky-one/files/lib/files";
 
@@ -11,19 +12,6 @@ const { entry } = Astro.props;
 const url = new URL(Astro.request.url);
 if (!url.pathname.endsWith("/")) {
     url.pathname += "/";
-}
-
-function formatBytes(bytes: number, precision: number = 3) {
-    const k = 1000;
-    const units = [" B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    if (bytes < k) return `${bytes.toString().padStart(precision)} ${units[0]}`;
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    const num = (bytes / Math.pow(k, i)).toPrecision(precision);
-    const unit = units[i];
-
-    return `${num.toString().padStart(precision)} ${unit}`;
 }
 
 let suffix = "";
