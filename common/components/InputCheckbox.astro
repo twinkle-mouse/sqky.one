@@ -9,35 +9,3 @@ const { ...props } = Astro.props;
 <Input type="checkbox" iconName="symbol/cross" {...props}>
     <slot />
 </Input>
-
-<style is:global>
-    input[type="checkbox"] {
-        width: 0px;
-        height: 0px;
-        opacity: 0;
-    }
-
-    label:has(> input[type="checkbox"]) {
-        user-select: none;
-        cursor: pointer;
-
-        padding-block: 0.2rem;
-        margin-right: 0.35rem;
-    }
-
-    input[type="checkbox"]:hover,
-    input[type="checkbox"]:focus-visible,
-    label:has(> input[type="checkbox"]:hover) > span,
-    label:has(> input[type="checkbox"]:focus-visible) > span {
-        color: var(--buttonHoverTextColor);
-    }
-
-    input[type="checkbox"]:active,
-    label:has(> input[type="checkbox"]:active) > span {
-        color: var(--buttonActiveTextColor);
-    }
-
-    label:has(> input[type="checkbox"]:focus-visible) {
-        outline: 2px solid var(--focusColor);
-    }
-</style>

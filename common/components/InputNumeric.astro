@@ -9,22 +9,3 @@ const { ...props } = Astro.props;
 <Input type="number" {...props}>
     <slot />
 </Input>
-
-<style is:global>
-    input[type="number"] {
-        color: var(--textColor);
-        text-decoration: none;
-
-        background-color: var(--buttonBgColor);
-        outline: 1px solid var(--buttonBorderColor);
-    }
-
-    label:has(> input[type="number"]) {
-        width: fit-content;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.5em;
-        margin-block: 1em;
-    }
-</style>

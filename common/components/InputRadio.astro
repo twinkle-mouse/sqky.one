@@ -9,35 +9,3 @@ const { ...props } = Astro.props;
 <Input type="radio" iconName="symbol/dot" {...props}>
     <slot />
 </Input>
-
-<style is:global>
-    input[type="radio"] {
-        width: 0px;
-        height: 0px;
-        opacity: 0;
-    }
-
-    label:has(> input[type="radio"]) {
-        user-select: none;
-        cursor: pointer;
-
-        padding-block: 0.2rem;
-        margin-right: 0.35rem;
-    }
-
-    input[type="radio"]:hover,
-    input[type="radio"]:focus-visible,
-    label:has(> input[type="radio"]:hover) > span,
-    label:has(> input[type="radio"]:focus-visible) > span {
-        color: var(--buttonHoverTextColor);
-    }
-
-    input[type="radio"]:active,
-    label:has(> input[type="radio"]:active) > span {
-        color: var(--buttonActiveTextColor);
-    }
-
-    label:has(> input[type="radio"]:focus-visible) {
-        outline: 2px solid var(--focusColor);
-    }
-</style>

@@ -603,50 +603,6 @@ ${colorsCss}
         border: 1px solid var(--tdBorderColor);
     }
 
-    details,
-    summary {
-        border-radius: 6px;
-    }
-
-    details {
-        margin-top: 1.4rem;
-        margin-bottom: 0.5rem;
-        background-color: var(--detailsBgColor);
-    }
-
-    summary {
-        display: flex;
-
-        min-width: max-content;
-        width: 100%;
-
-        padding: 0.35rem;
-
-        color: var(--summaryColor);
-        text-decoration: underline dotted 1px;
-        background-color: var(--detailsBorderColor);
-        outline: 3px solid var(--detailsBorderColor);
-    }
-
-    details > :not(summary) {
-        background: none;
-        border: none;
-
-        padding-block: 1px;
-        padding-inline: 0.9em;
-
-        margin-top: 6px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        outline: 3px solid var(--detailsBorderColor);
-    }
-
-    label {
-        display: inline-block;
-    }
-
-    input,
-    label > span,
     button,
     input::file-selector-button {
         display: inline-block;
@@ -687,20 +643,14 @@ ${colorsCss}
         border-color: var(--buttonActiveBorderColor);
     }
 
-    a:focus-visible,
-    input:focus-visible {
+    a:focus-visible {
         outline: 2px solid var(--focusColor);
     }
 
     img:focus-visible,
-    summary:focus-visible,
     textarea:focus-visible,
     button:focus-visible {
         outline: 3px solid var(--focusColor);
-    }
-
-    summary:focus {
-        outline-color: var(--focusColor);
     }
 
     textarea:focus {

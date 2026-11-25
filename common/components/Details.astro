@@ -26,6 +26,68 @@ const { src, summary, ...props } = Astro.props;
 </details>
 
 <style>
+    details {
+        margin-top: 1.4rem;
+        margin-bottom: 0.5rem;
+        background-color: var(--detailsBgColor);
+        border-radius: 6px;
+    }
+
+    details > :global(:not(summary)) {
+        background: none;
+        border: none;
+
+        padding-block: 1px;
+        padding-inline: 0.9em;
+
+        margin-top: 6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        outline: 3px solid var(--detailsBorderColor);
+    }
+
+    summary {
+        display: flex;
+
+        min-width: max-content;
+        width: 100%;
+
+        padding: 0.35rem;
+        border-radius: 6px;
+
+        color: var(--summaryColor);
+        text-decoration: underline dotted 1px;
+        background-color: var(--detailsBorderColor);
+        outline: 3px solid var(--detailsBorderColor);
+    }
+
+    summary:focus {
+        outline-color: var(--focusColor);
+    }
+
+    summary:focus-visible {
+        outline: 3px solid var(--focusColor);
+    }
+
+    summary > span {
+        margin-left: 0.3em;
+        margin-right: 1em;
+    }
+
+    summary > a {
+        display: inline-block;
+        height: min-content;
+        margin-left: auto;
+        padding: 0.1em;
+    }
+
+    details[open] > summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+</style>
+
+<style>
     .open-icon {
         flex: none;
 
@@ -41,22 +103,6 @@ const { src, summary, ...props } = Astro.props;
         .open-icon {
             transition: none;
         }
-    }
-
-    summary > span {
-        margin-left: 0.3em;
-        margin-right: 1em;
-    }
-
-    summary > a {
-        display: inline-block;
-        height: min-content;
-        margin-left: auto;
-    }
-
-    details[open] > summary {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
     }
 
     details[open] > summary > .open-icon {

@@ -33,7 +33,88 @@ if (shouldSaveValue && !props.name) {
     <input id={id} {...props} class:list={[shouldSaveValue && "input-auto-save-value", clazz]} />
 </label>
 
-<style is:global>
+<style>
+    label {
+        display: inline-block;
+    }
+
+    input,
+    label > span {
+        display: inline-block;
+
+        font-family: var(--sans);
+        text-decoration: underline solid 1px;
+        text-underline-offset: 15%;
+
+        color: var(--buttonTextColor);
+    }
+</style>
+
+<style lang="scss">
+    @mixin button-style($type) {
+        input[type="#{$type}"] {
+            width: 0px;
+            height: 0px;
+            opacity: 0;
+        }
+
+        label:has(> input[type="#{$type}"]) {
+            user-select: none;
+            cursor: pointer;
+
+            padding-block: 0.2rem;
+            margin-right: 0.35rem;
+        }
+
+        input[type="#{$type}"]:hover,
+        input[type="#{$type}"]:focus-visible,
+        label:has(> input[type="#{$type}"]:hover) > span,
+        label:has(> input[type="#{$type}"]:focus-visible) > span {
+            color: var(--buttonHoverTextColor);
+        }
+
+        input[type="#{$type}"]:active,
+        label:has(> input[type="#{$type}"]:active) > span {
+            color: var(--buttonActiveTextColor);
+        }
+
+        label:has(> input[type="#{$type}"]:focus-visible) {
+            outline: 2px solid var(--focusColor);
+        }
+    }
+
+    @mixin text-style($type) {
+        input[type="#{$type}"] {
+            color: var(--textColor);
+            text-decoration: none;
+
+            background-color: var(--buttonBgColor);
+            outline: 1px solid var(--buttonBorderColor);
+        }
+
+        label:has(> input[type="#{$type}"]) {
+            width: fit-content;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            margin-block: 1em;
+        }
+
+        input[type="#{$type}"]:focus-visible {
+            outline: 2px solid var(--focusColor);
+        }
+    }
+
+    @include button-style("radio");
+    @include button-style("checkbox");
+
+    @include text-style("text");
+    @include text-style("search");
+    @include text-style("number");
+</style>
+
+<style>
     .input-icon {
         padding: 0.125em;
 
