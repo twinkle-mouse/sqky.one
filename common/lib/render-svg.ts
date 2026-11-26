@@ -17,7 +17,7 @@ export function renderSvg(svgSource: string, attributeOverrides: HTMLAttributes<
 
     const doc = parse(svgSource);
 
-    const firstSVGNode = (doc.children as Node[]).find(isSvgElementNode);
+    const firstSVGNode = doc.childNodes.find(isSvgElementNode);
 
     if (!firstSVGNode) {
         throw new Error("No SVG element found in the provided source");
