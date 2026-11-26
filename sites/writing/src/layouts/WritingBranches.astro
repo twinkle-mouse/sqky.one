@@ -77,7 +77,8 @@ async function processNode(root: Node) {
                 props: { element, writingId },
                 slots: { default: root.childNodes.splice(0).join("") },
             });
-            return parse(rendered);
+            const parsed = parse(rendered);
+            return parsed.childNodes;
         }
 
         let node: Node | undefined;
@@ -142,7 +143,7 @@ async function processNode(root: Node) {
 
                     removeAstroData(node);
                     processedNodes.push(
-                        await renderBranchElement({
+                        ...(await renderBranchElement({
                             type,
                             name,
                             class: clazz,
@@ -150,7 +151,7 @@ async function processNode(root: Node) {
                                 choices,
                             },
                             attributes: node.attributes,
-                        }),
+                        })),
                     );
                 } else if (type == "continue") {
                     const name = `${currentParentName}-continue`;
@@ -163,14 +164,14 @@ async function processNode(root: Node) {
 
                     removeAstroData(node);
                     processedNodes.push(
-                        await renderBranchElement({
+                        ...(await renderBranchElement({
                             type,
                             name,
                             class: clazz,
                             data: {
                                 text: (text === "true" ? undefined : await renderMdText(text)) || "Continue",
                             },
-                        }),
+                        })),
                     );
                 } else if (type == "tangent") {
                     counts.tangent++;
@@ -180,7 +181,7 @@ async function processNode(root: Node) {
                     }
 
                     removeAstroData(node);
-                    processedNodes.push(await renderBranchElement(await parseTangent(node, currentParentName, counts.tangent)));
+                    processedNodes.push(...(await renderBranchElement(await parseTangent(node, currentParentName, counts.tangent))));
                 } else {
                     processedNodes.push(node);
                 }
@@ -199,14 +200,52 @@ async function processNode(root: Node) {
     }
 }
 
-await processNode(content);
+{
+    const childNodes: Node[] = [];
+    childNodes.push(...content.childNodes);
 
-const childNodes: Node[] = [];
-childNodes.push(...content.childNodes);
+    for (const child of childNodes) {
+        await processNode(child);
+        childNodes.push(...child.childNodes);
+    }
+}
 
-for (const child of childNodes) {
-    await processNode(child);
-    childNodes.push(...child.childNodes);
+// post processing
+{
+    const childNodes: Node[] = [];
+    childNodes.push(...content.childNodes);
+
+    for (const child of childNodes) {
+        if (child instanceof HTMLElement && child.classList.contains("slot")) {
+            const newChildNodes: Node[] = [];
+            const toWrap: HTMLElement[] = [];
+
+            child.childNodes.forEach((element) => {
+                if (element instanceof HTMLElement) {
+                    if (!element.classList.contains("branch-element")) {
+                        toWrap.push(element);
+                    } else {
+                        if (toWrap.length > 0) {
+                            const wrapper = new HTMLElement("div", {});
+                            wrapper.childNodes = toWrap.splice(0);
+                            newChildNodes.push(wrapper);
+                        }
+                        newChildNodes.push(element);
+                    }
+                }
+            });
+
+            if (toWrap.length > 0) {
+                const wrapper = new HTMLElement("div", {});
+                wrapper.childNodes = toWrap.splice(0);
+                newChildNodes.push(wrapper);
+            }
+
+            child.childNodes = newChildNodes;
+        }
+
+        childNodes.push(...child.childNodes);
+    }
 }
 ---
 
@@ -226,7 +265,7 @@ for (const child of childNodes) {
 
     #content {
         .writing-branch > .choices > li >,
-        .writing-check > {
+        .writing-check > .check {
             label {
                 user-select: none;
                 cursor: pointer;
@@ -300,40 +339,50 @@ for (const child of childNodes) {
 
         @for $i from 1 through 32 {
             .writing-branch
-                            > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                            ~ .branches /* go to branches */
-                                > :nth-child(#{$i}) /* unhide the one with the same index as the choice value */ {
+                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                ~ .branches /* go to branches */
+                    > *:nth-child(#{$i}):not(:empty) /* unhide the one with the same index as the choice value */ {
                 display: var(--display-override, block);
-                animation: fade-in 0.15s ease-in;
+
+                & > *:not(.branch-element) > *,
+                & > .branch-element:not(.writing-branch) > *:not(.slot) > * {
+                    animation: fade-in 0.15s ease-in;
+                }
             }
 
             .writing-branch
-                            > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
-                            ~ .branches:not(:has(
-                                > :nth-child(#{$i}) /* go to the corresponding branch */
-                                    .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
-                            ))
-                            ~ .slot /* unhide if either there's no tangents, or all tangents are checked */ {
+                > .choices:has(input[type="radio"][value="#{$i}"]:checked) /* select the one that's checked */
+                ~ .branches:not(:has(
+                    > *:nth-child(#{$i}) /* go to the corresponding branch */
+                        .tangent[data-required="true"] input:not(:checked) /* check that the branch doesn't have any unchecked tangents */
+                ))
+                ~ .slot /* unhide if either there's no tangents, or all tangents are checked */ {
                 display: var(--display-override, block);
-                animation: fade-in 0.15s ease-in;
+
+                & > *:not(.branch-element) > *,
+                & > .branch-element:not(.writing-branch) > *:not(.slot) > * {
+                    animation: fade-in 0.15s ease-in;
+                }
             }
         }
 
-        .writing-check {
-            margin-block: 1.1em;
+        .writing-check > .check {
+            text-wrap: nowrap;
+            padding-top: 0.4em;
+            padding-bottom: 0.8em;
         }
 
-        .writing-check[data-required="true"]::before {
+        .writing-check[data-required="true"] > .check::before {
             content: "↳" / "" !important;
             color: var(--focusColor);
         }
 
-        .writing-check:not([data-required="true"])::before {
+        .writing-check:not([data-required="true"]) > .check::before {
             content: "⋯" / "" !important;
             color: var(--linkColor);
         }
 
-        .writing-check::before {
+        .writing-check > .check::before {
             display: inline-block;
 
             font-size: 1.2em;
@@ -345,26 +394,72 @@ for (const child of childNodes) {
             vertical-align: top;
         }
 
-        .writing-check {
-            text-wrap: nowrap;
-        }
-
-        .writing-check > label {
+        .writing-check > .check > label {
             text-wrap: wrap;
         }
 
-        .writing-check > label:has(> input:not(:checked)) ~ .slot {
+        .writing-check > .check:has(> label > input:checked) {
+            padding-bottom: 0;
+        }
+
+        .writing-check > .check:has(> label > input:not(:checked)) ~ .slot {
             display: none;
         }
 
-        .writing-check > label:has(> input:checked) ~ .slot {
-            animation: fade-in 0.15s ease-in;
+        .writing-check > .check:has(> label > input:checked) ~ .slot {
+            & > *:not(.branch-element) > *,
+            & > .branch-element > *:not(.slot) > * {
+                animation: fade-in 0.15s ease-in;
+            }
         }
 
         @media (prefers-reduced-motion) {
             * {
                 animation: none !important;
             }
+        }
+    }
+</style>
+
+<style is:global lang="scss">
+    #content {
+        .continue {
+            margin-top: 0.8em;
+
+            & > .check {
+                padding-block: 0.8em;
+
+                border: 1px solid var(--buttonBorderColor);
+
+                &:has(> label > input:checked) {
+                    border-bottom: none;
+                }
+            }
+        }
+
+        /* for dialogue box look */
+
+        .slot > *:not(.branch-element),
+        .writing-check > .check {
+            padding-inline: 0.8em;
+        }
+
+        .slot > *:not(.branch-element),
+        .slot > .tangent > *:not(.slot) {
+            border-inline: 1px solid var(--buttonBorderColor);
+
+            margin-top: -2px;
+            padding-block: 1px;
+        }
+
+        .slot > *:has(+ .writing-branch),
+        .slot:not(:has(> .branch-element)) {
+            border-bottom: 1px solid var(--buttonBorderColor);
+        }
+
+        .slot > .tangent > .check:not(:has(> label > input:checked)) {
+            border-bottom: 1px solid var(--buttonBorderColor);
+            padding-bottom: 1em;
         }
     }
 </style>

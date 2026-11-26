@@ -17,7 +17,7 @@ if (element === undefined || writingId === undefined) {
 ---
 
 {element.type == "branch" && (
-    <div class:list={["writing-branch", element.class]} {...element.attributes}>
+    <div class:list={["branch-element writing-branch", element.class]} {...element.attributes}>
         <ol class="choices">
             {element.data.choices.map((choice, idx) => {
                 return (
@@ -39,7 +39,7 @@ if (element === undefined || writingId === undefined) {
         </ol>
         <div class="branches">
             {element.data.choices.map((choice) => {
-                return <div set:html={choice.content} hidden={choice.content == ""} />;
+                return <div class="slot" set:html={choice.content} hidden={choice.content == ""} />;
             })}
         </div>
 
@@ -49,10 +49,12 @@ if (element === undefined || writingId === undefined) {
     </div>
 )}
 {element.type == "continue" && (
-    <div class:list={["writing-check continue", element.class]} data-required="true">
-        <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
-            {element.data.text}
-        </InputCheckbox>
+    <div class:list={["branch-element writing-check continue", element.class]} data-required="true">
+        <div class="check">
+            <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
+                {element.data.text}
+            </InputCheckbox>
+        </div>
 
         <div class="slot">
             <slot />
@@ -61,13 +63,19 @@ if (element === undefined || writingId === undefined) {
 )}
 {element.type == "tangent" && (
     <>
-        <div class:list={["writing-check tangent", element.class]} data-required={element.required ? "true" : undefined} {...element.data.attributes}>
-            <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
-                <>
-                    {!element.required && <span class="sr-only">Optional text: </span>}
-                    {element.data.text}
-                </>
-            </InputCheckbox>
+        <div
+            class:list={["branch-element writing-check tangent", element.class]}
+            data-required={element.required ? "true" : undefined}
+            {...element.data.attributes}
+        >
+            <div class="check">
+                <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
+                    <>
+                        {!element.required && <span class="sr-only">Optional text: </span>}
+                        {element.data.text}
+                    </>
+                </InputCheckbox>
+            </div>
 
             <div class="slot" set:html={element.data.content} />
         </div>
