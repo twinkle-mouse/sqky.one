@@ -185,33 +185,15 @@ import Picture from "@sqky-one/common/components/Picture.astro";
     let lastTime = 0;
     let lastClickTime = 0;
 
-    let audio: { context: AudioContext; squeakSfx: AudioBuffer } | undefined = undefined;
-    async function init() {
-        const context = new AudioContext({ latencyHint: "interactive" });
-        const squeakSfx = await context.decodeAudioData(await squeakSfxData);
-
-        return { context, squeakSfx };
-    }
-    async function getAudio() {
-        if (audio) {
-            return audio;
-        } else {
-            audio = await init();
-            return audio;
-        }
-    }
+    const context = new AudioContext({ latencyHint: "interactive" });
+    const squeakSfx = squeakSfxData.then((v) => context.decodeAudioData(v));
 
     const play = async () => {
-        const { context, squeakSfx } = await getAudio();
         await context.resume();
 
         const source = new AudioBufferSourceNode(context, {
-            buffer: squeakSfx,
+            buffer: await squeakSfx,
         });
-        source.onended = () => {
-            source.disconnect();
-        };
-
         source.connect(context.destination);
         source.start();
 
@@ -220,22 +202,21 @@ import Picture from "@sqky-one/common/components/Picture.astro";
         resting = false;
     };
 
-    document.querySelectorAll<HTMLElement>(".pfp").forEach((element) => {
+    document.querySelectorAll<HTMLDivElement>(".pfp").forEach((element) => {
         element.style.cursor = "pointer";
         element.role = "button";
-
-        element.addEventListener("click", play);
-    });
-
-    document.querySelectorAll<HTMLElement>(".pfp").forEach((element) => {
         element.tabIndex = 0;
 
         const disallowedKeys = ["Tab", "Arrow", "Escape"];
 
+        element.addEventListener("click", (event) => {
+            event.preventDefault();
+            play();
+        });
         element.addEventListener("keydown", (event) => {
             if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && disallowedKeys.find((key) => event.key.includes(key)) == undefined) {
-                play();
                 event.preventDefault();
+                play();
             }
         });
     });
