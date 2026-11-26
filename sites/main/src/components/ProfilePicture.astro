@@ -185,7 +185,7 @@ import Picture from "@sqky-one/common/components/Picture.astro";
     let lastTime = 0;
     let lastClickTime = 0;
 
-    const context = new AudioContext({ latencyHint: "interactive" });
+    const context = new AudioContext({ latencyHint: "interactive", sampleRate: 44100 });
     const squeakSfx = squeakSfxData.then((v) => context.decodeAudioData(v));
 
     const play = async () => {
