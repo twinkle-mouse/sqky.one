@@ -155,7 +155,8 @@ async function processNode(root: Node) {
                     );
                 } else if (type == "continue") {
                     const name = `${currentParentName}-continue`;
-                    const text = node.innerText;
+                    const text = node.getAttribute("text");
+                    node.removeAttribute("text");
                     const clazz = node.getAttribute("class") ?? "";
                     node.removeAttribute("class");
 
@@ -170,6 +171,7 @@ async function processNode(root: Node) {
                             class: clazz,
                             data: {
                                 text: (text === "true" ? undefined : await renderMdText(text)) || "Continue",
+                                content: node.children.join(""),
                             },
                         })),
                     );
@@ -463,3 +465,22 @@ async function processNode(root: Node) {
         }
     }
 </style>
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("#content .branch-element").forEach((element) => {
+            const slot = element.querySelector<HTMLDivElement>("& > .slot");
+            if (!slot) throw Error(".branch-element must have a direct .slot descendant");
+
+            element.querySelectorAll<HTMLInputElement>("input").forEach((input) => {
+                if (input.type == "radio" || input.type == "checkbox") {
+                    input.addEventListener("change", () => {
+                        if (input.checked) {
+                            element.scrollIntoView({ behavior: "instant", block: "start" });
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script> -->

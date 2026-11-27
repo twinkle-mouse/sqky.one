@@ -50,9 +50,11 @@ if (element === undefined || writingId === undefined) {
 )}
 {element.type == "continue" && (
     <div class:list={["branch-element writing-check continue", element.class]} data-required="true">
+        {element.data.content && <div set:html={element.data.content} />}
+
         <div class="check">
             <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
-                {element.data.text}
+                <Fragment set:html={element.data.text} />
             </InputCheckbox>
         </div>
 
@@ -72,7 +74,7 @@ if (element === undefined || writingId === undefined) {
                 <InputCheckbox id={element.name} name={`${writingId}_${element.name}`} shouldSaveValue iconName={undefined}>
                     <>
                         {!element.required && <span class="sr-only">Optional text: </span>}
-                        {element.data.text}
+                        <Fragment set:html={element.data.text} />
                     </>
                 </InputCheckbox>
             </div>

@@ -21,6 +21,7 @@ export type Continue = {
     class: string;
     data: {
         text: string;
+        content: string;
     };
 };
 
